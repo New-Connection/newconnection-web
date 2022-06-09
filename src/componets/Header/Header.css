@@ -1,0 +1,55 @@
+.social-btn {
+    border: none;
+    /* color: #2B1EBC; */
+    padding: 10px;
+    min-width: 20;
+    margin: 5px;
+    border-radius: 10px;
+    align-items: center;
+    cursor: pointer;
+}
+.btn-not-ready {
+    cursor: not-allowed;
+    pointer-events: all !important;
+    background: #CCCCCC;
+}
+
+.social-btn > img {
+    height: 30px;
+    width: 30px;
+    margin: 2px;
+    
+}
+
+.btns {
+    padding-top: 20px;
+    padding-right: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    padding: 0px 10px;
+    margin-right: 10px;
+    
+}
+
+.logo > img {
+    height: 40px;
+}
+
+.logo > p {
+    font-family: 'Jaldi';
+    font-size: 24px;
+    color: white;
+    margin-left: 10px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo-spacing {
+    line-height: 0.8;
+}
