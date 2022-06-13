@@ -1,6 +1,5 @@
-.social-btn {
+.wallet-button {
     border: none;
-    /* color: #2B1EBC; */
     padding: 10px;
     min-width: 20;
     margin: 5px;
@@ -8,17 +7,13 @@
     align-items: center;
     cursor: pointer;
 }
-.btn-not-ready {
-    cursor: not-allowed;
-    pointer-events: all !important;
-    background: #CCCCCC;
-}
 
-.social-btn > img {
-    height: 30px;
-    width: 30px;
-    margin: 2px;
-    
+.wallet-text {
+    white-space: nowrap;
+    width: 100%;                   /* 100% or  IE6 needs any width */
+    overflow: hidden;              /* "overflow" value must be different from  visible"*/ 
+    -o-text-overflow: ellipsis;    /* Opera < 11*/
+    text-overflow:    ellipsis;    /* IE, Safari (WebKit), Opera >= 11, FF > 6 */
 }
 
 .btns {
