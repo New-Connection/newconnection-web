@@ -24,15 +24,27 @@ const Header = () => {
     // Event for chain changes
 	window.ethereum.on('chainChanged', chainChangedHandler);
 
-    const connectWalletHandler = () => {
+    async function connectWalletHandler() {
 		if (window.ethereum && window.ethereum.isMetaMask) {
-			const accounts = window.ethereum.request({ method: 'eth_requestAccounts'})
-            accounts.then(result => {
-                accountChangedHandler(result[0]);
+            
+            // A Web3Provider wraps a standard Web3 provider, which is
+            // what MetaMask injects as window.ethereum into each page
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+
+            try {
+                // MetaMask requires requesting permission to connect users accounts
+                const request = await provider.send("eth_requestAccounts", []);
+                accountChangedHandler(request[0]);
                 setConnectButtonText('Account:')
-            }).catch(error => {
+                // The MetaMask plugin also allows signing transactions to
+                // send ether and pay to change state within the blockchain.
+                // For this, you need the account signer...
+                const signer = provider.getSigner()
+                console.log(signer)
+            } catch (error) {
                 setErrorMessage(error.message)
-            })
+                console.error(error);
+            } 
         } else {
 			console.log('Need to install MetaMask');
 			setErrorMessage('Please install MetaMask browser extension to interact');
