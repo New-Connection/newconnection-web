@@ -1,1 +1,0 @@
-export { Coins } from './Coins';
