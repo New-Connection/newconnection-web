@@ -10,6 +10,7 @@ import classNames from 'classnames';
 // import { WalletSelector } from '../../Web3';
 // import { Coins } from '../../Icons';
 // import Menu from './Menu';
+import Logo from '../../Logo';
 
 const Header = () => {
     //const [{ data: account }] = useAccount();
@@ -26,8 +27,8 @@ const Header = () => {
           <Link href="/" passHref>
             <a>
               <span className="sr-only">Navigate to Home Page</span>
-              {/* <Logo /> */}
-              <h1>New Connection</h1>
+              <Logo />
+              
             </a>
           </Link>
     
