@@ -21,20 +21,9 @@ export default function Layout({ children, className, noBanner = false, ...props
   
   const onboardDialog = useDialogState();
 
-  const Loading = () =>  {
-    toast.success('I Love U');
-  }
-
   return (
     <>
-      {/* <button onClick={Loading}>SONYA, CLICK PLEASE</button> */}
       <Header/>
-      {/* {router.pathname === '/' && <Hero noBanner={noBanner} onboardDialog={onboardDialog} />}
-
-      <main className={classNames('flex-1', className)} {...props}>
-        {children}
-      </main> */}
-      {/* <OnboardDialog dialog={onboardDialog} /> */}
       <CustomToast />
     </>
   );

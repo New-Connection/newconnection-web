@@ -1,9 +1,10 @@
 import React from 'react';
 import { createRoot } from "react-dom/client";
-import Home from './pages';
-// import './index.css';
-import './styles/globals.css';
 import { ThemeProvider } from 'next-themes';
+
+// code
+import Home from './pages';
+import './styles/globals.css';
 
 function Page() {
     return (
