@@ -6,7 +6,6 @@ import { useDialogState } from 'ariakit';
 import toast from 'react-hot-toast';
 // import '../../index.css';
 
-import Hero from '../Hero';
 // import OnboardDialog from 'components/Onboard';
 import Header from './Header';
 import CustomToast from '../CustomToast';

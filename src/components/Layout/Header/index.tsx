@@ -7,14 +7,14 @@ import Link from 'next/link';
 import classNames from 'classnames';
 
 // OWN Componets
-// import { WalletSelector } from '../../Web3';
+import { WalletSelector, Account } from '../../Web3';
 // import { Coins } from '../../Icons';
 // import Menu from './Menu';
 import Logo from '../../Logo';
 
 const Header = () => {
-    //const [{ data: account }] = useAccount();
-    const walletDailog = useDialogState();
+    const { data: account } = useAccount();
+    const walletDailog = useDialogState(); // For pop-up with wallets 
 
     return (
         <header
@@ -51,8 +51,20 @@ const Header = () => {
                 Create DAO
               </a>
             </Link>
+            {account ? (
+          <>
+            <Account showAccountInfo={walletDailog.toggle} />
+          </>
+        ) : (
+          <button
+            className="nav-button hidden dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white md:block"
+            onClick={walletDailog.toggle}
+          >
+            Connect Wallet
+          </button>
+        )}
           </nav>
-          {/* <WalletSelector dialog={walletDailog} /> */}
+          <WalletSelector dialog={walletDailog} />
         </header>
       );
 
