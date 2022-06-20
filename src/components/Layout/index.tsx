@@ -17,12 +17,13 @@ interface ILayoutProps {
 }
 
 export default function Layout({ children, className, noBanner = false, ...props }: ILayoutProps) {
-  
+  const router = useRouter();
   const onboardDialog = useDialogState();
 
   return (
     <>
       <Header/>
+      {/* {router.pathname === '/'} */}
       <CustomToast />
     </>
   );
