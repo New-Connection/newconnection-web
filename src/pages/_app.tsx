@@ -1,26 +1,23 @@
 import React from 'react';
-import { createRoot } from "react-dom/client";
 import { ThemeProvider } from 'next-themes';
 import { QueryClient, QueryClientProvider} from 'react-query'; // it makes fetching, caching, synchronizing and updating server state
 import { WagmiConfig } from 'wagmi'
-// code
-import Home from './pages';
-import './styles/globals.css';
-import  { walletConfig } from './components/Web3/'
+import type { AppProps } from 'next/app';
+// code 
+import '../styles/globals.css';
+import  { walletConfig } from '../components/Web3'
 
-function Page() {
+function App({Component, pageProps}: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient());
     return (
         <ThemeProvider defaultTheme="system" attribute="class">
             <WagmiConfig client={walletConfig}>
                 <QueryClientProvider client={queryClient}>
-                    <Home />
+                    <Component {...pageProps} />
                 </QueryClientProvider>
             </WagmiConfig>
         </ThemeProvider>
     )
 }
 
-const container = document.getElementById('root') as HTMLElement;
-const root = createRoot(container)
-root.render(<Page />);
+export default App;
