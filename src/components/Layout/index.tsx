@@ -23,7 +23,7 @@ export default function Layout({ children, className, noBanner = false, ...props
   return (
     <>
       <Header/>
-      {/* {router.pathname === '/'} */}
+      {router.pathname === '/'}
       <CustomToast />
     </>
   );
