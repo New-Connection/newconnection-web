@@ -37,7 +37,7 @@ const Header = () => {
               <a
                 className={classNames(
                   'mr-8 hidden hover:text-[#23BD8F] hover:dark:text-[#1BDBAD] lg:inline-block',
-                  // router.pathname === '/create-nft'
+                  router.pathname === '/create-nft'
                 )}
               >
                 Create NFT
@@ -47,7 +47,7 @@ const Header = () => {
               <a
                 className={classNames(
                   'mr-8 hidden hover:text-[#23BD8F] hover:dark:text-[#1BDBAD] lg:inline-block',
-                  //  router.pathname === '/create-dao'
+                  router.pathname === '/create-dao'
                 )}
               >
                 Create DAO
