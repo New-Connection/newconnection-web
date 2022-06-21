@@ -24,6 +24,9 @@ export default function Layout({ children, className, noBanner = false, ...props
     <>
       <Header/>
       {router.pathname === '/'}
+      <main className={classNames('flex-1', className)} {...props}>
+        {children}
+      </main>
       <CustomToast />
     </>
   );
