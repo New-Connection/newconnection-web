@@ -11,14 +11,17 @@ export const InputAmount = ({ name, label, isRequired, className, handleChange, 
         required={isRequired}
         autoComplete="off"
         autoCorrect="off"
-        type="text"
+        type="number"
         pattern="^[0-9]*[.,]?[0-9]*$"
-        placeholder="0.0"
+        placeholder="1 (Max. 100)"
         minLength={1}
         maxLength={79}
         spellCheck="false"
         inputMode="decimal"
         title="Enter numbers only."
+        min={1}
+        max={100} //Max number of NFT
+        step={1}
         onChange={handleChange}
         {...props}
       />
@@ -41,6 +44,7 @@ export const InputText = ({ name, label, isRequired, className, optional, handle
         autoCorrect="off"
         type="text"
         spellCheck="false"
+        placeholder=''
         onChange={handleChange}
         {...props}
       />
