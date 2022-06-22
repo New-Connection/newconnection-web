@@ -1,0 +1,17 @@
+.header {
+    @apply flex items-center justify-between gap-10 bg-[#D9F4E6] text-base dark:bg-[#333336];
+    padding-inline: clamp(0.5rem, 2.5vw, 2rem);
+    padding-block: clamp(1rem, 2.5vh, 2rem);
+}
+
+.nav {
+    @apply flex flex-shrink-0 items-center justify-between gap-[0.625rem] bg-[#D9F4E6] text-base dark:bg-[#333336]
+}
+
+.navButton{
+    @apply mr-8 hidden hover:text-[#23BD8F] hover:dark:text-[#1BDBAD] lg:inline-block
+}
+
+.wallet{
+    @apply nav-button hidden dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white md:block
+}
