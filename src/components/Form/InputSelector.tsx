@@ -35,7 +35,7 @@ const images = [
     Binance
 ]
   
-export function InputSelect() {
+export function InputSelector() {
     const select = useSelectState({
         defaultValue: "Ethereum",
         setValueOnMove: true,
