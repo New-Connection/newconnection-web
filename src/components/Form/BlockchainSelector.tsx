@@ -46,8 +46,8 @@ export function BlockchainSelector() {
         <>
         <div className=''>
             <span className="input-label">Blockchain</span>
-            <div className="flex flex-col">
-                <Select state={select} className='input-field flex cursor-default items-center whitespace-nowrap px-4 text-base justify-start gap-3 hover:bg-sky-700'>
+            <div className="flex flex-col dark:w-full">
+                <Select state={select} className='input-field w-full flex cursor-default items-center whitespace-nowrap text-base justify-start gap-3 hover:bg-sky-700'>
                     {renderValue(select.value)}
                     <SelectArrow />
                 </Select>

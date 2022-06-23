@@ -2,13 +2,12 @@ import * as React from 'react';
 import { InputAmount, InputText, SubmitButton, BlockchainSelector, TypeSelector, DragAndDropImage } from '../Form';
 
 export default function NFTSection(){
-
     return (
       <section className="relative w-full">
       <form className="mx-auto flex max-w-xl flex-col gap-4">
         <h1 className="font-exo my-2 text-2xl font-semibold text-[#3D3D3D] dark:text-white">Create NFT</h1>
         <InputText label='Name' name="recipientAddress" placeholder='NFT Name' isRequired />
-        <InputText label='Description' name="vestedToken" placeholder='A short descption about NFT collection(Max. 250 words)' isRequired />
+        <InputText label='Description' className="pt-1.5 pb-14 dark:pt-1.5 dark:pb-14" name="vestedToken" placeholder='A short descption about NFT collection(Max. 250 words)' isRequired />
         <DragAndDropImage/>
         <div className="flex justify-between">
             <InputAmount label={'Number of NFT'} name="vestingAmount" isRequired/>
