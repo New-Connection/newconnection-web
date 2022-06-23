@@ -11,8 +11,8 @@ import Polygon from "../../assets/chains/Polygon.png"
 import Arbitrum from "../../assets/chains/Arbitrum.png"
 import Binance from "../../assets/chains/Binance.png"
   
-function renderValue(chain: string, index: number) {
-    const image = images[index]
+function renderValue(chain: string) {
+    const image = images[chain]
     return (
         <>
         <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full" />
@@ -28,12 +28,12 @@ const chains = [
     "Binance",
 ];
 
-const images = [
-    Ethereum,
-    Polygon,
-    Arbitrum,
-    Binance
-]
+const images = {
+    "Ethereum" : Ethereum,
+    "Polygon": Polygon,
+    "Arbitrum": Arbitrum,
+    "Binance": Binance
+}
   
 export function InputSelector() {
     const select = useSelectState({
@@ -48,13 +48,13 @@ export function InputSelector() {
             <span className="input-label">Blockchain</span>
             <div className="flex flex-col">
                 <Select state={select} className='input-field flex cursor-default items-center whitespace-nowrap px-4 text-base justify-start gap-3 hover:bg-sky-700'>
-                    {renderValue(select.value, 0)}
+                    {renderValue(select.value)}
                     <SelectArrow />
                 </Select>
                 <SelectPopover state={select} className="input-field flex flex-col overflow-auto overscroll-contain p-1 data-focus-visible focus-visible:ring focus: outline-none ">
-                    {chains.map((chain, index) => (
+                    {chains.map((chain) => (
                     <SelectItem key={chain} value={chain} className="input-field flex cursor-default scroll-m-2 items-center gap-2 p-1 hover:bg-sky-700">
-                        {renderValue(chain, index)}
+                        {renderValue(chain)}
                     </SelectItem>
                     ))}
                 </SelectPopover>
