@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InputAmount, InputText, SubmitButton, InputSelector, TypeSelector } from '../Form';
+import { InputAmount, InputText, SubmitButton, BlockchainSelector, TypeSelector } from '../Form';
 
 export default function NFTSection(){
 
@@ -12,7 +12,7 @@ export default function NFTSection(){
         <div className="flex justify-between">
             <InputAmount label={'Number of NFT'} name="vestingAmount" isRequired/>
             <InputAmount label={'Price'} placeholder="0 (Max. 0)" name="vestingAmount" isRequired/>
-            <InputSelector/>
+            <BlockchainSelector/>
         </div>
         <div className='flex justify-between'>
           <TypeSelector/>

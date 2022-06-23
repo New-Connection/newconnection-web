@@ -35,7 +35,7 @@ const images = {
     "Binance": Binance
 }
   
-export function InputSelector() {
+export function BlockchainSelector() {
     const select = useSelectState({
         defaultValue: "Ethereum",
         setValueOnMove: true,
