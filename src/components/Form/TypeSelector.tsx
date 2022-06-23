@@ -6,26 +6,30 @@ import {
     useSelectState,
 } from "ariakit/select";
   
+import classNames from 'classnames';
+import { Selector } from './types';
+
+
 const types = [
-    "Charity",
-    "Venture",
-    "Crypto",
+    "Member",
+    "Design",
+    "VC",
 ];
 
   
-export function TypeSelector() {
+export const TypeSelector = ({name, label, className, handlerChange, ...props}: Selector) => {
     const select = useSelectState({
-        defaultValue: "Venture",
+        defaultValue: "Member",
         setValueOnMove: true,
         sameWidth: true,
         gutter: 4,
     });
     return (
         <>
-        <div className=''>
-            <span className="input-label">Type of NFT</span>
+        <div>
+            <span className="input-label">{label}</span>
             <div className="flex flex-col">
-                <Select state={select} className='input-field flex cursor-default items-center whitespace-nowrap px-4 text-base justify-start gap-3 hover:bg-sky-700'>
+                <Select state={select} name={name} className={classNames('input-field', className)}>
                     <div className="type">{select.value}</div>
                     <SelectArrow />
                 </Select>

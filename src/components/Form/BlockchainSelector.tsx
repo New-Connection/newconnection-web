@@ -6,6 +6,9 @@ import {
     useSelectState,
 } from "ariakit/select";
 
+import classNames from 'classnames';
+import { Selector } from './types';
+
 import Ethereum from "../../assets/chains/Ethereum.png"
 import Polygon from "../../assets/chains/Polygon.png"
 import Arbitrum from "../../assets/chains/Arbitrum.png"
@@ -35,7 +38,7 @@ const images = {
     "Binance": Binance
 }
   
-export function BlockchainSelector() {
+export const BlockchainSelector = ({name, label, className, handlerChange, ...props}:Selector) => {
     const select = useSelectState({
         defaultValue: "Ethereum",
         setValueOnMove: true,
@@ -44,10 +47,13 @@ export function BlockchainSelector() {
     });
     return (
         <>
-        <div className=''>
-            <span className="input-label">Blockchain</span>
+        <div>
+            <span className="input-label">{label}</span>
             <div className="flex flex-col dark:w-full">
-                <Select state={select} className='input-field w-full flex cursor-default items-center whitespace-nowrap text-base justify-start gap-3 hover:bg-sky-700'>
+                <Select 
+                state={select} 
+                name={name} 
+                className={classNames('input-field', className)}>
                     {renderValue(select.value)}
                     <SelectArrow />
                 </Select>
