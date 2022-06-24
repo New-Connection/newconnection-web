@@ -1,6 +1,6 @@
 import React from "react";
 import { NextPage } from "next"; // it's just type
-import Layout from "../components/Layout";
+import Layout from "components/Layout";
 import Head from "next/head";
 
 function CreateDAO() {

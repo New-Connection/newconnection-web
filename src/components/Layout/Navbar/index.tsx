@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Logo from "../../Logo";
-import styles from "../../../styles/Layout.module.css";
+import Logo from "components/Logo";
+import styles from "styles/Layout.module.css";
 import classNames from "classnames";
-import { Account, WalletSelector } from "../../Web3";
+import { Account, WalletSelector } from "components/Web3";
 import { useAccount } from "wagmi";
 import { useDialogState } from "ariakit";
 import { useRouter } from "next/router";

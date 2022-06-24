@@ -1,14 +1,9 @@
-import Head from "next/head";
 import * as React from "react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import { useDialogState } from "ariakit";
-import toast from "react-hot-toast";
-// import '../../index.css';
-
-// import OnboardDialog from 'components/Onboard';
 import Header from "./Header";
-import CustomToast from "../CustomToast";
+import CustomToast from "components/CustomToast";
 
 interface ILayoutProps {
     children: React.ReactNode;
