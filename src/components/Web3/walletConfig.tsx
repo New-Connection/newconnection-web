@@ -11,10 +11,10 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { alchemyId } from 'src/utils/constants'
 
 // const alchemyId = "" // File should be in root directory(with package.json)
-console.log("Alchemy" + alchemyId)
+// console.log("Alchemy" + alchemyId)
 // Configure chains & providers with the Alchemy provider.
 // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
-const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
+export const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
   alchemyProvider({ alchemyId }),
   publicProvider(),
 ])
