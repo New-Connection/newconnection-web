@@ -8,10 +8,14 @@
     @apply flex flex-shrink-0 items-center justify-between gap-[0.625rem] bg-[#D9F4E6] text-base dark:bg-[#333336]
 }
 
-.navButton{
+.navButton {
     @apply mr-8 hidden hover:text-[#23BD8F] hover:dark:text-[#1BDBAD] lg:inline-block
 }
 
-.wallet{
+.navButtonActive {
+    color: #23BD8F;
+}
+
+.wallet {
     @apply nav-button hidden dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white md:block
 }

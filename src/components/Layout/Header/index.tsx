@@ -11,7 +11,8 @@ import { WalletSelector, Account } from "../../Web3";
 // import { Coins } from '../../Icons';
 // import Menu from './Menu';
 import Logo from "../../Logo";
-import styles from "../../../styles/Header.module.css";
+import styles from "../../../styles/Layout.module.css";
+import Navbar from "../Navbar";
 
 const Header = () => {
     const { data: account } = useAccount();
@@ -20,35 +21,7 @@ const Header = () => {
 
     return (
         <header className={styles.header}>
-            <Link href="/" passHref>
-                <a>
-                    <span className="sr-only">Navigate to Home Page</span>
-                    <Logo />
-                </a>
-            </Link>
-
-            <nav className={styles.nav}>
-                <Link href="/create-nft" passHref>
-                    <a className={classNames(styles.navButton, router.pathname === "/create-nft")}>
-                        Create NFT
-                    </a>
-                </Link>
-                <Link href="/create-dao" passHref>
-                    <a className={classNames(styles.navButton, router.pathname === "/create-dao")}>
-                        Create DAO
-                    </a>
-                </Link>
-                {account ? (
-                    <>
-                        <Account showAccountInfo={walletDailog.toggle} />
-                    </>
-                ) : (
-                    <button className={styles.wallet} onClick={walletDailog.toggle}>
-                        Connect Wallet
-                    </button>
-                )}
-            </nav>
-            <WalletSelector dialog={walletDailog} />
+            <Navbar />
         </header>
     );
 };
