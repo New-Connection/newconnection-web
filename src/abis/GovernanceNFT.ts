@@ -442,6 +442,25 @@ const governanceNFT = [
         type: "function",
     },
     {
+        inputs: [
+            {
+                internalType: "address",
+                name: "addr",
+                type: "address",
+            },
+        ],
+        name: "numAvailableToMint",
+        outputs: [
+            {
+                internalType: "uint8",
+                name: "",
+                type: "uint8",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
         inputs: [],
         name: "owner",
         outputs: [
@@ -732,13 +751,6 @@ const governanceNFT = [
             },
         ],
         name: "transferOwnership",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "withdraw",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
