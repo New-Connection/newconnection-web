@@ -54,9 +54,7 @@ const Header = () => {
               </a>
             </Link>
             {account ? (
-          <>
             <Account showAccountInfo={walletDailog.toggle} />
-          </>
         ) : (
           <button
             className="nav-button hidden dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white md:block"

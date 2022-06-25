@@ -10,8 +10,6 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { alchemyId } from 'src/utils/constants'
 
-// const alchemyId = "" // File should be in root directory(with package.json)
-// console.log("Alchemy" + alchemyId)
 // Configure chains & providers with the Alchemy provider.
 // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
 export const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
@@ -21,29 +19,29 @@ export const { chains, provider, webSocketProvider } = configureChains(defaultCh
 
 // Set up client
 export const walletConfig = createClient({
-        autoConnect: true,
-        connectors: [
-          new MetaMaskConnector({ chains }),
-          new CoinbaseWalletConnector({
-            chains,
-            options: {
-              appName: 'wagmi',
-            },
-          }),
-          new WalletConnectConnector({
-            chains,
-            options: {
-              qrcode: true,
-            },
-          }),
-          new InjectedConnector({
-            chains,
-            options: {
-              name: 'Injected',
-              shimDisconnect: true,
-            },
-          }),
-        ],
-        provider,
-        webSocketProvider,
-      })
+  autoConnect: true,
+  connectors: [
+    new MetaMaskConnector({ chains }),
+    new CoinbaseWalletConnector({
+      chains,
+      options: {
+        appName: 'wagmi',
+      },
+    }),
+    new WalletConnectConnector({
+      chains,
+      options: {
+        qrcode: true,
+      },
+    }),
+    new InjectedConnector({
+      chains,
+      options: {
+        name: 'Injected',
+        shimDisconnect: true,
+      },
+    }),
+  ],
+  provider,
+  webSocketProvider,
+})
