@@ -4,7 +4,8 @@ import { Dialog, DialogHeading, DisclosureState } from 'ariakit';
 
 // OWN
 import { useIsMounted } from '../../hooks';
-import { WalletProfile } from './WalletProfile';
+import {formatAddress} from 'src/utils/address'
+// import { WalletProfile } from './WalletProfile';
 interface Props {
   dialog: DisclosureState;
 }
@@ -33,6 +34,8 @@ export const WalletSelector = ({ dialog }: Props) => {
     }
   }, [connect, connectors]);
 
+  const formattedAddress = account && formatAddress(account?.address);
+
   return (
     // Display Connected Wallet 
     <Dialog state={dialog} className="dialog">
@@ -52,7 +55,7 @@ export const WalletSelector = ({ dialog }: Props) => {
             <p className="text-sm font-thin"> Connected to {account.connector?.name}</p>
             <p className="flex items-center gap-4 break-words">
               <div>
-                {ensName ? `${ensName} (${account.address})` : account.address}
+                {ensName ? `${ensName} (${formattedAddress})` : account.address}
               </div>
             </p>
             <button
@@ -80,7 +83,23 @@ export const WalletSelector = ({ dialog }: Props) => {
             </button>
           </DialogHeading>
           {/* choose profile */}
-          <WalletProfile/> 
+          <div className="mt-3 flex flex-col gap-2">
+              {connectors.map((connector) => (
+                <button
+                  disabled={!connector.ready}
+                  key={connector.id}
+                  onClick={() => handleConnect(connector)}
+                  className="rounded border p-2"
+                >
+                  {connector.name}
+                  {!connector.ready && ' (unsupported)'}
+                  {isConnecting &&
+                    connector.id === pendingConnector?.id &&
+                    ' (connecting)'}
+                </button>
+              ))}
+              {error && <div>{error.message}</div>}
+            </div>
         </>
       )}
     </Dialog>
