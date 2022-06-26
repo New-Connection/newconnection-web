@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 
 const Home = () => {
   return (
-    <Layout className="dark: flex flex-col gap-[30px] dark:bg-[#161818]" noBanner={false}>
+    <Layout className="dark: flex flex-col gap-[30px] dark:bg-[#161818]">
     </Layout>
   );
 };
