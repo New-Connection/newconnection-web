@@ -33,14 +33,7 @@ export const walletConfig = createClient({
       options: {
         qrcode: true,
       },
-    }),
-    new InjectedConnector({
-      chains,
-      options: {
-        name: 'Injected',
-        shimDisconnect: true,
-      },
-    }),
+    })
   ],
   provider,
   webSocketProvider,
