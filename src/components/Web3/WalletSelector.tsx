@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Connector, useAccount, useConnect, useDisconnect, useEnsName, useEnsAvatar } from 'wagmi';
 import { Dialog, DialogHeading, DisclosureState } from 'ariakit';
+import { XIcon } from '@heroicons/react/solid';
 
 // OWN
 import { useIsMounted } from '../../hooks';
@@ -12,7 +13,6 @@ interface Props {
 
 export const WalletSelector = ({ dialog }: Props) => {
   const { data: account } = useAccount()
-  const { data: ensAvatar } = useEnsAvatar({ addressOrName: account?.address })
   const { data: ensName } = useEnsName({ address: account?.address })
   const { connect, connectors, error, isConnecting, pendingConnector } =
     useConnect()
@@ -27,6 +27,14 @@ export const WalletSelector = ({ dialog }: Props) => {
     },
     [connect, dialog]
   );
+
+  const handlerDisconect = React.useCallback(
+    async () => {
+      await disconnect();
+      dialog.toggle();
+    },
+    [disconnect, dialog]
+  );
   
   React.useEffect(() => {
     if (process.env.NEXT_PUBLIC_SAFE === 'true' && typeof window !== 'undefined') {
@@ -35,7 +43,6 @@ export const WalletSelector = ({ dialog }: Props) => {
   }, [connect, connectors]);
 
   const formattedAddress = account && formatAddress(account?.address);
-
   return (
     // Display Connected Wallet 
     <Dialog state={dialog} className="dialog">
@@ -49,6 +56,7 @@ export const WalletSelector = ({ dialog }: Props) => {
               onClick={dialog.toggle}
             >
               <span className="sr-only">Close</span>
+              <XIcon className="h-5 w-5" />
             </button>
           </DialogHeading>
           <div className="mt-3 flex flex-col gap-2">
@@ -60,10 +68,7 @@ export const WalletSelector = ({ dialog }: Props) => {
             </p>
             <button
               className="nav-button mt-5 dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
-              onClick={() => {
-                disconnect();
-                dialog.toggle();
-              }}
+              onClick={() => handlerDisconect()}
             >
               Disconnect
             </button>
@@ -80,9 +85,10 @@ export const WalletSelector = ({ dialog }: Props) => {
               onClick={dialog.toggle}
             >
               <span className="sr-only">Close</span>
+              <XIcon className="h-5 w-5" />
             </button>
           </DialogHeading>
-          {/* choose profile */}
+          {/* choose profile: metamask, coinbase, wallet connect  */}
           <div className="mt-3 flex flex-col gap-2">
               {connectors.map((connector) => (
                 <button
@@ -99,7 +105,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                 </button>
               ))}
               {error && <div>{error.message}</div>}
-            </div>
+          </div>
         </>
       )}
     </Dialog>
