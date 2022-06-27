@@ -15,14 +15,7 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
     const onboardDialog = useDialogState();
 
     return (
-        <>
-            <Head>
-            <title>New Connection</title>
-            <meta
-              name="description"
-              content="New Connection is a multi-chain DAO protocol that allows you to create oranisation based on NFT-membership."
-             />
-            </Head>   
+        <>  
             <Header />
             <main className={classNames("flex-1", className)} {...props}>
                 {children}

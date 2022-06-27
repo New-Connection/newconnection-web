@@ -5,7 +5,7 @@ import { XIcon } from '@heroicons/react/solid';
 
 // OWN
 import { useIsMounted } from '../../hooks';
-import {formatAddress} from 'src/utils/address'
+import {formatAddress} from '../../utils/address';
 // import { WalletProfile } from './WalletProfile';
 interface Props {
   dialog: DisclosureState;
