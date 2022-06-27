@@ -15,7 +15,7 @@ export const Account = ({ showAccountInfo }: Props) => {
 
   return (
     <button
-      className="nav-button hidden bg-[#23BD8F] text-white dark:border-[#333336] md:block"
+      className="nav-button hidden bg-[#23BD8F] text-white md:block"
       onClick={showAccountInfo}
     >
     {ensName ?? formattedAddress}

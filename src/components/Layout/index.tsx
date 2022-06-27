@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useRouter } from "next/router";
 import { useDialogState } from "ariakit";
 import Header from "./Header";
-import CustomToast from "components/CustomToast";
+import CustomToast from "../CustomToast";
 
 interface ILayoutProps {
     children: React.ReactNode;

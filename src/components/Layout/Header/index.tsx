@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 
 // OWN Componets
 import styles from "styles/Layout.module.css";
-import Navbar from "components/Layout/Navbar";
+import Navbar from "../Navbar";
 
 const Header = () => {
     const { data: account } = useAccount();

@@ -48,11 +48,11 @@ export const WalletSelector = ({ dialog }: Props) => {
     <Dialog state={dialog} className="dialog">
       {account ? (
         <>
-          <DialogHeading className="text-base font-medium leading-6 text-neutral-700 dark:text-neutral-200">
+          <DialogHeading className="text-base font-medium leading-6 text-neutral-700">
             <span> Account </span>
             
             <button
-              className="absolute top-[18px] right-4 rounded hover:bg-neutral-200 dark:hover:bg-zinc-800"
+              className="absolute top-[18px] right-4 rounded hover:bg-neutral-200"
               onClick={dialog.toggle}
             >
               <span className="sr-only">Close</span>
@@ -67,7 +67,7 @@ export const WalletSelector = ({ dialog }: Props) => {
               </div>
             </p>
             <button
-              className="nav-button mt-5 dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+              className="nav-button mt-5"
               onClick={() => handlerDisconect()}
             >
               Disconnect
@@ -78,10 +78,10 @@ export const WalletSelector = ({ dialog }: Props) => {
       // Connect Wallet
       (
         <>
-          <DialogHeading className="text-base font-medium leading-6 text-neutral-700 dark:text-neutral-200">
+          <DialogHeading className="text-base font-medium leading-6 text-neutral-700 ">
             <span>Connect Wallet</span>
             <button
-              className="absolute top-[18px] right-4 rounded hover:bg-neutral-200 dark:hover:bg-zinc-800"
+              className="absolute top-[18px] right-4 rounded hover:bg-neutral-200"
               onClick={dialog.toggle}
             >
               <span className="sr-only">Close</span>

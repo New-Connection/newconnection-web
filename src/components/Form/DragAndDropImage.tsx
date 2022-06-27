@@ -21,7 +21,7 @@ export const DragAndDropImage = ({label, name, className, multiplefiles=false, h
       >
         <div className="flex flex-row gap-x-3 py-14 px-3 border-dashed 
           rounded-md border-2 border-slate-800
-          bg-slate-800 hover:border-slate-300 dark:items-center">
+          bg-slate-800 hover:border-slate-300 items-center">
           <p className='text-slate-400'>PNG, JPEG and JPG accept. Max 1mb.</p>
           {/* <img src={ImageIcon.src} className='h-6 w-6'/> */}
           {/* <p className='text-slate-400'>{file ? `File name: ${file?.name} ✅` : "PNG, JPEG and JPG accept. Max 1mb."}</p> */}
