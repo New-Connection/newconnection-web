@@ -11,12 +11,14 @@ export const Account = ({ showAccountInfo }: Props) => {
   if (!account) return null;
   const { data: ensName } = useEnsName({ address: account?.address })
 
+  const formattedAddress = formatAddress(account?.address);
+
   return (
     <button
       className="nav-button hidden bg-[#23BD8F] text-white dark:border-[#333336] md:block"
       onClick={showAccountInfo}
     >
-    {ensName ? `${ensName} (${account.address})` : account.address}
+    {ensName ?? formattedAddress}
     </button>
   );
 };

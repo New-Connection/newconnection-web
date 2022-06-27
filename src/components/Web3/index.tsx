@@ -1,4 +1,3 @@
 export { WalletSelector } from './WalletSelector';
-export { walletConfig } from './walletConfig';
-export { WalletProfile } from './WalletProfile';
+export { walletConfig, provider } from './walletConfig';
 export { Account } from './Account';
