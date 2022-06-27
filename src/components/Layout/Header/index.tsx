@@ -13,7 +13,7 @@ import { WalletSelector, Account } from '../../Web3';
 import Logo from '../../Logo';
 
 const Header = () => {
-    const { data: account } = useAccount();
+    const { data } = useAccount();
     const walletDailog = useDialogState(); // For pop-up with wallets 
     const router = useRouter();            
 
@@ -53,18 +53,20 @@ const Header = () => {
                 Create DAO
               </a>
             </Link>
-            {account ? (
+            {data ? (
+          <>
             <Account showAccountInfo={walletDailog.toggle} />
+          </>
         ) : (
           <button
             className="nav-button hidden dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white md:block"
             onClick={walletDailog.toggle}
           >
-            Connect Wallet
+            {'Connect Wallet'}
           </button>
         )}
           </nav>
-          <WalletSelector dialog={walletDailog} />
+          <WalletSelector dialog={walletDailog}/>
         </header>
       );
 
