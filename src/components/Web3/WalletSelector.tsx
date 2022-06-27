@@ -60,8 +60,8 @@ export const WalletSelector = ({ dialog }: Props) => {
             </button>
           </DialogHeading>
           <div className="mt-3 flex flex-col gap-2">
-            <p className="text-sm font-thin"> Connected to {account.connector?.name}</p>
-            <p className="flex items-center gap-4 break-words">
+            <p className="text-sm font-thin text-slate-500"> Connected to {account.connector?.name}</p>
+            <p className="flex items-center gap-4 break-words text-slate-500">
               <div>
                 {ensName ? `${ensName} (${formattedAddress})` : account.address}
               </div>
@@ -95,7 +95,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                   disabled={!connector.ready}
                   key={connector.id}
                   onClick={() => handleConnect(connector)}
-                  className="rounded border p-2"
+                  className="rounded border p-2 text-slate-500"
                 >
                   {connector.name}
                   {!connector.ready && ' (unsupported)'}

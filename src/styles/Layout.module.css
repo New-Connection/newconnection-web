@@ -5,15 +5,15 @@
 }
 
 .nav {
-    @apply flex flex-shrink-0 items-center justify-between gap-[0.625rem] bg-[#D9F4E6] text-base 
+    @apply flex flex-shrink-0 items-center justify-between gap-[0.625rem] text-base 
 }
 
 .navButton {
-    @apply mr-8 hidden hover:text-[#5c5c5c] lg:inline-block
+    @apply mr-8 hidden text-slate-500 hover:text-[#23BD8F] lg:inline-block
 }
 
 .navButtonActive {
-    color: #363636;
+    color: #23BD8F;
     font-weight: bold;
 }
 
