@@ -2,28 +2,28 @@ const governor = [
     {
         inputs: [
             {
+                internalType: "string",
+                name: "name_",
+                type: "string",
+            },
+            {
                 internalType: "contract IVotes",
-                name: "_token",
+                name: "token_",
                 type: "address",
             },
             {
                 internalType: "uint256",
-                name: "_votingDelay",
+                name: "votingDelay_",
                 type: "uint256",
             },
             {
                 internalType: "uint256",
-                name: "_votingPeriod",
+                name: "votingPeriod_",
                 type: "uint256",
             },
             {
                 internalType: "uint256",
-                name: "_proposalThreshold",
-                type: "uint256",
-            },
-            {
-                internalType: "uint256",
-                name: "_quorumPercentage",
+                name: "quorumPercentage_",
                 type: "uint256",
             },
         ],
@@ -34,6 +34,25 @@ const governor = [
         inputs: [],
         name: "Empty",
         type: "error",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "address",
+                name: "previousOwner",
+                type: "address",
+            },
+            {
+                indexed: true,
+                internalType: "address",
+                name: "newOwner",
+                type: "address",
+            },
+        ],
+        name: "OwnershipTransferred",
+        type: "event",
     },
     {
         anonymous: false,
@@ -320,6 +339,40 @@ const governor = [
     {
         inputs: [
             {
+                internalType: "address[]",
+                name: "targets",
+                type: "address[]",
+            },
+            {
+                internalType: "uint256[]",
+                name: "values",
+                type: "uint256[]",
+            },
+            {
+                internalType: "bytes[]",
+                name: "calldatas",
+                type: "bytes[]",
+            },
+            {
+                internalType: "bytes32",
+                name: "descriptionHash",
+                type: "bytes32",
+            },
+        ],
+        name: "cancel",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
                 internalType: "uint256",
                 name: "proposalId",
                 type: "uint256",
@@ -529,6 +582,25 @@ const governor = [
     {
         inputs: [
             {
+                internalType: "uint256",
+                name: "proposalId",
+                type: "uint256",
+            },
+        ],
+        name: "getProposer",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
                 internalType: "address",
                 name: "account",
                 type: "address",
@@ -574,6 +646,19 @@ const governor = [
                 internalType: "uint256",
                 name: "",
                 type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "governorInfoURI",
+        outputs: [
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
             },
         ],
         stateMutability: "view",
@@ -763,6 +848,19 @@ const governor = [
         type: "function",
     },
     {
+        inputs: [],
+        name: "owner",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
         inputs: [
             {
                 internalType: "uint256",
@@ -776,6 +874,25 @@ const governor = [
                 internalType: "uint256",
                 name: "",
                 type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "proposalId",
+                type: "uint256",
+            },
+        ],
+        name: "proposalInfoURI",
+        outputs: [
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
             },
         ],
         stateMutability: "view",
@@ -945,6 +1062,44 @@ const governor = [
         type: "function",
     },
     {
+        inputs: [],
+        name: "renounceOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "string",
+                name: "newInfoURI",
+                type: "string",
+            },
+        ],
+        name: "setGovernorInfoURI",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "proposalId",
+                type: "uint256",
+            },
+            {
+                internalType: "string",
+                name: "infoURI",
+                type: "string",
+            },
+        ],
+        name: "setProposalInfoURI",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
         inputs: [
             {
                 internalType: "uint256",
@@ -1032,6 +1187,19 @@ const governor = [
             },
         ],
         stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "newOwner",
+                type: "address",
+            },
+        ],
+        name: "transferOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
         type: "function",
     },
     {

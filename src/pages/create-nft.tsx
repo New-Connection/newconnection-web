@@ -1,7 +1,8 @@
-import Layout from '../components/Layout';
-import * as React from 'react';
-import { NextPage } from 'next'; // it's just type 
-import NFTSection from '../components/NFT';
+import Layout from "components/Layout";
+import * as React from "react";
+import { NextPage } from "next"; // it's just type
+import NFTSection from "components/NFT";
+import Head from "next/head";
 
 const CreateNFT: NextPage = () => {
   return (
