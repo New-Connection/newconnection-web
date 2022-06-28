@@ -3,9 +3,9 @@ import { useDialogState } from 'ariakit';
 
 import { InputAmount, InputText, SubmitButton, BlockchainSelector, TypeSelector, DragAndDropImage } from '../Form';
 import { hexValue } from 'ethers/lib/utils';
-import { provider } from "src/components/Web3/"
+import { provider } from "components/Web3/"
 
-import CreateNFTContract from 'src/queries/useCreateNFTContract'
+import CreateNFTContract from 'queries/useCreateNFTContract'
 import { Signer, ethers } from 'ethers';
 import { useSigner } from 'wagmi'
 // TODO: 

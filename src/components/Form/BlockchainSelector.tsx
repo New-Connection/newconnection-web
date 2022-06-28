@@ -9,10 +9,10 @@ import {
 import classNames from 'classnames';
 import { Selector } from './types';
 
-import Ethereum from "../../assets/chains/Ethereum.png"
-import Polygon from "../../assets/chains/Polygon.png"
-import Arbitrum from "../../assets/chains/Arbitrum.png"
-import Binance from "../../assets/chains/Binance.png"
+import Ethereum from "assets/chains/Ethereum.png"
+import Polygon from "assets/chains/Polygon.png"
+import Arbitrum from "assets/chains/Arbitrum.png"
+import Binance from "assets/chains/Binance.png"
   
 function renderValue(chain: string) {
     const image = images[chain]
