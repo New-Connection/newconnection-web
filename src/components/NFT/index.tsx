@@ -107,18 +107,10 @@ export default function NFTSection() {
                 <div className="flex justify-between">
                     <InputAmount label={"Number of NFT"} name="count" isRequired />
                     <InputAmount label={"Price"} placeholder="0 (Max. 0)" name="price" isRequired />
-                    <BlockchainSelector
-                        label={"Type of blockchain"}
-                        name={"blockchain"}
-                        className="w-full flex cursor-default items-center whitespace-nowrap text-base justify-start gap-3 hover:bg-sky-700"
-                    />
+                    <BlockchainSelector label={"Type of blockchain"} name={"blockchain"} />
                 </div>
                 <div className="flex justify-between">
-                    <TypeSelector
-                        label={"Role"}
-                        name="role"
-                        className="flex cursor-default items-center whitespace-nowrap px-4 text-base justify-start gap-3 hover:bg-sky-700"
-                    />
+                    <TypeSelector label={"Role"} name="role" />
                     <InputText
                         label={"Collection (optional)"}
                         name="collectionName"
