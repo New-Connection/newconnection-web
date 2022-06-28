@@ -1,6 +1,6 @@
 import { Signer } from 'ethers';
 
-import { createFactoryNFT } from 'src/utils/contract';
+import { createFactoryNFT } from 'utils/contract';
 
 
 
