@@ -7,7 +7,7 @@ function CreateDAO() {
     return (
         <>
             <Head>
-                <title>Create Dao</title>
+                <title>New Connection: Create DAO</title>
             </Head>
             <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-8">
                 <h1>Hello DAO</h1>
