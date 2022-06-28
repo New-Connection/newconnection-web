@@ -13,7 +13,7 @@ const navigation = [
 ];
 
 const Navbar = () => {
-    const { data: account } = useAccount();
+    const { address } = useAccount();
     const walletDailog = useDialogState(); // For pop-up with wallets
     const router = useRouter();
 
@@ -40,7 +40,7 @@ const Navbar = () => {
                     </Link>
                 ))}
 
-                {account ? (
+                {address ? (
                     <>
                         <Account showAccountInfo={walletDailog.toggle} />
                     </>

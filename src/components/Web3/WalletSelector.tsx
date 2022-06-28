@@ -12,16 +12,16 @@ interface Props {
 }
 
 export const WalletSelector = ({ dialog }: Props) => {
-    const { data: account } = useAccount();
-    const { data: ensName } = useEnsName({ address: account?.address });
-    const { connect, connectors, error, isConnecting, pendingConnector } = useConnect();
+    const { address, connector, isConnected } = useAccount();
+    const { data: ensName } = useEnsName({ address: address });
+    const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
     const { disconnect } = useDisconnect();
 
     const isMounted = useIsMounted();
 
     const handleConnect = React.useCallback(
-        async (connector: Connector) => {
-            await connect(connector);
+        async (x: Connector) => {
+            await connect({ connector: x });
             dialog.toggle();
         },
         [connect, dialog]
@@ -34,19 +34,19 @@ export const WalletSelector = ({ dialog }: Props) => {
 
     React.useEffect(() => {
         if (process.env.NEXT_PUBLIC_SAFE === "true" && typeof window !== "undefined") {
-            connect(connectors[0]);
+            connect({ connector: connectors[0] });
+            console.log(connectors[0]);
         }
     }, [connect, connectors]);
 
-    const formattedAddress = account && formatAddress(account?.address);
+    const formattedAddress = address && formatAddress(address);
     return (
         // Display Connected Wallet
         <Dialog state={dialog} className="dialog">
-            {account ? (
+            {isConnected ? (
                 <>
                     <DialogHeading className="text-base font-medium leading-6 text-neutral-700">
-                        <span> Account </span>
-
+                        <span>Account</span>
                         <button
                             className="absolute top-[18px] right-4 rounded hover:bg-neutral-200"
                             onClick={dialog.toggle}
@@ -57,12 +57,10 @@ export const WalletSelector = ({ dialog }: Props) => {
                     </DialogHeading>
                     <div className="mt-3 flex flex-col gap-2">
                         <p className="text-sm font-thin text-slate-500">
-                            Connected to {account.connector?.name}
+                            Connected to {connector?.name}
                         </p>
                         <p className="flex items-center gap-4 break-words text-slate-500">
-                            <div>
-                                {ensName ? `${ensName} (${formattedAddress})` : account.address}
-                            </div>
+                            <div>{ensName ? `${ensName} (${formattedAddress})` : address}</div>
                         </p>
                         <button className="nav-button mt-5" onClick={() => handlerDisconect()}>
                             Disconnect
@@ -85,19 +83,15 @@ export const WalletSelector = ({ dialog }: Props) => {
                     {/* choose profile: metamask, wallet connect  */}
                     <div className="mt-3 flex flex-col gap-2">
                         {connectors
-                            //.filter((x) => isMounted && x.ready && x.id !== connector?.id)
-                            .map((connector) => (
+                            //.filter((x) => isMounted && x.ready && x.id !== pendingConnector?.id) //Disable Button
+                            .map((x) => (
                                 <button
-                                    disabled={!connector.ready}
-                                    key={connector.id}
-                                    onClick={() => handleConnect(connector)}
+                                    key={x?.id}
+                                    onClick={() => handleConnect(x)}
                                     className="rounded border p-2 text-slate-500"
                                 >
-                                    {connector.name}
-                                    {!connector.ready && " (unsupported)"}
-                                    {isConnecting &&
-                                        connector.id === pendingConnector?.id &&
-                                        " (connecting)"}
+                                    {x?.name}
+                                    {isLoading && x.id === pendingConnector?.id && " (connecting)"}
                                 </button>
                             ))}
                         {error && <div>{error.message}</div>}
