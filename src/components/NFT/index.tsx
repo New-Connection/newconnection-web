@@ -76,9 +76,7 @@ export default function NFTSection() {
         const blockchain = form.blockchain.value;
         const price = form.price.value;
 
-        // console.log(name, description, image, role);
-        // console.log(collectionName, twitterURL, discordURL);
-        // console.log(count, blockchain, price);
+        console.log(formData);
         // if (isApproved) {
         //     confirmDialog.show();
         //     form.reset();

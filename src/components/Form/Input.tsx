@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { InputElement } from "./types";
+import { InputElement, TextAreaElement } from "./types";
 
 export const InputAmount = ({
     name,
@@ -60,6 +60,39 @@ export const InputText = ({
                 autoComplete="off"
                 autoCorrect="off"
                 type="text"
+                spellCheck="false"
+                placeholder={placeholder}
+                onChange={handleChange}
+                maxLength={maxLength}
+                {...props}
+            />
+        </label>
+    );
+};
+
+export const InputTextArea = ({
+    name,
+    label,
+    isRequired,
+    className,
+    optional,
+    handleChange,
+    placeholder,
+    maxLength,
+    ...props
+}: TextAreaElement) => {
+    return (
+        <label>
+            <span className="input-label">
+                <span className="mr-2">{label}</span>
+                {optional && <small className="text-neutral-500">Optional</small>}
+            </span>
+            <textarea
+                className={classNames("input-field", className)}
+                name={name}
+                required={isRequired}
+                autoComplete="off"
+                autoCorrect="off"
                 spellCheck="false"
                 placeholder={placeholder}
                 onChange={handleChange}

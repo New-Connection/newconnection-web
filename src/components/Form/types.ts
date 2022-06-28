@@ -1,5 +1,6 @@
 import { VoidSigner } from "ethers";
 import * as React from "react";
+import { ChangeEventHandler } from "react";
 
 export interface InputElement {
     name: string;
@@ -7,6 +8,18 @@ export interface InputElement {
     isRequired: boolean;
     className?: string;
     handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: string;
+    optional?: boolean;
+    maxLength?: number;
+    pattern?: string;
+}
+
+export interface TextAreaElement {
+    name: string;
+    label: string;
+    isRequired: boolean;
+    className?: string;
+    handleChange?: ChangeEventHandler<HTMLTextAreaElement>;
     placeholder?: string;
     optional?: boolean;
     maxLength?: number;
