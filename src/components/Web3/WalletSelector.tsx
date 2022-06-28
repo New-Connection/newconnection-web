@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Connector, useAccount, useConnect, useDisconnect, useEnsName, useEnsAvatar } from "wagmi";
-import { Dialog, DialogHeading, DisclosureState } from "ariakit";
-import { XIcon } from "@heroicons/react/solid";
+import { Dialog, DisclosureState } from "ariakit";
 
 // OWN
 import { useIsMounted } from "hooks";
 import { formatAddress } from "utils/address";
-// import { WalletProfile } from './WalletProfile';
+import { DialogHeader } from "components/Dialog";
+
 interface Props {
     dialog: DisclosureState;
 }
@@ -45,16 +45,7 @@ export const WalletSelector = ({ dialog }: Props) => {
         <Dialog state={dialog} className="dialog">
             {isConnected ? (
                 <>
-                    <DialogHeading className="text-base font-medium leading-6 text-neutral-700">
-                        <span>Account</span>
-                        <button
-                            className="absolute top-[18px] right-4 rounded hover:bg-neutral-200"
-                            onClick={dialog.toggle}
-                        >
-                            <span className="sr-only">Close</span>
-                            <XIcon className="h-5 w-5" />
-                        </button>
-                    </DialogHeading>
+                    <DialogHeader title="Account" dialog={dialog} />
                     <div className="mt-3 flex flex-col gap-2">
                         <p className="text-sm font-thin text-slate-500">
                             Connected to {connector?.name}
@@ -70,16 +61,7 @@ export const WalletSelector = ({ dialog }: Props) => {
             ) : (
                 // Connect Wallet
                 <>
-                    <DialogHeading className="text-base font-medium leading-6 text-neutral-700 ">
-                        <span>Connect Wallet</span>
-                        <button
-                            className="absolute top-[18px] right-4 rounded hover:bg-neutral-200"
-                            onClick={dialog.toggle}
-                        >
-                            <span className="sr-only">Close</span>
-                            <XIcon className="h-5 w-5" />
-                        </button>
-                    </DialogHeading>
+                    <DialogHeader title="Connect Wallet" dialog={dialog} />
                     {/* choose profile: metamask, wallet connect  */}
                     <div className="mt-3 flex flex-col gap-2">
                         {connectors
