@@ -7,15 +7,18 @@ import { useAccount } from "wagmi";
 import { useDialogState } from "ariakit";
 import { useRouter } from "next/router";
 
+import { useIsMounted } from "hooks";
+
 const navigation = [
     { id: 1, title: "Create NFT", path: "/create-nft" },
     { id: 2, title: "Create DAO", path: "/create-dao" },
 ];
 
 const Navbar = () => {
-    const { address } = useAccount();
+    const { isConnected } = useAccount();
     const walletDailog = useDialogState(); // For pop-up with wallets
     const router = useRouter();
+    const isMounted = useIsMounted();
 
     return (
         <>
@@ -39,18 +42,14 @@ const Navbar = () => {
                         </a>
                     </Link>
                 ))}
-
-                {address ? (
-                    <>
-                        <Account showAccountInfo={walletDailog.toggle} />
-                    </>
+                {isMounted && isConnected ? (
+                    <Account showAccountInfo={walletDailog.toggle} />
                 ) : (
                     <button className={styles.wallet} onClick={walletDailog.toggle}>
                         Connect Wallet
                     </button>
                 )}
             </nav>
-
             <WalletSelector dialog={walletDailog} />
         </>
     );

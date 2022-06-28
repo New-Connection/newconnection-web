@@ -43,7 +43,7 @@ export const WalletSelector = ({ dialog }: Props) => {
     return (
         // Display Connected Wallet
         <Dialog state={dialog} className="dialog">
-            {isConnected ? (
+            {isMounted && isConnected ? (
                 <>
                     <DialogHeader title="Account" dialog={dialog} />
                     <div className="mt-3 flex flex-col gap-2">
