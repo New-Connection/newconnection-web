@@ -67,7 +67,7 @@ export default function NFTSection() {
         const count = form.count.value;
         const blockchain = form.blockchain.value;
         const price = form.price.value;
-        confirmDialog.show();
+        // confirmDialog.show();
         const factory = CreateNFTContract(GovernorNFTBytecode, signer_data as Signer);
         const contract = await factory.deploy(name, description, BigNumber.from(count));
         await contract.deployed();
@@ -117,7 +117,7 @@ export default function NFTSection() {
                     />
                 </div>
                 <SubmitButton className="mt-5">
-                    <BeatLoader size={6} color="white" />
+                    {/* <BeatLoader size={6} color="white" /> */}
                     Create Contract
                 </SubmitButton>
             </form>
