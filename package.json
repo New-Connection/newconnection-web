@@ -50,6 +50,7 @@
     "react-drag-drop-files": "^2.3.7",
     "react-hot-toast": "^2.2.0",
     "react-scripts": "^5.0.1",
+    "react-spinners": "^0.13.2",
     "wagmi": "^0.5.3"
   },
   "browserslist": {

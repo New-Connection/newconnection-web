@@ -51,9 +51,12 @@ export const WalletSelector = ({ dialog }: Props) => {
                             Connected to {connector?.name}
                         </p>
                         <p className="flex items-center gap-4 break-words text-slate-500">
-                            <div>{ensName ? `${ensName} (${formattedAddress})` : address}</div>
+                            {ensName ? `${ensName} (${formattedAddress})` : address}
                         </p>
-                        <button className="nav-button mt-5" onClick={() => handlerDisconect()}>
+                        <button
+                            className="nav-button mt-5 hover:bg-[#23BD8F] hover:text-white"
+                            onClick={() => handlerDisconect()}
+                        >
                             Disconnect
                         </button>
                     </div>
