@@ -7,19 +7,7 @@ export interface InputElement {
     label: string;
     isRequired: boolean;
     className?: string;
-    handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    placeholder?: string;
-    optional?: boolean;
-    maxLength?: number;
-    pattern?: string;
-}
-
-export interface TextAreaElement {
-    name: string;
-    label: string;
-    isRequired: boolean;
-    className?: string;
-    handleChange?: ChangeEventHandler<HTMLTextAreaElement>;
+    handleChange?: React.ChangeEventHandler;
     placeholder?: string;
     optional?: boolean;
     maxLength?: number;
@@ -62,3 +50,13 @@ export interface InputAmountWithDaysProps {
     handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSelectChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
+
+export interface ButtonProps {
+    disabled?: boolean;
+    type?: "submit" | "button";
+    className?: string;
+    onClick?: () => void;
+    children: React.ReactNode;
+}
+
+export interface CheckboxProps {}

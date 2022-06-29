@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { InputElement, TextAreaElement } from "./types";
+import { InputElement } from "./types";
 
 export const InputAmount = ({
     name,
@@ -80,7 +80,7 @@ export const InputTextArea = ({
     placeholder,
     maxLength,
     ...props
-}: TextAreaElement) => {
+}: InputElement) => {
     return (
         <label>
             <span className="input-label">
@@ -88,7 +88,7 @@ export const InputTextArea = ({
                 {optional && <small className="text-neutral-500">Optional</small>}
             </span>
             <textarea
-                className={classNames("input-field", className)}
+                className={classNames("input-field resize-none h-28", className)}
                 name={name}
                 required={isRequired}
                 autoComplete="off"
