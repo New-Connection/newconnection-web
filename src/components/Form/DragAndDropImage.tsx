@@ -29,7 +29,7 @@ export const DragAndDropImage = ({
                 <div
                     className="flex flex-col text-center py-6 px-3 mt-[5px] border-dashed
                                rounded-md border-2 border-slate-300
-                               bg-slate-800 bg-[#fdfdfda6] hover:border-slate-800 items-center h-[200px]"
+                               bg-slate-800 bg-[#fdfdfda6] hover:border-slate-800 items-center h-40"
                 >
                     <Image src={ImageIcon} width={"50"} height={"50"} />
                     <p className="text-slate-500 mt-5">PNG, JPEG and JPG accept. Max 1mb.</p>
