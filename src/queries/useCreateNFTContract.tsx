@@ -1,30 +1,19 @@
-import { Signer } from 'ethers';
+import { Signer, ContractFactory } from "ethers";
 
-import { createFactoryNFT } from 'utils/contract';
+import { createFactoryNFT } from "utils/contract";
 
-
-
-interface ICreateNFTToken {
-    bytecode: any | null;
-    signer?: Signer;
-}
-
-export const create = async({bytecode, signer}: ICreateNFTToken) => {
-    try{
-        if(!signer){
+export const CreateNFTContract = (bytecode, signer): ContractFactory => {
+    try {
+        console.log(signer);
+        if (!signer) {
             throw new Error("Couldn't get signer");
         }
-        if(!bytecode){
-            throw new Error("Couldn't find contract bytecode")
+        if (!bytecode) {
+            throw new Error("Couldn't find contract bytecode");
         }
+        console.log("Hello", createFactoryNFT(bytecode, signer));
         return createFactoryNFT(bytecode, signer);
-    } catch (error: any){
-        throw new Error(error.message || (error?.reason ?? "Couldn't create contract"))
+    } catch (error: any) {
+        throw new Error(error.message || (error?.reason ?? "Couldn't create contract"));
     }
-    
-}
-
-export default function CreateNFTContract({bytecode, signer}: ICreateNFTToken){
-    
-    return create({bytecode, signer})
-}
+};
