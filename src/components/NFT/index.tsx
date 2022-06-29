@@ -9,9 +9,10 @@ import {
     TypeSelector,
     DragAndDropImage,
 } from "../Form";
-
+import toast from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 import { CreateNFTContract } from "queries/useCreateNFTContract";
-import { Signer, ethers, BigNumber } from "ethers";
+import { Signer, BigNumber } from "ethers";
 import { useSigner } from "wagmi";
 
 // TODO:
@@ -43,6 +44,7 @@ export default function NFTSection() {
     });
 
     const { data: signer_data } = useSigner();
+
     const [createData, setCreateData] = useState<ICreateNFTElements | null>(null);
 
     const confirmDialog = useDialogState();
@@ -65,10 +67,11 @@ export default function NFTSection() {
         const count = form.count.value;
         const blockchain = form.blockchain.value;
         const price = form.price.value;
-
-        const factory = CreateNFTContract(GovernorNFTBytecode, signer_data);
+        confirmDialog.show();
+        const factory = CreateNFTContract(GovernorNFTBytecode, signer_data as Signer);
         const contract = await factory.deploy(name, description, BigNumber.from(count));
         await contract.deployed();
+        toast.success(`Contract Address: ${contract.address}`);
         console.log(`Deployment successful! Contract Address: ${contract.address}`);
     }
 
@@ -113,7 +116,10 @@ export default function NFTSection() {
                         isRequired={false}
                     />
                 </div>
-                <SubmitButton className="mt-5">Create Contract</SubmitButton>
+                <SubmitButton className="mt-5">
+                    <BeatLoader size={6} color="white" />
+                    Create Contract
+                </SubmitButton>
             </form>
         </section>
     );
