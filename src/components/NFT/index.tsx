@@ -12,6 +12,8 @@ import {
 import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
 import { CreateNFTContract } from "queries/useCreateNFTContract";
+import { mintClick } from "queries/useMintFunctions";
+import { deployNFTContract } from "queries/useDeployNFTContract";
 import { Signer, BigNumber, Contract, ethers } from "ethers";
 import { useSigner } from "wagmi";
 
@@ -56,45 +58,32 @@ export default function NFTSection() {
         setFormData((prev) => ({ ...prev, [type]: value }));
     };
 
-    async function mintClick() {
-        console.log(formData.contractAddress);
-        const erc20_rw = new ethers.Contract(
-            formData.contractAddress,
-            GovernorNFTABI,
-            signer_data as Signer
-        );
-        console.log(erc20_rw);
-        const max = await erc20_rw.reserve(1);
-        console.log(max);
-
-        toast.success(`DONE✅ successful mint!`);
-        const supply = await erc20_rw.totalSupply();
-        console.log(supply);
-    }
-
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         const form = e.target as HTMLFormElement & ICreateNFTElements;
         const name = form.name.value;
         const image = form.image?.value;
-        const description = form.description.value;
+        const symbol = form.description.value;
         const role = form.role.value;
         const collectionName = form.collectionName?.value;
         const twitterURL = form.twitterURL?.value;
         const discordURL = form.discordURL?.value;
-        const count = form.count.value;
+        const numberNFT = form.count.value;
         const blockchain = form.blockchain.value;
         const price = form.price.value;
         // confirmDialog.show();
         const toastId = toast.loading("Loading on ETH Blockchain");
-        const factory = CreateNFTContract(GovernorNFTBytecode, signer_data as Signer);
-        const contract = await factory.deploy(name, description, BigNumber.from(count));
-        await contract.deployed();
+        const contractAddress = await deployNFTContract(signer_data as Signer, {
+            name,
+            symbol,
+            numberNFT,
+        });
         toast.dismiss(toastId);
-        toast.success(`Deployment successful! Contract Address`);
-        console.log(`Deployment successful! Contract Address: ${contract.address}`);
-        handleChange(contract.address, "contractAddress");
+        toast.success(`Deployment successful!`);
+        console.log(`Deployment successful! Contract Address: ${contractAddress}`);
+        // MAIN, TODO - MOVE TO Deploy NFT Contract
+        handleChange(contractAddress, "contractAddress");
         console.log("Contract address from FormData", formData.contractAddress);
     }
 
@@ -153,7 +142,9 @@ export default function NFTSection() {
                     </SubmitButton>
                 </form>
             </section>
-            <button onClick={mintClick}>Mint Button</button>
+            <button onClick={() => mintClick(formData.contractAddress, signer_data as Signer)}>
+                Mint Button
+            </button>
         </>
     );
 }
