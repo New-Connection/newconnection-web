@@ -1,30 +1,21 @@
-import { Signer } from 'ethers';
+import { Signer, ContractFactory } from "ethers";
+import toast from "react-hot-toast";
+import { createFactoryNFT } from "utils/contract";
 
-import { createFactoryNFT } from 'utils/contract';
-
-
-
-interface ICreateNFTToken {
-    bytecode: any | null;
-    signer?: Signer;
-}
-
-export const create = async({bytecode, signer}: ICreateNFTToken) => {
-    try{
-        if(!signer){
+export const CreateNFTContract = (bytecode: string, signer: Signer): ContractFactory => {
+    try {
+        if (!signer) {
+            toast.error("Please connect wallet");
             throw new Error("Couldn't get signer");
         }
-        if(!bytecode){
-            throw new Error("Couldn't find contract bytecode")
+        if (!bytecode) {
+            toast.error("Couldn't find contract bytecode");
+            throw new Error("Couldn't find contract bytecode");
         }
+        //console.log("Hello", createFactoryNFT(bytecode, signer));
         return createFactoryNFT(bytecode, signer);
-    } catch (error: any){
-        throw new Error(error.message || (error?.reason ?? "Couldn't create contract"))
+    } catch (error: any) {
+        toast.error("Couldn't create contract");
+        throw new Error(error.message || (error?.reason ?? "Couldn't create contract"));
     }
-    
-}
-
-export default function CreateNFTContract({bytecode, signer}: ICreateNFTToken){
-    
-    return create({bytecode, signer})
-}
+};

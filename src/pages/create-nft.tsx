@@ -5,11 +5,16 @@ import NFTSection from "components/NFT";
 import Head from "next/head";
 
 const CreateNFT: NextPage = () => {
-  return (
-    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
-        <NFTSection />
-    </Layout>
-  );
+    return (
+        <div>
+            <Head>
+                <title>NC: Create NFT</title>
+            </Head>
+            <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
+                <NFTSection />
+            </Layout>
+        </div>
+    );
 };
 
 export default CreateNFT;
