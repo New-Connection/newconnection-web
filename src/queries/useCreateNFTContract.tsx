@@ -12,7 +12,6 @@ export const CreateNFTContract = (bytecode: string, signer: Signer): ContractFac
             toast.error("Couldn't find contract bytecode");
             throw new Error("Couldn't find contract bytecode");
         }
-        //console.log("Hello", createFactoryNFT(bytecode, signer));
         return createFactoryNFT(bytecode, signer);
     } catch (error: any) {
         toast.error("Couldn't create contract");
