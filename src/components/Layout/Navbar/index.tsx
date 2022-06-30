@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Logo from "components/Logo";
-import styles from "styles/Layout.module.css";
+import styles from "styles/components/Layout/Layout.module.css";
 import classNames from "classnames";
 import { Account, WalletSelector } from "components/Web3";
 import { useAccount } from "wagmi";

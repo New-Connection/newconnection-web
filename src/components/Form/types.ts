@@ -9,7 +9,6 @@ export interface InputElement {
     className?: string;
     handleChange?: React.ChangeEventHandler;
     placeholder?: string;
-    optional?: boolean;
     maxLength?: number;
     pattern?: string;
 }
@@ -59,4 +58,6 @@ export interface ButtonProps {
     children: React.ReactNode;
 }
 
-export interface CheckboxProps {}
+export interface CheckboxProps {
+    values: [];
+}

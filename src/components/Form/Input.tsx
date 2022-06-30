@@ -41,7 +41,6 @@ export const InputText = ({
     label,
     isRequired,
     className,
-    optional,
     handleChange,
     placeholder,
     maxLength,
@@ -49,10 +48,7 @@ export const InputText = ({
 }: InputElement) => {
     return (
         <label>
-            <span className="input-label">
-                <span className="mr-2">{label}</span>
-                {optional && <small className="text-neutral-500">Optional</small>}
-            </span>
+            <div className="input-label mr-2">{label}</div>
             <input
                 className={classNames("input-field", className)}
                 name={name}
@@ -75,7 +71,6 @@ export const InputTextArea = ({
     label,
     isRequired,
     className,
-    optional,
     handleChange,
     placeholder,
     maxLength,
@@ -83,10 +78,7 @@ export const InputTextArea = ({
 }: InputElement) => {
     return (
         <label>
-            <span className="input-label">
-                <span className="mr-2">{label}</span>
-                {optional && <small className="text-neutral-500">Optional</small>}
-            </span>
+            <div className="input-label mr-2">{label}</div>
             <textarea
                 className={classNames("input-field resize-none h-28", className)}
                 name={name}
