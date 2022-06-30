@@ -59,5 +59,8 @@ export interface ButtonProps {
 }
 
 export interface CheckboxProps {
-    values: [];
+    label: string;
+    description?: string;
+    values: string[];
+    handleChange?: React.ChangeEventHandler;
 }
