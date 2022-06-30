@@ -25,7 +25,7 @@ export interface IDragAndDrop {
     name: string;
     label: string;
     className?: string;
-    handlerChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleChange?: (arg0: File | File[]) => void;
     hoverTitle?: string;
     multipleFiles?: boolean;
 }
