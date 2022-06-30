@@ -18,5 +18,5 @@
 }
 
 .wallet {
-    @apply nav-button hidden md:block;
+    @apply rounded-2xl border border-[#1BDBAD] bg-white py-2 px-4 font-medium text-[#23BD8F] hidden md:block;
 }
