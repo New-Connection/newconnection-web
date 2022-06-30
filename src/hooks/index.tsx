@@ -1,2 +1,3 @@
-export { useIsMounted } from './useIsMounted';
-export { useChainExplorer } from './useChainExplorer';
+export { useIsMounted } from "./useIsMounted";
+export { useChainExplorer } from "./useChainExplorer";
+export { useNetworkProvider } from "./useNetworkProvider";
