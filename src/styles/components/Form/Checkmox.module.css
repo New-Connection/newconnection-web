@@ -1,0 +1,32 @@
+.checkbox {
+    display: flex;
+    height: 2rem;
+    width: 8rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    border: solid 1px #1bdbad;
+    border-radius: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.checkbox:hover {
+    background-color: #1bdbad;
+}
+
+.checkbox[aria-disabled="true"] {
+    opacity: 0.5;
+}
+
+.checkbox[aria-checked="true"] {
+    background-color: #23bd8f;
+    color: white;
+}
+
+.checkbox:hover[aria-checked="true"] {
+    background-color: #1bdbad;
+}
