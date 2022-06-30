@@ -1,9 +1,8 @@
-import { Checkbox, useCheckboxState } from "ariakit/checkbox";
+import { Checkbox } from "ariakit/checkbox";
 import { Group, GroupLabel } from "ariakit/group";
 
 import styles from "styles/components/Form/Checkmox.module.css";
 import { CheckboxProps } from "./types";
-import { ChangeEvent, ChangeEventHandler } from "react";
 
 export function CheckboxGroup({ label, description, values, handleChange }: CheckboxProps) {
     return (
@@ -14,7 +13,7 @@ export function CheckboxGroup({ label, description, values, handleChange }: Chec
                 {values.map((value) => (
                     <label key={value.toUpperCase()} className="input-label">
                         <Checkbox
-                            as="button"
+                            as={"div"}
                             value={value}
                             className={styles.checkbox}
                             onChange={handleChange}

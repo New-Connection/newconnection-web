@@ -5,7 +5,7 @@ import { ChangeEventHandler } from "react";
 export interface InputElement {
     name: string;
     label: string;
-    isRequired: boolean;
+    isRequired?: boolean;
     className?: string;
     handleChange?: React.ChangeEventHandler;
     placeholder?: string;

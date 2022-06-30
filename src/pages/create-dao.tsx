@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, ChangeEvent, ChangeEventHandler, useState } from "react";
+import { BaseSyntheticEvent, ChangeEvent, ChangeEventHandler, FormEvent, useState } from "react";
 import { NextPage } from "next";
 import Layout from "components/Layout";
 import Head from "next/head";
@@ -6,6 +6,8 @@ import { useSigner } from "wagmi";
 import { DragAndDropImage, InputText, SubmitButton } from "components/Form";
 import { InputTextArea } from "components/Form/Input";
 import { CheckboxGroup } from "components/Form/Checkbox";
+import toast from "react-hot-toast";
+import fa from "@walletconnect/qrcode-modal/dist/cjs/browser/languages/fa";
 
 interface CreateDAO {
     name: string;
@@ -29,6 +31,28 @@ const BlockchainValues = [
     "Polygon",
 ];
 
+const stringIsEmpty = (str: string) => !str || str.length === 0;
+const objectIsEmpty = (obj: object) => Object.keys(obj).length === 0 && obj.constructor === Object;
+const arrayIsEmpty = <T extends string>(array: T[]) => array.length === 0;
+const validateForm = (formData: CreateDAO): boolean => {
+    const fields: string[] = [];
+    for (const formDataKey in formData) {
+        const key = formData[formDataKey];
+        if (
+            (typeof key === "string" && stringIsEmpty(key)) ||
+            (typeof key === "object" && objectIsEmpty(key)) ||
+            (Array.isArray(key) && arrayIsEmpty(key))
+        ) {
+            fields.push(formDataKey);
+        }
+    }
+    if (!arrayIsEmpty(fields)) {
+        toast.error(`Please fill out these fields: \n${fields.join("\n")}`);
+        return false;
+    }
+    return true;
+};
+
 const CreateDAO: NextPage = () => {
     const [formData, setFormData] = useState({
         name: "",
@@ -48,7 +72,6 @@ const CreateDAO: NextPage = () => {
     const handleTextChange: ChangeEventHandler = <T extends HTMLInputElement | HTMLTextAreaElement>(
         event: ChangeEvent<T>
     ) => {
-        // console.log(event);
         setFormData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
     };
 
@@ -64,20 +87,25 @@ const CreateDAO: NextPage = () => {
         const elem = event.currentTarget;
         const label = elem.parentNode.textContent;
 
-        if (elem.checked) {
+        if (elem.checked && !checkboxGroup.includes(label)) {
             checkboxGroup.push(label);
-        } else {
+        }
+        if (!elem.checked && checkboxGroup.includes(label)) {
             checkboxGroup = checkboxGroup.filter((value) => value !== label);
         }
 
         setFormData((prev) => ({ ...prev, [field]: checkboxGroup }));
     };
 
-    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         console.log(formData);
+        if (!validateForm(formData)) {
+            return;
+        }
 
+        console.log("submited");
         // DIDN'T
         // const singer_right = await signer?.connect()
         // const factory = CreateNFTContract(bytecode=bytecodeERC20, singer_right})
@@ -116,7 +144,7 @@ const CreateDAO: NextPage = () => {
                             label="DAO Name"
                             name="name"
                             placeholder="Unique DAO name"
-                            isRequired
+                            // isRequired
                             maxLength={30}
                             handleChange={handleTextChange}
                         />
@@ -125,10 +153,9 @@ const CreateDAO: NextPage = () => {
                             name="goals"
                             placeholder="Сlear DAO goals"
                             maxLength={100}
-                            isRequired
+                            // isRequired
                             handleChange={handleTextChange}
                         />
-                        <div className="">!</div>
                         <CheckboxGroup
                             label={"DAO Type"}
                             description={"You can choose one or more types"}
@@ -144,7 +171,7 @@ const CreateDAO: NextPage = () => {
                         <InputTextArea
                             name={"description"}
                             label={"DAO Description"}
-                            isRequired
+                            // isRequired
                             maxLength={2000}
                             handleChange={handleTextChange}
                         />
