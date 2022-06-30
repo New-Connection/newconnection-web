@@ -5,18 +5,18 @@
 }
 
 .nav {
-    @apply flex flex-shrink-0 items-center justify-between gap-[0.625rem] text-base 
+    @apply flex flex-shrink-0 items-center justify-between gap-[0.625rem] text-base;
 }
 
-.navButton {
-    @apply mr-8 hidden text-slate-500 hover:text-[#23BD8F] lg:inline-block
+.navMenuButton {
+    @apply mr-8 hidden text-slate-500 hover:text-[#23BD8F] lg:inline-block;
 }
 
 .navButtonActive {
-    color: #23BD8F;
+    color: #23bd8f;
     font-weight: bold;
 }
 
 .wallet {
-    @apply nav-button hidden md:block
+    @apply nav-button hidden md:block;
 }

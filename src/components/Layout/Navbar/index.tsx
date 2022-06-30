@@ -34,7 +34,7 @@ const Navbar = () => {
                     <Link key={id} href={path}>
                         <a
                             className={classNames(
-                                styles.navButton,
+                                styles.navMenuButton,
                                 router.pathname == path ? styles.navButtonActive : null
                             )}
                         >
@@ -45,7 +45,7 @@ const Navbar = () => {
                 {isMounted && isConnected ? (
                     <Account showAccountInfo={walletDailog.toggle} />
                 ) : (
-                    <button className={styles.wallet} onClick={walletDailog.toggle}>
+                    <button className={"nav-button hidden md:block"} onClick={walletDailog.toggle}>
                         Connect Wallet
                     </button>
                 )}

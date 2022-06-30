@@ -60,11 +60,11 @@
     }
 
     .input-label {
-        @apply text-sm font-medium text-[#303030];
+        @apply text-lg mb-1  text-[#303030];
     }
 
     .input-field {
-        @apply mt-[5px] w-full rounded text-[#666666] border border-[#CBCBCB] px-3 py-[7px] slashed-zero placeholder:text-sm placeholder:text-[#666666];
+        @apply w-full rounded border border-[#1bdbad] px-3 py-[7px] slashed-zero placeholder:text-sm placeholder:text-[#666666];
     }
 
     .input-error {

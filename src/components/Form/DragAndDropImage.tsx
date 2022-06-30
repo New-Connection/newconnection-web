@@ -30,7 +30,7 @@ export const DragAndDropImage = ({
             >
                 <div
                     className="flex flex-col justify-center text-center border-dashed
-                               rounded-md border-2 border-slate-300
+                               rounded-md border-2 border-[#1bdbad]
                                bg-slate-800 bg-[#fdfdfda6] hover:border-slate-800 items-center h-40"
                 >
                     <Image src={ImageIcon} width={"50"} height={"50"} />
