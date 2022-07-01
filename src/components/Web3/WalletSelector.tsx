@@ -67,18 +67,16 @@ export const WalletSelector = ({ dialog }: Props) => {
                     <DialogHeader title="Connect Wallet" dialog={dialog} />
                     {/* choose profile: metamask, wallet connect  */}
                     <div className="mt-3 flex flex-col gap-2">
-                        {connectors
-                            //.filter((x) => isMounted && x.ready && x.id !== pendingConnector?.id) //Disable Button
-                            .map((x) => (
-                                <button
-                                    key={x?.id}
-                                    onClick={() => handleConnect(x)}
-                                    className="rounded border p-2 text-slate-500"
-                                >
-                                    {x?.name}
-                                    {isLoading && x.id === pendingConnector?.id && " (connecting)"}
-                                </button>
-                            ))}
+                        {connectors.map((x) => (
+                            <button
+                                key={x?.id}
+                                onClick={() => handleConnect(x)}
+                                className="rounded border p-2 text-slate-500"
+                            >
+                                {x?.name}
+                                {isLoading && x.id === pendingConnector?.id && " (connecting)"}
+                            </button>
+                        ))}
                         {error && <div>{error.message}</div>}
                     </div>
                 </>
