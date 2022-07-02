@@ -42,7 +42,12 @@ export const WalletSelector = ({ dialog }: Props) => {
     const formattedAddress = address && formatAddress(address);
     return (
         // Display Connected Wallet
-        <Dialog state={dialog} className="dialog">
+        <Dialog
+            state={dialog}
+            className="dialog"
+            hideOnInteractOutside={false}
+            hideOnEscape={false}
+        >
             {isMounted && isConnected ? (
                 <>
                     <DialogHeader title="Account" dialog={dialog} />
