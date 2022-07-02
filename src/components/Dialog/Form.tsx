@@ -13,7 +13,7 @@ interface FormDialogProps {
 
 export const FormDialog = ({ dialog, title, className, children }: FormDialogProps) => {
     return (
-        <Dialog state={dialog} className={classNames("dialog", className)}>
+        <Dialog state={dialog} className={classNames("dialog", className)} backdrop={false}>
             <header className="font-exo relative flex items-center justify-between text-lg font-medium">
                 <DialogHeading>{title}</DialogHeading>
                 <DialogDismiss className="flex items-start justify-end">
