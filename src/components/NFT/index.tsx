@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDialogState } from "ariakit";
-import { GovernorNFTBytecode } from "abis/GovernanceNFT";
 import {
     InputAmount,
     InputText,
@@ -11,13 +10,12 @@ import {
 } from "../Form";
 import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
-import { CreateNFTContract } from "queries/useCreateNFTContract";
 import { mintClick } from "queries/useMintFunctions";
 import { deployNFTContract } from "queries/useDeployNFTContract";
-import { Signer, BigNumber, Contract, ethers } from "ethers";
+import { Signer } from "ethers";
 import { useSigner } from "wagmi";
+import { FormDialog } from "components/Dialog";
 
-import { GovernorNFTABI } from "abis/GovernanceNFT";
 // TODO:
 // Check ipfs approver
 
@@ -51,6 +49,7 @@ export default function NFTSection() {
     const { data: signer_data } = useSigner();
 
     const [createData, setCreateData] = useState<ICreateNFTElements | null>(null);
+    const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
 
     const confirmDialog = useDialogState();
     // function for set values into formData
@@ -73,18 +72,21 @@ export default function NFTSection() {
         const blockchain = form.blockchain.value;
         const price = form.price.value;
         // confirmDialog.show();
-        const toastId = toast.loading("Loading on ETH Blockchain");
+        confirmDialog.toggle();
+        // const toastId = toast.loading("Loading on ETH Blockchain");
         const contractAddress = await deployNFTContract(signer_data as Signer, {
             name,
             symbol,
             numberNFT,
         });
-        toast.dismiss(toastId);
-        toast.success(`Deployment successful!`);
+
+        // toast.dismiss(toastId)
+        // toast.success(`Deployment successful!`);
         console.log(`Deployment successful! Contract Address: ${contractAddress}`);
         // MAIN, TODO - MOVE TO Deploy NFT Contract
         handleChange(contractAddress, "contractAddress");
         console.log("Contract address from FormData", formData.contractAddress);
+        setConfirmFromBlockchain(true);
     }
 
     return (
@@ -142,6 +144,20 @@ export default function NFTSection() {
                     </SubmitButton>
                 </form>
             </section>
+            <FormDialog dialog={confirmDialog} title="Loading into Blockchain" className="dialog">
+                {
+                    <div>
+                        <p>Please confirm on wallet</p>
+                        {confirmFromBlockchain ? (
+                            <p>
+                                Deployment successful! Contract Address: {formData.contractAddress}
+                            </p>
+                        ) : (
+                            <BeatLoader />
+                        )}
+                    </div>
+                }
+            </FormDialog>
             <button onClick={() => mintClick(formData.contractAddress, signer_data as Signer)}>
                 Mint Button
             </button>
