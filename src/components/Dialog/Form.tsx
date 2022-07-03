@@ -13,13 +13,14 @@ interface FormDialogProps {
 
 export const FormDialog = ({ dialog, title, className, children }: FormDialogProps) => {
     return (
-        <Dialog state={dialog} className={classNames("dialog", className)} backdrop={false}>
+        <Dialog
+            state={dialog}
+            className={classNames("dialog", className)}
+            hideOnInteractOutside={false}
+            hideOnEscape={false}
+        >
             <header className="font-exo relative flex items-center justify-between text-lg font-medium">
                 <DialogHeading>{title}</DialogHeading>
-                <DialogDismiss className="flex items-start justify-end">
-                    <span className="sr-only">{"close"}</span>
-                    <XIcon className="h-6 w-6" />
-                </DialogDismiss>
             </header>
             <div className="mt-4">{children}</div>
         </Dialog>
