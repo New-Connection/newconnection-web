@@ -7,6 +7,10 @@ import { useIsMounted } from "hooks";
 import { formatAddress } from "utils/address";
 import { DialogHeader } from "components/Dialog";
 
+// Wallet icon
+import MetamaskIcon from "assets/wallets/mm.png";
+import WalletConnectIcon from "assets/wallets/wc.png";
+
 interface Props {
     dialog: DisclosureState;
 }
@@ -18,6 +22,11 @@ export const WalletSelector = ({ dialog }: Props) => {
     const { disconnect } = useDisconnect();
 
     const isMounted = useIsMounted();
+
+    const imageID = {
+        MetaMask: MetamaskIcon.src,
+        WalletConnect: WalletConnectIcon.src,
+    };
 
     const handleConnect = React.useCallback(
         async (x: Connector) => {
@@ -75,9 +84,13 @@ export const WalletSelector = ({ dialog }: Props) => {
                         {connectors.map((x) => (
                             <button
                                 key={x?.id}
-                                onClick={() => handleConnect(x)}
-                                className="rounded border p-2 text-slate-500"
+                                onClick={() => {
+                                    console.log("------", x);
+                                    handleConnect(x);
+                                }}
+                                className="flex rounded border items-center p-3 gap-4 text-slate-500 hover:bg-[#23BD8F] hover:text-white "
                             >
+                                <img src={imageID[x.name]} className="w-8 h-8" />
                                 {x?.name}
                                 {isLoading && x.id === pendingConnector?.id && " (connecting)"}
                             </button>
