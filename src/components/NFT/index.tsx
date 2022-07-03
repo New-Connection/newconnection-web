@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDialogState } from "ariakit";
+import Link from "next/link";
 import {
     InputAmount,
     InputText,
@@ -151,14 +152,16 @@ export default function NFTSection() {
                             <>
                                 <p>Deployment successful!</p>
                                 <p>Contract Address: {formData.contractAddress}</p>
-                                <button
-                                    className="form-submit-button"
-                                    onClick={() => {
-                                        confirmDialog.toggle();
-                                    }}
-                                >
-                                    Next Steps
-                                </button>
+                                <Link href="/create-dao">
+                                    <button
+                                        className="form-submit-button"
+                                        onClick={() => {
+                                            confirmDialog.toggle();
+                                        }}
+                                    >
+                                        Next Steps
+                                    </button>
+                                </Link>
                             </>
                         ) : (
                             <>
