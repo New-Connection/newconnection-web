@@ -147,13 +147,24 @@ export default function NFTSection() {
             <FormDialog dialog={confirmDialog} title="Loading into Blockchain" className="dialog">
                 {
                     <div>
-                        <p>Please confirm on wallet</p>
                         {confirmFromBlockchain ? (
-                            <p>
-                                Deployment successful! Contract Address: {formData.contractAddress}
-                            </p>
+                            <>
+                                <p>Deployment successful!</p>
+                                <p>Contract Address: {formData.contractAddress}</p>
+                                <button
+                                    className="form-submit-button"
+                                    onClick={() => {
+                                        confirmDialog.toggle();
+                                    }}
+                                >
+                                    Next Steps
+                                </button>
+                            </>
                         ) : (
-                            <BeatLoader />
+                            <>
+                                <p>Please confirm on wallet</p>
+                                <BeatLoader />
+                            </>
                         )}
                     </div>
                 }
