@@ -2,7 +2,7 @@ import Link from "next/link";
 import Logo from "components/Layout/Logo";
 import styles from "styles/components/Layout/Layout.module.css";
 import classNames from "classnames";
-import { Account, WalletSelector } from "components/Web3";
+import { Account, WalletSelector, NetworksMenu } from "components/Web3";
 import { useAccount } from "wagmi";
 import { useDialogState } from "ariakit";
 import { useRouter } from "next/router";
@@ -43,7 +43,10 @@ const Navbar = () => {
                     </Link>
                 ))}
                 {isMounted && isConnected ? (
-                    <Account showAccountInfo={walletDailog.toggle} />
+                    <>
+                        <NetworksMenu />
+                        <Account showAccountInfo={walletDailog.toggle} />
+                    </>
                 ) : (
                     <button className={"nav-button hidden md:block"} onClick={walletDailog.toggle}>
                         Connect Wallet
