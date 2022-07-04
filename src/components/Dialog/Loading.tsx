@@ -4,14 +4,14 @@ import { DisclosureState } from "ariakit";
 import { Dialog, DialogDismiss, DialogHeading } from "ariakit/dialog";
 import classNames from "classnames";
 
-interface FormDialogProps {
+interface LoadingDialogProps {
     dialog: DisclosureState;
     title: string | React.ReactNode | null;
     children: React.ReactNode;
     className?: string;
 }
 
-export const FormDialog = ({ dialog, title, className, children }: FormDialogProps) => {
+export const LoadingDialog = ({ dialog, title, className, children }: LoadingDialogProps) => {
     return (
         <Dialog
             state={dialog}

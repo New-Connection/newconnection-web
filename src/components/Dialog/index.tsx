@@ -1,2 +1,2 @@
 export { DialogHeader } from "./Header";
-export { FormDialog } from "./Form";
+export { LoadingDialog } from "./Loading";

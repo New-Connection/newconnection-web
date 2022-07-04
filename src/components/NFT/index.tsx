@@ -15,7 +15,7 @@ import { mintClick } from "queries/useMintFunctions";
 import { deployNFTContract } from "queries/useDeployNFTContract";
 import { Signer } from "ethers";
 import { useSigner } from "wagmi";
-import { FormDialog } from "components/Dialog";
+import { LoadingDialog } from "components/Dialog";
 
 // TODO:
 // Check ipfs approver
@@ -145,7 +145,11 @@ export default function NFTSection() {
                     </SubmitButton>
                 </form>
             </section>
-            <FormDialog dialog={confirmDialog} title="Loading into Blockchain" className="dialog">
+            <LoadingDialog
+                dialog={confirmDialog}
+                title="Loading into Blockchain"
+                className="dialog"
+            >
                 {
                     <div>
                         {confirmFromBlockchain ? (
@@ -165,13 +169,13 @@ export default function NFTSection() {
                             </>
                         ) : (
                             <>
-                                <p>Please confirm on wallet</p>
+                                <p>Please confirm transaction in wallet</p>
                                 <BeatLoader />
                             </>
                         )}
                     </div>
                 }
-            </FormDialog>
+            </LoadingDialog>
             <button onClick={() => mintClick(formData.contractAddress, signer_data as Signer)}>
                 Mint Button
             </button>
