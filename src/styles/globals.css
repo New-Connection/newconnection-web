@@ -64,7 +64,7 @@
     }
 
     .input-field {
-        @apply w-full rounded border border-[#1bdbad] px-3 py-[7px] slashed-zero placeholder:text-sm placeholder:text-[#666666];
+        @apply w-full rounded border bg-white border-[#1bdbad] px-3 py-[7px] slashed-zero placeholder:text-sm placeholder:text-[#666666];
     }
 
     .input-error {
