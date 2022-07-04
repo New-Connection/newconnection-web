@@ -1,7 +1,7 @@
 import * as React from "react";
 import classNames from "classnames";
 
-import Header from "./Header/Header";
+import Header from "./Header";
 import CustomToast from "../CustomToast";
 
 interface ILayoutProps {
