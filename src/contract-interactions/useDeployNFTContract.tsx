@@ -1,4 +1,3 @@
-import { GOVERNANCE_NFT_BYTECODE } from "contracts";
 import { CreateNFTContract } from "./useCreateNFTContract";
 import { Signer, BigNumber } from "ethers";
 
@@ -10,13 +9,13 @@ interface ICounstructorNFT {
 
 export async function deployNFTContract(
     signer: Signer,
-    construstor: ICounstructorNFT
+    constructor: ICounstructorNFT
 ): Promise<string> {
-    const factory = CreateNFTContract(GOVERNANCE_NFT_BYTECODE, signer);
+    const factory = CreateNFTContract(signer);
     const contract = await factory.deploy(
-        construstor.name,
-        construstor.symbol,
-        BigNumber.from(construstor.numberNFT)
+        constructor.name,
+        constructor.symbol,
+        BigNumber.from(constructor.numberNFT)
     );
     await contract.deployed();
     console.log(`Deployment successful! Contract Address: ${contract.address}`);

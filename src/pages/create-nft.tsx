@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDialogState } from "ariakit";
-import { GOVERNANCE_NFT_BYTECODE } from "contracts";
 import {
     InputAmount,
     InputText,
@@ -10,7 +9,7 @@ import {
     DragAndDropImage,
 } from "components/Form";
 import toast from "react-hot-toast";
-import { CreateNFTContract } from "queries/useCreateNFTContract";
+import { CreateNFTContract } from "contract-interactions/useCreateNFTContract";
 import { Signer, BigNumber } from "ethers";
 import { useSigner } from "wagmi";
 import { NextPage } from "next";
@@ -58,6 +57,13 @@ const CreateNFT: NextPage = () => {
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
+        if (!signer_data) {
+            toast.error("Please connect wallet");
+            return;
+        }
+
+        console.log(formData);
+
         const form = e.target as HTMLFormElement & ICreateNFTElements;
         const name = form.name.value;
         const image = form.image?.value;
@@ -70,7 +76,7 @@ const CreateNFT: NextPage = () => {
         const blockchain = form.blockchain.value;
         const price = form.price.value;
         // confirmDialog.show();
-        const factory = CreateNFTContract(GOVERNANCE_NFT_BYTECODE, signer_data as Signer);
+        const factory = CreateNFTContract(signer_data as Signer);
         const contract = await factory.deploy(name, description, BigNumber.from(count));
         await contract.deployed();
         toast.success(`Contract Address: ${contract.address}`);
