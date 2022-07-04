@@ -27,13 +27,7 @@ const images = {
     Binance: Binance,
 };
 
-export const BlockchainSelector = ({
-    name,
-    label,
-    className,
-    handlerChange,
-    ...props
-}: Selector) => {
+export const BlockchainSelector = ({ name, label, className, handlerChange }: Selector) => {
     const select = useSelectState({
         defaultValue: "Ethereum",
         setValueOnMove: true,

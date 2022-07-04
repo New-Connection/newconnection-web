@@ -1,7 +1,7 @@
 import { DialogHeading } from "ariakit";
 import { XIcon } from "@heroicons/react/solid";
 
-export const DialogHeader = ({ title, dialog, ...props }) => {
+export const DialogHeader = ({ title, dialog}) => {
     return (
         <DialogHeading className="text-base font-medium leading-6 text-neutral-700">
             <span>{title}</span>

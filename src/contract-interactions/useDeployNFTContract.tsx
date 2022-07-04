@@ -1,7 +1,7 @@
 import { CreateNFTContract } from "./useCreateNFTContract";
 import { Signer, BigNumber } from "ethers";
 
-interface ICounstructorNFT {
+interface IConstructorNFT {
     name: string;
     symbol: string;
     numberNFT: number;
@@ -9,7 +9,7 @@ interface ICounstructorNFT {
 
 export async function deployNFTContract(
     signer: Signer,
-    constructor: ICounstructorNFT
+    constructor: IConstructorNFT
 ): Promise<string> {
     const factory = CreateNFTContract(signer);
     const contract = await factory.deploy(

@@ -1,5 +1,3 @@
-import { Contract } from "ethers";
-
 export interface ICreate {
     name: string;
     description: string;
@@ -23,14 +21,4 @@ export interface CreateNFT extends ICreate {
     collectionName?: string;
     twitterURL?: string;
     discordURL?: string;
-}
-
-export interface IToken {
-    tokenAddress: string;
-    ncContractAddress: string; // TODO
-    name: string;
-    symbol: string;
-    decimals: number;
-    tokenContract: Contract;
-    ncTokenContract: Contract; // TODO
 }

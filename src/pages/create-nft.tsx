@@ -20,17 +20,6 @@ import { validateForm } from "utils/validate";
 
 // TODO:
 // Check ipfs approver
-const BlockchainValues = [
-    "Arbitrum",
-    "Aurora",
-    "Avalanche",
-    "Binance",
-    "Ethereum",
-    "Fantom",
-    "Optimism",
-    "Polygon",
-];
-const RoleValues = ["Member", "Design", "VC"];
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({

@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, ChangeEvent, ChangeEventHandler, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import Layout from "components/Layout";
 import Head from "next/head";
@@ -62,7 +62,7 @@ const CreateDAO: NextPage = () => {
     };
 
     return (
-        <>
+        <div>
             <Head>
                 <title>New Connection: Create DAO</title>
             </Head>
@@ -135,7 +135,7 @@ const CreateDAO: NextPage = () => {
                     </form>
                 </section>
             </Layout>
-        </>
+        </div>
     );
 };
 
