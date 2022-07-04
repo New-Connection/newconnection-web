@@ -1,13 +1,12 @@
-import { VoidSigner } from "ethers";
 import * as React from "react";
-import { ChangeEventHandler } from "react";
+import { BaseSyntheticEvent, ChangeEvent } from "react";
 
 export interface InputElement {
     name: string;
     label: string;
     isRequired?: boolean;
     className?: string;
-    handleChange?: React.ChangeEventHandler;
+    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     placeholder?: string;
     maxLength?: number;
     pattern?: string;
@@ -17,14 +16,14 @@ export interface Selector {
     name: string;
     label: string;
     className?: string;
-    handlerChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handlerChange?: (event: BaseSyntheticEvent) => boolean;
 }
 
 export interface IDragAndDrop {
     name: string;
     label: string;
     className?: string;
-    handleChange?: (arg0: File | File[]) => void;
+    handleChange?: (file: File | File[]) => void;
     hoverTitle?: string;
     multipleFiles?: boolean;
 }
@@ -62,5 +61,5 @@ export interface CheckboxProps {
     label: string;
     description?: string;
     values: string[];
-    handleChange?: React.ChangeEventHandler;
+    handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }

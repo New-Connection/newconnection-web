@@ -61,13 +61,16 @@ export const BlockchainSelector = ({
                         className="input-field bg-white text-slate-500 flex flex-col overflow-auto overscroll-contain p-1 data-focus-visible focus-visible:ring focus:outline-none "
                     >
                         {chains.map((chain) => (
-                            <SelectItem
-                                key={chain}
-                                value={chain}
-                                className="input-field border-0 flex cursor-default scroll-m-2 items-center gap-2 p-1 hover:bg-[#23BD8F] hover:text-gray-50"
-                            >
-                                {renderValue(chain)}
-                            </SelectItem>
+                            <label key={chain.toUpperCase()} className="input-label">
+                                <SelectItem
+                                    key={chain}
+                                    value={chain}
+                                    className="input-field border-0 flex cursor-default scroll-m-2 items-center gap-2 p-1 hover:bg-[#23BD8F] hover:text-gray-50"
+                                    setValueOnClick={handlerChange}
+                                >
+                                    {renderValue(chain)}
+                                </SelectItem>
+                            </label>
                         ))}
                     </SelectPopover>
                 </div>

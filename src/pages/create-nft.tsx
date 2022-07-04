@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDialogState } from "ariakit";
 import {
     InputAmount,
     InputText,
@@ -15,28 +14,31 @@ import { useSigner } from "wagmi";
 import { NextPage } from "next";
 import Head from "next/head";
 import Layout from "components/Layout/Layout";
+import { CreateNFT } from "types/forms";
+import { handleTextChange, handleImageChange, handleSelectorChange } from "utils/handlers";
+import { validateForm } from "utils/validate";
 
 // TODO:
 // Check ipfs approver
-
-interface ICreateNFTElements {
-    name: { value: string };
-    description: { value: string };
-    image: { value: string };
-    count: { value: number };
-    price: { value: number };
-    blockchain: { value: "Ethereum" | "Polygon" | "Arbitrum" | "Binance" };
-    role: { value: "Member" | "Design" | "VC" };
-    collectionName: { value: string };
-    twitterURL: { value: string };
-    discordURL: { value: string };
-}
+const BlockchainValues = [
+    "Arbitrum",
+    "Aurora",
+    "Avalanche",
+    "Binance",
+    "Ethereum",
+    "Fantom",
+    "Optimism",
+    "Polygon",
+];
+const RoleValues = ["Member", "Design", "VC"];
 
 const CreateNFT: NextPage = () => {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<CreateNFT>({
         name: "",
         description: "",
         image: "",
+        count: "",
+        price: "",
         blockchain: "Ethereum",
         role: "Member",
         collectionName: "",
@@ -46,14 +48,6 @@ const CreateNFT: NextPage = () => {
 
     const { data: signer_data } = useSigner();
 
-    const [createData, setCreateData] = useState<ICreateNFTElements | null>(null);
-
-    const confirmDialog = useDialogState();
-    // function for set values into formData
-    const handleChange = (value: string | boolean, type: keyof typeof formData) => {
-        setFormData((prev) => ({ ...prev, [type]: value }));
-    };
-
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -62,22 +56,16 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        console.log(formData);
+        if (!validateForm(formData, ["collectionName", "twitterURL", "discordURL"])) {
+            return;
+        }
 
-        const form = e.target as HTMLFormElement & ICreateNFTElements;
-        const name = form.name.value;
-        const image = form.image?.value;
-        const description = form.description.value;
-        const role = form.role.value;
-        const collectionName = form.collectionName?.value;
-        const twitterURL = form.twitterURL?.value;
-        const discordURL = form.discordURL?.value;
-        const count = form.count.value;
-        const blockchain = form.blockchain.value;
-        const price = form.price.value;
-        // confirmDialog.show();
         const factory = CreateNFTContract(signer_data as Signer);
-        const contract = await factory.deploy(name, description, BigNumber.from(count));
+        const contract = await factory.deploy(
+            formData.name,
+            formData.description,
+            BigNumber.from(formData.count)
+        );
         await contract.deployed();
         toast.success(`Contract Address: ${contract.address}`);
         console.log(`Deployment successful! Contract Address: ${contract.address}`);
@@ -94,32 +82,57 @@ const CreateNFT: NextPage = () => {
                         <h1 className="font-exo my-2 text-2xl font-semibold text-[#3D3D3D]">
                             Create NFT
                         </h1>
-                        <InputText label="Name" name="name" placeholder="NFT Name" isRequired />
+                        <InputText
+                            label="Name"
+                            name="name"
+                            placeholder="NFT Name"
+                            handleChange={(event) => handleTextChange(event, setFormData)}
+                        />
                         <InputText
                             label="Description"
                             className="pt-1.5 pb-14"
                             name="description"
                             placeholder="A short descption about NFT collection(Max. 250 words)"
-                            isRequired
+                            handleChange={(event) => handleTextChange(event, setFormData)}
                         />
-                        <DragAndDropImage label="Image" name="image" />
+                        <DragAndDropImage
+                            label="Image"
+                            name="image"
+                            handleChange={(file) => handleImageChange(file, setFormData, "image")}
+                        />
                         <div className="flex justify-between">
-                            <InputAmount label={"Number of NFT"} name="count" isRequired />
+                            <InputAmount
+                                label={"Number of NFT"}
+                                name="count"
+                                handleChange={(event) => handleTextChange(event, setFormData)}
+                            />
                             <InputAmount
                                 label={"Price"}
                                 placeholder="0 (Max. 0)"
                                 name="price"
-                                isRequired
+                                handleChange={(event) => handleTextChange(event, setFormData)}
                             />
-                            <BlockchainSelector label={"Type of blockchain"} name={"blockchain"} />
+                            <BlockchainSelector
+                                label={"Type of blockchain"}
+                                name={"blockchain"}
+                                handlerChange={(event) =>
+                                    handleSelectorChange(event, setFormData, "blockchain")
+                                }
+                            />
                         </div>
                         <div className="flex justify-between">
-                            <TypeSelector label={"Role"} name="role" />
+                            <TypeSelector
+                                label={"Role"}
+                                name="role"
+                                handlerChange={(event) =>
+                                    handleSelectorChange(event, setFormData, "role")
+                                }
+                            />
                             <InputText
                                 label={"Collection (optional)"}
                                 name="collectionName"
                                 placeholder="Collection name"
-                                isRequired={false}
+                                handleChange={(event) => handleTextChange(event, setFormData)}
                             />
                         </div>
                         <div className="flex space-x-4">
@@ -127,13 +140,13 @@ const CreateNFT: NextPage = () => {
                                 label={"Twitter (optional)"}
                                 name="twitterURL"
                                 placeholder="Enter your twitter handler"
-                                isRequired={false}
+                                handleChange={(event) => handleTextChange(event, setFormData)}
                             />
                             <InputText
                                 label={"Discord (optional)"}
                                 name="discordURL"
                                 placeholder="Enter your discord server"
-                                isRequired={false}
+                                handleChange={(event) => handleTextChange(event, setFormData)}
                             />
                         </div>
                         <SubmitButton className="mt-5">
