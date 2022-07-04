@@ -5,13 +5,14 @@ import { Selector } from "./types";
 
 const types = ["Member", "Design", "VC"];
 
-export const TypeSelector = ({ name, label, className, handlerChange, ...props }: Selector) => {
+export const TypeSelector = ({ name, label, className, handlerChange }: Selector) => {
     const select = useSelectState({
         defaultValue: "Member",
         setValueOnMove: true,
         sameWidth: true,
         gutter: 4,
     });
+
     return (
         <>
             <div>
@@ -33,13 +34,16 @@ export const TypeSelector = ({ name, label, className, handlerChange, ...props }
                         className="input-field bg-white flex flex-col overflow-auto overscroll-contain p-1 data-focus-visible focus-visible:ring focus:outline-none text-slate-500"
                     >
                         {types.map((type) => (
-                            <SelectItem
-                                key={type}
-                                value={type}
-                                className="input-field border-0 flex cursor-default scroll-m-2 items-center gap-2 p-1 hover:bg-[#23BD8F] hover:text-gray-50"
-                            >
-                                <div className="type">{type}</div>
-                            </SelectItem>
+                            <label key={type.toUpperCase()} className="input-label">
+                                <SelectItem
+                                    key={type}
+                                    value={type}
+                                    className="input-field border-0 flex cursor-default scroll-m-2 items-center gap-2 p-1 hover:bg-[#23BD8F] hover:text-gray-50"
+                                    setValueOnClick={handlerChange}
+                                >
+                                    {type}
+                                </SelectItem>
+                            </label>
                         ))}
                     </SelectPopover>
                 </div>

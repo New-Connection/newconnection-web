@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Connector, useAccount, useConnect, useDisconnect, useEnsName} from "wagmi";
+import { Connector, useAccount, useConnect, useDisconnect, useEnsName } from "wagmi";
 import { Dialog, DisclosureState } from "ariakit";
 
 // OWN

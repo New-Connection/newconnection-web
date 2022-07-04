@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Logo from "components/Logo";
+import Logo from "components/Layout/Logo";
 import styles from "styles/components/Layout/Layout.module.css";
 import classNames from "classnames";
 import { Account, WalletSelector, NetworksMenu } from "components/Web3";

@@ -1,9 +1,7 @@
-import toast from "react-hot-toast";
-import { GovernorNFTBytecode } from "abis/GovernanceNFT";
 import { CreateNFTContract } from "./useCreateNFTContract";
-import { ethers, Signer, BigNumber } from "ethers";
+import { Signer, BigNumber } from "ethers";
 
-interface ICounstructorNFT {
+interface IConstructorNFT {
     name: string;
     symbol: string;
     numberNFT: number;
@@ -11,13 +9,13 @@ interface ICounstructorNFT {
 
 export async function deployNFTContract(
     signer: Signer,
-    construstor: ICounstructorNFT
+    constructor: IConstructorNFT
 ): Promise<string> {
-    const factory = CreateNFTContract(GovernorNFTBytecode, signer);
+    const factory = CreateNFTContract(signer);
     const contract = await factory.deploy(
-        construstor.name,
-        construstor.symbol,
-        BigNumber.from(construstor.numberNFT)
+        constructor.name,
+        constructor.symbol,
+        BigNumber.from(constructor.numberNFT)
     );
     await contract.deployed();
     console.log(`Deployment successful! Contract Address: ${contract.address}`);
