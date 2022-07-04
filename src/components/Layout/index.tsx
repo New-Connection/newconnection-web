@@ -1,22 +1,6 @@
-import * as React from "react";
-import classNames from "classnames";
+import Layout from "./Layout";
 
-import Header from "./Header";
-import CustomToast from "../CustomToast";
-
-interface ILayoutProps {
-    children: React.ReactNode;
-    className?: string;
-}
-
-export default function Layout({ children, className, ...props }: ILayoutProps) {
-    return (
-        <>
-            <Header />
-            <main className={classNames("flex-1", className)} {...props}>
-                {children}
-            </main>
-            <CustomToast />
-        </>
-    );
-}
+export default Layout;
+export { default as Logo } from "./Logo";
+export { default as Header } from "./Header";
+export { default as Navbar } from "./Navbar";

@@ -1,5 +1,5 @@
 import { useAccount, useEnsName } from "wagmi";
-import { formatAddress } from "../../utils/address";
+import { formatAddress } from "utils/address";
 import * as React from "react";
 
 interface Props {

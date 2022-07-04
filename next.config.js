@@ -1,26 +1,25 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-    enabled: process.env.ANALYZE === 'true',
-  });
-  
-  /** @type {import('next').NextConfig} */
-  const nextConfig = {
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+    enabled: process.env.ANALYZE === "true",
+});
+
+/** @type {import("next").NextConfig} */
+const nextConfig = {
     i18n: {
-      locales: ['en'],
-      defaultLocale: 'en',
+        locales: ["en"],
+        defaultLocale: "en",
     },
     images: {
-      domains: [''],
+        domains: [""],
     },
     async redirects() {
-      return [
-        {
-          source: '/create-dao',
-          destination: '/',
-          permanent: true,
-        }
-      ];
+        return [
+            {
+                source: "/create-dao",
+                destination: "/",
+                permanent: true,
+            },
+        ];
     },
-  };
-  
-  module.exports = withBundleAnalyzer(nextConfig);
-  
+};
+
+module.exports = withBundleAnalyzer(nextConfig);
