@@ -3,11 +3,15 @@ import { NextPage } from "next";
 import Layout from "components/Layout";
 import Head from "next/head";
 import { useSigner } from "wagmi";
-import { DragAndDropImage, InputText, SubmitButton } from "components/Form";
-import { InputTextArea } from "components/Form/Input";
-import { CheckboxGroup } from "components/Form/Checkbox";
+import {
+    DragAndDropImage,
+    InputText,
+    InputTextArea,
+    SubmitButton,
+    CheckboxGroup,
+} from "components/Form";
 import toast from "react-hot-toast";
-import fa from "@walletconnect/qrcode-modal/dist/cjs/browser/languages/fa";
+import { objectIsEmpty, stringIsEmpty, arrayIsEmpty } from "utils/basic";
 
 interface CreateDAO {
     name: string;
@@ -31,9 +35,6 @@ const BlockchainValues = [
     "Polygon",
 ];
 
-const stringIsEmpty = (str: string) => !str || str.length === 0;
-const objectIsEmpty = (obj: object) => Object.keys(obj).length === 0 && obj.constructor === Object;
-const arrayIsEmpty = <T extends string>(array: T[]) => array.length === 0;
 const validateForm = (formData: CreateDAO): boolean => {
     const fields: string[] = [];
     for (const formDataKey in formData) {

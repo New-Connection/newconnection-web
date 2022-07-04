@@ -1,8 +1,7 @@
 import * as React from "react";
 import type { NextPage } from "next";
-import Layout from "components/Layout";
+import Layout from "components/Layout/Layout";
 import Head from "next/head";
-import Example from "components/Example";
 
 const Home: NextPage = () => {
     return (
@@ -12,7 +11,7 @@ const Home: NextPage = () => {
             </Head>
             <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    <Example />
+                    <h1>Home</h1>
                 </section>
             </Layout>
         </div>
