@@ -1,6 +1,10 @@
 import { ethers, providers } from 'ethers';
 import { Chain, allChains } from 'wagmi';
 
+import ETH from "assets/chains/Ethereum.png";
+import BNB from "assets/chains/Binance.png";
+import MATIC from "assets/chains/Polygon.png"
+
 export const infuraId = '9b42ce0bea0a40c98832bdef4f0fb5cc';
 export const alchemyId = 'EYaU8KZOLuaFhqXUxa5zzXhaXk6qC2SW';
 
@@ -28,14 +32,14 @@ export const defaultProvider = providers.getDefaultProvider(4, {
 export const networkDetails: INetworkDetails = {
   5: {
     rpcUrl: `https://goerli.infura.io/v3/${infuraId}`,
-    chainProviders: providers.getDefaultProvider(4, {
+    chainProviders: providers.getDefaultProvider(5, {    
       alchemy: alchemyId,
       infura: infuraId,
     }),
     blockExplorerURL: 'https://goerli.etherscan.io',
     blockExplorerName: 'Etherscan',
     prefix: 'goerli',
-    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+    logoURI: ETH.src,
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
@@ -43,7 +47,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
-    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+    logoURI: ETH.src,
     tokenListId: 'ethereum',
   }
 };
@@ -51,7 +55,7 @@ export const networkDetails: INetworkDetails = {
 export const defaultChains: Chain[] = allChains.filter(
   (chain) =>
     chain.name === 'Goerli' ||
-    chain.name === 'Mainnet' 
+    chain.name === 'Mainnet'
 );
 
 const formattedChains = defaultChains.map((chain) => {
