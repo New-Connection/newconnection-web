@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { GOVERNANCE_NFT_ABI } from "contracts";
+import { GOVERNANCE_NFT_ABI } from "abis";
 import { ethers, Signer } from "ethers";
 
 export async function mintClick(contractAddress: string, signer: Signer) {
