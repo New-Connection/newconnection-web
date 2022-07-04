@@ -17,6 +17,11 @@ import Layout from "components/Layout/Layout";
 import { CreateNFT } from "types/forms";
 import { handleTextChange, handleImageChange, handleSelectorChange } from "utils/handlers";
 import { validateForm } from "utils/validate";
+import { useDialogState } from "ariakit";
+import { LoadingDialog } from "../components/Dialog";
+import Link from "next/link";
+import { BeatLoader } from "react-spinners";
+import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
 // TODO:
 // Check ipfs approver
@@ -37,6 +42,13 @@ const CreateNFT: NextPage = () => {
 
     const { data: signer_data } = useSigner();
 
+    const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
+    const confirmDialog = useDialogState();
+
+    const handleChange = (value: string | boolean, type: keyof typeof formData) => {
+        setFormData((prev) => ({ ...prev, [type]: value }));
+    };
+
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -49,15 +61,17 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        const factory = CreateNFTContract(signer_data as Signer);
-        const contract = await factory.deploy(
-            formData.name,
-            formData.description,
-            BigNumber.from(formData.count)
-        );
-        await contract.deployed();
-        toast.success(`Contract Address: ${contract.address}`);
-        console.log(`Deployment successful! Contract Address: ${contract.address}`);
+        confirmDialog.toggle();
+
+        const contractAddress = await deployNFTContract(signer_data as Signer, {
+            name: formData.name,
+            symbol: formData.description,
+            numberNFT: Number.parseInt(formData.count),
+        });
+
+        handleChange(contractAddress, "contractAddress");
+        console.log(`Deployment successful! Contract Address: ${contractAddress}`);
+        setConfirmFromBlockchain(true);
     }
 
     return (
@@ -144,6 +158,37 @@ const CreateNFT: NextPage = () => {
                         </SubmitButton>
                     </form>
                 </section>
+                <LoadingDialog
+                    dialog={confirmDialog}
+                    title="Loading into Blockchain"
+                    className="dialog"
+                >
+                    {
+                        <div>
+                            {confirmFromBlockchain ? (
+                                <>
+                                    <p>Deployment successful!</p>
+                                    <p>Contract Address: {formData.contractAddress}</p>
+                                    <Link href="/create-dao">
+                                        <button
+                                            className="form-submit-button"
+                                            onClick={() => {
+                                                confirmDialog.toggle();
+                                            }}
+                                        >
+                                            Next Steps
+                                        </button>
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                    <p>Please confirm transaction in wallet</p>
+                                    <BeatLoader />
+                                </>
+                            )}
+                        </div>
+                    }
+                </LoadingDialog>
             </Layout>
         </div>
     );
