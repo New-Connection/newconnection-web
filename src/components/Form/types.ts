@@ -1,9 +1,10 @@
 import * as React from "react";
 import { BaseSyntheticEvent, ChangeEvent } from "react";
 
-export interface InputElement {
+export interface InputTextProps {
     name: string;
     label: string;
+    labelTitle?: string;
     isRequired?: boolean;
     className?: string;
     handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -12,14 +13,29 @@ export interface InputElement {
     pattern?: string;
 }
 
-export interface Selector {
+export interface InputAmountProps {
+    name: string;
+    label: string;
+    labelTitle?: string;
+    isRequired?: boolean;
+    className?: string;
+    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    placeholder?: string;
+    maxLength?: number;
+    pattern?: string;
+    min?: number;
+    max?: number;
+    step?: number;
+}
+
+export interface SelectorProps {
     name: string;
     label: string;
     className?: string;
     handlerChange?: (event: BaseSyntheticEvent) => boolean;
 }
 
-export interface IDragAndDrop {
+export interface IDragAndDropProps {
     name: string;
     label: string;
     className?: string;
@@ -28,12 +44,12 @@ export interface IDragAndDrop {
     multipleFiles?: boolean;
 }
 
-export interface InputWithTokenElement extends InputElement {
+export interface InputWithTokenElement extends InputTextProps {
     handleTokenChange: (token: string) => void;
     tokens: string[];
 }
 
-export interface InputWithTokenSelectProps extends InputElement {
+export interface InputWithTokenSelectProps extends InputTextProps {
     handleTokenChange: (token: string) => void;
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     tokenOptions: string[];

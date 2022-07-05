@@ -8,14 +8,18 @@ import {
     DragAndDropImage,
 } from "components/Form";
 import toast from "react-hot-toast";
-import { CreateNFTContract } from "contract-interactions/useCreateNFTContract";
-import { Signer, BigNumber } from "ethers";
+import { Signer } from "ethers";
 import { useSigner } from "wagmi";
 import { NextPage } from "next";
 import Head from "next/head";
 import Layout from "components/Layout/Layout";
 import { CreateNFT } from "types/forms";
-import { handleTextChange, handleImageChange, handleSelectorChange } from "utils/handlers";
+import {
+    handleTextChange,
+    handleImageChange,
+    handleSelectorChange,
+    handleChangeBasic,
+} from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { LoadingDialog } from "../components/Dialog";
@@ -45,10 +49,6 @@ const CreateNFT: NextPage = () => {
     const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
 
-    const handleChange = (value: string | boolean, type: keyof typeof formData) => {
-        setFormData((prev) => ({ ...prev, [type]: value }));
-    };
-
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -66,10 +66,10 @@ const CreateNFT: NextPage = () => {
         const contractAddress = await deployNFTContract(signer_data as Signer, {
             name: formData.name,
             symbol: formData.description,
-            numberNFT: Number.parseInt(formData.count),
+            numberNFT: +formData.count,
         });
 
-        handleChange(contractAddress, "contractAddress");
+        handleChangeBasic(contractAddress, setFormData, "contractAddress");
         console.log(`Deployment successful! Contract Address: ${contractAddress}`);
         setConfirmFromBlockchain(true);
     }
@@ -93,9 +93,8 @@ const CreateNFT: NextPage = () => {
                         />
                         <InputText
                             label="Description"
-                            className="pt-1.5 pb-14"
                             name="description"
-                            placeholder="A short descption about NFT collection(Max. 250 words)"
+                            placeholder="A short description about NFT collection(Max. 250 words)"
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
                         <DragAndDropImage

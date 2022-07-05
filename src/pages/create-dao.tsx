@@ -9,11 +9,24 @@ import {
     InputTextArea,
     SubmitButton,
     CheckboxGroup,
+    InputAmount,
 } from "components/Form";
-import { handleTextChange, handleImageChange, handleCheckboxChange } from "utils/handlers";
+import {
+    handleTextChange,
+    handleImageChange,
+    handleCheckboxChange,
+    handleChangeBasic,
+} from "utils/handlers";
 import { CreateDAO } from "types/forms";
 import { validateForm } from "utils/validate";
 import toast from "react-hot-toast";
+import { useDialogState } from "ariakit";
+import { Signer } from "ethers";
+import { deployGovernorContract } from "../contract-interactions/useDeployGovernorContract";
+import { BLOCKS_IN_DAY } from "../utils/constants";
+import Link from "next/link";
+import { BeatLoader } from "react-spinners";
+import { LoadingDialog } from "../components/Dialog";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 const BlockchainValues = [
@@ -33,17 +46,21 @@ const CreateDAO: NextPage = () => {
         goals: "",
         profileImage: {},
         coverImage: {},
+        tokenAddress: "",
+        votingPeriod: "",
+        quorumPercentage: "",
         type: [],
         blockchain: [],
         description: "",
     });
 
     const { data: signer_data } = useSigner();
+    const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
+    const confirmDialog = useDialogState();
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(formData);
         if (!signer_data) {
             toast.error("Please connect wallet");
             return;
@@ -52,13 +69,18 @@ const CreateDAO: NextPage = () => {
         if (!validateForm(formData)) {
             return;
         }
-        console.log("submited");
-        // DIDN'T
-        // const singer_right = await signer?.connect()
-        // const factory = CreateNFTContract(bytecode=bytecodeERC20, singer_right})
-        // const contract = await factory.deploy({name}, {description}, {count})
-        // await contract.deployed()
-        // console.log(`Deployment successful! Contract Address: ${contract.address}`)
+
+        confirmDialog.toggle();
+
+        const contractAddress = await deployGovernorContract(signer_data as Signer, {
+            name: formData.name,
+            tokenAddress: formData.tokenAddress,
+            votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
+            quorumPercentage: +formData.quorumPercentage,
+        });
+
+        handleChangeBasic(contractAddress, setFormData, "contractAddress");
+        setConfirmFromBlockchain(true);
     };
 
     return (
@@ -95,18 +117,48 @@ const CreateDAO: NextPage = () => {
                             label="DAO Name"
                             name="name"
                             placeholder="Unique DAO name"
-                            // isRequired
+                            labelTitle="Unique DAO name"
                             maxLength={30}
+                            handleChange={(event) => handleTextChange(event, setFormData)}
+                        />
+                        <InputText
+                            label="NFT Address"
+                            name="tokenAddress"
+                            placeholder="NFT which will be used in DAO (Ox...)"
+                            labelTitle="NFT Address"
+                            pattern={"^0x[a-fA-F0-9]{40}$"}
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
                         <InputText
                             label="DAO Goals"
                             name="goals"
                             placeholder="Сlear DAO goals"
+                            labelTitle="Сlear DAO goals"
                             maxLength={100}
-                            // isRequired
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
+                        <div className="flex justify-between">
+                            <InputAmount
+                                label={"Voting Period"}
+                                name="votingPeriod"
+                                className={"w-2/5"}
+                                labelTitle="Length of period during which people can cast their vote."
+                                placeholder="Voting period in days"
+                                min={1}
+                                max={10000}
+                                handleChange={(event) => handleTextChange(event, setFormData)}
+                            />
+                            <InputAmount
+                                label={"Quorum Percentage"}
+                                name="quorumPercentage"
+                                className={"w-2/5"}
+                                labelTitle="Quorum percentage required for a proposal to pass."
+                                placeholder="Quorum percentage (1-100)%"
+                                min={1}
+                                max={100}
+                                handleChange={(event) => handleTextChange(event, setFormData)}
+                            />
+                        </div>
                         <CheckboxGroup
                             label={"DAO Type"}
                             description={"You can choose one or more types"}
@@ -134,6 +186,37 @@ const CreateDAO: NextPage = () => {
                         <SubmitButton className="mt-5">Create Contract</SubmitButton>
                     </form>
                 </section>
+                <LoadingDialog
+                    dialog={confirmDialog}
+                    title="Loading into Blockchain"
+                    className="dialog"
+                >
+                    {
+                        <div>
+                            {confirmFromBlockchain ? (
+                                <>
+                                    <p>Deployment successful!</p>
+                                    <p>Contract Address: {formData.contractAddress}</p>
+                                    <Link href="/">
+                                        <button
+                                            className="form-submit-button"
+                                            onClick={() => {
+                                                confirmDialog.toggle();
+                                            }}
+                                        >
+                                            Back Home
+                                        </button>
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                    <p>Please confirm transaction in wallet</p>
+                                    <BeatLoader />
+                                </>
+                            )}
+                        </div>
+                    }
+                </LoadingDialog>
             </Layout>
         </div>
     );

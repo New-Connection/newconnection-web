@@ -28,8 +28,8 @@ export const NetworksMenu = () => {
 
     const { network } = chainDetails(chain?.id?.toString());
     // TODO: if network === underfied make a dialog or make network menu unsupported
-    console.log("Network", network);
-    console.log("Error", error);
+    // console.log("Network", network);
+    // console.log("Error", error);
     if (!chain || !switchNetwork) return null;
 
     const mainnets = chains.filter((chain) => !chain.testnet);

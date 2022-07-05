@@ -7,9 +7,13 @@ export interface CreateDAO extends ICreate {
     goals: string;
     profileImage: object;
     coverImage: object;
+    tokenAddress: string;
+    votingPeriod: string;
+    quorumPercentage: string;
     type: string[];
     blockchain: string[];
     description: string;
+    contractAddress?: string;
 }
 
 export interface CreateNFT extends ICreate {

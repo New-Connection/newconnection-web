@@ -1,19 +1,24 @@
-import classNames from "classnames";
-import { InputElement } from "./types";
+import { InputAmountProps, InputTextProps } from "./types";
 
 export const InputAmount = ({
     name,
     label,
+    labelTitle,
     isRequired,
     className,
     handleChange,
+    min,
+    max,
+    step,
     ...props
-}: InputElement) => {
+}: InputAmountProps) => {
     return (
-        <label>
-            <span className="input-label">{label}</span>
+        <div className={className}>
+            <label title={labelTitle}>
+                <span className="input-label">{label}</span>
+            </label>
             <input
-                className={classNames("input-field", className)}
+                className={"input-field"}
                 name={name}
                 required={isRequired}
                 autoComplete="off"
@@ -26,31 +31,36 @@ export const InputAmount = ({
                 spellCheck="false"
                 inputMode="decimal"
                 title="Enter numbers only."
-                min={1}
-                max={100} //Max number of NFT
-                step={1}
+                min={min || 1}
+                max={max || 100} //Max number of NFT
+                step={step || 1}
                 onChange={handleChange}
                 {...props}
             />
-        </label>
+        </div>
     );
 };
 
 export const InputText = ({
     name,
     label,
+    labelTitle,
     isRequired,
     className,
     handleChange,
     placeholder,
     maxLength,
     ...props
-}: InputElement) => {
+}: InputTextProps) => {
     return (
-        <label>
-            <div className="input-label mr-2">{label}</div>
+        <div className={className}>
+            <label>
+                <div title={labelTitle} className="input-label mr-2">
+                    {label}
+                </div>
+            </label>
             <input
-                className={classNames("input-field", className)}
+                className={"input-field"}
                 name={name}
                 required={isRequired}
                 autoComplete="off"
@@ -62,25 +72,30 @@ export const InputText = ({
                 maxLength={maxLength}
                 {...props}
             />
-        </label>
+        </div>
     );
 };
 
 export const InputTextArea = ({
     name,
     label,
+    labelTitle,
     isRequired,
     className,
     handleChange,
     placeholder,
     maxLength,
     ...props
-}: InputElement) => {
+}: InputTextProps) => {
     return (
-        <label>
-            <div className="input-label mr-2">{label}</div>
+        <div className={className}>
+            <label>
+                <div title={labelTitle} className="input-label mr-2">
+                    {label}
+                </div>
+            </label>
             <textarea
-                className={classNames("input-field resize-none h-28", className)}
+                className={"input-field resize-none h-28"}
                 name={name}
                 required={isRequired}
                 autoComplete="off"
@@ -91,6 +106,6 @@ export const InputTextArea = ({
                 maxLength={maxLength}
                 {...props}
             />
-        </label>
+        </div>
     );
 };

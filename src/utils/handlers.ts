@@ -1,6 +1,14 @@
 import { BaseSyntheticEvent, ChangeEvent, Dispatch, SetStateAction } from "react";
 import { ICreate } from "types/forms";
 
+export const handleChangeBasic = <T extends ICreate>(
+    value: string | boolean,
+    set: Dispatch<SetStateAction<T>>,
+    field: string
+) => {
+    set((prev) => ({ ...prev, [field]: value }));
+};
+
 export const handleTextChange = <
     T extends ICreate,
     E extends HTMLInputElement | HTMLTextAreaElement

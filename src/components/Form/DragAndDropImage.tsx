@@ -1,7 +1,7 @@
 import { FileUploader } from "react-drag-drop-files";
 import ImageIcon from "assets/ImageIcon.png";
 import Image from "next/image";
-import { IDragAndDrop } from "./types";
+import { IDragAndDropProps } from "./types";
 
 const fileTypes = ["JPEG", "PNG", "JPG"];
 
@@ -13,7 +13,7 @@ export const DragAndDropImage = ({
     hoverTitle,
     handleChange,
     ...props
-}: IDragAndDrop) => {
+}: IDragAndDropProps) => {
     return (
         <div className={className}>
             <div className="input-label">{label}</div>
@@ -23,6 +23,7 @@ export const DragAndDropImage = ({
                 handleChange={handleChange}
                 name={name}
                 maxSize={1}
+
                 types={fileTypes}
                 {...props}
             >
