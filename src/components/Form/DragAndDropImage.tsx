@@ -12,11 +12,11 @@ export const DragAndDropImage = ({
     className,
     multipleFiles = false,
     hoverTitle,
-    //handleChange,
+    handleChange,
     ...props
 }: IDragAndDropProps) => {
-    const [file, setFile] = useState(null);
-    const handleChange = (file) => {
+    const [file, setFile] = useState<File | null>(null);
+    const localHandleChange = (file: File) => {
         setFile(file);
         console.log(file.name);
     };
@@ -26,7 +26,9 @@ export const DragAndDropImage = ({
             <FileUploader
                 hoverTitle={hoverTitle}
                 multiple={multipleFiles}
-                handleChange={handleChange}
+                handleChange={(file: File) => {
+                    localHandleChange(file), handleChange(file);
+                }}
                 name={name}
                 maxSize={1}
                 types={fileTypes}
@@ -49,8 +51,6 @@ export const DragAndDropImage = ({
                             </p>
                         </>
                     )}
-
-                    {/* <p className='text-slate-400'>{file ? `File name: ${file?.name} ✅` : "PNG, JPEG and JPG accept. Max 1mb."}</p> */}
                 </div>
             </FileUploader>
         </div>

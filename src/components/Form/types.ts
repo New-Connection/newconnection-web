@@ -39,7 +39,7 @@ export interface IDragAndDropProps {
     name: string;
     label: string;
     className?: string;
-    handleChange?: (file: File) => void;
+    handleChange: (file: File) => void;
     hoverTitle?: string;
     multipleFiles?: boolean;
 }

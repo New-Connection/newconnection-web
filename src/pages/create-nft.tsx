@@ -100,7 +100,7 @@ const CreateNFT: NextPage = () => {
                         <DragAndDropImage
                             label="Image"
                             name="image"
-                            //handleChange={(file) => handleImageChange(file, setFormData, "image")}
+                            handleChange={(file) => handleImageChange(file, setFormData, "image")}
                         />
                         <div className="flex justify-between">
                             <InputAmount
