@@ -11,14 +11,25 @@ export const DragAndDropImage = ({
     name,
     className,
     multipleFiles = false,
-    hoverTitle,
+    hoverTitle = "Drag and drop file here",
     handleChange,
     ...props
 }: IDragAndDropProps) => {
     const [file, setFile] = useState<File | null>(null);
+    const [error, setError] = useState<boolean>(false);
+    const [errorMessages, setErrorMessages] = useState<string | undefined>();
+
+    const onTypeError = (err = 1) => {
+        setErrorMessages(err.toString());
+        setError(true);
+    };
+    const onSizeError = (err = 1) => {
+        setErrorMessages(err.toString());
+        setError(true);
+    };
     const localHandleChange = (file: File) => {
+        setError(false);
         setFile(file);
-        console.log(file.name);
     };
     return (
         <div className={className}>
@@ -32,6 +43,8 @@ export const DragAndDropImage = ({
                 name={name}
                 maxSize={1}
                 types={fileTypes}
+                onSizeError={onSizeError}
+                onTypeError={onTypeError}
                 {...props}
             >
                 <div
@@ -39,16 +52,22 @@ export const DragAndDropImage = ({
                                rounded-md border-2 border-[#1bdbad]
                                bg-slate-800 bg-[#fdfdfda6] hover:border-slate-800 items-center h-40"
                 >
-                    {file ? (
-                        <p className="text-slate-500 mt-1">
-                            File is accepted. File name: {file?.name} ✅
-                        </p>
+                    {error ? (
+                        <p className="text-slate-500 mt-1">Error: {errorMessages}</p>
                     ) : (
                         <>
-                            <Image src={ImageIcon} width={"50"} height={"50"} />
-                            <p className="text-slate-500 mt-1">
-                                PNG, JPEG and JPG accept. Max 1mb.
-                            </p>
+                            {file ? (
+                                <p className="text-slate-500 mt-1">
+                                    File is accepted. File name: {file?.name} ✅
+                                </p>
+                            ) : (
+                                <>
+                                    <Image src={ImageIcon} width={"50"} height={"50"} />
+                                    <p className="text-slate-500 mt-1">
+                                        PNG, JPEG and JPG accept. Max 1mb.
+                                    </p>
+                                </>
+                            )}
                         </>
                     )}
                 </div>
