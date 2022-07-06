@@ -2,6 +2,7 @@ import { FileUploader } from "react-drag-drop-files";
 import ImageIcon from "assets/ImageIcon.png";
 import Image from "next/image";
 import { IDragAndDropProps } from "./types";
+import { useState } from "react";
 
 const fileTypes = ["JPEG", "PNG", "JPG"];
 
@@ -11,9 +12,14 @@ export const DragAndDropImage = ({
     className,
     multipleFiles = false,
     hoverTitle,
-    handleChange,
+    //handleChange,
     ...props
 }: IDragAndDropProps) => {
+    const [file, setFile] = useState(null);
+    const handleChange = (file) => {
+        setFile(file);
+        console.log(file.name);
+    };
     return (
         <div className={className}>
             <div className="input-label">{label}</div>
@@ -23,7 +29,6 @@ export const DragAndDropImage = ({
                 handleChange={handleChange}
                 name={name}
                 maxSize={1}
-
                 types={fileTypes}
                 {...props}
             >
@@ -32,8 +37,19 @@ export const DragAndDropImage = ({
                                rounded-md border-2 border-[#1bdbad]
                                bg-slate-800 bg-[#fdfdfda6] hover:border-slate-800 items-center h-40"
                 >
-                    <Image src={ImageIcon} width={"50"} height={"50"} />
-                    <p className="text-slate-500 mt-1">PNG, JPEG and JPG accept. Max 1mb.</p>
+                    {file ? (
+                        <p className="text-slate-500 mt-1">
+                            File is accepted. File name: {file?.name} ✅
+                        </p>
+                    ) : (
+                        <>
+                            <Image src={ImageIcon} width={"50"} height={"50"} />
+                            <p className="text-slate-500 mt-1">
+                                PNG, JPEG and JPG accept. Max 1mb.
+                            </p>
+                        </>
+                    )}
+
                     {/* <p className='text-slate-400'>{file ? `File name: ${file?.name} ✅` : "PNG, JPEG and JPG accept. Max 1mb."}</p> */}
                 </div>
             </FileUploader>
