@@ -1,28 +1,36 @@
 import * as React from "react";
-import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
+import type { GetServerSideProps, GetStaticProps, NextPage, PreviewData } from "next";
 import Layout from "components/Layout/Layout";
 import Head from "next/head";
 import Link from "next/link";
+import { getName } from "contract-interactions/viewGovernorContract";
 import { ParsedUrlQuery } from "querystring";
-import { GetServerSidePropsResult } from "next/types";
 
-interface Params extends ParsedUrlQuery {
-    id: string;
+interface QueryUrlParams extends ParsedUrlQuery {
+    address: string;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+interface DAOPageProps {
+    name: string;
+    address: string;
+}
+
+export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams> = async (
+    context
+) => {
     // const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
     // const data = await response.json();
-    const { address } = context.params as Params;
+    const address = context.params?.address;
 
     if (!address) {
         return {
             notFound: true,
-        } ;
+        };
     }
 
     const result: DAOPageProps = {
-        name: "DAO page",
+        //todo: need to transfer chainId
+        name: await getName(address, 5),
         address: address.toString(),
     };
 
@@ -30,11 +38,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: result,
     };
 };
-
-interface DAOPageProps {
-    name: string;
-    address: string;
-}
 
 const DAOPage: NextPage<DAOPageProps> = ({ name, address }) => {
     return (
