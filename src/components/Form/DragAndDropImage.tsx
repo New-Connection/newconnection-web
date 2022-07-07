@@ -6,6 +6,8 @@ import { useState } from "react";
 
 const fileTypes = ["JPEG", "PNG", "JPG"];
 
+// Maybe change the next time: https://react-dropzone.js.org/
+// Tutorial: https://blog.openreplay.com/create-a-drag-and-drop-zone-in-react-with-react-dropzone
 export const DragAndDropImage = ({
     label,
     name,
@@ -28,8 +30,8 @@ export const DragAndDropImage = ({
         setError(true);
     };
     const localHandleChange = (file: File) => {
-        setError(false);
         setFile(file);
+        setError(false);
     };
     return (
         <div className={className}>
@@ -41,6 +43,7 @@ export const DragAndDropImage = ({
                     localHandleChange(file), handleChange(file);
                 }}
                 name={name}
+                disabled={false}
                 maxSize={1}
                 types={fileTypes}
                 onSizeError={onSizeError}
@@ -48,9 +51,11 @@ export const DragAndDropImage = ({
                 {...props}
             >
                 <div
-                    className="flex flex-col justify-center text-center border-dashed
-                               rounded-md border-2 border-[#1bdbad]
-                               bg-slate-800 bg-[#fdfdfda6] hover:border-slate-800 items-center h-40"
+                    className="flex flex-col 
+                    justify-center content-center items-center text-center
+                    h-40 
+                    border-dashed rounded-md border-2 
+                    border-[#1bdbad] hover:border-slate-800 focus:text-white "
                 >
                     {error ? (
                         <p className="text-slate-500 mt-1">Error: {errorMessages}</p>
