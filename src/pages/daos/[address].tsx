@@ -1,10 +1,11 @@
 import * as React from "react";
-import type { GetServerSideProps, GetStaticProps, NextPage, PreviewData } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import Head from "next/head";
-import Link from "next/link";
 import { getName } from "contract-interactions/viewGovernorContract";
 import { ParsedUrlQuery } from "querystring";
+import { DAOProps } from "./index";
+import { getDAO } from "./data-example";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -13,6 +14,12 @@ interface QueryUrlParams extends ParsedUrlQuery {
 interface DAOPageProps {
     name: string;
     address: string;
+    discordURL?: string;
+    twitterURL?: string;
+    totalVotes?: number;
+    totalMembers?: number;
+    activeProposals?: number;
+    NFT?: string;
 }
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams> = async (
@@ -20,17 +27,18 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams
 ) => {
     // const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
     // const data = await response.json();
-    const address = context.params?.address;
+    const { address } = context.params as QueryUrlParams;
 
-    if (!address) {
+    const data: DAOProps | undefined = await getDAO(address);
+
+    if (!data) {
         return {
             notFound: true,
         };
     }
 
     const result: DAOPageProps = {
-        //todo: need to transfer chainId
-        name: await getName(address, 5),
+        name: await getName(address, data.chainId),
         address: address.toString(),
     };
 
