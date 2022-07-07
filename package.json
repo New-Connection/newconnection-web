@@ -40,6 +40,7 @@
     "esm": "^3.2.25",
     "ethers": "^5.6.9",
     "heroicons": "^1.0.6",
+    "ipfs-core": "^0.15.4",
     "js-cookie": "^3.0.1",
     "next": "^12.1.6",
     "next-themes": "^0.2.0",
