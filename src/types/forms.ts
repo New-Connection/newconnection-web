@@ -17,7 +17,7 @@ export interface CreateDAO extends ICreate {
 }
 
 export interface CreateNFT extends ICreate {
-    image: string;
+    image: File | null;
     count: string;
     price: string;
     blockchain: string;
