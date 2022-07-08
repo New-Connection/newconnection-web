@@ -27,14 +27,16 @@ import Link from "next/link";
 import { BeatLoader } from "react-spinners";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
-// TODO:
-// Check ipfs approver
+import storeNFT from "utils/ipfsUpload";
+
+// TODO
+// FOR EXPECTIONS FOR ERRORS
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({
         name: "",
         description: "",
-        image: "",
+        image: null,
         count: "",
         price: "",
         blockchain: "Ethereum",
@@ -62,6 +64,8 @@ const CreateNFT: NextPage = () => {
         }
 
         confirmDialog.toggle();
+        const UID = await storeNFT(formData.image, formData.name, formData.description);
+        console.log(UID);
 
         const contractAddress = await deployNFTContract(signer_data as Signer, {
             name: formData.name,
