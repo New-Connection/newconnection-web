@@ -27,7 +27,8 @@ import Link from "next/link";
 import { BeatLoader } from "react-spinners";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
-import { storeNFT } from "utils/ipfsUpload";
+import { storeNFT, ipfsFullPath } from "utils/ipfsUpload";
+import { mintClick } from "contract-interactions/useMintFunctions";
 
 // TODO
 // FOR EXPECTIONS FOR ERRORS
@@ -36,6 +37,7 @@ const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({
         name: "",
         description: "",
+        ipfsAddress: "",
         image: null,
         count: "",
         price: "",
@@ -59,13 +61,19 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        if (!validateForm(formData, ["collectionName", "twitterURL", "discordURL"])) {
+        if (
+            !validateForm(formData, ["collectionName", "twitterURL", "discordURL", "ipfsAddress"])
+        ) {
             return;
         }
 
         confirmDialog.toggle();
-        const UID = await storeNFT(formData.image, formData.name, formData.description);
+        const UID = await storeNFT(formData.image!, formData.name, formData.description);
         console.log(UID);
+        console.log(UID.ipnft);
+        const fullPath = ipfsFullPath(UID.ipnft);
+        console.log(fullPath);
+        handleChangeBasic(fullPath, setFormData, "ipfsAddress");
 
         const contractAddress = await deployNFTContract(signer_data as Signer, {
             name: formData.name,
@@ -73,14 +81,17 @@ const CreateNFT: NextPage = () => {
             numberNFT: +formData.count,
         }).catch((error) => {
             console.log(error, "User is cancel transaction");
-
             return;
         });
 
-        handleChangeBasic(contractAddress, setFormData, "contractAddress");
+        handleChangeBasic(contractAddress!, setFormData, "contractAddress");
         console.log(`Deployment successful! Contract Address: ${contractAddress}`);
         setConfirmFromBlockchain(true);
     }
+
+    // async function mint(contractAddress,) {
+    //    const tx = await mintClick()
+    // }
 
     return (
         <div>
@@ -159,12 +170,13 @@ const CreateNFT: NextPage = () => {
                                 handleChange={(event) => handleTextChange(event, setFormData)}
                             />
                         </div>
-                        <SubmitButton className="mt-5">
-                            {/* <BeatLoader size={6} color="white" /> */}
-                            Create Contract
-                        </SubmitButton>
+                        <SubmitButton className="mt-5">Create Contract</SubmitButton>
                     </form>
+                    {/* <SubmitButton className="mt-5" onClick={mint}>
+                        MINT
+                    </SubmitButton> */}
                 </section>
+
                 <LoadingDialog
                     dialog={confirmDialog}
                     title="Loading into Blockchain"

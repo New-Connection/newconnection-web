@@ -22,6 +22,7 @@ export interface CreateNFT extends ICreate {
     price: string;
     blockchain: string;
     role: string;
+    ipfsAddress?: string;
     collectionName?: string;
     twitterURL?: string;
     discordURL?: string;
