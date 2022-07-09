@@ -27,7 +27,7 @@ import Link from "next/link";
 import { BeatLoader } from "react-spinners";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
-import storeNFT from "utils/ipfsUpload";
+import { storeNFT } from "utils/ipfsUpload";
 
 // TODO
 // FOR EXPECTIONS FOR ERRORS
@@ -47,7 +47,7 @@ const CreateNFT: NextPage = () => {
     });
 
     const { data: signer_data } = useSigner();
-
+    const [error, setError] = useState(false);
     const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
 
@@ -71,6 +71,10 @@ const CreateNFT: NextPage = () => {
             name: formData.name,
             symbol: formData.description,
             numberNFT: +formData.count,
+        }).catch((error) => {
+            console.log(error, "User is cancel transaction");
+
+            return;
         });
 
         handleChangeBasic(contractAddress, setFormData, "contractAddress");
