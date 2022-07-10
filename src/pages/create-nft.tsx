@@ -89,9 +89,10 @@ const CreateNFT: NextPage = () => {
         setConfirmFromBlockchain(true);
     }
 
-    // async function mint(contractAddress,) {
-    //    const tx = await mintClick()
-    // }
+    async function mint() {
+        const tx = await mintClick(formData.contractAddress!, signer_data as Signer);
+        console.log(tx);
+    }
 
     return (
         <div>
@@ -172,9 +173,9 @@ const CreateNFT: NextPage = () => {
                         </div>
                         <SubmitButton className="mt-5">Create Contract</SubmitButton>
                     </form>
-                    {/* <SubmitButton className="mt-5" onClick={mint}>
+                    <SubmitButton className="mt-5" onClick={mint}>
                         MINT
-                    </SubmitButton> */}
+                    </SubmitButton>
                 </section>
 
                 <LoadingDialog
@@ -188,16 +189,16 @@ const CreateNFT: NextPage = () => {
                                 <>
                                     <p>Deployment successful!</p>
                                     <p>Contract Address: {formData.contractAddress}</p>
-                                    <Link href="/create-dao">
-                                        <button
-                                            className="form-submit-button"
-                                            onClick={() => {
-                                                confirmDialog.toggle();
-                                            }}
-                                        >
-                                            Next Steps
-                                        </button>
-                                    </Link>
+                                    {/* <Link href="/create-dao"> */}
+                                    <button
+                                        className="form-submit-button"
+                                        onClick={() => {
+                                            confirmDialog.toggle();
+                                        }}
+                                    >
+                                        Next Steps
+                                    </button>
+                                    {/* </Link> */}
                                 </>
                             ) : (
                                 <>
