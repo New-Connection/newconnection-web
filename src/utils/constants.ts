@@ -5,6 +5,14 @@ import ETH from "assets/chains/Ethereum.png";
 import BNB from "assets/chains/Binance.png";
 import MATIC from "assets/chains/Polygon.png";
 
+// IPFS MODULE
+export const infuraIpfsApiEndpoint = "https://ipfs.infura.io:5001"
+export const infuraIPFS = "";
+
+// NFT-STORAGE MODULE
+export const NFT_STORAGE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEU3MkRmOTliNkJDZjhGODlmOTQ4ODkwMTYyN0M5MUZhQkZENUU3RDMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NzMwMzgxOTIwOCwibmFtZSI6Ik5ld0Nvbm5lY3Rpb24ifQ.1LBmCk5ZRmzQVjSDXmV8Vugt85blOz0PBwTdLX1a9Rk";
+
+// EVM MODULE 
 export const infuraId = "9b42ce0bea0a40c98832bdef4f0fb5cc";
 export const alchemyId = "EYaU8KZOLuaFhqXUxa5zzXhaXk6qC2SW";
 export const BLOCKS_IN_DAY = 6545;

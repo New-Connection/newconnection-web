@@ -27,14 +27,18 @@ import Link from "next/link";
 import { BeatLoader } from "react-spinners";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
-// TODO:
-// Check ipfs approver
+import { storeNFT, ipfsFullPath } from "utils/ipfsUpload";
+import { mintClick } from "contract-interactions/useMintFunctions";
+
+// TODO
+// FOR EXPECTIONS FOR ERRORS
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({
         name: "",
         description: "",
-        image: "",
+        ipfsAddress: "",
+        image: null,
         count: "",
         price: "",
         blockchain: "Ethereum",
@@ -45,7 +49,7 @@ const CreateNFT: NextPage = () => {
     });
 
     const { data: signer_data } = useSigner();
-
+    const [error, setError] = useState(false);
     const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
 
@@ -57,21 +61,37 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        if (!validateForm(formData, ["collectionName", "twitterURL", "discordURL"])) {
+        if (
+            !validateForm(formData, ["collectionName", "twitterURL", "discordURL", "ipfsAddress"])
+        ) {
             return;
         }
 
         confirmDialog.toggle();
+        const UID = await storeNFT(formData.image!, formData.name, formData.description);
+        console.log(UID);
+        console.log(UID.ipnft);
+        const fullPath = ipfsFullPath(UID.ipnft);
+        console.log(fullPath);
+        handleChangeBasic(fullPath, setFormData, "ipfsAddress");
 
         const contractAddress = await deployNFTContract(signer_data as Signer, {
             name: formData.name,
             symbol: formData.description,
             numberNFT: +formData.count,
+        }).catch((error) => {
+            console.log(error, "User is cancel transaction");
+            return;
         });
 
-        handleChangeBasic(contractAddress, setFormData, "contractAddress");
+        handleChangeBasic(contractAddress!, setFormData, "contractAddress");
         console.log(`Deployment successful! Contract Address: ${contractAddress}`);
         setConfirmFromBlockchain(true);
+    }
+
+    async function mint() {
+        const tx = await mintClick(formData.contractAddress!, signer_data as Signer);
+        console.log(tx);
     }
 
     return (
@@ -151,12 +171,13 @@ const CreateNFT: NextPage = () => {
                                 handleChange={(event) => handleTextChange(event, setFormData)}
                             />
                         </div>
-                        <SubmitButton className="mt-5">
-                            {/* <BeatLoader size={6} color="white" /> */}
-                            Create Contract
-                        </SubmitButton>
+                        <SubmitButton className="mt-5">Create Contract</SubmitButton>
                     </form>
+                    <SubmitButton className="mt-5" onClick={mint}>
+                        MINT
+                    </SubmitButton>
                 </section>
+
                 <LoadingDialog
                     dialog={confirmDialog}
                     title="Loading into Blockchain"
@@ -168,16 +189,16 @@ const CreateNFT: NextPage = () => {
                                 <>
                                     <p>Deployment successful!</p>
                                     <p>Contract Address: {formData.contractAddress}</p>
-                                    <Link href="/create-dao">
-                                        <button
-                                            className="form-submit-button"
-                                            onClick={() => {
-                                                confirmDialog.toggle();
-                                            }}
-                                        >
-                                            Next Steps
-                                        </button>
-                                    </Link>
+                                    {/* <Link href="/create-dao"> */}
+                                    <button
+                                        className="form-submit-button"
+                                        onClick={() => {
+                                            confirmDialog.toggle();
+                                        }}
+                                    >
+                                        Next Steps
+                                    </button>
+                                    {/* </Link> */}
                                 </>
                             ) : (
                                 <>
