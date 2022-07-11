@@ -1,6 +1,5 @@
 import { Select, SelectArrow, SelectItem, SelectPopover, useSelectState } from "ariakit/select";
 
-import classNames from "classnames";
 import { SelectorProps } from "./types";
 
 import Ethereum from "assets/chains/Ethereum.png";

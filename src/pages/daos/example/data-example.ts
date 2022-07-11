@@ -1,4 +1,4 @@
-import { DAOProps } from "./index";
+import { DAOProps } from "../index";
 
 const data: DAOProps[] = [
     {

@@ -3,7 +3,7 @@ import type { GetStaticProps, NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import Head from "next/head";
 import Link from "next/link";
-import { getDAO, getDAOs } from "./data-example";
+import { getDAOs } from "./example/data-example";
 
 export interface DAOProps {
     address: string;
@@ -43,9 +43,8 @@ const DAOsPage: NextPage<DAOsPageProps> = ({ daos }) => {
                         {daos &&
                             daos.map(({ address, chainId }) => (
                                 <li key={address}>
-                                    <Link href={`/daos/${address}`}>
-                                        {address} (Network:${chainId})
-                                    </Link>
+                                    <Link href={`/daos/${address}`}>{address}</Link> (Network:
+                                    {chainId})
                                 </li>
                             ))}
                     </ul>
