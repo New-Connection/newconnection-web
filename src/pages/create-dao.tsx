@@ -197,7 +197,7 @@ const CreateDAO: NextPage = () => {
                                 <>
                                     <p>Deployment successful!</p>
                                     <p>Contract Address: {formData.contractAddress}</p>
-                                    <Link href="/">
+                                    <Link href="/create-dao">
                                         <button
                                             className="form-submit-button"
                                             onClick={() => {

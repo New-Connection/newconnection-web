@@ -30,9 +30,6 @@ import { deployNFTContract } from "../contract-interactions/useDeployNFTContract
 import { storeNFT, ipfsFullPath } from "utils/ipfsUpload";
 import { mintClick } from "contract-interactions/useMintFunctions";
 
-// TODO
-// FOR EXPECTIONS FOR ERRORS
-
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({
         name: "",
