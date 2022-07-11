@@ -12,6 +12,7 @@ import { useIsMounted } from "hooks";
 const navigation = [
     { id: 1, title: "Create NFT", path: "/create-nft" },
     { id: 2, title: "Create DAO", path: "/create-dao" },
+    { id: 3, title: "DAOs", path: "/daos" },
 ];
 
 const Navbar = () => {
