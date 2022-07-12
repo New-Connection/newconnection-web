@@ -7,10 +7,14 @@ import { useAccount } from "wagmi";
 import Link from "next/link";
 import BasicAvatar from "assets/basic_avatar.jpg";
 import ViewAllIcon from "assets/ViewAll.png";
+import { Tab, TabList, TabPanel, useTabState } from "ariakit/tab";
 
 const Home: NextPage = () => {
     const { address } = useAccount();
     console.log(address);
+    // TAB's
+    const defaultSelectedId = "default-selected-tab";
+    const tab = useTabState({ defaultSelectedId });
 
     // Wallet information when connect wallet
     const AccountInfo = () => {
@@ -45,16 +49,17 @@ const Home: NextPage = () => {
         return (
             <div className="flex my-4 gap-16">
                 <Image src={BasicAvatar} width="125" height="125" layout="fixed" />
-                <div className="w-3/5 justify-between-col">
+                <div className="w-3/5 justify-between">
                     <p className="text-lg font-bold">DAO Name</p>
-                    <p className="truncate">
+                    {/* About style for paragraph https://codepen.io/ShanShahOfficial/pen/wvBYwaB */}
+                    <p className="overflow-hidden leading-5 max-h-20 block text-ellipsis">
                         A DAO, or “Decentralized Autonomous Organization,” is a community-led entity
                         with no central authority. It is fully autonomous and transparent: smart
                         contracts lay the foundational rules, execute the agreed upon decisions, and
                         at any point, proposals, voting, and even the very code itself can be
                         publicly audited.
                     </p>
-                    <button>View more</button>
+                    <button className="text-gray-500">View more</button>
                 </div>
                 <div>
                     <p>Active voting now</p>
@@ -77,6 +82,40 @@ const Home: NextPage = () => {
             </div>
         );
     };
+
+    // // Tabs list
+    // const HeadTabs = () => {
+    //     return (
+    //         <TabList state={tab} className="tab-list" aria-label="DAOs">
+    //             <Tab className="tab" id={defaultSelectedId}>
+    //                 My DAOs
+    //             </Tab>
+    //             <Tab className="tab">Administration</Tab>
+    //         </TabList>
+    //     );
+    // };
+
+    // const TabsElement = () => {
+    //     return (
+    //         <>
+    //             <HeadTabs />
+    //             <TabPanel state={tab} tabId={defaultSelectedId}>
+    //                 <ul>
+    //                     <li>🍎 Apple</li>
+    //                     <li>🍇 Grape</li>
+    //                     <li>🍊 Orange</li>
+    //                 </ul>
+    //             </TabPanel>
+    //             <TabPanel state={tab}>
+    //                 <ul>
+    //                     <li>🥕 Carrot</li>
+    //                     <li>🧅 Onion</li>
+    //                     <li>🥔 Potato</li>
+    //                 </ul>
+    //             </TabPanel>
+    //         </>
+    //     );
+    // };
 
     const ProporsalsSection = () => {
         return (
@@ -127,11 +166,12 @@ const Home: NextPage = () => {
                             <ElementOfDAO />
                             <ElementOfDAO />
                             <ViewAll />
+                            {/* <TabsElement /> */}
                             <ProporsalsSection />
                             <NFTSection />
                         </div>
                     ) : (
-                        <h1>Please connect wallet</h1>
+                        <h1 className="text-center font-bold">Please connect wallet</h1>
                     )}
                 </section>
             </Layout>
