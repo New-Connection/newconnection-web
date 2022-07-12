@@ -72,7 +72,7 @@ const Home: NextPage = () => {
 
     const ViewAll = () => {
         return (
-            <div className="w-full flex justify-center items-center">
+            <div className="w-full mt-10 flex justify-center items-center">
                 <button>
                     <div className="flex gap-2">
                         <p className="align-middle text-gray-400">View all DAOs</p>
@@ -156,7 +156,7 @@ const Home: NextPage = () => {
             <Head>
                 <title>New Connection: Home</title>
             </Head>
-            <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
+            <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     {address ? (
                         <div>
