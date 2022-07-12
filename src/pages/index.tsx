@@ -67,29 +67,31 @@ const Home: NextPage = () => {
 
     const ViewAll = () => {
         return (
-            <button className="content-center">
-                <div className="flex gap-2 content-center">
-                    <p className="align-middle">View all DAOs</p>
-                    <Image src={ViewAllIcon} layout="fixed" height="15" width="30" />
-                </div>
-            </button>
+            <div className="w-full flex justify-center items-center">
+                <button>
+                    <div className="flex gap-2">
+                        <p className="align-middle text-gray-400">View all DAOs</p>
+                        {/* <Image src={ViewAllIcon} layout="fixed" height="15" width="30" /> */}
+                    </div>
+                </button>
+            </div>
         );
     };
 
     const ProporsalsSection = () => {
         return (
-            <>
-                <div className="flex mt-16 mb-12 gap-2">
+            <div className="my-24">
+                <div className="flex my-20 gap-2">
                     <p className="text-lg font-bold">My Proporsal</p>
                     <p className="text-lg font-bold  text-gray-400">0</p>
                 </div>
-                <div className="text-center my-16">
+                <div className="text-center my-32">
                     <p>No proposals here</p>
                     <p className="text-gray-400">
                         You should first join a DAO or create a new DAO to add a proposal
                     </p>
                 </div>
-            </>
+            </div>
         );
     };
 
@@ -100,7 +102,7 @@ const Home: NextPage = () => {
                     <p className="text-lg font-bold">My NFTs</p>
                     <p className="text-lg font-bold  text-gray-400">0</p>
                 </div>
-                <div className="text-center my-16">
+                <div className="text-center my-32">
                     <p>No NFTs here</p>
                     <p className="text-gray-400">
                         You should first join a DAO and get NFT from its administrator
