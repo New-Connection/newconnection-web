@@ -27,6 +27,8 @@ import { BLOCKS_IN_DAY } from "../utils/constants";
 import Link from "next/link";
 import { BeatLoader } from "react-spinners";
 import { LoadingDialog } from "../components/Dialog";
+import Moralis from "moralis";
+import { useNewMoralisObject } from "react-moralis";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 const BlockchainValues = [
@@ -39,6 +41,9 @@ const BlockchainValues = [
     "Optimism",
     "Polygon",
 ];
+
+const DaoObject = Moralis.Object.extend("Dao");
+Moralis.Object.registerSubclass("Dao", DaoObject);
 
 const CreateDAO: NextPage = () => {
     const [formData, setFormData] = useState<CreateDAO>({
@@ -53,10 +58,26 @@ const CreateDAO: NextPage = () => {
         blockchain: [],
         description: "",
     });
-
+    const { save } = useNewMoralisObject("Dao");
     const { data: signer_data } = useSigner();
     const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
+
+    const saveObject = async () => {
+        const daoObject = new DaoObject();
+
+        for (const formDataKey in formData) {
+            daoObject.set(formDataKey, formData[formDataKey]);
+        }
+        await daoObject.save().then(
+            (dao) => {
+                console.log("New object created with objectId: " + dao.id);
+            },
+            (error) => {
+                alert("Failed to create new object, with error code: " + error.message);
+            }
+        );
+    };
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -71,6 +92,8 @@ const CreateDAO: NextPage = () => {
         }
 
         confirmDialog.toggle();
+
+        await saveObject();
 
         const contractAddress = await deployGovernorContract(signer_data as Signer, {
             name: formData.name,

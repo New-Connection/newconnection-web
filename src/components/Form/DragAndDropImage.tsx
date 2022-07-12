@@ -40,7 +40,8 @@ export const DragAndDropImage = ({
                 hoverTitle={hoverTitle}
                 multiple={multipleFiles}
                 handleChange={(file: File) => {
-                    localHandleChange(file), handleChange(file);
+                    localHandleChange(file);
+                    handleChange(file);
                 }}
                 name={name}
                 disabled={false}
