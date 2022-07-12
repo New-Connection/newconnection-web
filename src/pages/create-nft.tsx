@@ -29,6 +29,7 @@ import { deployNFTContract } from "../contract-interactions/useDeployNFTContract
 
 import { storeNFT, ipfsFullPath } from "utils/ipfsUpload";
 import { mintClick } from "contract-interactions/useMintFunctions";
+import { saveObject, NftMoralisObject} from "database/interactions";
 
 // TODO
 // FOR EXPECTIONS FOR ERRORS
@@ -83,9 +84,10 @@ const CreateNFT: NextPage = () => {
             console.log(error, "User is cancel transaction");
             return;
         });
-
         handleChangeBasic(contractAddress!, setFormData, "contractAddress");
-        console.log(`Deployment successful! Contract Address: ${contractAddress}`);
+
+        await saveObject(new NftMoralisObject(), formData);
+
         setConfirmFromBlockchain(true);
     }
 

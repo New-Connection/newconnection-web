@@ -1,8 +1,14 @@
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
-import Layout from "components/Layout";
 import Head from "next/head";
 import { useSigner } from "wagmi";
+import toast from "react-hot-toast";
+import { useDialogState } from "ariakit";
+import { Signer } from "ethers";
+import Link from "next/link";
+import { CreateDAO } from "types/forms";
+import { validateForm } from "utils/validate";
+import Layout from "components/Layout";
 import {
     DragAndDropImage,
     InputText,
@@ -17,17 +23,11 @@ import {
     handleCheckboxChange,
     handleChangeBasic,
 } from "utils/handlers";
-import { CreateDAO } from "types/forms";
-import { validateForm } from "utils/validate";
-import toast from "react-hot-toast";
-import { useDialogState } from "ariakit";
-import { Signer } from "ethers";
-import { deployGovernorContract } from "../contract-interactions/useDeployGovernorContract";
-import { BLOCKS_IN_DAY } from "../utils/constants";
-import Link from "next/link";
+import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
+import { BLOCKS_IN_DAY } from "utils/constants";
 import { BeatLoader } from "react-spinners";
-import { LoadingDialog } from "../components/Dialog";
-import Moralis from "moralis";
+import { LoadingDialog } from "components/Dialog";
+import { saveObject, DaoMoralisObject } from "database/interactions";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 const BlockchainValues = [
@@ -40,9 +40,6 @@ const BlockchainValues = [
     "Optimism",
     "Polygon",
 ];
-
-const DaoObject = Moralis.Object.extend("Dao");
-Moralis.Object.registerSubclass("Dao", DaoObject);
 
 const CreateDAO: NextPage = () => {
     const [formData, setFormData] = useState<CreateDAO>({
@@ -60,22 +57,6 @@ const CreateDAO: NextPage = () => {
     const { data: signer_data } = useSigner();
     const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
-
-    const saveObject = async () => {
-        const daoObject = new DaoObject();
-
-        for (const formDataKey in formData) {
-            daoObject.set(formDataKey, formData[formDataKey]);
-        }
-        await daoObject.save().then(
-            (dao) => {
-                console.log("New DAO created with id: " + dao.id);
-            },
-            (error) => {
-                toast.error(`Failed to create dao, please try again. Error(${error.message})`);
-            }
-        );
-    };
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -99,7 +80,7 @@ const CreateDAO: NextPage = () => {
         });
         handleChangeBasic(contractAddress, setFormData, "contractAddress");
 
-        await saveObject();
+        await saveObject(new DaoMoralisObject(), formData);
 
         setConfirmFromBlockchain(true);
     };
