@@ -10,24 +10,24 @@ import { CreateDAO } from "types/forms";
 import { validateForm } from "utils/validate";
 import Layout from "components/Layout";
 import {
+    CheckboxGroup,
     DragAndDropImage,
+    InputAmount,
     InputText,
     InputTextArea,
     SubmitButton,
-    CheckboxGroup,
-    InputAmount,
 } from "components/Form";
 import {
-    handleTextChange,
-    handleImageChange,
-    handleCheckboxChange,
     handleChangeBasic,
+    handleCheckboxChange,
+    handleImageChange,
+    handleTextChange,
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
 import { BLOCKS_IN_DAY } from "utils/constants";
 import { BeatLoader } from "react-spinners";
 import { LoadingDialog } from "components/Dialog";
-import { saveObject, DaoMoralisObject } from "database/interactions";
+import { getMoralisInstance, MoralisClassEnum, saveMoralisInstance, setFieldsIntoMoralisInstance } from "database/interactions";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 const BlockchainValues = [
@@ -80,7 +80,11 @@ const CreateDAO: NextPage = () => {
         });
         handleChangeBasic(contractAddress, setFormData, "contractAddress");
 
-        await saveObject(new DaoMoralisObject(), formData);
+        const moralisDao = getMoralisInstance(MoralisClassEnum.DAO);
+        setFieldsIntoMoralisInstance(moralisDao, formData);
+        moralisDao.set("contractAddress", contractAddress);
+        moralisDao.set("chainId", await signer_data.getChainId());
+        await saveMoralisInstance(moralisDao);
 
         setConfirmFromBlockchain(true);
     };

@@ -11,7 +11,7 @@ export const validateForm = (formData: ICreate, ignoreFields?: string[]): boolea
         }
         if (
             (typeof value === "string" && stringIsEmpty(value)) ||
-            (typeof value === "object" && objectIsEmpty(value)) ||
+            (typeof value === "object" && (value == null || objectIsEmpty(value))) ||
             (Array.isArray(value) && arrayIsEmpty(value))
         ) {
             fields.push(key);
