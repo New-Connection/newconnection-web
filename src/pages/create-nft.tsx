@@ -30,9 +30,6 @@ import { deployNFTContract } from "../contract-interactions/useDeployNFTContract
 import { storeNFT, ipfsFullPath } from "utils/ipfsUpload";
 import { mintClick } from "contract-interactions/useMintFunctions";
 
-// TODO
-// FOR EXPECTIONS FOR ERRORS
-
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({
         name: "",
@@ -99,7 +96,7 @@ const CreateNFT: NextPage = () => {
             <Head>
                 <title>NC: Create NFT</title>
             </Head>
-            <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
+            <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
                         <h1 className="font-exo my-2 text-2xl font-semibold text-[#3D3D3D]">
