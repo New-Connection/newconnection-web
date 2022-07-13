@@ -14,18 +14,20 @@ const Footer = () => {
             <div className="flex justify-between">
                 <p className="align-middle pt-4 pl-2">contact@newconnection.xyz</p>
                 <div className="pt-4">
-                    <button>Terms</button>
+                    <button className="cursor-not-allowed">Terms</button>
                     <SpaceBetweenButtons />
-                    <button>Privacy</button>
+                    <button className="cursor-not-allowed">Privacy</button>
                 </div>
                 <div className="pr-4 pb-2">
-                    <button className="h-16 w-16 bg-[#F6F6F6] rounded-md">
+                    <button className="cursor-not-allowed h-16 w-16 bg-[#F6F6F6] rounded-md">
                         <Image src={Discord} />
                     </button>
                     <SpaceBetweenButtons />
-                    <button className="h-16 w-16 bg-[#F6F6F6] rounded-md">
-                        <Image src={Twitter} />
-                    </button>
+                    <a href="https://twitter.com/NewConnectionX" target="_blank" rel="noreferrer">
+                        <button className="h-16 w-16 bg-[#F6F6F6] rounded-md">
+                            <Image src={Twitter} />
+                        </button>
+                    </a>
                 </div>
             </div>
         </footer>
