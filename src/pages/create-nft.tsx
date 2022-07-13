@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import {
+    BlockchainSelector,
+    DragAndDropImage,
     InputAmount,
     InputText,
     SubmitButton,
-    BlockchainSelector,
     TypeSelector,
-    DragAndDropImage,
 } from "components/Form";
 import toast from "react-hot-toast";
 import { Signer } from "ethers";
@@ -15,20 +15,25 @@ import Head from "next/head";
 import Layout from "components/Layout/Layout";
 import { CreateNFT } from "types/forms";
 import {
-    handleTextChange,
+    handleChangeBasic,
     handleImageChange,
     handleSelectorChange,
-    handleChangeBasic,
+    handleTextChange,
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { LoadingDialog } from "../components/Dialog";
-import Link from "next/link";
 import { BeatLoader } from "react-spinners";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
-import { storeNFT, ipfsFullPath } from "utils/ipfsUpload";
+import { ipfsFullPath, storeNFT } from "utils/ipfsUpload";
 import { mintClick } from "contract-interactions/useMintFunctions";
+import {
+    getMoralisInstance,
+    MoralisClassEnum,
+    saveMoralisInstance,
+    setFieldsIntoMoralisInstance,
+} from "database/interactions";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({
@@ -59,7 +64,13 @@ const CreateNFT: NextPage = () => {
         }
 
         if (
-            !validateForm(formData, ["collectionName", "twitterURL", "discordURL", "ipfsAddress"])
+            !validateForm(formData, [
+                "collectionName",
+                "twitterURL",
+                "discordURL",
+                "ipfsAddress",
+                "contractAddress",
+            ])
         ) {
             return;
         }
@@ -80,9 +91,15 @@ const CreateNFT: NextPage = () => {
             console.log(error, "User is cancel transaction");
             return;
         });
-
         handleChangeBasic(contractAddress!, setFormData, "contractAddress");
-        console.log(`Deployment successful! Contract Address: ${contractAddress}`);
+
+        const moralisNft = getMoralisInstance(MoralisClassEnum.NFT);
+        setFieldsIntoMoralisInstance(moralisNft, formData);
+        moralisNft.set("contractAddress", contractAddress);
+        moralisNft.set("ipfsAddress", fullPath);
+        moralisNft.set("chainId", await signer_data.getChainId());
+        await saveMoralisInstance(moralisNft);
+
         setConfirmFromBlockchain(true);
     }
 

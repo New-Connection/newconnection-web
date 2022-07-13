@@ -1,32 +1,33 @@
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
-import Layout from "components/Layout";
 import Head from "next/head";
 import { useSigner } from "wagmi";
-import {
-    DragAndDropImage,
-    InputText,
-    InputTextArea,
-    SubmitButton,
-    CheckboxGroup,
-    InputAmount,
-} from "components/Form";
-import {
-    handleTextChange,
-    handleImageChange,
-    handleCheckboxChange,
-    handleChangeBasic,
-} from "utils/handlers";
-import { CreateDAO } from "types/forms";
-import { validateForm } from "utils/validate";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
-import { deployGovernorContract } from "../contract-interactions/useDeployGovernorContract";
-import { BLOCKS_IN_DAY } from "../utils/constants";
 import Link from "next/link";
+import { CreateDAO } from "types/forms";
+import { validateForm } from "utils/validate";
+import Layout from "components/Layout";
+import {
+    CheckboxGroup,
+    DragAndDropImage,
+    InputAmount,
+    InputText,
+    InputTextArea,
+    SubmitButton,
+} from "components/Form";
+import {
+    handleChangeBasic,
+    handleCheckboxChange,
+    handleImageChange,
+    handleTextChange,
+} from "utils/handlers";
+import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
+import { BLOCKS_IN_DAY } from "utils/constants";
 import { BeatLoader } from "react-spinners";
-import { LoadingDialog } from "../components/Dialog";
+import { LoadingDialog } from "components/Dialog";
+import { getMoralisInstance, MoralisClassEnum, saveMoralisInstance, setFieldsIntoMoralisInstance } from "database/interactions";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 const BlockchainValues = [
@@ -53,7 +54,6 @@ const CreateDAO: NextPage = () => {
         blockchain: [],
         description: "",
     });
-
     const { data: signer_data } = useSigner();
     const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
@@ -78,8 +78,14 @@ const CreateDAO: NextPage = () => {
             votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
             quorumPercentage: +formData.quorumPercentage,
         });
-
         handleChangeBasic(contractAddress, setFormData, "contractAddress");
+
+        const moralisDao = getMoralisInstance(MoralisClassEnum.DAO);
+        setFieldsIntoMoralisInstance(moralisDao, formData);
+        moralisDao.set("contractAddress", contractAddress);
+        moralisDao.set("chainId", await signer_data.getChainId());
+        await saveMoralisInstance(moralisDao);
+
         setConfirmFromBlockchain(true);
     };
 
