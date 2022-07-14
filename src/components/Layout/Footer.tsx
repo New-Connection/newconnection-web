@@ -1,5 +1,6 @@
 import * as React from "react";
 import Image from "next/image";
+import { Separator } from "ariakit/separator";
 
 import Discord from "assets/social/Discord-Icon.png";
 import Twitter from "assets/social/Twitter-Icon.png";
@@ -11,6 +12,10 @@ const Footer = () => {
 
     return (
         <footer className="absolute bottom-0 w-full h-16">
+            <Separator
+                orientation="horizontal"
+                className="mt-16 mb-6 h-0 w-full border-t-2 border-[#6858CB]"
+            />
             <div className="flex justify-between">
                 <p className="align-middle pt-4 pl-2">contact@newconnection.xyz</p>
                 <div className="pt-4">
