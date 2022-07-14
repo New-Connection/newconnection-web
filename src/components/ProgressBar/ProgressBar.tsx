@@ -43,9 +43,12 @@ const ProgressBar = ({ bgColor, percentage }: ProgressBarInterface) => {
     const [styleNumber, percentageNumber] = getClosestNumber(numbersWeight, percentage);
 
     return (
-        <div className={`h-[30px] w-full bg-[#F1F1F1] rounded-lg`}>
-            <div className={`h-full ${styleNumber} ${color[bgColor]} rounded-lg text-right`}>
-                <span className={`p-2.5 text-white`}>{`${percentageNumber}%`}</span>
+        <div>
+            <span className={`p-2.5`}>{`${percentageNumber}%`}</span>
+            <div className={`h-[6px] w-full bg-[#F1F1F1] rounded-lg mb-4`}>
+                <div
+                    className={`h-full ${styleNumber} ${color[bgColor]} rounded-lg text-right`}
+                ></div>
             </div>
         </div>
     );

@@ -174,6 +174,8 @@ const Home: NextPage = () => {
                                 <NFTCard />
                             </div>
                             <ProporsalCard />
+                            <ProporsalCard />
+                            <ProporsalCard />
                         </div>
                     )}
                 </section>
