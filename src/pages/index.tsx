@@ -7,10 +7,10 @@ import Image from "next/image";
 import { useAccount } from "wagmi";
 import Link from "next/link";
 import BasicAvatar from "assets/basic_avatar.jpg";
-import ViewAllIcon from "assets/ViewAll.png";
 
 import Tabs from "components/Tabs/Tabs";
 import DAOCard from "components/Cards/DAOCard";
+import NFTCard from "components/Cards/NFTCard";
 
 import { TabsType } from "types/tabs";
 
@@ -165,7 +165,12 @@ const Home: NextPage = () => {
                             <NFTSection />
                         </div>
                     ) : (
-                        <h1 className="text-center font-bold">Please connect wallet</h1>
+                        //<h1 className="text-center font-bold">Please connect wallet</h1>
+                        <div className="flex justify-between">
+                            <NFTCard />
+                            <NFTCard />
+                            <NFTCard />
+                        </div>
                     )}
                 </section>
             </Layout>
