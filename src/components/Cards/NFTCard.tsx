@@ -6,7 +6,7 @@ import BlockchainExample from "assets/chains/Polygon.png";
 const NFTCard = () => {
     return (
         <div className="border-solid border-4 w-1/4 rounded-md">
-            {/* //Wrap to div for center to elements */}
+            {/* //Wrap to div for center elements */}
             <div className="flex justify-center">
                 <Image src={NFTExample} className="rounded-t-md" objectFit="contain" />
             </div>

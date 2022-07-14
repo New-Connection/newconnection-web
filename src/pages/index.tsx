@@ -11,6 +11,7 @@ import BasicAvatar from "assets/basic_avatar.jpg";
 import Tabs from "components/Tabs/Tabs";
 import DAOCard from "components/Cards/DAOCard";
 import NFTCard from "components/Cards/NFTCard";
+import ProporsalCard from "components/Cards/ProporsalCard";
 
 import { TabsType } from "types/tabs";
 
@@ -166,10 +167,13 @@ const Home: NextPage = () => {
                         </div>
                     ) : (
                         //<h1 className="text-center font-bold">Please connect wallet</h1>
-                        <div className="flex justify-between">
-                            <NFTCard />
-                            <NFTCard />
-                            <NFTCard />
+                        <div>
+                            <div className="flex justify-between">
+                                <NFTCard />
+                                <NFTCard />
+                                <NFTCard />
+                            </div>
+                            <ProporsalCard />
                         </div>
                     )}
                 </section>
