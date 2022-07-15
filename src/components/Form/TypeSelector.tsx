@@ -16,7 +16,7 @@ export const TypeSelector = ({ name, label, className, handlerChange }: Selector
     return (
         <div className={className}>
             <span className="input-label">{label}</span>
-            <div className="flex flex-col">
+            <div className="flex flex-col mt-4">
                 <Select
                     state={select}
                     name={name}
