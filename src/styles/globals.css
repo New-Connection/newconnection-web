@@ -56,24 +56,19 @@
     }
 
     .form-submit-button {
-        @apply shadow-1 w-full rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-3 font-semibold text-white disabled:cursor-not-allowed;
+        @apply w-full rounded-[10px] border bg-[#6858CB] py-2 px-3 font-normal text-white disabled:cursor-not-allowed;
     }
 
     .input-label {
-        @apply text-lg mb-1  text-[#303030] hover:text-gray-500;
+        @apply text-base mb-4 text-[#111112] mr-2 mt-6;
     }
 
     .input-field {
-        @apply w-full rounded border bg-white border-[#1bdbad] px-3 py-[7px] slashed-zero placeholder:text-sm placeholder:text-[#666666];
+        @apply w-full rounded border-2 bg-white border-[#F2F4F4] px-3 py-[7px] slashed-zero outline-none placeholder:text-sm placeholder:text-[#CCCCCC] focus:border-[#6858CB];
     }
 
     .input-error {
         @apply mt-1 text-xs text-red-500;
-    }
-
-    .hero-word-break::before {
-        content: "\A";
-        white-space: pre;
     }
 
     .section-header {
