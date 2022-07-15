@@ -115,6 +115,7 @@ const DAOPage: NextPage<DAOPageProps> = ({
                         Edit DAO Profile
                     </button>
                 </div>
+
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className="dao-info flex">
                         <div className="mt-[-50px] ">

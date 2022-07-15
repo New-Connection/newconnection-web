@@ -6,6 +6,7 @@ import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import { WalletConfig } from "../components/Web3";
 import { MoralisProvider } from "react-moralis";
+import { moralisAppId, moralisServerUrl } from "../utils/constants";
 
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient());
@@ -13,10 +14,7 @@ function App({ Component, pageProps }: AppProps) {
         <ThemeProvider defaultTheme="system" attribute="class">
             <WagmiConfig client={WalletConfig}>
                 <QueryClientProvider client={queryClient}>
-                    <MoralisProvider
-                        appId="iAzZ2yHjWMRkMgBuRwBv3ZdwatednKBAw4MpCV0D"
-                        serverUrl="https://pmaspuub0lgb.usemoralis.com:2053/server"
-                    >
+                    <MoralisProvider appId={moralisAppId} serverUrl={moralisServerUrl}>
                         <Component {...pageProps} />
                     </MoralisProvider>
                 </QueryClientProvider>
