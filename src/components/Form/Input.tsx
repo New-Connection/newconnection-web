@@ -55,7 +55,7 @@ export const InputText = ({
     return (
         <div className={className}>
             <label>
-                <div title={labelTitle} className="input-label mr-2">
+                <div title={labelTitle} className="input-label">
                     {label}
                 </div>
             </label>
