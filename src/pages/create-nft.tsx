@@ -6,6 +6,7 @@ import {
     InputText,
     SubmitButton,
     TypeSelector,
+    InputTextArea,
 } from "components/Form";
 import toast from "react-hot-toast";
 import { Signer } from "ethers";
@@ -38,15 +39,16 @@ const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({
         name: "",
         description: "",
-        ipfsAddress: "",
-        image: null,
-        count: "",
-        price: "",
-        blockchain: "Ethereum",
-        role: "Member",
+        file: {},
+        NFTtype: "",
         collectionName: "",
-        twitterURL: "",
-        discordURL: "",
+        royalties: 0,
+        symbol: "",
+        price: 0,
+        blockchain: "",
+        numberOfNFT: 1,
+        contractAddress: "",
+        ipfsAddress: "",
     });
 
     const { data: signer_data } = useSigner();
@@ -75,7 +77,7 @@ const CreateNFT: NextPage = () => {
         }
 
         confirmDialog.toggle();
-        const UID = await storeNFT(formData.image!, formData.name, formData.description);
+        const UID = await storeNFT(formData.file as File, formData.name, formData.description);
         console.log(UID);
         console.log(UID.ipnft);
         const fullPath = ipfsFullPath(UID.ipnft);
@@ -85,7 +87,7 @@ const CreateNFT: NextPage = () => {
         const contractAddress = await deployNFTContract(signer_data as Signer, {
             name: formData.name,
             symbol: formData.description,
-            numberNFT: +formData.count,
+            numberNFT: +formData.numberOfNFT,
         }).catch((error) => {
             console.log(error, "User is cancel transaction");
             return;
@@ -111,75 +113,85 @@ const CreateNFT: NextPage = () => {
         <div>
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
                 <section className="relative w-full">
-                    <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
-                        <h1 className="font-exo my-2 text-2xl font-semibold text-[#3D3D3D]">
-                            Create NFT
-                        </h1>
-                        <InputText
-                            label="Name"
-                            name="name"
-                            placeholder="NFT Name"
-                            handleChange={(event) => handleTextChange(event, setFormData)}
-                        />
-                        <InputText
-                            label="Description"
-                            name="description"
-                            placeholder="A short description about NFT collection(Max. 250 words)"
-                            handleChange={(event) => handleTextChange(event, setFormData)}
-                        />
-                        <DragAndDropImage
-                            label="Image"
-                            name="image"
-                            handleChange={(file) => handleImageChange(file, setFormData, "image")}
-                        />
-                        <div className="flex justify-between">
-                            <InputAmount
-                                label={"Number of NFT"}
-                                name="count"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                            <InputAmount
-                                label={"Price"}
-                                placeholder="0 (Max. 0)"
-                                name="price"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                            <BlockchainSelector
-                                label={"Type of blockchain"}
-                                name={"blockchain"}
-                                handlerChange={(event) =>
-                                    handleSelectorChange(event, setFormData, "blockchain")
-                                }
-                            />
-                        </div>
-                        <div className="flex justify-between">
-                            <TypeSelector
-                                label={"Role"}
-                                name="role"
-                                handlerChange={(event) =>
-                                    handleSelectorChange(event, setFormData, "role")
-                                }
-                            />
-                            <InputText
-                                label={"Collection (optional)"}
-                                name="collectionName"
-                                placeholder="Collection name"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                        </div>
-                        <div className="flex space-x-4">
-                            <InputText
-                                label={"Twitter (optional)"}
-                                name="twitterURL"
-                                placeholder="Enter your twitter handler"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                            <InputText
-                                label={"Discord (optional)"}
-                                name="discordURL"
-                                placeholder="Enter your discord server"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
+                    <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
+                        <h1 className="font-normal my-2 text-5xl text-[#3D3D3D]">Add NFT</h1>
+                        <div className="w-full flex">
+                            <div className="w-2/3">
+                                <InputText
+                                    label="Name"
+                                    name="name"
+                                    placeholder="NFT Name"
+                                    handleChange={(event) => handleTextChange(event, setFormData)}
+                                />
+                                <InputTextArea
+                                    label={"Description"}
+                                    name={"description"}
+                                    placeholder="A short description about NFT collection(Max. 250 words)"
+                                    // isRequired
+                                    maxLength={2000}
+                                    handleChange={(event) => handleTextChange(event, setFormData)}
+                                />
+                                <div className="flex justify-between gap-10">
+                                    <TypeSelector
+                                        label={"Role"}
+                                        name="role"
+                                        handlerChange={(event) =>
+                                            handleSelectorChange(event, setFormData, "role")
+                                        }
+                                        className="w-1/2 mt-6"
+                                    />
+                                    <InputText
+                                        label={"Collection (optional)"}
+                                        name="collectionName"
+                                        placeholder="Collection name"
+                                        handleChange={(event) =>
+                                            handleTextChange(event, setFormData)
+                                        }
+                                        className="w-1/2"
+                                    />
+                                </div>
+                                <div className="flex justify-between gap-10">
+                                    <InputText
+                                        label={"Royalties"}
+                                        name="royalties"
+                                        placeholder="NFT royalties"
+                                        handleChange={(event) =>
+                                            handleTextChange(event, setFormData)
+                                        }
+                                        className="w-1/2"
+                                    />
+                                    <InputText
+                                        label={"Symbol"}
+                                        name="symbol"
+                                        placeholder="Short NFT name"
+                                        handleChange={(event) =>
+                                            handleTextChange(event, setFormData)
+                                        }
+                                        className="w-1/2"
+                                    />
+                                </div>
+                                <div className="flex justify-between gap-10 pt-6">
+                                    <InputAmount
+                                        label={"Price"}
+                                        placeholder="Soon you will be able to set the price of your NFT, but for now skip this field"
+                                        name="price"
+                                        handleChange={(event) =>
+                                            handleTextChange(event, setFormData)
+                                        }
+                                        isRequired={false}
+                                        className="w-full"
+                                    />
+                                </div>
+                            </div>
+                            <div className="w-1/3 ml-10">
+                                <DragAndDropImage
+                                    label="Image"
+                                    name="image"
+                                    handleChange={(file) =>
+                                        handleImageChange(file, setFormData, "image")
+                                    }
+                                />
+                            </div>
                         </div>
                         <SubmitButton className="mt-5">Create Contract</SubmitButton>
                     </form>
