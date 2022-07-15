@@ -11,7 +11,6 @@ import toast from "react-hot-toast";
 import { Signer } from "ethers";
 import { useSigner } from "wagmi";
 import { NextPage } from "next";
-import Head from "next/head";
 import Layout from "components/Layout/Layout";
 import { CreateNFT } from "types/forms";
 import {
@@ -110,9 +109,6 @@ const CreateNFT: NextPage = () => {
 
     return (
         <div>
-            <Head>
-                <title>NC: Create NFT</title>
-            </Head>
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>

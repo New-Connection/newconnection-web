@@ -1,6 +1,5 @@
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
-import Head from "next/head";
 import { useSigner } from "wagmi";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
@@ -27,7 +26,12 @@ import { deployGovernorContract } from "contract-interactions/useDeployGovernorC
 import { BLOCKS_IN_DAY } from "utils/constants";
 import { BeatLoader } from "react-spinners";
 import { LoadingDialog } from "components/Dialog";
-import { getMoralisInstance, MoralisClassEnum, saveMoralisInstance, setFieldsIntoMoralisInstance } from "database/interactions";
+import {
+    getMoralisInstance,
+    MoralisClassEnum,
+    saveMoralisInstance,
+    setFieldsIntoMoralisInstance,
+} from "database/interactions";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 const BlockchainValues = [
@@ -91,9 +95,6 @@ const CreateDAO: NextPage = () => {
 
     return (
         <div>
-            <Head>
-                <title>New Connection: Create DAO</title>
-            </Head>
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8">
                 <section className="relative w-full">
                     <form className="mx-auto flex flex-col max-w-2xl gap-4" onSubmit={onSubmit}>
