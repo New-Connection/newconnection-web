@@ -67,8 +67,12 @@
         @apply text-base text-[#111112];
     }
 
+    .sub-label {
+        @apply text-sm mb-2 text-[#CCCCCC];
+    }
+
     .input-field {
-        @apply w-full rounded border-2 bg-white  border-[#F2F4F4] px-3 py-[7px] slashed-zero outline-none placeholder:text-sm placeholder:text-[#CCCCCC] focus:border-[#6858CB];
+        @apply w-full rounded border-2 bg-white border-[#F2F4F4] px-3 py-[7px] slashed-zero outline-none placeholder:text-sm placeholder:text-[#CCCCCC] focus:border-[#6858CB];
     }
 
     .input-selector {
@@ -162,5 +166,16 @@
         .balance-wrap > *:last-child {
             margin-left: 2rem;
         }
+    }
+}
+
+/* 
+For remove arrows from input values
+https://stackoverflow.com/questions/71296535/how-to-remove-arrow-on-input-type-number-with-tailwind-css */
+@layer utilities {
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 }
