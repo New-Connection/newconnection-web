@@ -7,6 +7,7 @@ import {
     SubmitButton,
     TypeSelector,
     InputTextArea,
+    InputSupplyOfNFT,
 } from "components/Form";
 import toast from "react-hot-toast";
 import { Signer } from "ethers";
@@ -34,6 +35,20 @@ import {
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
+
+import Ethereum from "assets/chains/Ethereum.png";
+import Polygon from "assets/chains/Polygon.png";
+import Arbitrum from "assets/chains/Arbitrum.png";
+import Binance from "assets/chains/Binance.png";
+
+const chains = ["Ethereum", "Polygon", "Arbitrum", "Binance"];
+
+const images = {
+    Ethereum: Ethereum,
+    Polygon: Polygon,
+    Arbitrum: Arbitrum,
+    Binance: Binance,
+};
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({
@@ -170,17 +185,27 @@ const CreateNFT: NextPage = () => {
                                         className="w-1/2"
                                     />
                                 </div>
-                                <div className="pt-6">
-                                    <InputAmount
-                                        label={"Price"}
-                                        placeholder="Soon you will be able to set the price of your NFT, but for now skip this field"
-                                        name="price"
-                                        handleChange={(event) =>
-                                            handleTextChange(event, setFormData)
-                                        }
-                                        isRequired={false}
-                                        className="w-full"
-                                    />
+
+                                <InputAmount
+                                    label={"Price"}
+                                    placeholder="Soon you will be able to set the price of your NFT, but for now skip this field"
+                                    name="price"
+                                    handleChange={(event) => handleTextChange(event, setFormData)}
+                                    isRequired={false}
+                                    className="w-full"
+                                    isDisabled={true}
+                                />
+                                <label>
+                                    <div className="input-label"> NFT Supply </div>
+                                </label>
+                                <div className="grid w-full grid-cols-4 gap-4">
+                                    {chains.map((chain) => (
+                                        <InputSupplyOfNFT
+                                            label={chain}
+                                            name={chain}
+                                            image={images[chain]}
+                                        />
+                                    ))}
                                 </div>
                             </div>
                             <div className="w-1/3 ml-10">
