@@ -26,6 +26,8 @@ export interface InputAmountProps {
     min?: number;
     max?: number;
     step?: number;
+    image?: object;
+    isDisabled?: boolean;
 }
 
 export interface SelectorProps {
