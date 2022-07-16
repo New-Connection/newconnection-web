@@ -14,8 +14,10 @@ export const InputAmount = ({
 }: InputAmountProps) => {
     return (
         <div className={className}>
-            <label title={labelTitle}>
-                <span className="input-label">{label}</span>
+            <label>
+                <div title={labelTitle} className="input-label">
+                    {label}
+                </div>
             </label>
             <input
                 className={"input-field"}
