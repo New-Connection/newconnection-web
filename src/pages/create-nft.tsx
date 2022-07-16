@@ -170,7 +170,7 @@ const CreateNFT: NextPage = () => {
                                         className="w-1/2"
                                     />
                                 </div>
-                                <div className="flex justify-between gap-10 pt-6">
+                                <div className="pt-6">
                                     <InputAmount
                                         label={"Price"}
                                         placeholder="Soon you will be able to set the price of your NFT, but for now skip this field"
@@ -193,11 +193,11 @@ const CreateNFT: NextPage = () => {
                                 />
                             </div>
                         </div>
-                        <SubmitButton className="mt-5">Create Contract</SubmitButton>
+                        <SubmitButton className="mt-5 w-2/3">Create Contract</SubmitButton>
                     </form>
-                    <SubmitButton className="mt-5" onClick={mint}>
+                    {/* <SubmitButton className="mt-5" onClick={mint}>
                         MINT
-                    </SubmitButton>
+                    </SubmitButton> */}
                 </section>
 
                 <LoadingDialog
