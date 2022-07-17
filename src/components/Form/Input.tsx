@@ -11,18 +11,21 @@ export const InputAmount = ({
     min,
     max,
     step,
-    isDisabled,
+    isDisabled = false,
     ...props
 }: InputAmountProps) => {
     return (
         <div className={className}>
             <label>
-                <div title={labelTitle} className="input-label">
+                <div
+                    title={labelTitle}
+                    className={isDisabled ? "input-label text-gray-400" : "input-label"}
+                >
                     {label}
                 </div>
             </label>
             <input
-                className={"input-field"}
+                className={isDisabled ? "input-field cursor-not-allowed" : "input-field"}
                 name={name}
                 required={isRequired}
                 autoComplete="off"
@@ -127,18 +130,22 @@ export const InputSupplyOfNFT = ({
     min,
     max,
     step,
+    isDisabled = false,
     ...props
 }: InputAmountProps) => {
     return (
         <div className={className}>
             <label>
-                <div title={labelTitle} className="sub-label">
+                <div
+                    title={labelTitle}
+                    className={isDisabled ? "sub-label" : "sub-label text-black"}
+                >
                     {label}
                 </div>
             </label>
             <div className="relative">
                 <input
-                    className={"input-field"}
+                    className={isDisabled ? "input-field cursor-not-allowed" : "input-field"}
                     name={name}
                     required={isRequired}
                     autoComplete="off"
@@ -151,9 +158,10 @@ export const InputSupplyOfNFT = ({
                     spellCheck="false"
                     inputMode="decimal"
                     title="Enter numbers only."
-                    min={min || 1}
+                    min={min || 0}
                     max={max || 100} //Max number of NFT
                     step={step || 1}
+                    disabled={isDisabled}
                     onChange={handleChange}
                     {...props}
                 />
