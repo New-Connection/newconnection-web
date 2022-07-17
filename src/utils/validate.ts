@@ -18,7 +18,7 @@ export const validateForm = (formData: ICreate, ignoreFields?: string[]): boolea
         }
     }
     if (!arrayIsEmpty(fields)) {
-        toast.error(`Please fill out these fields: \n-${fields.join("\n-")}`);
+        toast.error(`Please fill out these fields: \n${fields.join("\n")}`);
         return false;
     }
     return true;

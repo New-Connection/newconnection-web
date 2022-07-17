@@ -6,7 +6,10 @@ import {
     InputText,
     SubmitButton,
     TypeSelector,
+    InputTextArea,
+    InputSupplyOfNFT,
 } from "components/Form";
+import Link from "next/link";
 import toast from "react-hot-toast";
 import { Signer } from "ethers";
 import { useSigner } from "wagmi";
@@ -34,23 +37,41 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 
+import Ethereum from "assets/chains/Ethereum.png";
+import Polygon from "assets/chains/Polygon.png";
+import Arbitrum from "assets/chains/Arbitrum.png";
+import Binance from "assets/chains/Binance.png";
+import Avalanche from "assets/chains/Avalanche.png";
+import Fantom from "assets/chains/Fantom.png";
+import Optimism from "assets/chains/Optimism.png";
+
+const chains = ["Ethereum", "Polygon", "Arbitrum", "Binance", "Avalanche", "Fantom", "Optimism"];
+
+const images = {
+    Ethereum: Ethereum,
+    Polygon: Polygon,
+    Arbitrum: Arbitrum,
+    Binance: Binance,
+    Avalanche: Avalanche,
+    Fantom: Fantom,
+    Optimism: Optimism,
+};
+
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<CreateNFT>({
         name: "",
         description: "",
-        ipfsAddress: "",
-        image: null,
-        count: "",
-        price: "",
-        blockchain: "Ethereum",
-        role: "Member",
+        file: {},
+        NFTtype: "Member",
         collectionName: "",
-        twitterURL: "",
-        discordURL: "",
+        royalties: 0,
+        symbol: "",
+        price: 0,
+        contractAddress: "",
+        ipfsAddress: "",
     });
 
     const { data: signer_data } = useSigner();
-    const [error, setError] = useState(false);
     const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
 
@@ -61,45 +82,45 @@ const CreateNFT: NextPage = () => {
             toast.error("Please connect wallet");
             return;
         }
-
+        console.log("Form Data", formData);
         if (
-            !validateForm(formData, [
-                "collectionName",
-                "twitterURL",
-                "discordURL",
-                "ipfsAddress",
-                "contractAddress",
-            ])
+            !validateForm(formData, ["collectionName", "ipfsAddress", "contractAddress", "price"])
         ) {
             return;
         }
 
         confirmDialog.toggle();
-        const UID = await storeNFT(formData.image!, formData.name, formData.description);
+
+        const UID = await storeNFT(formData.file as File, formData.name, formData.description);
         console.log(UID);
         console.log(UID.ipnft);
         const fullPath = ipfsFullPath(UID.ipnft);
         console.log(fullPath);
         handleChangeBasic(fullPath, setFormData, "ipfsAddress");
 
-        const contractAddress = await deployNFTContract(signer_data as Signer, {
-            name: formData.name,
-            symbol: formData.description,
-            numberNFT: +formData.count,
-        }).catch((error) => {
-            console.log(error, "User is cancel transaction");
+        try {
+            const contractAddress = await deployNFTContract(signer_data as Signer, {
+                name: formData.name,
+                symbol: formData.symbol,
+                numberNFT: +formData.Polygon,
+            });
+
+            handleChangeBasic(contractAddress!, setFormData, "contractAddress");
+            console.log("set true");
+            setConfirmFromBlockchain(true);
+        } catch (error) {
+            confirmDialog.toggle();
+            setConfirmFromBlockchain(false);
+            toast.error("Please approve transaction to create DAO");
             return;
-        });
-        handleChangeBasic(contractAddress!, setFormData, "contractAddress");
+        }
 
-        const moralisNft = getMoralisInstance(MoralisClassEnum.NFT);
-        setFieldsIntoMoralisInstance(moralisNft, formData);
-        moralisNft.set("contractAddress", contractAddress);
-        moralisNft.set("ipfsAddress", fullPath);
-        moralisNft.set("chainId", await signer_data.getChainId());
-        await saveMoralisInstance(moralisNft);
-
-        setConfirmFromBlockchain(true);
+        // const moralisNft = getMoralisInstance(MoralisClassEnum.NFT);
+        // setFieldsIntoMoralisInstance(moralisNft, formData);
+        // moralisNft.set("contractAddress", contractAddress);
+        // moralisNft.set("ipfsAddress", fullPath);
+        // moralisNft.set("chainId", await signer_data.getChainId());
+        // await saveMoralisInstance(moralisNft);
     }
 
     async function mint() {
@@ -111,81 +132,114 @@ const CreateNFT: NextPage = () => {
         <div>
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
                 <section className="relative w-full">
-                    <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
-                        <h1 className="font-exo my-2 text-2xl font-semibold text-[#3D3D3D]">
-                            Create NFT
-                        </h1>
-                        <InputText
-                            label="Name"
-                            name="name"
-                            placeholder="NFT Name"
-                            handleChange={(event) => handleTextChange(event, setFormData)}
-                        />
-                        <InputText
-                            label="Description"
-                            name="description"
-                            placeholder="A short description about NFT collection(Max. 250 words)"
-                            handleChange={(event) => handleTextChange(event, setFormData)}
-                        />
-                        <DragAndDropImage
-                            label="Image"
-                            name="image"
-                            handleChange={(file) => handleImageChange(file, setFormData, "image")}
-                        />
-                        <div className="flex justify-between">
-                            <InputAmount
-                                label={"Number of NFT"}
-                                name="count"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                            <InputAmount
-                                label={"Price"}
-                                placeholder="0 (Max. 0)"
-                                name="price"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                            <BlockchainSelector
-                                label={"Type of blockchain"}
-                                name={"blockchain"}
-                                handlerChange={(event) =>
-                                    handleSelectorChange(event, setFormData, "blockchain")
-                                }
-                            />
+                    <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
+                        <h1 className="text-highlighter">Add NFT</h1>
+                        <div className="w-full flex">
+                            <div className="w-2/3">
+                                <InputText
+                                    label="Name"
+                                    name="name"
+                                    placeholder="NFT Name"
+                                    handleChange={(event) => handleTextChange(event, setFormData)}
+                                />
+                                <InputTextArea
+                                    label="Description"
+                                    name="description"
+                                    placeholder="A short description about NFT collection(Max. 250 words)"
+                                    maxLength={2000}
+                                    handleChange={(event) => handleTextChange(event, setFormData)}
+                                />
+                                <div className="flex justify-between gap-10">
+                                    <TypeSelector
+                                        label="NFT type"
+                                        name="NFTtype"
+                                        handlerChange={(event) =>
+                                            handleSelectorChange(event, setFormData, "NFTtype")
+                                        }
+                                        className="w-1/2 mt-6"
+                                    />
+                                    <InputText
+                                        label="Collection (optional)"
+                                        name="collectionName"
+                                        placeholder="Collection name"
+                                        handleChange={(event) =>
+                                            handleTextChange(event, setFormData)
+                                        }
+                                        className="w-1/2"
+                                    />
+                                </div>
+                                <div className="flex justify-between gap-10">
+                                    <InputAmount
+                                        label="Royalties"
+                                        name="royalties"
+                                        placeholder="NFT royalties"
+                                        handleChange={(event) =>
+                                            handleTextChange(event, setFormData)
+                                        }
+                                        className="w-1/2"
+                                    />
+                                    <InputText
+                                        label={"Symbol"}
+                                        name="symbol"
+                                        placeholder="Short NFT name"
+                                        handleChange={(event) => {
+                                            handleTextChange(event, setFormData);
+                                        }}
+                                        className="w-1/2"
+                                    />
+                                </div>
+
+                                <InputAmount
+                                    label={"Price"}
+                                    placeholder="Soon you will be able to set the price of your NFT, but for now skip this field"
+                                    name="price"
+                                    handleChange={(event) => handleTextChange(event, setFormData)}
+                                    isRequired={false}
+                                    className="w-full"
+                                    isDisabled={true}
+                                />
+                                <label>
+                                    <div className="input-label"> NFT Supply </div>
+                                </label>
+                                <div className="grid w-full grid-cols-4 gap-4">
+                                    {chains.map((chain) =>
+                                        chain === "Polygon" ? (
+                                            <InputSupplyOfNFT
+                                                key={chain}
+                                                label={chain}
+                                                name={chain}
+                                                image={images[chain]}
+                                                handleChange={(event) => {
+                                                    handleTextChange(event, setFormData);
+                                                }}
+                                            />
+                                        ) : (
+                                            <InputSupplyOfNFT
+                                                key={chain}
+                                                label={chain}
+                                                name={chain}
+                                                image={images[chain]}
+                                                handleChange={(event) => {
+                                                    handleTextChange(event, setFormData);
+                                                }}
+                                                isDisabled={true}
+                                            />
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                            <div className="w-1/3 ml-10">
+                                <DragAndDropImage
+                                    label="Image"
+                                    name="file"
+                                    handleChange={(file) =>
+                                        handleImageChange(file, setFormData, "file")
+                                    }
+                                />
+                            </div>
                         </div>
-                        <div className="flex justify-between">
-                            <TypeSelector
-                                label={"Role"}
-                                name="role"
-                                handlerChange={(event) =>
-                                    handleSelectorChange(event, setFormData, "role")
-                                }
-                            />
-                            <InputText
-                                label={"Collection (optional)"}
-                                name="collectionName"
-                                placeholder="Collection name"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                        </div>
-                        <div className="flex space-x-4">
-                            <InputText
-                                label={"Twitter (optional)"}
-                                name="twitterURL"
-                                placeholder="Enter your twitter handler"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                            <InputText
-                                label={"Discord (optional)"}
-                                name="discordURL"
-                                placeholder="Enter your discord server"
-                                handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                        </div>
-                        <SubmitButton className="mt-5">Create Contract</SubmitButton>
+                        <SubmitButton className="mt-5 w-2/3">Create Contract</SubmitButton>
                     </form>
-                    <SubmitButton className="mt-5" onClick={mint}>
-                        MINT
-                    </SubmitButton>
                 </section>
 
                 <LoadingDialog
@@ -199,16 +253,16 @@ const CreateNFT: NextPage = () => {
                                 <>
                                     <p>Deployment successful!</p>
                                     <p>Contract Address: {formData.contractAddress}</p>
-                                    {/* <Link href="/create-dao"> */}
-                                    <button
-                                        className="form-submit-button"
-                                        onClick={() => {
-                                            confirmDialog.toggle();
-                                        }}
-                                    >
-                                        Next Steps
-                                    </button>
-                                    {/* </Link> */}
+                                    <Link href="create-dao">
+                                        <button
+                                            className="form-submit-button"
+                                            onClick={() => {
+                                                confirmDialog.toggle();
+                                            }}
+                                        >
+                                            Next Steps
+                                        </button>
+                                    </Link>
                                 </>
                             ) : (
                                 <>

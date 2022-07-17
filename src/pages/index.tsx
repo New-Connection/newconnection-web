@@ -76,7 +76,7 @@ const Home: NextPage = () => {
             <>
                 <div className="flex justify-between my-7">
                     <p className="font-bold text-xl">{title}</p>
-                    <Link href="./create-nft">
+                    <Link href="./create-new-dao">
                         <button className="secondary-button">Create DAO</button>
                     </Link>
                 </div>

@@ -97,8 +97,8 @@ const CreateDAO: NextPage = () => {
         <div>
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8">
                 <section className="relative w-full">
-                    <form className="mx-auto flex flex-col max-w-2xl gap-4" onSubmit={onSubmit}>
-                        <h1 className="font-exo my-2 text-2xl font-semibold">Create DAO</h1>
+                    <form className="mx-auto flex flex-col max-w-4xl gap-4" onSubmit={onSubmit}>
+                        <h1 className="text-highlighter">Create DAO</h1>
                         <div className="flex flex-row">
                             <h2 className={"my-2 text-xl font-medium"}>DAO Name and Goals</h2>
                         </div>

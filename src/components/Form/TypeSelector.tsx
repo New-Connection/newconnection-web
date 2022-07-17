@@ -16,27 +16,27 @@ export const TypeSelector = ({ name, label, className, handlerChange }: Selector
     return (
         <div className={className}>
             <span className="input-label">{label}</span>
-            <div className="flex flex-col">
+            <div className="flex flex-col mt-4">
                 <Select
                     state={select}
                     name={name}
                     className={
-                        "input-field text-slate-500 hover:bg-[#23BD8F] hover:text-gray-50 flex cursor-default items-center whitespace-nowrap px-4 text-base justify-start gap-3"
+                        "input-selector text-slate-800 hover:bg-[#6858CB] hover:text-gray-50 flex cursor-default items-center whitespace-nowrap px-4 text-base justify-between gap-3"
                     }
                 >
-                    <div className="type ">{select.value}</div>
+                    <div>{select.value}</div>
                     <SelectArrow />
                 </Select>
                 <SelectPopover
                     state={select}
-                    className="input-field bg-white flex flex-col overflow-auto overscroll-contain p-1 data-focus-visible focus-visible:ring focus:outline-none text-slate-500"
+                    className="input-selector bg-white flex flex-col overflow-auto overscroll-contain pt-4 pb-4 data-focus-visible focus-visible:ring focus:outline-none text-slate-500"
                 >
                     {types.map((type) => (
-                        <label key={type.toUpperCase()} className="input-label">
+                        <label key={type.toUpperCase()} className="input-label-selector">
                             <SelectItem
                                 key={type}
                                 value={type}
-                                className="input-field border-0 flex cursor-default scroll-m-2 items-center gap-2 p-1 hover:bg-[#23BD8F] hover:text-gray-50"
+                                className="input-selector border-0 flex cursor-default scroll-m-2 items-center py-3 hover:bg-[#6858CB] hover:text-white"
                                 setValueOnClick={handlerChange}
                             >
                                 {type}
