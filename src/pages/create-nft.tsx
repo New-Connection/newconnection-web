@@ -129,7 +129,7 @@ const CreateNFT: NextPage = () => {
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
-                        <h1 className="font-normal my-2 text-5xl text-[#3D3D3D]">Add NFT</h1>
+                        <h1 className="text-highlighter">Add NFT</h1>
                         <div className="w-full flex">
                             <div className="w-2/3">
                                 <InputText
