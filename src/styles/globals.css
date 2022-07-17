@@ -56,7 +56,7 @@
     }
 
     .form-submit-button {
-        @apply w-full rounded-[10px] border bg-[#6858CB] py-2 px-3 font-normal text-white disabled:cursor-not-allowed;
+        @apply w-full rounded-[10px] border border-[#6858CB] bg-white py-2 px-3 font-normal text-[#6858CB] disabled:cursor-not-allowed hover:bg-[#6858CB] hover:text-white;
     }
 
     .text-highlighter {
