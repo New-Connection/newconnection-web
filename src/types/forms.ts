@@ -18,16 +18,26 @@ export interface CreateDAO extends ICreate {
     contractAddress?: string;
 }
 
-export interface CreateNFT extends ICreate {
+
+
+export interface IBlockchains {
+    Polygon?: any;
+    Ethereum?: any;
+    Arbitrum?: any;
+    Binance?: any;
+    Avalanche?: any;
+    Fantom?: any;
+    Optimism?: any;
+}
+
+export interface CreateNFT extends ICreate, IBlockchains {
     file: object;
     NFTtype: string;
     collectionName: string;
     royalties: number;
     symbol: string;
     price: number;
-    blockchain: string;
-    numberOfNFT: number;
+    // numberOfNFT: { [blockchainName: string]: number };
     contractAddress?: string;
     ipfsAddress?: string;
-    
 }
