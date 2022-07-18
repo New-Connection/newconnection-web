@@ -1,4 +1,4 @@
-export { InputAmount, InputText, InputTextArea } from "./Input";
+export { InputAmount, InputText, InputTextArea, InputSupplyOfNFT } from "./Input";
 export { SubmitButton } from "./Button";
 export { BlockchainSelector } from "./BlockchainSelector";
 export { TypeSelector } from "./TypeSelector";

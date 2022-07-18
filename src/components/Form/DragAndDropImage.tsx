@@ -1,5 +1,5 @@
 import { FileUploader } from "react-drag-drop-files";
-import ImageIcon from "assets/ImageIcon.png";
+import ImageIcon from "assets/imageIcon.png";
 import Image from "next/image";
 import { IDragAndDropProps } from "./types";
 import { useState } from "react";
@@ -54,22 +54,22 @@ export const DragAndDropImage = ({
                 <div
                     className="flex flex-col 
                     justify-center content-center items-center text-center
-                    h-40 
+                    h-60 
                     border-dashed rounded-md border-2 
-                    border-[#1bdbad] hover:border-slate-800 focus:text-white "
+                    border-[#F2F4F4] hover:border-[#6858CB] focus:text-white "
                 >
                     {error ? (
                         <p className="text-slate-500 mt-1">Error: {errorMessages}</p>
                     ) : (
                         <>
                             {file ? (
-                                <p className="text-slate-500 mt-1">
+                                <p className="text-[#6858CB] mt-1">
                                     File is accepted. File name: {file?.name} ✅
                                 </p>
                             ) : (
                                 <>
                                     <Image src={ImageIcon} width={"50"} height={"50"} />
-                                    <p className="text-slate-500 mt-1">
+                                    <p className="text-[#CCCCCC] mt-6 text-sm px-4">
                                         PNG, JPEG and JPG accept. Max 1mb.
                                     </p>
                                 </>

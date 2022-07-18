@@ -42,7 +42,7 @@ export const NetworksMenu = () => {
             </SelectLabel>
             <Select
                 state={select}
-                className="nav-button hidden items-center justify-between gap-2 sm:flex hover:bg-[#23BD8F] hover:text-white "
+                className="nav-button hidden items-center justify-between gap-2 sm:flex hover:bg-[#6858CB] hover:text-white "
             >
                 <>
                     <div className="flex h-5 w-5 items-center rounded-full">
@@ -75,7 +75,7 @@ export const NetworksMenu = () => {
                                 <SelectItem
                                     key={value.id}
                                     value={value.id?.toString()}
-                                    className="flex rounded-md cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 hover:bg-[#23BD8F] hover:text-white"
+                                    className="flex rounded-md cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 hover:bg-[#6858CB] hover:text-white"
                                     onClick={() => switchNetwork(value.id)}
                                 >
                                     <div className="flex h-5 w-5 items-center rounded-full">
@@ -104,7 +104,7 @@ export const NetworksMenu = () => {
                                 <SelectItem
                                     key={value.id}
                                     value={value.id?.toString()}
-                                    className="flex rounded-md cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 hover:bg-[#23BD8F] hover:text-white"
+                                    className="flex rounded-md cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 hover:bg-[#6858CB] hover:text-white"
                                     onClick={() => switchNetwork(value.id)}
                                 >
                                     <div className="flex h-5 w-5 items-center rounded-full">

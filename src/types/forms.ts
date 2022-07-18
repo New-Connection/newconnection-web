@@ -1,3 +1,5 @@
+import { StringLike } from "ariakit/ts/form/__utils";
+
 export interface ICreate {
     name: string;
     description: string;
@@ -16,15 +18,26 @@ export interface CreateDAO extends ICreate {
     contractAddress?: string;
 }
 
-export interface CreateNFT extends ICreate {
-    image: File | null;
-    count: string;
-    price: string;
-    blockchain: string;
-    role: string;
+
+
+export interface IBlockchains {
+    Polygon?: any;
+    Ethereum?: any;
+    Arbitrum?: any;
+    Binance?: any;
+    Avalanche?: any;
+    Fantom?: any;
+    Optimism?: any;
+}
+
+export interface CreateNFT extends ICreate, IBlockchains {
+    file: object;
+    NFTtype: string;
     collectionName: string;
-    twitterURL: string;
-    discordURL: string;
-    ipfsAddress?: string;
+    royalties: number;
+    symbol: string;
+    price: number;
+    // numberOfNFT: { [blockchainName: string]: number };
     contractAddress?: string;
+    ipfsAddress?: string;
 }

@@ -68,7 +68,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                             {ensName ? `${ensName} (${formattedAddress})` : address}
                         </p>
                         <button
-                            className="nav-button mt-5 hover:bg-[#23BD8F] hover:text-white"
+                            className="nav-button mt-5 hover:bg-[#6858CB] hover:text-white"
                             onClick={() => handlerDisconect()}
                         >
                             Disconnect
@@ -88,7 +88,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                                     console.log("------", x);
                                     handleConnect(x);
                                 }}
-                                className="flex rounded border items-center p-3 gap-4 text-slate-500 hover:bg-[#23BD8F] hover:text-white "
+                                className="flex rounded border items-center p-3 gap-4 text-slate-500 hover:bg-[#6858CB] hover:text-white "
                             >
                                 <img src={imageID[x.name]} className="w-8 h-8" />
                                 {x?.name}
