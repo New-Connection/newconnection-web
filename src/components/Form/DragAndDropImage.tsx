@@ -1,5 +1,5 @@
 import { FileUploader } from "react-drag-drop-files";
-import ImageIcon from "assets/imageIcon.png";
+import ImageIcon from "assets/ImageIcon.png";
 import Image from "next/image";
 import { IDragAndDropProps } from "./types";
 import { useState } from "react";
