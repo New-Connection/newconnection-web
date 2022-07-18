@@ -19,8 +19,8 @@ export const alchemyId = "EYaU8KZOLuaFhqXUxa5zzXhaXk6qC2SW";
 export const BLOCKS_IN_DAY = 6545;
 
 //Moralis
-export const moralisAppId = "iAzZ2yHjWMRkMgBuRwBv3ZdwatednKBAw4MpCV0D";
-export const moralisServerUrl = "https://pmaspuub0lgb.usemoralis.com:2053/server";
+export const moralisAppId = "QXgdpPkskj8Y2KNmwHErJ5P1IogPrNCXS2X5YRQp";
+export const moralisServerUrl = "https://a3odkikekdlf.usemoralis.com:2053/server";
 
 interface INetworkDetails {
     [key: number]: {
