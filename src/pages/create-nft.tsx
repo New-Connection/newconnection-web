@@ -15,7 +15,7 @@ import { Signer } from "ethers";
 import { useSigner } from "wagmi";
 import { NextPage } from "next";
 import Layout from "components/Layout/Layout";
-import { CreateNFT } from "types/forms";
+import { ICreateNFT } from "types/forms";
 import {
     handleChangeBasic,
     handleImageChange,
@@ -58,7 +58,7 @@ const images = {
 };
 
 const CreateNFT: NextPage = () => {
-    const [formData, setFormData] = useState<CreateNFT>({
+    const [formData, setFormData] = useState<ICreateNFT>({
         name: "",
         description: "",
         file: {},
@@ -91,7 +91,7 @@ const CreateNFT: NextPage = () => {
 
         confirmDialog.toggle();
 
-        const UID = await storeNFT(formData.file as File, formData.name, formData.description);
+        const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
         console.log(UID);
         console.log(UID.ipnft);
         const fullPath = ipfsFullPath(UID.ipnft);
