@@ -3,54 +3,36 @@ import type { GetServerSideProps, NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import Head from "next/head";
 import { getName } from "contract-interactions/viewGovernorContract";
+import { getName as getNftName } from "contract-interactions/viewNftContract";
 import { ParsedUrlQuery } from "querystring";
-import { DAOProps } from "./index";
-import { getDAO } from "./example/data-example";
 import Image from "next/image";
-import Cover from "pages/daos/example/images/cover.jpg";
-import Logo from "pages/daos/example/images/logo.png";
+import basicAvatar from "assets/basic_avatar.jpg";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import globeLogo from "assets/social/globe.png";
 import contractLogo from "assets/smart-contract.png";
 import { Box } from "@mui/system";
 import { Tab, Tabs } from "@mui/material";
+import Moralis from "moralis";
+import { useMoralisQuery } from "react-moralis";
+import { useEffect, useState } from "react";
+import { CreateDAO, DAOPageForm } from "types/forms";
+import { getChainScanner } from "utils/network";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
 }
 
 interface DAOPageProps {
-    name: string;
     address: string;
-    discordURL?: string;
-    twitterURL?: string;
-    URL?: string;
-    scanURL?: string;
-    totalVotes?: number;
-    totalMembers?: number;
-    totalProposals?: number;
-    activeProposals?: number;
-    NFT?: string;
 }
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams> = async (
     context
 ) => {
-    // const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
-    // const data = await response.json();
     const { address } = context.params as QueryUrlParams;
 
-    const dao: DAOProps | undefined = await getDAO(address);
-
-    if (!dao) {
-        return {
-            notFound: true,
-        };
-    }
-
     const result: DAOPageProps = {
-        name: await getName(address, dao.chainId),
         address: address.toString(),
     };
 
@@ -81,37 +63,111 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-const DAOPage: NextPage<DAOPageProps> = ({
-    name,
-    address,
-    URL,
-    discordURL,
-    twitterURL,
-    scanURL,
-    totalVotes,
-    totalMembers,
-    totalProposals,
-    NFT,
-}) => {
-    const [value, setValue] = React.useState(0);
+const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
+    const [tabState, setTabState] = React.useState(0);
+    const [DAO, setDAO] = useState<DAOPageForm>();
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+    const { fetch } = useMoralisQuery(
+        "DAO",
+        (query) => query.equalTo("contractAddress", address),
+        [],
+        {
+            autoFetch: false,
+        }
+    );
+
+    const fetchDB = () => {
+        fetch({
+            onSuccess: (results) => {
+                const moralisInstance = results[0];
+                const newDao: DAOPageForm = {
+                    name: moralisInstance.get("name"),
+                    description: moralisInstance.get("description"),
+                    goals: moralisInstance.get("goals"),
+                    profileImage: moralisInstance.get("profileImage"),
+                    coverImage: moralisInstance.get("coverImage"),
+                    tokenAddress: moralisInstance.get("tokenAddress"),
+                    votingPeriod: moralisInstance.get("votingPeriod"),
+                    quorumPercentage: moralisInstance.get("quorumPercentage"),
+                    type: moralisInstance.get("type"),
+                    blockchain: moralisInstance.get("blockchain"),
+                    contractAddress: moralisInstance.get("contractAddress"),
+                    chainId: moralisInstance.get("chainId"),
+                    //todo: parse below values
+                    discordURL: "",
+                    twitterURL: "",
+                    URL: "",
+                    scanURL: getChainScanner(
+                        moralisInstance.get("chainId"),
+                        moralisInstance.get("contractAddress")
+                    ),
+                    totalVotes: 0,
+                    totalMembers: 0,
+                    totalProposals: 0,
+                    activeProposals: 0,
+                };
+                setDAO(() => newDao);
+            },
+            onError: (error) => {
+                console.log("Error fetching db query" + error);
+            },
+        });
     };
 
-    return (
+    useEffect(() => {
+        fetchDB();
+    }, []);
+
+    const handleTabStateChange = (event: React.SyntheticEvent, newValue: number) => {
+        setTabState(newValue);
+    };
+
+    const StatisticCard = ({ label, counter }) => {
+        return (
+            <div className="flex flex-col justify-between rounded border-2 border-[#6858CB] w-1/4 h-28 pt-2 pl-2 pr-4 pb-4">
+                <div className={"text-gray-400"}>{label}</div>
+                <div className={"flex text-black justify-end text-3xl"}>{counter || 0}</div>
+            </div>
+        );
+    };
+
+    const MockupTextCard = ({ label, text }) => {
+        return (
+            <div className={"text-center my-32"}>
+                <div className={"font-semibold"}>{label}</div>
+                <p className={"text-gray-400"}>{text}</p>
+            </div>
+        );
+    };
+
+    const ImageLink = ({ url, image }) => {
+        return (
+            <a href={url} target={"_blank"}>
+                <Image height={"25"} width={"25"} src={image} />
+            </a>
+        );
+    };
+
+    const NFTCard = ({ tokenAddress, chainId }) => {
+        return (
+            <a href={getChainScanner(chainId, tokenAddress)} target={"_blank"}>
+                <div className="flex flex-col justify-between rounded border-2 border-[#6858CB] w-52 h-52 p-3">
+                    <Image src={basicAvatar} height={"150px"} width={"150px"} />
+                    <div className={"text-gray-400"}>{"Membership NFT"}</div>
+                </div>
+            </a>
+        );
+    };
+
+    return DAO ? (
         <div>
             <Head>
-                <title>{name.toUpperCase()}</title>
+                <title>{DAO.name}</title>
             </Head>
-            <Layout className="mx-auto mt-0 flex w-full flex-col space-y-6 pb-8 bg-[#ffffff]">
-                <div className="cover h-40 w-full relative justify-center">
-                    <Image src={Cover} layout={"fill"} />
-                    <button
-                        className={
-                            "bg-gray-300 border-gray-400 border-2 hover:text-[#23BD8F] absolute bottom-5 right-5 p-2"
-                        }
-                    >
+            <Layout className="app-section mx-auto mt-20 flex w-full flex-col space-y-6 pb-8 bg-[#ffffff]">
+                <div className="cover h-36 w-full relative justify-center">
+                    <Image src={basicAvatar} layout={"fill"} />
+                    <button className={"secondary-button absolute bottom-5 right-5 p-2"}>
                         Edit DAO Profile
                     </button>
                 </div>
@@ -119,28 +175,30 @@ const DAOPage: NextPage<DAOPageProps> = ({
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className="dao-info flex">
                         <div className="mt-[-50px] ">
-                            <Image src={Logo} height={"150px"} width={"150px"} />
+                            <Image src={basicAvatar} height={"150px"} width={"150px"} />
                         </div>
                         <div className="flex flex-col w-full">
                             <div className="flex ml-3 w-full justify-between">
-                                <h1 className={"text-2xl font-semibold"}>{name}</h1>
+                                <h1 className={"text-2xl font-semibold"}>{DAO.name}</h1>
                                 <div className="flex w-[100px] justify-between">
-                                    <a href={discordURL}>
-                                        <Image height={"25"} width={"25"} src={discordLogo} />
-                                    </a>
-                                    <a href={twitterURL}>
-                                        <Image height={"25"} width={"25"} src={twitterLogo} />
-                                    </a>
-                                    <a href={URL}>
-                                        <Image height={"25"} width={"25"} src={globeLogo} />
-                                    </a>
+                                    <ImageLink url={DAO.discordURL} image={discordLogo} />
+                                    <ImageLink url={DAO.twitterURL} image={twitterLogo} />
+                                    <ImageLink url={DAO.URL} image={globeLogo} />
                                 </div>
                             </div>
                             <div className="flex ml-3 w-1/2 justify-between">
-                                <a href={URL} className={"hover:text-[#23BD8F]"}>
+                                <a
+                                    href={DAO.URL}
+                                    target={"_blank"}
+                                    className={"hover:text-[#23BD8F]"}
+                                >
                                     About DAO
                                 </a>
-                                <a href={scanURL} className={"hover:text-[#23BD8F]"}>
+                                <a
+                                    href={DAO.scanURL}
+                                    target={"_blank"}
+                                    className={"hover:text-[#23BD8F]"}
+                                >
                                     Smart Contract
                                     <Image height={"20"} width={"20"} src={contractLogo} />
                                 </a>
@@ -149,24 +207,9 @@ const DAOPage: NextPage<DAOPageProps> = ({
                     </div>
 
                     <div className="dao-statistics flex flex-row justify-between">
-                        <div className="flex flex-col justify-between rounded border-2 border-gray-400 w-1/4 h-28 pt-2 pl-2 pr-4 pb-4">
-                            <div className={"text-gray-400"}>Total votes</div>
-                            <div className={"flex text-black justify-end text-3xl"}>
-                                {totalVotes || 0}
-                            </div>
-                        </div>
-                        <div className="flex flex-col justify-between rounded border-2 border-gray-400 w-1/4 h-28 pt-2 pl-2 pr-4 pb-4">
-                            <div className={"text-gray-400"}>Total proposals</div>
-                            <div className={"flex text-black justify-end text-3xl"}>
-                                {totalProposals || 0}
-                            </div>
-                        </div>
-                        <div className="flex flex-col justify-between rounded border-2 border-gray-400 w-1/4 h-28 pt-2 pl-2 pr-4 pb-4">
-                            <div className={"text-gray-400"}>Total members</div>
-                            <div className={"flex text-black justify-end text-3xl"}>
-                                {totalMembers || 0}
-                            </div>
-                        </div>
+                        <StatisticCard label={"Total votes"} counter={DAO.totalVotes} />
+                        <StatisticCard label={"Total proposals"} counter={DAO.totalProposals} />
+                        <StatisticCard label={"Total members"} counter={DAO.totalMembers} />
                     </div>
 
                     <div className="dao-proposals-members">
@@ -176,11 +219,11 @@ const DAOPage: NextPage<DAOPageProps> = ({
                                     textColor={"inherit"}
                                     TabIndicatorProps={{
                                         sx: {
-                                            backgroundColor: "black",
+                                            backgroundColor: "#6858CB",
                                         },
                                     }}
-                                    value={value}
-                                    onChange={handleChange}
+                                    value={tabState}
+                                    onChange={handleTabStateChange}
                                     aria-label="tabs"
                                 >
                                     <Tab
@@ -193,50 +236,66 @@ const DAOPage: NextPage<DAOPageProps> = ({
                                     />
                                 </Tabs>
                             </Box>
-                            <button className={"bg-gray-300 border-2 border-gray-400 p-2"}>
-                                Add new proposal
-                            </button>
+                            <button className={"secondary-button"}>Add new proposal</button>
                         </div>
-                        <TabPanel value={value} index={0}>
-                            {totalProposals ? (
-                                totalProposals
+                        <TabPanel value={tabState} index={0}>
+                            {DAO.totalProposals ? (
+                                DAO.totalProposals
                             ) : (
-                                <div className={"text-center"}>
-                                    <div className={"font-semibold"}>No proposals here yet</div>
-                                    You should first add NFTs so that members can vote then click
-                                    the button “Add new proposal” and initiate a proposal
-                                </div>
+                                <MockupTextCard
+                                    label={"No proposals here yet"}
+                                    text={
+                                        "You should first add NFTs so that members can vote " +
+                                        "then click the button “Add new proposal” and initiate a proposal"
+                                    }
+                                />
                             )}
                         </TabPanel>
-                        <TabPanel value={value} index={1}>
-                            {totalMembers ? (
-                                totalMembers
+                        <TabPanel value={tabState} index={1}>
+                            {DAO.totalMembers ? (
+                                DAO.totalMembers
                             ) : (
-                                <div className={"text-center"}>
-                                    <div className={"font-semibold"}>No members here yet</div>
-                                    You should first add NFTs for members
-                                </div>
+                                <MockupTextCard
+                                    label="No members here yet"
+                                    text="You should first add NFTs for members"
+                                />
                             )}
                         </TabPanel>
                     </div>
 
                     <div className="dao-nfts">
-                        <div className="flex flex-row justify-between">
+                        <div className="flex flex-row justify-between mb-2">
                             <h3 className={"font-semibold text-lg"}>Membership NFTs</h3>
-                            <button className={"bg-gray-300 border-2 border-gray-400 p-2"}>
-                                Add NFT
-                            </button>
+                            <button className={"secondary-button"}>Add NFT</button>
                         </div>
-                        {NFT ? (
-                            <div>{NFT}</div>
-                        ) : (
-                            <div className={"text-center"}>
-                                <div className={"font-semibold"}>No NFT membership</div>
-                                You should first add NFTs so that members can vote Then click the
-                                button “Add new proposal” and initiate a proposal
+                        {DAO.tokenAddress ? (
+                            <div className={"flex gap-6"}>
+                                <NFTCard chainId={DAO.chainId} tokenAddress={DAO.tokenAddress} />
                             </div>
+                        ) : (
+                            <MockupTextCard
+                                label={"No NFT membership"}
+                                text={
+                                    "You should first add NFTs so that members can vote " +
+                                    "then click the button “Add new proposal” and initiate a proposal"
+                                }
+                            />
                         )}
                     </div>
+                </section>
+            </Layout>
+        </div>
+    ) : (
+        <div>
+            <Head>
+                <title>Not found</title>
+            </Head>
+            <Layout className="app-section mx-auto mt-32 flex w-full flex-col space-y-6 pb-8 bg-[#ffffff]">
+                <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
+                    <MockupTextCard
+                        label={"DAO not found"}
+                        text={"Sorry, DAO not fount. Please try to reload page"}
+                    />
                 </section>
             </Layout>
         </div>

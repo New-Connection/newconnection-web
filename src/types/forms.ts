@@ -14,11 +14,20 @@ export interface CreateDAO extends ICreate {
     quorumPercentage: string;
     type: string[];
     blockchain: string[];
-    description: string;
     contractAddress?: string;
+    chainId?: number;
 }
 
-
+export interface DAOPageForm extends CreateDAO {
+    discordURL?: string;
+    twitterURL?: string;
+    URL?: string;
+    scanURL?: string;
+    totalVotes?: number;
+    totalMembers?: number;
+    totalProposals?: number;
+    activeProposals?: number;
+}
 
 export interface IBlockchains {
     Polygon?: any;
