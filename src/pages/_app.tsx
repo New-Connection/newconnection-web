@@ -11,15 +11,15 @@ import { moralisAppId, moralisServerUrl } from "../utils/constants";
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient());
     return (
-        <ThemeProvider defaultTheme="system" attribute="class">
-            <WagmiConfig client={WalletConfig}>
-                <QueryClientProvider client={queryClient}>
-                    <MoralisProvider appId={moralisAppId} serverUrl={moralisServerUrl}>
+        <MoralisProvider appId={moralisAppId} serverUrl={moralisServerUrl}>
+            <ThemeProvider defaultTheme="system" attribute="class">
+                <WagmiConfig client={WalletConfig}>
+                    <QueryClientProvider client={queryClient}>
                         <Component {...pageProps} />
-                    </MoralisProvider>
-                </QueryClientProvider>
-            </WagmiConfig>
-        </ThemeProvider>
+                    </QueryClientProvider>
+                </WagmiConfig>
+            </ThemeProvider>
+        </MoralisProvider>
     );
 }
 

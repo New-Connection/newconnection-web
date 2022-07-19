@@ -84,10 +84,13 @@ const CreateDAO: NextPage = () => {
         });
         handleChangeBasic(contractAddress, setFormData, "contractAddress");
 
+        const chainId = await signer_data.getChainId();
+        handleChangeBasic(chainId, setFormData, "chainId");
+
         const moralisDao = getMoralisInstance(MoralisClassEnum.DAO);
         setFieldsIntoMoralisInstance(moralisDao, formData);
         moralisDao.set("contractAddress", contractAddress);
-        moralisDao.set("chainId", await signer_data.getChainId());
+        moralisDao.set("chainId", chainId);
         await saveMoralisInstance(moralisDao);
 
         setConfirmFromBlockchain(true);
