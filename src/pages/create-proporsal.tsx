@@ -98,10 +98,10 @@ const CreateProporsal: NextPage = () => {
         );
     };
 
-    const OptionsForm = () => {
+    const OptionsForm = (nameLabel) => {
         return (
             <InputText
-                label={"Options 1"}
+                label={nameLabel}
                 name="options"
                 placeholder="Title of purpose"
                 handleChange={(event) => {
@@ -141,8 +141,8 @@ const CreateProporsal: NextPage = () => {
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
                         <FileAndLinkForm />
-                        <OptionsForm />
-                        <OptionsForm />
+                        <OptionsForm nameLabel="Option 1" />
+                        <OptionsForm nameLabel="Option 2" />
                         <CheckboxGroup
                             label={"Proposal Blockchain"}
                             description={"You can choose one or more blockchains"}
