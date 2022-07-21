@@ -4,13 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 
 import Layout from "components/Layout/Layout";
-import { handleTextChange, handleCheckboxChange } from "utils/handlers";
+import { handleTextChange, handleCheckboxChange, handleDatePicker } from "utils/handlers";
 import {
     CheckboxGroup,
     DragAndDropImage,
     InputText,
     SubmitButton,
     InputTextArea,
+    ComponentDateTimePicker,
 } from "components/Form";
 import { ICreateProposal } from "types/forms";
 import BackButton from "assets/elements/BackButton.png";
@@ -98,19 +99,26 @@ const CreateProporsal: NextPage = () => {
         );
     };
 
-    const OptionsForm = (nameLabel) => {
-        return (
-            <InputText
-                label={nameLabel}
-                name="options"
-                placeholder="Title of purpose"
-                handleChange={(event) => {
-                    // TODO: Need to create handler for array
-                    // handleTextChange(event, setFormData);
-                }}
-            />
-        );
-    };
+    // const OptionsForm = (nameLabel: string) => {
+    //     return (
+    //         <InputText
+    //             label={nameLabel}
+    //             name="options"
+    //             placeholder="Title of purpose"
+    //             handleChange={(event) => {
+    //                 // TODO: Need to create handler for array
+    //                 // handleTextChange(event, setFormData);
+    //             }}
+    //         />
+    //     );
+    // };
+
+
+    const DatePicker = () => {
+        return(
+            <ComponentDateTimePicker label="Start Date"
+        )
+    }
 
     return (
         <div>
@@ -141,8 +149,8 @@ const CreateProporsal: NextPage = () => {
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
                         <FileAndLinkForm />
-                        <OptionsForm nameLabel="Option 1" />
-                        <OptionsForm nameLabel="Option 2" />
+                        {/* <OptionsForm nameLabel="Option 1" />
+                        <OptionsForm nameLabel="Option 2" /> */}
                         <CheckboxGroup
                             label={"Proposal Blockchain"}
                             description={"You can choose one or more blockchains"}
