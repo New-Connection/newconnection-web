@@ -11,9 +11,8 @@ import { useIsMounted } from "hooks";
 
 const navigation = [
     { id: 0, title: "Home", path: "/" },
-    { id: 1, title: "Create NFT", path: "/create-nft" },
-    { id: 2, title: "Create DAO", path: "/create-dao" },
-    { id: 3, title: "DAOs", path: "/daos" },
+    { id: 1, title: "DAOs", path: "/daos" },
+    { id: 2, title: "Proposals", path: "/proposals" },
 ];
 
 const Navbar = () => {
@@ -44,6 +43,9 @@ const Navbar = () => {
                         </a>
                     </Link>
                 ))}
+            </nav>
+
+            <div className={"flex gap-3"}>
                 {isMounted && isConnected ? (
                     <>
                         <NetworksMenu />
@@ -54,7 +56,8 @@ const Navbar = () => {
                         Connect Wallet
                     </button>
                 )}
-            </nav>
+            </div>
+
             <WalletSelector dialog={walletDailog} />
         </>
     );

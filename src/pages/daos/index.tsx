@@ -87,7 +87,7 @@ const DAOsPage: NextPage = () => {
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className={"flex justify-between items-center"}>
                         <h1 className={"text-highlighter"}>DAOs</h1>
-                        <Link href="./create-dao">
+                        <Link href="./create-new-dao">
                             <button className={"secondary-button h-10 "}>Create DAO</button>
                         </Link>
                     </div>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-    BlockchainSelector,
     DragAndDropImage,
     InputAmount,
     InputText,
@@ -29,13 +28,6 @@ import { BeatLoader } from "react-spinners";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
 import { ipfsFullPath, storeNFT } from "utils/ipfsUpload";
-import { mintClick } from "contract-interactions/useMintFunctions";
-import {
-    getMoralisInstance,
-    MoralisClassEnum,
-    saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
-} from "database/interactions";
 
 import Ethereum from "assets/chains/Ethereum.png";
 import Polygon from "assets/chains/Polygon.png";
@@ -69,6 +61,7 @@ const CreateNFT: NextPage = () => {
         price: 0,
         contractAddress: "",
         ipfsAddress: "",
+        Polygon: "",
     });
 
     const { data: signer_data } = useSigner();
@@ -98,11 +91,12 @@ const CreateNFT: NextPage = () => {
         console.log(fullPath);
         handleChangeBasic(fullPath, setFormData, "ipfsAddress");
 
+        let contractAddress;
         try {
-            const contractAddress = await deployNFTContract(signer_data as Signer, {
+            contractAddress = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
-                numberNFT: +formData.Polygon,
+                numberNFT: +formData.Polygon!,
             });
 
             handleChangeBasic(contractAddress!, setFormData, "contractAddress");
@@ -114,20 +108,7 @@ const CreateNFT: NextPage = () => {
             toast.error("Please approve transaction to create DAO");
             return;
         }
-
-        // const moralisNft = getMoralisInstance(MoralisClassEnum.NFT);
-        // setFieldsIntoMoralisInstance(moralisNft, formData);
-        // moralisNft.set("contractAddress", contractAddress);
-        // moralisNft.set("ipfsAddress", fullPath);
-        // moralisNft.set("chainId", await signer_data.getChainId());
-        // await saveMoralisInstance(moralisNft);
     }
-
-    async function mint() {
-        const tx = await mintClick(formData.contractAddress!, signer_data as Signer);
-        console.log(tx);
-    }
-
     return (
         <div>
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
@@ -199,7 +180,7 @@ const CreateNFT: NextPage = () => {
                                     isDisabled={true}
                                 />
                                 <label>
-                                    <div className="input-label"> NFT Supply </div>
+                                    <div className="input-label"> NFT Supply</div>
                                 </label>
                                 <div className="grid w-full grid-cols-4 gap-4">
                                     {chains.map((chain) =>
@@ -253,7 +234,12 @@ const CreateNFT: NextPage = () => {
                                 <>
                                     <p>Deployment successful!</p>
                                     <p>Contract Address: {formData.contractAddress}</p>
-                                    <Link href="create-dao">
+                                    <Link
+                                        href={{
+                                            pathname: "create-dao",
+                                            query: { tokenAddress: formData.contractAddress },
+                                        }}
+                                    >
                                         <button
                                             className="form-submit-button"
                                             onClick={() => {

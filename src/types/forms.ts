@@ -1,5 +1,3 @@
-import { StringLike } from "ariakit/ts/form/__utils";
-
 export interface ICreate {
     name: string;
     description: string;
@@ -30,13 +28,13 @@ export interface DAOPageForm extends CreateDAO {
 }
 
 export interface IBlockchains {
-    Polygon?: any;
-    Ethereum?: any;
-    Arbitrum?: any;
-    Binance?: any;
-    Avalanche?: any;
-    Fantom?: any;
-    Optimism?: any;
+    Polygon?: string;
+    Ethereum?: string;
+    Arbitrum?: string;
+    Binance?: string;
+    Avalanche?: string;
+    Fantom?: string;
+    Optimism?: string;
 }
 
 export interface CreateNFT extends ICreate, IBlockchains {
