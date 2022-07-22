@@ -73,48 +73,6 @@ const CreateProporsal: NextPage = () => {
         );
     };
 
-    // TODO Change to text into date
-    const DateForm = () => {
-        return (
-            <>
-                <p>Voting Time</p>
-                <div className="flex justify-between gap-10">
-                    {/* TODO: New to change it for drag and drop */}
-                    <InputText
-                        label="Start Date"
-                        name="startDate"
-                        placeholder="Start Date and Time"
-                        handleChange={(event) => handleTextChange(event, setFormData)}
-                        className="w-1/2"
-                    />
-                    <InputText
-                        label="End Date"
-                        name="endDate"
-                        placeholder="End Date and Time"
-                        handleChange={(event) => handleTextChange(event, setFormData)}
-                        className="w-1/2"
-                    />
-                </div>
-            </>
-        );
-    };
-
-    // const OptionsForm = (nameLabel: string) => {
-    //     return (
-    //         <InputText
-    //             label={nameLabel}
-    //             name="options"
-    //             placeholder="Title of purpose"
-    //             handleChange={(event) => {
-    //                 // TODO: Need to create handler for array
-    //                 // handleTextChange(event, setFormData);
-    //             }}
-    //         />
-    //     );
-    // };
-
-    const DatePicker = () => {};
-
     return (
         <div>
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
@@ -158,7 +116,6 @@ const CreateProporsal: NextPage = () => {
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
                         />
-                        <DateForm />
                         <SubmitButton className="mt-5">Create Proporsal</SubmitButton>
                     </form>
                 </section>
