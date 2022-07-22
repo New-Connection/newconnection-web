@@ -113,12 +113,7 @@ const CreateProporsal: NextPage = () => {
     //     );
     // };
 
-
-    const DatePicker = () => {
-        return(
-            <ComponentDateTimePicker label="Start Date"
-        )
-    }
+    const DatePicker = () => {};
 
     return (
         <div>
@@ -149,8 +144,12 @@ const CreateProporsal: NextPage = () => {
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
                         <FileAndLinkForm />
-                        {/* <OptionsForm nameLabel="Option 1" />
-                        <OptionsForm nameLabel="Option 2" /> */}
+
+                        <div className="flex w-full gap-10">
+                            <ComponentDateTimePicker label="Start Date" className="w-1/2" />
+                            <ComponentDateTimePicker label="End Date" className="w-1/2" />
+                        </div>
+
                         <CheckboxGroup
                             label={"Proposal Blockchain"}
                             description={"You can choose one or more blockchains"}

@@ -5,20 +5,23 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import { IDatePicker } from "./types";
-export const ComponentDateTimePicker = ({ label, value, handleChange }: IDatePicker) => {
-    //const [value, setValue] = React.useState<Date | null>(new Date());
+export const ComponentDateTimePicker = ({ label, className }) => {
+    const [value, setValue] = React.useState<Date | null>(new Date());
 
     return (
-        <>
+        <div className={className}>
             <div className={"input-label"}>{label}</div>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
                     renderInput={(props) => <TextField {...props} />}
-                    label="DateTimePicker"
                     value={value}
-                    onChange={handleChange}
+                    onChange={(newValue) => {
+                        console.log(newValue);
+                        setValue(newValue);
+                    }}
+                    className={className}
                 />
             </LocalizationProvider>
-        </>
+        </div>
     );
 };
