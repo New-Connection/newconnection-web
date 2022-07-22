@@ -33,6 +33,8 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 
+import { CHAINS, CHAINS_IMG } from "utils/blockchains";
+
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 const BlockchainValues = [
     "Arbitrum",
@@ -177,7 +179,7 @@ const CreateDAO: NextPage = () => {
                         <CheckboxGroup
                             label={"DAO Blockchain"}
                             description={"You can choose one or more blockchains"}
-                            values={BlockchainValues}
+                            values={CHAINS}
                             handleChange={(event) =>
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
