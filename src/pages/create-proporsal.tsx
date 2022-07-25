@@ -11,10 +11,9 @@ import {
     InputText,
     SubmitButton,
     InputTextArea,
-    ComponentDateTimePicker,
 } from "components/Form";
 import { ICreateProposal } from "types/forms";
-import BackButton from "assets/elements/BackButton.png";
+import BackButton from "components/Button/backButton";
 
 const BlockchainValues = [
     "Arbitrum",
@@ -34,22 +33,7 @@ const CreateProporsal: NextPage = () => {
         description: "",
         options: [],
         blockchain: [],
-        // startDate: new Date.now(),
-        // endData:
     });
-
-    const TitleForm = () => {
-        return (
-            <InputText
-                label={"Title"}
-                name="name"
-                placeholder="Title of purpose"
-                handleChange={(event) => {
-                    handleTextChange(event, setFormData);
-                }}
-            />
-        );
-    };
 
     const FileAndLinkForm = () => {
         return (
@@ -79,14 +63,18 @@ const CreateProporsal: NextPage = () => {
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4">
                         <Link href="/create-dao">
-                            <button className="flex gap-1">
-                                <Image src={BackButton} width={40} height={20} />
-                                <p className="text-xl">Back</p>
-                            </button>
+                            <BackButton />
                         </Link>
 
                         <h1 className="text-highlighter">New Proporsal</h1>
-                        <TitleForm />
+                        <InputText
+                            label="Title"
+                            name="name"
+                            placeholder="Title of purpose"
+                            handleChange={(event) => {
+                                handleTextChange(event, setFormData);
+                            }}
+                        />
                         <InputTextArea
                             label="Short Description"
                             name="shortDescription"
@@ -102,11 +90,6 @@ const CreateProporsal: NextPage = () => {
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
                         <FileAndLinkForm />
-
-                        <div className="flex w-full gap-10">
-                            <ComponentDateTimePicker label="Start Date" className="w-1/2" />
-                            <ComponentDateTimePicker label="End Date" className="w-1/2" />
-                        </div>
 
                         <CheckboxGroup
                             label={"Proposal Blockchain"}
