@@ -1,5 +1,5 @@
-import { CreateGovernorContract } from "./useCreateGovernorContract";
-import { Signer, BigNumber } from "ethers";
+import { CreateGovernorContract } from "./ContractFactory";
+import { Signer } from "ethers";
 
 export interface IConstructorGovernor {
     name: string;

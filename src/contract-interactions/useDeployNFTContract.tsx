@@ -1,4 +1,4 @@
-import { CreateNFTContract } from "./useCreateNFTContract";
+import { CreateNFTContract } from "./ContractFactory";
 import { Signer, BigNumber } from "ethers";
 
 export interface IConstructorNFT {
