@@ -44,6 +44,4 @@ export interface ICreateProposal extends ICreate {
     linkForum?: object;
     options: string[];
     blockchain: string[];
-    startDate?: Date;
-    endDate?: Date;
 }
