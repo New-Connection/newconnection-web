@@ -4,4 +4,3 @@ export { BlockchainSelector } from "./BlockchainSelector";
 export { TypeSelector } from "./TypeSelector";
 export { DragAndDropImage } from "./DragAndDropImage";
 export { CheckboxGroup } from "./Checkbox";
-export { ComponentDateTimePicker } from "./ComponentDateTimePicker";
