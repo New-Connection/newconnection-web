@@ -4,23 +4,23 @@ import { useMoralisQuery } from "react-moralis";
 
 export enum MoralisClassEnum {
     DAO = "DAO",
-    NFT = "NFT",
+    PROPOSAL = "Proposal",
     USER = "User",
 }
 
 const DaoMoralisObject = Moralis.Object.extend(MoralisClassEnum.DAO);
-const NftMoralisObject = Moralis.Object.extend(MoralisClassEnum.NFT);
+const ProposalMoralisObject = Moralis.Object.extend(MoralisClassEnum.PROPOSAL);
 const UserMoralisObject = Moralis.Object.extend(MoralisClassEnum.USER);
 Moralis.Object.registerSubclass("DAO", DaoMoralisObject);
-Moralis.Object.registerSubclass("NFT", NftMoralisObject);
+Moralis.Object.registerSubclass("Proposal", ProposalMoralisObject);
 Moralis.Object.registerSubclass("User", UserMoralisObject);
 
 export const getMoralisInstance = (moralisClass: MoralisClassEnum) => {
     switch (moralisClass) {
         case MoralisClassEnum.DAO:
             return new DaoMoralisObject();
-        case MoralisClassEnum.NFT:
-            return new NftMoralisObject();
+        case MoralisClassEnum.PROPOSAL:
+            return new ProposalMoralisObject();
         case MoralisClassEnum.USER:
             return new UserMoralisObject();
     }

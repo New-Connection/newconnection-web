@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
-    border: solid 1px #1bdbad;
+    border: solid 1px #6858CB;
     border-radius: 0.5rem;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -15,7 +15,7 @@
 }
 
 .checkbox:hover {
-    background-color: #1bdbad;
+    background-color: #6858CB;
 }
 
 .checkbox[aria-disabled="true"] {
@@ -23,10 +23,10 @@
 }
 
 .checkbox[aria-checked="true"] {
-    background-color: #23bd8f;
+    background-color: #6858CB;
     color: white;
 }
 
 .checkbox:hover[aria-checked="true"] {
-    background-color: #1bdbad;
+    background-color: #6858CB;
 }
