@@ -2,16 +2,12 @@ import React, { useState } from "react";
 import { NextPage } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import { useSigner } from "wagmi";
 
 import Layout from "components/Layout/Layout";
 import { handleTextChange, handleCheckboxChange, handleDatePicker } from "utils/handlers";
-import {
-    CheckboxGroup,
-    DragAndDropImage,
-    InputText,
-    SubmitButton,
-    InputTextArea,
-} from "components/Form";
+import { CheckboxGroup, InputText, SubmitButton, InputTextArea } from "components/Form";
 import { ICreateProposal } from "types/forms";
 import BackButton from "components/Button/backButton";
 
@@ -34,6 +30,7 @@ const CreateProporsal: NextPage = () => {
         options: [],
         blockchain: [],
     });
+    const { data: signer_data } = useSigner();
 
     const FileAndLinkForm = () => {
         return (
@@ -57,11 +54,29 @@ const CreateProporsal: NextPage = () => {
         );
     };
 
+    async function createProporsalContract(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        if (!signer_data) {
+            toast.error("Please connect wallet");
+            return;
+        }
+
+        // TODO: Create Proporsal
+        try {
+        } catch (error) {
+            toast.error("Please approve transaction to create DAO");
+            return;
+        }
+    }
+
     return (
         <div>
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
                 <section className="relative w-full">
-                    <form className="mx-auto flex max-w-4xl flex-col gap-4">
+                    <form
+                        className="mx-auto flex max-w-4xl flex-col gap-4"
+                        onSubmit={createProporsalContract}
+                    >
                         <Link href="/create-dao">
                             <BackButton />
                         </Link>

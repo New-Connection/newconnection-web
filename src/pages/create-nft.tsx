@@ -82,7 +82,6 @@ const CreateNFT: NextPage = () => {
             toast.error("Please connect wallet");
             return;
         }
-        console.log("Form Data", formData);
         if (
             !validateForm(formData, ["collectionName", "ipfsAddress", "contractAddress", "price"])
         ) {
@@ -106,7 +105,6 @@ const CreateNFT: NextPage = () => {
             });
 
             handleChangeBasic(contractAddress!, setFormData, "contractAddress");
-            console.log("set true");
             setConfirmFromBlockchain(true);
         } catch (error) {
             confirmDialog.toggle();

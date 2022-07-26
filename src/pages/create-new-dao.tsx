@@ -1,8 +1,9 @@
 import React from "react";
 import { NextPage } from "next";
+import Link from "next/link";
+
 import Layout from "components/Layout/Layout";
 import { SubmitButton } from "components/Form";
-import Link from "next/link";
 
 const CreateNewDAO: NextPage = () => {
     interface ICard {
