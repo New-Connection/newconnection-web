@@ -1,25 +1,24 @@
-import * as React from "react";
-import type { NextPage } from "next";
-import Layout from "components/Layout/Layout";
-import Head from "next/head";
+import { NextPage } from "next";
 import Link from "next/link";
+import Head from "next/head";
+import Layout from "components/Layout";
+import Moralis from "moralis";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useState } from "react";
-import Moralis from "moralis";
 import Image from "next/image";
-import basicAvatar from "assets/basic_avatar.jpg";
+import basicAvatar from "../../assets/basic_avatar.jpg";
 
-const DAOsPage: NextPage = () => {
-    const [DAOs, setDAOs] = useState<Moralis.Object<Moralis.Attributes>[]>();
+const ProposalsPage: NextPage = () => {
+    const [Proposals, setProposals] = useState<Moralis.Object<Moralis.Attributes>[]>();
 
-    const { fetch } = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
+    const { fetch } = useMoralisQuery("Proposal", (query) => query.notEqualTo("objectId", ""), [], {
         autoFetch: false,
     });
 
     const fetchDB = () => {
         fetch({
             onSuccess: (results) => {
-                setDAOs(() => results);
+                setProposals(() => results);
             },
             onError: (error) => {
                 console.log("Error fetching db query" + error);
@@ -31,9 +30,9 @@ const DAOsPage: NextPage = () => {
         fetchDB();
     }, []);
 
-    const DAOCard = ({ name, description, profileImage, address, isActive, proposals, votes }) => {
+    const ProposalCard = ({ name, description, id, isActive, votesFor, votesAgainst }) => {
         return (
-            <Link href={`/daos/${address}`}>
+            <Link href={`/proposals/${id}`}>
                 <div
                     className={
                         // border-[#6858CB]
@@ -41,9 +40,6 @@ const DAOsPage: NextPage = () => {
                     }
                 >
                     <div className={"flex gap-3 w-2/3 overflow-hidden"}>
-                        <div className={"w-28 h-28"}>
-                            <Image className={"w-28 h-28"} src={basicAvatar} />
-                        </div>
                         <div className="w-2/3">
                             <p className={"text-lg uppercase font-semibold"}>{name}</p>
                             <p className={"text-gray-500 "}>{description}</p>
@@ -64,12 +60,12 @@ const DAOsPage: NextPage = () => {
                         )}
                         <div className={"flex flex-col gap-3"}>
                             <div className={"flex justify-between"}>
-                                <div className={"text-gray-500"}>Proposals:</div>
-                                <div>{proposals}</div>
+                                <div className={"text-gray-500"}>Votes For:</div>
+                                <div>{votesFor}</div>
                             </div>
                             <div className={"flex justify-between"}>
-                                <div className={"text-gray-500"}>Votes:</div>
-                                <div>{votes}</div>
+                                <div className={"text-gray-500"}>Votes Against:</div>
+                                <div>{votesAgainst}</div>
                             </div>
                         </div>
                     </div>
@@ -86,34 +82,32 @@ const DAOsPage: NextPage = () => {
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className={"flex justify-between items-center"}>
-                        <h1 className={"text-highlighter"}>DAOs</h1>
-                        <Link href="./create-new-dao">
-                            <button className={"secondary-button h-10 "}>Create DAO</button>
+                        <h1 className={"text-highlighter"}>Proposals</h1>
+                        <Link href="./">
+                            <button className={"secondary-button h-10 "}>Add new proposal</button>
                         </Link>
                     </div>
 
                     <ul>
-                        {DAOs &&
-                            DAOs.map((dao) => {
-                                const address = dao.get("contractAddress");
-                                const name = dao.get("name");
-                                const description = dao.get("description");
-                                const profileImage = dao.get("profileImage");
+                        {Proposals &&
+                            Proposals.map((proposal) => {
+                                const id = proposal.get("id");
+                                const name = proposal.get("name");
+                                const description = proposal.get("description");
 
                                 //todo: write to db
                                 const isActive = true;
-                                const proposals = 0;
-                                const votes = 0;
+                                const votesFor = 0;
+                                const votesAgainst = 0;
                                 return (
-                                    <li key={address}>
-                                        <DAOCard
+                                    <li key={id}>
+                                        <ProposalCard
                                             name={name}
                                             description={description}
-                                            address={address}
-                                            profileImage={profileImage}
+                                            id={id}
                                             isActive={isActive}
-                                            proposals={proposals}
-                                            votes={votes}
+                                            votesFor={votesFor}
+                                            votesAgainst={votesAgainst}
                                         />
                                     </li>
                                 );
@@ -125,4 +119,4 @@ const DAOsPage: NextPage = () => {
     );
 };
 
-export default DAOsPage;
+export default ProposalsPage;

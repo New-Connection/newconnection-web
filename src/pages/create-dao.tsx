@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useSigner } from "wagmi";
 import toast from "react-hot-toast";
@@ -32,6 +32,8 @@ import {
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
+import { useRouter } from "next/router";
+import { ParsedUrlQuery } from "querystring";
 
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 
@@ -47,7 +49,13 @@ const BlockchainValues = [
     "Polygon",
 ];
 
+interface QueryUrlParams extends ParsedUrlQuery {
+    tokenAddress: string;
+}
+
 const CreateDAO: NextPage = () => {
+    const router = useRouter();
+
     const [formData, setFormData] = useState<CreateDAO>({
         name: "",
         goals: "",
@@ -64,6 +72,14 @@ const CreateDAO: NextPage = () => {
     const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
 
+    useEffect(() => {
+        const query = router.query as QueryUrlParams;
+
+        handleChangeBasic(query.tokenAddress, setFormData, "tokenAddress");
+
+        console.log(`tokenAddress from query: ${query.tokenAddress}`);
+    }, []);
+
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -78,21 +94,38 @@ const CreateDAO: NextPage = () => {
 
         confirmDialog.toggle();
 
-        const contractAddress = await deployGovernorContract(signer_data as Signer, {
-            name: formData.name,
-            tokenAddress: formData.tokenAddress,
-            votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
-            quorumPercentage: +formData.quorumPercentage,
-        });
-        handleChangeBasic(contractAddress, setFormData, "contractAddress");
+        let contractAddress;
+        try {
+            contractAddress = await deployGovernorContract(signer_data as Signer, {
+                name: formData.name,
+                tokenAddress: formData.tokenAddress,
+                votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
+                quorumPercentage: +formData.quorumPercentage,
+            });
+            handleChangeBasic(contractAddress, setFormData, "contractAddress");
+            setConfirmFromBlockchain(true);
+        } catch (error) {
+            confirmDialog.toggle();
+            setConfirmFromBlockchain(false);
+            toast.error("Please approve transaction to create DAO");
+            return;
+        }
 
-        const moralisDao = getMoralisInstance(MoralisClassEnum.DAO);
-        setFieldsIntoMoralisInstance(moralisDao, formData);
-        moralisDao.set("contractAddress", contractAddress);
-        moralisDao.set("chainId", await signer_data.getChainId());
-        await saveMoralisInstance(moralisDao);
+        try {
+            const chainId = await signer_data.getChainId();
+            handleChangeBasic(chainId, setFormData, "chainId");
 
-        setConfirmFromBlockchain(true);
+            const moralisDao = getMoralisInstance(MoralisClassEnum.DAO);
+            setFieldsIntoMoralisInstance(moralisDao, formData);
+            moralisDao.set("contractAddress", contractAddress);
+            moralisDao.set("chainId", chainId);
+            await saveMoralisInstance(moralisDao);
+        } catch (error) {
+            confirmDialog.toggle();
+            setConfirmFromBlockchain(false);
+            toast.error("Сouldn't save your DAO. Please try again");
+            return;
+        }
     };
 
     return (
@@ -136,7 +169,9 @@ const CreateDAO: NextPage = () => {
                             placeholder="NFT which will be used in DAO (Ox...)"
                             labelTitle="NFT Address"
                             pattern={"^0x[a-fA-F0-9]{40}$"}
-                            handleChange={(event) => handleTextChange(event, setFormData)}
+                            value={formData.tokenAddress}
+                            disabled={true}
+                            // handleChange={(event) => handleTextChange(event, setFormData)}
                         />
                         <InputText
                             label="DAO Goals"
@@ -206,14 +241,14 @@ const CreateDAO: NextPage = () => {
                                 <>
                                     <p>Deployment successful!</p>
                                     <p>Contract Address: {formData.contractAddress}</p>
-                                    <Link href="/create-dao">
+                                    <Link href={`/daos/${formData.contractAddress}`}>
                                         <button
                                             className="form-submit-button"
                                             onClick={() => {
                                                 confirmDialog.toggle();
                                             }}
                                         >
-                                            Back Home
+                                            View DAO
                                         </button>
                                     </Link>
                                 </>

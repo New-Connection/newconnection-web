@@ -4,8 +4,10 @@ import { BaseSyntheticEvent, ChangeEvent } from "react";
 export interface InputTextProps {
     name: string;
     label: string;
+    value?: string;
     labelTitle?: string;
     isRequired?: boolean;
+    disabled?:boolean;
     className?: string;
     handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     placeholder?: string;

@@ -12,18 +12,29 @@ export interface CreateDAO extends ICreate {
     quorumPercentage: string;
     type: string[];
     blockchain: string[];
-    description: string;
     contractAddress?: string;
+    chainId?: number;
+}
+
+export interface DAOPageForm extends CreateDAO {
+    discordURL?: string;
+    twitterURL?: string;
+    URL?: string;
+    scanURL?: string;
+    totalVotes?: number;
+    totalMembers?: number;
+    totalProposals?: number;
+    activeProposals?: number;
 }
 
 export interface IBlockchains {
-    Polygon?: any;
-    Ethereum?: any;
-    Arbitrum?: any;
-    Binance?: any;
-    Avalanche?: any;
-    Fantom?: any;
-    Optimism?: any;
+    Polygon?: string;
+    Ethereum?: string;
+    Arbitrum?: string;
+    Binance?: string;
+    Avalanche?: string;
+    Fantom?: string;
+    Optimism?: string;
 }
 
 export interface ICreateNFT extends ICreate, IBlockchains {

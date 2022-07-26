@@ -54,10 +54,12 @@ export const InputText = ({
     label,
     labelTitle,
     isRequired,
+    disabled,
     className,
     handleChange,
     placeholder,
     maxLength,
+    value,
     ...props
 }: InputTextProps) => {
     return (
@@ -71,6 +73,7 @@ export const InputText = ({
                 className={"input-field"}
                 name={name}
                 required={isRequired}
+                disabled={disabled}
                 autoComplete="off"
                 autoCorrect="off"
                 type="text"
@@ -78,6 +81,7 @@ export const InputText = ({
                 placeholder={placeholder}
                 onChange={handleChange}
                 maxLength={maxLength}
+                value={value}
                 {...props}
             />
         </div>
