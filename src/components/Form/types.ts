@@ -83,3 +83,9 @@ export interface CheckboxProps {
     values: string[];
     handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
+
+export interface IDatePicker {
+    label: string;
+    value: Date | null;
+    handleChange: () => void;
+}

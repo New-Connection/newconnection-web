@@ -1,13 +1,14 @@
 .checkbox {
     display: flex;
-    height: 2rem;
+    height: 3rem;
     width: 8rem;
     cursor: pointer;
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
-    border: solid 1px #6858CB;
-    border-radius: 0.5rem;
+    color: #aaaaaa;
+    background: #f2f4f4;
+    border-radius: 0.25rem;
     padding-left: 1rem;
     padding-right: 1rem;
     font-size: 1rem;
@@ -15,7 +16,8 @@
 }
 
 .checkbox:hover {
-    background-color: #6858CB;
+    background-color: #7343df;
+    color: #ffffff;
 }
 
 .checkbox[aria-disabled="true"] {
@@ -23,10 +25,10 @@
 }
 
 .checkbox[aria-checked="true"] {
-    background-color: #6858CB;
+    background-color: #7343df;
     color: white;
 }
 
 .checkbox:hover[aria-checked="true"] {
-    background-color: #6858CB;
+    background-color: #7343df;
 }
