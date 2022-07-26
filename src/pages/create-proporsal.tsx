@@ -9,7 +9,7 @@ import Layout from "components/Layout/Layout";
 import { handleTextChange, handleCheckboxChange, handleDatePicker } from "utils/handlers";
 import { CheckboxGroup, InputText, SubmitButton, InputTextArea } from "components/Form";
 import { ICreateProposal } from "types/forms";
-import BackButton from "components/Button/backButton";
+import BackButton from "components/Button/BackButton";
 
 const BlockchainValues = [
     "Arbitrum",
@@ -72,15 +72,13 @@ const CreateProporsal: NextPage = () => {
     return (
         <div>
             <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
+                <BackButton linkToBack="/create-dao" />
+
                 <section className="relative w-full">
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={createProporsalContract}
                     >
-                        <Link href="/create-dao">
-                            <BackButton />
-                        </Link>
-
                         <h1 className="text-highlighter">New Proporsal</h1>
                         <InputText
                             label="Title"

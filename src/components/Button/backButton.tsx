@@ -1,12 +1,20 @@
 import * as React from "react";
 import { ArrowNarrowLeftIcon } from "@heroicons/react/solid";
+import Link from "next/link";
 
-const BackButton = () => {
+interface IBackButton {
+    title?: string;
+    linkToBack: string;
+}
+
+const BackButton = ({ title = "Back", linkToBack }: IBackButton) => {
     return (
-        <button className="flex items-center gap-1">
-            <ArrowNarrowLeftIcon className="h-8 w-7" />
-            Back
-        </button>
+        <Link href={linkToBack}>
+            <button className="flex items-center gap-1">
+                <ArrowNarrowLeftIcon className="h-8 w-7" />
+                {title}
+            </button>
+        </Link>
     );
 };
 
