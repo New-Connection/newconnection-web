@@ -1,7 +1,6 @@
 import * as React from "react";
 import toast from "react-hot-toast";
 import { XIcon } from "@heroicons/react/solid";
-import { Switch } from "components/Web3";
 
 const CustomNotification = () => {
     toast.custom((t) => (
@@ -16,12 +15,13 @@ const CustomNotification = () => {
                         <p className="text-lg font-medium text-[#3D3D3D]">
                             New Connection is a live only on Testnets!
                         </p>
-                        <button
+                        <p className="text-lg text-[#6858CB]">
+                            Please Switch Network to Mumbai, Fuji, Gorelic Testnets
+                        </p>
+                        {/* <button
                             className="bg-[#6858CB] text-white w-full mt-5 my-2 py-3 rounded-md hover:bg-[#5446af] hover:text-white active:bg-[#403684]"
                             onClick={() => null}
-                        >
-                            Switch Network to Polygon Mumbai Testnet
-                        </button>
+                        ></button> */}
                     </div>
                 </div>
                 <button
