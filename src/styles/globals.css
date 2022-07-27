@@ -52,7 +52,7 @@
     }
 
     .secondary-button {
-        @apply primary-button bg-white text-[#6858CB];
+        @apply whitespace-nowrap bg-[#7343DF] text-white font-medium w-1/5 h-10 rounded-full py-2 px-8 text-sm disabled:cursor-not-allowed;
     }
 
     .form-submit-button {
@@ -65,6 +65,14 @@
 
     .input-label {
         @apply text-base mb-4 text-[#111112] mr-2 mt-6;
+    }
+
+    .dao-label {
+        @apply font-normal text-[#111112] text-5xl ml-12 mt-6;
+    }
+
+    .settings-button {
+        @apply bg-[#F2F4F4] text-[#1B1A1D] rounded-full text-base h-12 w-1/5;
     }
 
     .input-label-selector {
