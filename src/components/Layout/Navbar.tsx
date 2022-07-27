@@ -6,6 +6,7 @@ import { Account, WalletSelector, NetworksMenu } from "components/Web3";
 import { useAccount } from "wagmi";
 import { useDialogState } from "ariakit";
 import { useRouter } from "next/router";
+import Menu from "./Menu";
 
 import { useIsMounted } from "hooks";
 
@@ -56,8 +57,9 @@ const Navbar = () => {
                         Connect Wallet
                     </button>
                 )}
-            </div>
 
+                <Menu walletDialog={walletDailog} />
+            </div>
             <WalletSelector dialog={walletDailog} />
         </>
     );
