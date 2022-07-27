@@ -18,6 +18,9 @@ import { useMoralisQuery } from "react-moralis";
 import { useEffect, useState } from "react";
 import { CreateDAO, DAOPageForm } from "types/forms";
 import { getChainScanner } from "utils/network";
+import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
+import BlockchainExample from "assets/chains/Polygon.png";
+import NFTExample from "assets/nft-example.png";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -124,9 +127,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const StatisticCard = ({ label, counter }) => {
         return (
-            <div className="flex flex-col justify-between rounded border-2 border-[#6858CB] w-1/4 h-28 pt-2 pl-2 pr-4 pb-4">
-                <div className={"text-gray-400"}>{label}</div>
-                <div className={"flex text-black justify-end text-3xl"}>{counter || 0}</div>
+            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg w-1/4 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] cursor-pointer">
+                <div className={"text-gray-400 group-hover:text-white"}>{label}</div>
+                <div className={"flex justify-end text-black text-5xl group-hover:text-white"}>
+                    {counter || 0}
+                </div>
             </div>
         );
     };
@@ -148,12 +153,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
-    const NFTCard = ({ tokenAddress, chainId }) => {
+    const NFTCard = ({ tokenAddress, chainId, daoTitle }) => {
         return (
             <a href={getChainScanner(chainId, tokenAddress)} target={"_blank"}>
-                <div className="flex flex-col justify-between rounded border-2 border-[#6858CB] w-52 h-52 p-3">
-                    <Image src={basicAvatar} height={"150px"} width={"150px"} />
-                    <div className={"text-gray-400"}>{"Membership NFT"}</div>
+                <div className="border-solid border-4 w-1/4 rounded-md">
+                    {/* //Wrap to div for center elements */}
+                    <div className="flex justify-center">
+                        <Image src={NFTExample} className="rounded-t-md" objectFit="contain" />
+                    </div>
+
+                    <div className="p-4 gap-y-6">
+                        <p>{daoTitle}: Membership </p>
+                        <div className="flex pt-4 justify-between">
+                            <p className="font-light text-sm text-[#AAAAAA]">Type: Art</p>
+                            <Image src={BlockchainExample} height="24" width="24" />
+                        </div>
+                    </div>
                 </div>
             </a>
         );
@@ -165,44 +180,51 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 <title>{DAO.name}</title>
             </Head>
             <Layout className="app-section mx-auto mt-20 flex w-full flex-col space-y-6 pb-8 bg-[#ffffff]">
-                <div className="cover h-36 w-full relative justify-center">
+                <div className="cover h-36 w-full relative justify-center ">
                     <Image src={basicAvatar} layout={"fill"} />
-                    <button className={"secondary-button absolute bottom-5 right-5 p-2"}>
-                        Edit DAO Profile
-                    </button>
                 </div>
 
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    <div className="dao-info flex">
-                        <div className="mt-[-50px] ">
-                            <Image src={basicAvatar} height={"150px"} width={"150px"} />
+                    <div className="dao-info flex justify-between">
+                        <div className="flex">
+                            <div className="mt-[-50px] ">
+                                <Image
+                                    src={basicAvatar}
+                                    height={"150px"}
+                                    width={"150px"}
+                                    className="rounded-xl"
+                                />
+                            </div>
+                            <h1 className="dao-label">{DAO.name}</h1>
                         </div>
-                        <div className="flex flex-col w-full">
-                            <div className="flex ml-3 w-full justify-between">
-                                <h1 className={"text-2xl font-semibold"}>{DAO.name}</h1>
-                                <div className="flex w-[100px] justify-between">
-                                    <ImageLink url={DAO.discordURL} image={discordLogo} />
-                                    <ImageLink url={DAO.twitterURL} image={twitterLogo} />
-                                    <ImageLink url={DAO.URL} image={globeLogo} />
-                                </div>
-                            </div>
-                            <div className="flex ml-3 w-1/2 justify-between">
-                                <a
-                                    href={DAO.URL}
-                                    target={"_blank"}
-                                    className={"hover:text-[#23BD8F]"}
-                                >
-                                    About DAO
-                                </a>
-                                <a
-                                    href={DAO.scanURL}
-                                    target={"_blank"}
-                                    className={"hover:text-[#23BD8F]"}
-                                >
-                                    Smart Contract
-                                    <Image height={"20"} width={"20"} src={contractLogo} />
-                                </a>
-                            </div>
+                        <button className="settings-button mt-6 cursor-not-allowed">
+                            Edit DAO Profile
+                        </button>
+                    </div>
+                    <div className="flex justify-between gap-10 w-full">
+                        <div className="flex w-1/2 justify-between">
+                            <a href={DAO.URL} target={"_blank"} className={"hover:text-[#7343DF]"}>
+                                About DAO
+                            </a>
+                            <a
+                                href={DAO.scanURL}
+                                target={"_blank"}
+                                className="hover:text-[#7343DF] flex gap-3"
+                            >
+                                Smart Contract
+                                <ExternalLinkIcon className="h-6 w-5" />
+                            </a>
+                            <a href={DAO.URL} target={"_blank"} className={"hover:text-[#7343DF]"}>
+                                DAO Blockchains
+                            </a>
+                        </div>
+
+                        <div className="flex w-1/3 justify-end gap-7">
+                            <ImageLink url={DAO.discordURL} image={discordLogo} />
+                            <ImageLink url={DAO.twitterURL} image={twitterLogo} />
+                            <a href={DAO.URL}>
+                                <GlobeAltIcon className="h-6 w-6" />
+                            </a>
                         </div>
                     </div>
 
@@ -269,9 +291,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <button className={"secondary-button"}>Add NFT</button>
                         </div>
                         {DAO.tokenAddress ? (
-                            <div className={"flex gap-6"}>
-                                <NFTCard chainId={DAO.chainId} tokenAddress={DAO.tokenAddress} />
-                            </div>
+                            <NFTCard
+                                chainId={DAO.chainId}
+                                tokenAddress={DAO.tokenAddress}
+                                daoTitle={DAO.name}
+                            />
                         ) : (
                             <MockupTextCard
                                 label={"No NFT membership"}
