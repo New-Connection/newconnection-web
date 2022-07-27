@@ -167,9 +167,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             <Layout className="app-section mx-auto mt-20 flex w-full flex-col space-y-6 pb-8 bg-[#ffffff]">
                 <div className="cover h-36 w-full relative justify-center">
                     <Image src={basicAvatar} layout={"fill"} />
-                    <button className={"secondary-button absolute bottom-5 right-5 p-2"}>
+
+                    {/*
+                    TODO:
+                    If I'm owner of DAO show me this button
+                     <button className={"secondary-button absolute bottom-5 right-5 p-2"}>
                         Edit DAO Profile
-                    </button>
+                    </button> */}
                 </div>
 
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
