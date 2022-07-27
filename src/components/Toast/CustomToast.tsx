@@ -25,6 +25,10 @@ const CustomToast = () => {
                         color: "white",
                     },
                 },
+                custom: {
+                    position: "top-right",
+                    duration: 10000,
+                },
             }}
         />
     );
