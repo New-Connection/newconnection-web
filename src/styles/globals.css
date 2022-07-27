@@ -67,6 +67,14 @@
         @apply text-base mb-4 text-[#111112] mr-2 mt-6;
     }
 
+    .dao-label {
+        @apply font-normal text-[#111112] text-5xl ml-12 mt-6;
+    }
+
+    .settings-button {
+        @apply bg-[#F2F4F4] text-[#1B1A1D] rounded-full text-base h-12 w-1/5;
+    }
+
     .input-label-selector {
         @apply text-base text-[#111112];
     }
