@@ -33,8 +33,11 @@ export const NetworksMenu = () => {
     if (!chain || !switchNetwork) return null;
 
     const mainnets = chains.filter((chain) => !chain.testnet);
-    const testnets = chains.filter((chain) => chain.id === 5); // ONLY GOERLI. For using all testnets (=> chain.testnet)
-
+    console.log("Chains---", chain);
+    const testnets = chains.filter(
+        (chain) => chain.id === 5 || chain.id === 80001 || chain.id === 43113
+    ); // ONLY GOERLI. For using all testnets (=> chain.testnet)
+    //const testnets = chains.filter((chain) => chain.testnet);
     return (
         <>
             <SelectLabel state={select} className="hidden sm:sr-only">
