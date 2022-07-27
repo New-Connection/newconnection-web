@@ -3,10 +3,11 @@ import Logo from "components/Layout/Logo";
 import styles from "styles/components/Layout/Layout.module.css";
 import classNames from "classnames";
 import { Account, WalletSelector, NetworksMenu } from "components/Web3";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useDialogState } from "ariakit";
 import { useRouter } from "next/router";
 import Menu from "./Menu";
+import CustomNotification from "components/Toast/CustomNotification";
 
 import { useIsMounted } from "hooks";
 
@@ -18,10 +19,14 @@ const navigation = [
 
 const Navbar = () => {
     const { isConnected } = useAccount();
+    const { chain } = useNetwork();
+
+    const chainIDs = ["5", "80001", "43113"]; // Goerli, Mumbai, FUJI
     const walletDailog = useDialogState(); // For pop-up with wallets
     const router = useRouter();
     const isMounted = useIsMounted();
 
+    const isIncludeNumber = (id: string) => chainIDs.some((val) => val === id); // return true if we have this chainID in chainIDs
     return (
         <>
             <Link href="/" passHref>
@@ -56,6 +61,12 @@ const Navbar = () => {
                     <button className={"nav-button hidden md:block"} onClick={walletDailog.toggle}>
                         Connect Wallet
                     </button>
+                )}
+                {/* //notification for switch network, because it's wrong network */}
+                {isConnected ? (
+                    <>{isIncludeNumber(chain?.id?.toString()!) ? <></> : CustomNotification()}</>
+                ) : (
+                    <></>
                 )}
 
                 <Menu walletDialog={walletDailog} />
