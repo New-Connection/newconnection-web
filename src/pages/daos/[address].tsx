@@ -2,8 +2,6 @@ import * as React from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import Head from "next/head";
-import { getName } from "contract-interactions/viewGovernorContract";
-import { getName as getNftName } from "contract-interactions/viewNftContract";
 import { ParsedUrlQuery } from "querystring";
 import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
@@ -13,11 +11,11 @@ import globeLogo from "assets/social/globe.png";
 import contractLogo from "assets/smart-contract.png";
 import { Box } from "@mui/system";
 import { Tab, Tabs } from "@mui/material";
-import Moralis from "moralis";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useState } from "react";
-import { CreateDAO, DAOPageForm } from "types/forms";
+import { DAOPageForm } from "types/forms";
 import { getChainScanner } from "utils/network";
+import Link from "next/link";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -236,7 +234,15 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     />
                                 </Tabs>
                             </Box>
-                            <button className={"secondary-button"}>Add new proposal</button>
+
+                            <Link
+                                href={{
+                                    pathname: "/create-proposal",
+                                    query: { governorAddress: DAO.contractAddress },
+                                }}
+                            >
+                                <button className={"secondary-button"}>Add new proposal</button>
+                            </Link>
                         </div>
                         <TabPanel value={tabState} index={0}>
                             {DAO.totalProposals ? (

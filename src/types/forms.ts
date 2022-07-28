@@ -50,6 +50,9 @@ export interface ICreateNFT extends ICreate, IBlockchains {
 }
 
 export interface ICreateProposal extends ICreate {
+    proposalId?: string;
+    governorAddress: string;
+    chainId?: number;
     shortDescription: string;
     file?: object;
     linkForum?: object;
