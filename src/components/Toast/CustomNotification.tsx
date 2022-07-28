@@ -13,10 +13,10 @@ const CustomNotification = () => {
                 <div className="flex items-start">
                     <div className="ml-3 flex-1">
                         <p className="text-lg font-medium text-[#3D3D3D]">
-                            New Connection is a live only on Testnets!
+                            New Connection is live only on Testnets!
                         </p>
                         <p className="text-lg text-[#6858CB]">
-                            Please Switch Network to Mumbai, Fuji, Gorelic Testnets
+                            Please Switch Network to Mumbai, Fuji or Gorelic Testnets
                         </p>
                         {/* <button
                             className="bg-[#6858CB] text-white w-full mt-5 my-2 py-3 rounded-md hover:bg-[#5446af] hover:text-white active:bg-[#403684]"
