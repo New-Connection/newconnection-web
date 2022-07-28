@@ -10,16 +10,14 @@ import {
     SelectSeparator,
 } from "ariakit/select";
 import { SelectorIcon } from "@heroicons/react/solid";
-import { useNetwork, useSwitchNetwork } from "wagmi";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import defaultImage from "assets/empty-token.webp";
-
 import { chainDetails } from "utils/network"; // this file to add more networks
 
 export const NetworksMenu = () => {
     const { chain } = useNetwork();
     const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
-
     const select = useSelectState({
         defaultValue: chain?.id?.toString() ?? "0",
         sameWidth: true,
@@ -27,13 +25,16 @@ export const NetworksMenu = () => {
     });
 
     const { network } = chainDetails(chain?.id?.toString());
-    // TODO: if network === underfied make a dialog or make network menu unsupported
-    // console.log("Network", network);
+    // How to know what chain is it
+    // console.log("Chain", chain?.id?.toString());
     // console.log("Error", error);
     if (!chain || !switchNetwork) return null;
 
     const mainnets = chains.filter((chain) => !chain.testnet);
-    const testnets = chains.filter((chain) => chain.id === 5); // ONLY GOERLI. For using all testnets (=> chain.testnet)
+    const testnets = chains.filter(
+        (chain) => chain.id === 5 || chain.id === 80001 || chain.id === 43113
+    );
+    // ONLY GOERLI. For using all testnets (=> chain.testnet)
 
     return (
         <>
