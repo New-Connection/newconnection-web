@@ -44,6 +44,8 @@ export const defaultProvider = providers.getDefaultProvider(4, {
     infura: infuraId,
 });
 
+
+
 export const polygonTestnet: Chain = {
     id: 80001,
     name: 'Polygon Mumbai',
@@ -79,7 +81,8 @@ export const avalancheTestnet: Chain = {
     },
     testnet: true,
 }
-  
+
+export const SupportedChainName = ["Goerli", polygonTestnet.name, avalancheTestnet.name]
 
 export const networkDetails: INetworkDetails = {
     5: {
@@ -93,15 +96,15 @@ export const networkDetails: INetworkDetails = {
         prefix: "goerli",
         logoURI: ETH.src,
     },
-    1: {
-        rpcUrl: "https://rpc.ankr.com/eth",
-        chainProviders: new ethers.providers.JsonRpcProvider("https://rpc.ankr.com/eth"),
-        blockExplorerURL: "https://etherscan.io/",
-        blockExplorerName: "Etherscan",
-        prefix: "ethereum",
-        logoURI: ETH.src,
-        tokenListId: "ethereum",
-    },
+    // 1: {
+    //     rpcUrl: "https://rpc.ankr.com/eth",
+    //     chainProviders: new ethers.providers.JsonRpcProvider("https://rpc.ankr.com/eth"),
+    //     blockExplorerURL: "https://etherscan.io/",
+    //     blockExplorerName: "Etherscan",
+    //     prefix: "ethereum",
+    //     logoURI: ETH.src,
+    //     tokenListId: "ethereum",
+    // },
 
     80001: {
         rpcUrl: "https://rpc-mumbai.maticvigil.com",

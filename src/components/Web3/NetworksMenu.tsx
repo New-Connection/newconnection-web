@@ -14,6 +14,7 @@ import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import defaultImage from "assets/empty-token.webp";
 import { chainDetails } from "utils/network"; // this file to add more networks
+import { SupportedChainName } from "utils/constants";
 
 export const NetworksMenu = () => {
     const { chain } = useNetwork();
@@ -30,11 +31,14 @@ export const NetworksMenu = () => {
     // console.log("Error", error);
     if (!chain || !switchNetwork) return null;
 
-    const mainnets = chains.filter((chain) => !chain.testnet);
+    //const mainnets = chains.filter((chain) => !chain.testnet);
+    // ONLY GOERLI. For using all testnets (=> chain.testnet)
     const testnets = chains.filter(
         (chain) => chain.id === 5 || chain.id === 80001 || chain.id === 43113
     );
-    // ONLY GOERLI. For using all testnets (=> chain.testnet)
+
+    // To find name what we need
+    const nameChain = SupportedChainName.find((name) => name === chain.name);
 
     return (
         <>
@@ -57,7 +61,7 @@ export const NetworksMenu = () => {
                             priority
                         />
                     </div>
-                    <span>{chain.name ?? "unsupported"}</span>
+                    <span>{nameChain ?? "Unsupported"}</span>
                     <SelectorIcon className="relative right-[-4px] h-4 w-4" aria-hidden="true" />
                 </>
             </Select>
@@ -66,7 +70,7 @@ export const NetworksMenu = () => {
                     state={select}
                     className="shadow-2 z-10 max-h-[280px] w-fit min-w-[12rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
-                    <SelectGroup>
+                    {/* <SelectGroup>
                         <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">
                             Mainnets
                         </SelectGroupLabel>
@@ -93,8 +97,8 @@ export const NetworksMenu = () => {
                                 </SelectItem>
                             );
                         })}
-                    </SelectGroup>
-                    <SelectSeparator className="my-2" />
+                    </SelectGroup> */}
+                    {/* <SelectSeparator className="my-2" /> */}
                     <SelectGroup>
                         <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">
                             Testnets
