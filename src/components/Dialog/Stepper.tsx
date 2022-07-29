@@ -7,11 +7,15 @@ import Step from "@mui/material/Step";
 import StepContent from "@mui/material/StepContent";
 import Typography from "@mui/material/Typography";
 import { CheckCircleIcon } from "@heroicons/react/solid";
-import { BeatLoader } from "react-spinners";
+import Link from "next/link";
 
 interface LoadingDialogProps {
     dialog: DisclosureState;
     className?: string;
+    activeStep: number;
+    contractAddress: string;
+    linkToPage: any;
+    //children: React.ReactNode;
 }
 
 const steps = [
@@ -28,18 +32,15 @@ const steps = [
         description: "",
     },
 ];
-
-export const StepperDialog = ({ dialog, className }: LoadingDialogProps) => {
-    const [activeStep, setActiveStep] = React.useState(0);
-
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
-
+// TODO: Send updated variables to objects: contractAddress and linkToPage
+// TODO: Create children for next page and address
+export const StepperDialog = ({
+    dialog,
+    className,
+    activeStep,
+    contractAddress,
+    linkToPage,
+}: LoadingDialogProps) => {
     const SpinnerLoading = () => {
         return (
             <div role="status">
@@ -97,30 +98,24 @@ export const StepperDialog = ({ dialog, className }: LoadingDialogProps) => {
                             </div>
                             <StepContent>
                                 <Typography>{step.description}</Typography>
-                                <div className="mt-2">
-                                    <button
-                                        onClick={handleNext}
-                                        className="bg-[#6858CB] text-white py-2 px-4 rounded-2xl"
-                                    >
-                                        {index === steps.length - 1 ? "Finish" : "Continue"}
-                                    </button>
-                                </div>
                             </StepContent>
                         </Step>
                     ))}
                 </Stepper>
                 {activeStep === steps.length && (
-                    <div className={"p-3"}>
-                        {/* <div>All steps completed - you&apos;re finished</div> */}
+                    <div className="p-3">
+                        <div>All steps completed - you&apos;re created NFT</div>
+                        <div>Contract address: {contractAddress}</div>
+                        {/* <Link href={linkToPage}> */}
                         <button
                             onClick={() => {
                                 dialog.toggle();
-                                handleReset();
                             }}
                             className="mt-1 mr-1 py-2 px-4 rounded-2xl bg-[#6858CB] text-white"
                         >
-                            Close
+                            Go to DAO page
                         </button>
+                        {/* </Link> */}
                     </div>
                 )}
             </div>
