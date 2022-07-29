@@ -24,6 +24,7 @@ import {
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { LoadingDialog } from "../components/Dialog";
+import { StepperDialog } from "../components/Dialog";
 import { BeatLoader } from "react-spinners";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
@@ -68,6 +69,19 @@ const CreateNFT: NextPage = () => {
     const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
 
+    const [activeStep, setActiveStep] = React.useState(0);
+    let contract;
+    let contractAddr;
+    let linkToDAOpage;
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+    };
+
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -80,28 +94,36 @@ const CreateNFT: NextPage = () => {
         ) {
             return;
         }
-
+        handleReset();
         confirmDialog.toggle();
 
         const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
         console.log(UID);
-        console.log(UID.ipnft);
         const fullPath = ipfsFullPath(UID.ipnft);
         console.log(fullPath);
         handleChangeBasic(fullPath, setFormData, "ipfsAddress");
 
-        let contractAddress;
         try {
-            contractAddress = await deployNFTContract(signer_data as Signer, {
+            contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
                 numberNFT: +formData.Polygon!,
             });
-
-            handleChangeBasic(contractAddress!, setFormData, "contractAddress");
+            handleNext();
+            await contract.deployed();
+            console.log(`Deployment successful! Contract Address: ${contract.address}`);
+            contractAddr = contract.address;
+            handleNext();
+            handleNext();
+            handleChangeBasic(contract.address, setFormData, "contractAddress");
+            linkToDAOpage = {
+                pathname: "create-dao",
+                query: { tokenAddress: formData.contractAddress },
+            };
             setConfirmFromBlockchain(true);
         } catch (error) {
             confirmDialog.toggle();
+            handleReset();
             setConfirmFromBlockchain(false);
             toast.error("Please approve transaction to create DAO");
             return;
@@ -221,42 +243,13 @@ const CreateNFT: NextPage = () => {
                     </form>
                 </section>
 
-                <LoadingDialog
+                <StepperDialog
                     dialog={confirmDialog}
-                    title="Loading into Blockchain"
                     className="dialog"
-                >
-                    {
-                        <div>
-                            {confirmFromBlockchain ? (
-                                <>
-                                    <p>Deployment successful!</p>
-                                    <p>Contract Address: {formData.contractAddress}</p>
-                                    <Link
-                                        href={{
-                                            pathname: "create-dao",
-                                            query: { tokenAddress: formData.contractAddress },
-                                        }}
-                                    >
-                                        <button
-                                            className="form-submit-button"
-                                            onClick={() => {
-                                                confirmDialog.toggle();
-                                            }}
-                                        >
-                                            Next Steps
-                                        </button>
-                                    </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <p>Please confirm transaction in wallet</p>
-                                    <BeatLoader />
-                                </>
-                            )}
-                        </div>
-                    }
-                </LoadingDialog>
+                    activeStep={activeStep}
+                    contractAddress={contractAddr}
+                    linkToPage={linkToDAOpage}
+                />
             </Layout>
         </div>
     );
