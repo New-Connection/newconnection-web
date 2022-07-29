@@ -108,7 +108,7 @@ const DAOsPage: NextPage = () => {
                                 const description = dao.get("description");
                                 const profileImage = dao.get("profileImage");
 
-                                //todo: write to db
+                                //TODO: write to db
                                 const isActive = true;
                                 const proposals = 0;
                                 const votes = 0;
