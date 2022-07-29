@@ -171,11 +171,7 @@ const Home: NextPage = () => {
                     ) : (
                         //<h1 className="text-center font-bold">Please connect wallet</h1>
                         <div>
-                            <StepperDialog
-                                dialog={confirmDialog}
-                                title="Loading into Blockchain"
-                                className="dialog"
-                            />
+                            <StepperDialog dialog={confirmDialog} className="dialog" />
                             <button onClick={() => confirmDialog.toggle()}>Click for test</button>
                             <div className="flex justify-between">
                                 <NFTCardMockup />
