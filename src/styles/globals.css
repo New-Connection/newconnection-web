@@ -33,6 +33,10 @@
         @apply mx-auto w-full max-w-7xl;
     }
 
+    .layout-base {
+        @apply app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-white;
+    }
+
     .shadow-1 {
         @apply shadow-[0px_3px_7px_rgba(0,0,0,0.12)];
     }
@@ -42,53 +46,57 @@
     }
 
     .nav-button {
-        @apply shadow-1 rounded-2xl border bg-white py-2 px-4 font-medium text-[#6858CB];
+        @apply shadow-1 rounded-2xl border py-2 px-4 font-medium text-purple hover:bg-btnHover hover:text-white active:bg-btnActive active:text-white;
     }
 
     .primary-button {
-        @apply whitespace-nowrap rounded bg-[#6858CB] py-2 px-8 text-sm font-bold text-white disabled:cursor-not-allowed;
+        @apply whitespace-nowrap rounded bg-purple py-2 px-8 text-sm font-bold text-white hover:bg-btnHover active:bg-btnActive disabled:cursor-not-allowed;
         box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14),
             0 1px 5px rgba(0, 0, 0, 0.12);
     }
 
     .secondary-button {
-        @apply whitespace-nowrap bg-[#7343DF] text-white font-medium w-1/5 h-10 rounded-full py-2 px-8 text-sm disabled:cursor-not-allowed;
+        @apply whitespace-nowrap bg-purple text-white font-medium w-1/5 h-10 rounded-full py-2 px-8 text-sm hover:bg-btnHover active:bg-btnActive disabled:cursor-not-allowed;
     }
 
     .form-submit-button {
-        @apply w-full rounded-[10px] border border-[#6858CB] bg-white py-2 px-3 font-normal text-[#6858CB] disabled:cursor-not-allowed hover:bg-[#6858CB] hover:text-white;
+        @apply w-full rounded-full border-purple border-2 py-2 px-3 font-normal text-purple disabled:cursor-not-allowed hover:border-btnHover hover:text-btnHover active:bg-btnActive active:text-white;
     }
 
     .text-highlighter {
         @apply font-normal my-2 text-5xl text-[#3D3D3D];
     }
 
+    .btn-connect-wallets {
+        @apply rounded border-purple border-[2.25px] items-center p-3 text-black hover:bg-btnHover hover:text-white active:text-white active:bg-btnActive;
+    }
+
     .input-label {
-        @apply text-base mb-4 text-[#111112] mr-2 mt-6;
+        @apply text-base mb-4 text-black mr-2 mt-6;
     }
 
     .dao-label {
-        @apply font-normal text-[#111112] text-5xl ml-12 mt-6;
+        @apply font-normal text-blck text-5xl ml-12 mt-6;
     }
 
     .settings-button {
-        @apply bg-[#F2F4F4] text-[#1B1A1D] rounded-full text-base h-12 w-1/5;
+        @apply bg-[#F2F4F4] text-black rounded-full text-base h-12 w-1/5;
     }
 
     .input-label-selector {
-        @apply text-base text-[#111112];
+        @apply text-base text-black;
     }
 
     .sub-label {
-        @apply text-sm mb-2 text-[#CCCCCC];
-    }
-
-    .input-field {
-        @apply w-full rounded border-2 bg-white border-[#F2F4F4] px-3 py-[7px] slashed-zero outline-none placeholder:text-sm placeholder:text-[#CCCCCC] focus:border-[#6858CB];
+        @apply text-sm mb-2 text-gray3;
     }
 
     .input-selector {
-        @apply w-full rounded border-2 bg-white border-[#F2F4F4] px-3 py-[7px] slashed-zero outline-none placeholder:text-sm placeholder:text-[#CCCCCC];
+        @apply w-full rounded border-2 bg-white border-gray px-3 py-[7px] slashed-zero outline-none placeholder:text-sm placeholder:text-[#CCCCCC];
+    }
+
+    .input-field {
+        @apply input-selector focus:border-[#6858CB];
     }
 
     .input-error {
@@ -107,6 +115,10 @@
         animation: shimmer 2s cubic-bezier(0.31, 0.29, 0.62, 0.59) infinite;
         background: linear-gradient(to right, #eff1f3 5%, #eaeaea 20%, #eff1f3 40%);
         background-size: 1000px 100%;
+    }
+
+    .nft-card {
+        @apply border-solid shadow-1 border-gray border-2 w-1/4 rounded-md;
     }
 
     .table-row {
