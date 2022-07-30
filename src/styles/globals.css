@@ -80,7 +80,7 @@
     }
 
     .dao-label {
-        @apply font-normal text-blck text-5xl ml-12 mt-6;
+        @apply font-normal text-black text-5xl ml-12 mt-6;
     }
 
     .settings-button {
