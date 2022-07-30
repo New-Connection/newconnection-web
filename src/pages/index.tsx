@@ -7,11 +7,13 @@ import Image from "next/image";
 import { useAccount } from "wagmi";
 import Link from "next/link";
 import BasicAvatar from "assets/basic_avatar.jpg";
+import { useDialogState } from "ariakit";
 
 import Tabs from "components/Tabs/Tabs";
 import DAOCard from "components/Cards/DAOCard";
 import NFTCardMockup from "components/Cards/NFTCard";
 import ProporsalCard from "components/Cards/ProporsalCard";
+import { StepperDialog } from "components/Dialog";
 
 import { TabsType } from "types/tabs";
 
@@ -28,7 +30,7 @@ const TabOne: FC<{}> = () => {
 const TabTwo: FC<{}> = () => {
     return (
         <div>
-            <h1>Administration</h1>
+            <p>Administration</p>
             <DAOCard />
             <DAOCard />
             <DAOCard />
@@ -52,6 +54,7 @@ const tabs: TabsType = [
 
 const Home: NextPage = () => {
     const { address } = useAccount();
+    const confirmDialog = useDialogState();
     // Just mock up for test DAO profile, NFT section and po
     const USERDATA = true;
     console.log(address);
@@ -62,8 +65,8 @@ const Home: NextPage = () => {
         return (
             <div className="flex p-4 gap-5 content-center">
                 <Image src={BasicAvatar} width={"100"} height={"100"} />
-                <div className="">
-                    <h1>Hello,</h1>
+                <div>
+                    <p>Hello,</p>
                     <p className="text-2xl font-bold">{address}</p>
                 </div>
             </div>

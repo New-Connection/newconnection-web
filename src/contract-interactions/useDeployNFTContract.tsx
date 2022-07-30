@@ -1,23 +1,23 @@
 import { CreateNFTContract } from "./ContractFactory";
-import { Signer, BigNumber } from "ethers";
+import { Signer, Contract } from "ethers";
 
 export interface IConstructorNFT {
     name: string;
     symbol: string;
     numberNFT: number;
+    isWalletApproved?: boolean;
 }
 
 export async function deployNFTContract(
     signer: Signer,
     constructor: IConstructorNFT
-): Promise<string> {
+): Promise<Contract> {
     const factory = CreateNFTContract(signer);
     const contract = await factory.deploy(
         constructor.name,
         constructor.symbol,
         constructor.numberNFT
     );
-    await contract.deployed();
-    console.log(`Deployment successful! Contract Address: ${contract.address}`);
-    return contract.address;
+    console.log("Wallet approved");
+    return contract;
 }

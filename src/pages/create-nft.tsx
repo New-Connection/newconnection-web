@@ -23,31 +23,11 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { LoadingDialog } from "../components/Dialog";
-import { BeatLoader } from "react-spinners";
+import { StepperDialog } from "../components/Dialog";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
 import { ipfsFullPath, storeNFT } from "utils/ipfsUpload";
-
-import Ethereum from "assets/chains/Ethereum.png";
-import Polygon from "assets/chains/Polygon.png";
-import Arbitrum from "assets/chains/Arbitrum.png";
-import Binance from "assets/chains/Binance.png";
-import Avalanche from "assets/chains/Avalanche.png";
-import Fantom from "assets/chains/Fantom.png";
-import Optimism from "assets/chains/Optimism.png";
-
-const chains = ["Ethereum", "Polygon", "Arbitrum", "Binance", "Avalanche", "Fantom", "Optimism"];
-
-const images = {
-    Ethereum: Ethereum,
-    Polygon: Polygon,
-    Arbitrum: Arbitrum,
-    Binance: Binance,
-    Avalanche: Avalanche,
-    Fantom: Fantom,
-    Optimism: Optimism,
-};
+import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -65,8 +45,17 @@ const CreateNFT: NextPage = () => {
     });
 
     const { data: signer_data } = useSigner();
-    const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
+    const [activeStep, setActiveStep] = useState(0);
+    let contract;
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+    };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -80,29 +69,30 @@ const CreateNFT: NextPage = () => {
         ) {
             return;
         }
-
+        handleReset();
         confirmDialog.toggle();
 
         const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
         console.log(UID);
-        console.log(UID.ipnft);
         const fullPath = ipfsFullPath(UID.ipnft);
         console.log(fullPath);
         handleChangeBasic(fullPath, setFormData, "ipfsAddress");
 
-        let contractAddress;
         try {
-            contractAddress = await deployNFTContract(signer_data as Signer, {
+            contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
                 numberNFT: +formData.Polygon!,
             });
-
-            handleChangeBasic(contractAddress!, setFormData, "contractAddress");
-            setConfirmFromBlockchain(true);
+            handleNext();
+            await contract.deployed();
+            console.log(`Deployment successful! Contract Address: ${contract.address}`);
+            handleNext();
+            handleNext();
+            handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
             confirmDialog.toggle();
-            setConfirmFromBlockchain(false);
+            handleReset();
             toast.error("Please approve transaction to create DAO");
             return;
         }
@@ -181,13 +171,13 @@ const CreateNFT: NextPage = () => {
                                     <div className="input-label"> NFT Supply</div>
                                 </label>
                                 <div className="grid w-full grid-cols-4 gap-4">
-                                    {chains.map((chain) =>
+                                    {CHAINS.map((chain) =>
                                         chain === "Polygon" ? (
                                             <InputSupplyOfNFT
                                                 key={chain}
                                                 label={chain}
                                                 name={chain}
-                                                image={images[chain]}
+                                                image={CHAINS_IMG[chain]}
                                                 handleChange={(event) => {
                                                     handleTextChange(event, setFormData);
                                                 }}
@@ -197,7 +187,7 @@ const CreateNFT: NextPage = () => {
                                                 key={chain}
                                                 label={chain}
                                                 name={chain}
-                                                image={images[chain]}
+                                                image={CHAINS_IMG[chain]}
                                                 handleChange={(event) => {
                                                     handleTextChange(event, setFormData);
                                                 }}
@@ -221,42 +211,25 @@ const CreateNFT: NextPage = () => {
                     </form>
                 </section>
 
-                <LoadingDialog
-                    dialog={confirmDialog}
-                    title="Loading into Blockchain"
-                    className="dialog"
-                >
-                    {
-                        <div>
-                            {confirmFromBlockchain ? (
-                                <>
-                                    <p>Deployment successful!</p>
-                                    <p>Contract Address: {formData.contractAddress}</p>
-                                    <Link
-                                        href={{
-                                            pathname: "create-dao",
-                                            query: { tokenAddress: formData.contractAddress },
-                                        }}
-                                    >
-                                        <button
-                                            className="form-submit-button"
-                                            onClick={() => {
-                                                confirmDialog.toggle();
-                                            }}
-                                        >
-                                            Next Steps
-                                        </button>
-                                    </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <p>Please confirm transaction in wallet</p>
-                                    <BeatLoader />
-                                </>
-                            )}
-                        </div>
-                    }
-                </LoadingDialog>
+                <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
+                    <p className="ml-7">Deployment successful!</p>
+                    <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
+                    <Link
+                        href={{
+                            pathname: "create-dao",
+                            query: { tokenAddress: formData.contractAddress },
+                        }}
+                    >
+                        <button
+                            className="form-submit-button"
+                            onClick={() => {
+                                confirmDialog.toggle();
+                            }}
+                        >
+                            Go to DAO page
+                        </button>
+                    </Link>
+                </StepperDialog>
             </Layout>
         </div>
     );

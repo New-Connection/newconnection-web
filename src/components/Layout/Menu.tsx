@@ -54,7 +54,7 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
                 <MenuItem
                     label={
                         <div className="flex flex-col gap-1 p-2 cursor-pointer">
-                            <span className="text-xs text-neutral-500">{"Connected as"}</span>
+                            <p className="text-xs text-neutral-500">Connected as</p>
                             <p className="font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40">
                                 {address}
                             </p>
