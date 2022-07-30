@@ -27,6 +27,7 @@ const Navbar = () => {
     const isMounted = useIsMounted();
 
     const isIncludeNumber = (id: string) => chainIDs.some((val) => val === id); // return true if we have this chainID in chainIDs
+
     return (
         <>
             <Link href="/" passHref>
@@ -52,23 +53,35 @@ const Navbar = () => {
             </nav>
 
             <div className={"flex gap-3"}>
-                {isMounted && isConnected ? (
-                    <>
-                        <NetworksMenu />
-                        <Account showAccountInfo={walletDailog.toggle} />
-                    </>
-                ) : (
-                    <button className={"nav-button hidden md:block"} onClick={walletDailog.toggle}>
-                        Connect Wallet
-                    </button>
-                )}
+                <>
+                    {isMounted && isConnected ? (
+                        <>
+                            <NetworksMenu />
+                            <Account showAccountInfo={walletDailog.toggle} />
+                        </>
+                    ) : (
+                        <button
+                            className={"nav-button hidden md:block"}
+                            onClick={walletDailog.toggle}
+                        >
+                            Connect Wallet
+                        </button>
+                    )}
+                </>
                 {/* //notification for switch network, because it's wrong network */}
-                {isConnected ? (
-                    <>{isIncludeNumber(chain?.id?.toString()!) ? <></> : CustomNotification()}</>
-                ) : (
-                    <></>
-                )}
-
+                <>
+                    {isConnected ? (
+                        <>
+                            {isIncludeNumber(chain?.id?.toString()!) ? (
+                                <div></div>
+                            ) : (
+                                CustomNotification()
+                            )}
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                </>
                 <Menu walletDialog={walletDailog} />
             </div>
             <WalletSelector dialog={walletDailog} />

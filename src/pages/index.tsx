@@ -30,7 +30,7 @@ const TabOne: FC<{}> = () => {
 const TabTwo: FC<{}> = () => {
     return (
         <div>
-            <h1>Administration</h1>
+            <p>Administration</p>
             <DAOCard />
             <DAOCard />
             <DAOCard />
@@ -65,8 +65,8 @@ const Home: NextPage = () => {
         return (
             <div className="flex p-4 gap-5 content-center">
                 <Image src={BasicAvatar} width={"100"} height={"100"} />
-                <div className="">
-                    <h1>Hello,</h1>
+                <div>
+                    <p>Hello,</p>
                     <p className="text-2xl font-bold">{address}</p>
                 </div>
             </div>
@@ -171,8 +171,6 @@ const Home: NextPage = () => {
                     ) : (
                         //<h1 className="text-center font-bold">Please connect wallet</h1>
                         <div>
-                            <StepperDialog dialog={confirmDialog} className="dialog" />
-                            <button onClick={() => confirmDialog.toggle()}>Click for test</button>
                             <div className="flex justify-between">
                                 <NFTCardMockup />
                                 <NFTCardMockup />
