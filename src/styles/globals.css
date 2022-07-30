@@ -49,6 +49,10 @@
         @apply shadow-1 rounded-2xl border py-2 px-4 font-medium text-purple hover:bg-btnHover hover:text-white active:bg-btnActive active:text-white;
     }
 
+    .btn-state {
+        @apply hover:bg-btnHover hover:text-white active:bg-btnActive active:text-white;
+    }
+
     .primary-button {
         @apply whitespace-nowrap rounded bg-purple py-2 px-8 text-sm font-bold text-white hover:bg-btnHover active:bg-btnActive disabled:cursor-not-allowed;
         box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14),
@@ -96,7 +100,7 @@
     }
 
     .input-field {
-        @apply input-selector focus:border-[#6858CB];
+        @apply input-selector focus:border-purple;
     }
 
     .input-error {
@@ -138,7 +142,7 @@
         }
     }
 
-    /* dialog backdrop */
+    /* dialog backdrop[background] */
     [data-backdrop] {
         background-color: rgb(0 0 0 / 80%);
     }
