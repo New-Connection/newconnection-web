@@ -123,16 +123,16 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const StatisticCard = ({ label, counter }) => {
         return (
             <div className="flex flex-col justify-between rounded border-2 border-[#6858CB] w-1/4 h-28 pt-2 pl-2 pr-4 pb-4">
-                <div className={"text-gray-400"}>{label}</div>
-                <div className={"flex text-black justify-end text-3xl"}>{counter || 0}</div>
+                <div className="text-gray-400">{label}</div>
+                <div className="flex text-black justify-end text-3xl">{counter || 0}</div>
             </div>
         );
     };
 
     const MockupTextCard = ({ label, text }) => {
         return (
-            <div className={"text-center my-32"}>
-                <div className={"font-semibold"}>{label}</div>
+            <div className="text-center my-32">
+                <div className="font-semibold">{label}</div>
                 <p className={"text-gray-400"}>{text}</p>
             </div>
         );
@@ -162,7 +162,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             <Head>
                 <title>{DAO.name}</title>
             </Head>
-            <Layout className="app-section mx-auto mt-20 flex w-full flex-col space-y-6 pb-8 bg-[#ffffff]">
+            <Layout className="layout-base mt-20">
                 <div className="cover h-36 w-full relative justify-center">
                     <Image src={basicAvatar} layout={"fill"} />
                     <button className={"secondary-button absolute bottom-5 right-5 p-2"}>
@@ -296,7 +296,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             <Head>
                 <title>Not found</title>
             </Head>
-            <Layout className="app-section mx-auto mt-32 flex w-full flex-col space-y-6 pb-8 bg-[#ffffff]">
+            <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     <MockupTextCard
                         label={"DAO not found"}

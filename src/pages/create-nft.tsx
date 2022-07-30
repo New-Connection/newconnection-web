@@ -99,7 +99,7 @@ const CreateNFT: NextPage = () => {
     }
     return (
         <div>
-            <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
+            <Layout className="layout-base">
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <h1 className="text-highlighter">Add NFT</h1>
@@ -148,7 +148,7 @@ const CreateNFT: NextPage = () => {
                                         className="w-1/2"
                                     />
                                     <InputText
-                                        label={"Symbol"}
+                                        label="Symbol"
                                         name="symbol"
                                         placeholder="Short NFT name"
                                         handleChange={(event) => {
@@ -159,7 +159,7 @@ const CreateNFT: NextPage = () => {
                                 </div>
 
                                 <InputAmount
-                                    label={"Price"}
+                                    label="Price"
                                     placeholder="Soon you will be able to set the price of your NFT, but for now skip this field"
                                     name="price"
                                     handleChange={(event) => handleTextChange(event, setFormData)}
