@@ -62,7 +62,7 @@ export const StepperDialog = ({ dialog, className, activeStep, children }: Loadi
             hideOnInteractOutside={false}
             hideOnEscape={false}
         >
-            <div className="h-full">
+            <div className="h-full m-10">
                 <Stepper activeStep={activeStep} orientation="vertical">
                     {steps.map((step, index) => (
                         <Step key={step.label}>
