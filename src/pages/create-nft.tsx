@@ -23,9 +23,7 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { LoadingDialog } from "../components/Dialog";
 import { StepperDialog } from "../components/Dialog";
-import { BeatLoader } from "react-spinners";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
 import { ipfsFullPath, storeNFT } from "utils/ipfsUpload";
@@ -71,8 +69,6 @@ const CreateNFT: NextPage = () => {
 
     const [activeStep, setActiveStep] = React.useState(0);
     let contract;
-    let contractAddr;
-    let linkToDAOpage;
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -112,14 +108,9 @@ const CreateNFT: NextPage = () => {
             handleNext();
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            contractAddr = contract.address;
             handleNext();
             handleNext();
             handleChangeBasic(contract.address, setFormData, "contractAddress");
-            linkToDAOpage = {
-                pathname: "create-dao",
-                query: { tokenAddress: formData.contractAddress },
-            };
             setConfirmFromBlockchain(true);
         } catch (error) {
             confirmDialog.toggle();
@@ -243,13 +234,25 @@ const CreateNFT: NextPage = () => {
                     </form>
                 </section>
 
-                <StepperDialog
-                    dialog={confirmDialog}
-                    className="dialog"
-                    activeStep={activeStep}
-                    contractAddress={contractAddr}
-                    linkToPage={linkToDAOpage}
-                />
+                <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
+                    <p className="ml-7">Deployment successful!</p>
+                    <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
+                    <Link
+                        href={{
+                            pathname: "create-dao",
+                            query: { tokenAddress: formData.contractAddress },
+                        }}
+                    >
+                        <button
+                            className="form-submit-button"
+                            onClick={() => {
+                                confirmDialog.toggle();
+                            }}
+                        >
+                            Go to DAO page
+                        </button>
+                    </Link>
+                </StepperDialog>
             </Layout>
         </div>
     );
