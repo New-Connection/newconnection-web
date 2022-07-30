@@ -27,26 +27,7 @@ import { StepperDialog } from "../components/Dialog";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
 import { ipfsFullPath, storeNFT } from "utils/ipfsUpload";
-
-import Ethereum from "assets/chains/Ethereum.png";
-import Polygon from "assets/chains/Polygon.png";
-import Arbitrum from "assets/chains/Arbitrum.png";
-import Binance from "assets/chains/Binance.png";
-import Avalanche from "assets/chains/Avalanche.png";
-import Fantom from "assets/chains/Fantom.png";
-import Optimism from "assets/chains/Optimism.png";
-
-const chains = ["Ethereum", "Polygon", "Arbitrum", "Binance", "Avalanche", "Fantom", "Optimism"];
-
-const images = {
-    Ethereum: Ethereum,
-    Polygon: Polygon,
-    Arbitrum: Arbitrum,
-    Binance: Binance,
-    Avalanche: Avalanche,
-    Fantom: Fantom,
-    Optimism: Optimism,
-};
+import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -64,10 +45,8 @@ const CreateNFT: NextPage = () => {
     });
 
     const { data: signer_data } = useSigner();
-    const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
-
-    const [activeStep, setActiveStep] = React.useState(0);
+    const [activeStep, setActiveStep] = useState(0);
     let contract;
 
     const handleNext = () => {
@@ -111,11 +90,9 @@ const CreateNFT: NextPage = () => {
             handleNext();
             handleNext();
             handleChangeBasic(contract.address, setFormData, "contractAddress");
-            setConfirmFromBlockchain(true);
         } catch (error) {
             confirmDialog.toggle();
             handleReset();
-            setConfirmFromBlockchain(false);
             toast.error("Please approve transaction to create DAO");
             return;
         }
@@ -194,13 +171,13 @@ const CreateNFT: NextPage = () => {
                                     <div className="input-label"> NFT Supply</div>
                                 </label>
                                 <div className="grid w-full grid-cols-4 gap-4">
-                                    {chains.map((chain) =>
+                                    {CHAINS.map((chain) =>
                                         chain === "Polygon" ? (
                                             <InputSupplyOfNFT
                                                 key={chain}
                                                 label={chain}
                                                 name={chain}
-                                                image={images[chain]}
+                                                image={CHAINS_IMG[chain]}
                                                 handleChange={(event) => {
                                                     handleTextChange(event, setFormData);
                                                 }}
@@ -210,7 +187,7 @@ const CreateNFT: NextPage = () => {
                                                 key={chain}
                                                 label={chain}
                                                 name={chain}
-                                                image={images[chain]}
+                                                image={CHAINS_IMG[chain]}
                                                 handleChange={(event) => {
                                                     handleTextChange(event, setFormData);
                                                 }}
