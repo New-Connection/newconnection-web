@@ -14,7 +14,7 @@ const Footer = () => {
         <footer className="absolute bottom-0 w-full h-16">
             <Separator
                 orientation="horizontal"
-                className="mt-16 mb-6 h-0 w-full border-t-2 border-[#6858CB]"
+                className="mt-16 mb-6 h-0 w-full border-t-2 border-purple"
             />
             <div className="flex justify-between">
                 <p className="align-middle pt-4 pl-2">contact@newconnection.xyz</p>
@@ -24,12 +24,12 @@ const Footer = () => {
                     <button className="cursor-not-allowed">Privacy</button>
                 </div>
                 <div className="pr-4 pb-2">
-                    <button className="cursor-not-allowed h-16 w-16 bg-[#F6F6F6] rounded-md">
+                    <button className="cursor-not-allowed h-16 w-16 bg-gray rounded-md">
                         <Image src={Discord} />
                     </button>
                     <SpaceBetweenButtons />
                     <a href="https://twitter.com/NewConnectionX" target="_blank" rel="noreferrer">
-                        <button className="h-16 w-16 bg-[#F6F6F6] rounded-md">
+                        <button className="h-16 w-16 bg-gray rounded-md">
                             <Image src={Twitter} />
                         </button>
                     </a>

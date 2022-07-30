@@ -70,7 +70,7 @@ export const InputText = ({
                 </div>
             </label>
             <input
-                className={"input-field"}
+                className="input-field"
                 name={name}
                 required={isRequired}
                 disabled={disabled}
@@ -107,7 +107,7 @@ export const InputTextArea = ({
                 </div>
             </label>
             <textarea
-                className={"input-field resize-none h-28"}
+                className="input-field resize-none h-28"
                 name={name}
                 required={isRequired}
                 autoComplete="off"

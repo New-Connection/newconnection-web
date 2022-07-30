@@ -36,7 +36,7 @@ export const StepperDialog = ({ dialog, className, activeStep, children }: Loadi
         return (
             <div role="status">
                 <svg
-                    className="inline mr-2 w-7 h-7 animate-spin text-gray-600 fill-[#6858CB]"
+                    className="inline mr-2 w-7 h-7 animate-spin text-gray-600 fill-purple"
                     viewBox="0 0 100 101"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -71,19 +71,19 @@ export const StepperDialog = ({ dialog, className, activeStep, children }: Loadi
                                     //step for rn active message
                                     <>
                                         <SpinnerLoading />
-                                        <div className="text-xl text-[#1C1823]">{step.label}</div>
+                                        <div className="text-xl text-black">{step.label}</div>
                                     </>
                                 ) : index > activeStep - 1 ? (
                                     //steps for next messages
                                     <>
-                                        <CheckCircleIcon className="h-7 w-7 fill-[#CCCCCC]" />
-                                        <div className="text-xl text-[#CCCCCC]">{step.label}</div>
+                                        <CheckCircleIcon className="h-7 w-7 fill-gray3" />
+                                        <div className="text-xl text-gray3">{step.label}</div>
                                     </>
                                 ) : (
                                     //steps for previous messages
                                     <>
-                                        <CheckCircleIcon className="h-7 w-7 stroke-1 fill-[#6858CB]" />
-                                        <div className="text-xl text-[#1C1823]">{step.label}</div>
+                                        <CheckCircleIcon className="h-7 w-7 stroke-1 fill-purple" />
+                                        <div className="text-xl text-black2">{step.label}</div>
                                     </>
                                 )}
                             </div>

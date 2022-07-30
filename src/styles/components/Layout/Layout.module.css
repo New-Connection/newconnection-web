@@ -9,12 +9,11 @@
 }
 
 .navMenuButton {
-    @apply mr-8 hidden text-slate-500 hover:text-[#6858CB] lg:inline-block;
+    @apply mr-8 hidden text-slate-500 hover:text-btnHover active:text-btnActive lg:inline-block;
 }
 
 .navButtonActive {
-    color: #6858cb;
-    font-weight: bold;
+    @apply text-purple border-b-2;
 }
 
 .wallet {

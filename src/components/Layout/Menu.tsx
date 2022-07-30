@@ -14,31 +14,25 @@ import Link from "next/link";
 
 export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureState }) {
     const { address: accountData } = useAccount();
-
     const { setTheme, resolvedTheme } = useTheme();
-
     // const isMounted = useIsMounted();
-
     // const isDark = resolvedTheme === "dark";
 
     const address = accountData ? formatAddress(accountData) : null;
 
     const { chain } = useNetwork();
     const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
-
     const mainnets = chains.filter((chain) => !chain.testnet);
 
     const size = useWindowSize();
-
     const isSm = size && size.width && size.width < 640;
-
     const isLg = size && size.width && size.width < 1024;
 
     return (
         <Menu
             label={
                 <>
-                    <span className="sr-only">{"menu"}</span>
+                    <span className="sr-only">menu</span>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"
@@ -110,7 +104,6 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
                         <Link passHref href="/">
                             <div className="flex w-full items-center justify-between gap-4 font-normal cursor-pointer">
                                 <span className="">Home</span>
-                                {/* <ChartPieIcon className="h-4 w-4" /> */}
                                 <HomeIcon className="h-4 w-4" />
                             </div>
                         </Link>

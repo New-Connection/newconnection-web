@@ -47,7 +47,7 @@ const DAOsPage: NextPage = () => {
                             <p className={"text-lg uppercase font-semibold"}>{name}</p>
                             <p className={"text-gray-500 mt-2"}>{description}</p>
                             <Link href={`/daos/${address}`}>
-                                <p className={"text-[#AAAAAA] text-sm"}>View more</p>
+                                <p className={"text-gray2 text-sm"}>View more</p>
                             </Link>
                         </div>
                     </div>
@@ -91,7 +91,7 @@ const DAOsPage: NextPage = () => {
             <Head>
                 <title>DAOs</title>
             </Head>
-            <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
+            <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className={"flex justify-between items-center"}>
                         <h1 className={"text-highlighter"}>DAOs</h1>

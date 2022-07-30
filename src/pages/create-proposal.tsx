@@ -136,7 +136,7 @@ const CreateProposal: NextPage = () => {
 
     return (
         <div>
-            <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
+            <Layout className="layout-base">
                 <section className="relative w-full">
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
@@ -170,8 +170,8 @@ const CreateProposal: NextPage = () => {
                         <FileAndLinkForm />
 
                         <CheckboxGroup
-                            label={"Proposal Blockchain"}
-                            description={"You can choose one or more blockchains"}
+                            label="Proposal Blockchain"
+                            description="You can choose one or more blockchains"
                             values={CHAINS}
                             handleChange={(event) =>
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")

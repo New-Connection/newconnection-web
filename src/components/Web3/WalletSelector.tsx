@@ -61,16 +61,13 @@ export const WalletSelector = ({ dialog }: Props) => {
                 <>
                     <DialogHeader title="Account" dialog={dialog} />
                     <div className="mt-3 flex flex-col gap-2">
-                        <p className="text-sm font-thin text-slate-500">
+                        <p className="text-sm font-thin text-gray2">
                             Connected to {connector?.name}
                         </p>
-                        <p className="flex items-center gap-4 break-words text-slate-500">
+                        <p className="flex items-center gap-4 break-words text-gray2">
                             {ensName ? `${ensName} (${formattedAddress})` : address}
                         </p>
-                        <button
-                            className="nav-button mt-5 hover:bg-[#6858CB] hover:text-white"
-                            onClick={() => handlerDisconect()}
-                        >
+                        <button className="nav-button mt-5" onClick={() => handlerDisconect()}>
                             Disconnect
                         </button>
                     </div>
@@ -85,10 +82,9 @@ export const WalletSelector = ({ dialog }: Props) => {
                             <button
                                 key={x?.id}
                                 onClick={() => {
-                                    console.log("------", x);
                                     handleConnect(x);
                                 }}
-                                className="flex rounded border items-center p-3 gap-4 text-slate-500 hover:bg-[#6858CB] hover:text-white "
+                                className="flex gap-4 btn-connect-wallets"
                             >
                                 <img src={imageID[x.name]} className="w-8 h-8" />
                                 {x?.name}

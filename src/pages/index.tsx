@@ -159,7 +159,7 @@ const Home: NextPage = () => {
             <Head>
                 <title>New Connection: Home</title>
             </Head>
-            <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
+            <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     {address ? (
                         <div>
