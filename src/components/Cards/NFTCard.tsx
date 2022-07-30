@@ -11,7 +11,7 @@ interface INFTCard {
 
 const NFTCard = ({ tokenAddress, chainId }: INFTCard) => {
     return (
-        <div className="border-solid border-4 w-1/4 rounded-md">
+        <div className="nft-card">
             {/* //Wrap to div for center elements */}
             <div className="flex justify-center">
                 <Image src={NFTExample} className="rounded-t-md" objectFit="contain" />
@@ -20,7 +20,7 @@ const NFTCard = ({ tokenAddress, chainId }: INFTCard) => {
             <div className="p-4 gap-y-6">
                 <p>NFT Membership title</p>
                 <div className="flex pt-4 justify-between">
-                    <p className="font-light text-sm text-[#AAAAAA]">Art</p>
+                    <p className="font-light text-sm text-gray2">Art</p>
                     <Image src={BlockchainExample} height="24" width="24" />
                 </div>
             </div>
@@ -30,7 +30,7 @@ const NFTCard = ({ tokenAddress, chainId }: INFTCard) => {
 
 const NFTCardMockup = () => {
     return (
-        <div className="border-solid border-4 w-1/4 rounded-md">
+        <div className="nft-card">
             {/* //Wrap to div for center elements */}
             <div className="flex justify-center">
                 <Image src={NFTExample} className="rounded-t-md" objectFit="contain" />
@@ -39,7 +39,7 @@ const NFTCardMockup = () => {
             <div className="p-4 gap-y-6">
                 <p>NFT Membership title</p>
                 <div className="flex pt-4 justify-between">
-                    <p className="font-light text-sm text-[#AAAAAA]">Art</p>
+                    <p className="font-light text-sm text-gray2">Art</p>
                     <Image src={BlockchainExample} height="24" width="24" />
                 </div>
             </div>

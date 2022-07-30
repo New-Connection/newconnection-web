@@ -52,7 +52,7 @@ const Navbar = () => {
                 ))}
             </nav>
 
-            <div className={"flex gap-3"}>
+            <div className="flex gap-3">
                 <>
                     {isMounted && isConnected ? (
                         <>
@@ -61,7 +61,7 @@ const Navbar = () => {
                         </>
                     ) : (
                         <button
-                            className={"nav-button hidden md:block"}
+                            className="form-submit-button hidden md:block"
                             onClick={walletDailog.toggle}
                         >
                             Connect Wallet

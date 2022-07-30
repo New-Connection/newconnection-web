@@ -11,7 +11,7 @@ export const SubmitButton = ({
 }: ButtonProps) => {
     return (
         <button
-            className={classNames("form-submit-button", className)}
+            className={classNames("nav-button shadow-none", className)}
             type={type}
             disabled={disabled}
             {...props}

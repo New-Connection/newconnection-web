@@ -49,7 +49,7 @@ export const BlockchainSelector = ({ name, label, className, handlerChange }: Se
                 </Select>
                 <SelectPopover
                     state={select}
-                    className="input-field bg-white text-slate-500 flex flex-col overflow-auto overscroll-contain p-1 data-focus-visible focus-visible:ring focus:outline-none "
+                    className="input-field bg-white text-slate-500 flex flex-col overflow-auto overscroll-contain p-1 data-focus-visible focus-visible:ring focus:outline-none"
                 >
                     {chains.map((chain) => (
                         <label key={chain.toUpperCase()} className="input-label">

@@ -56,20 +56,21 @@ export const DragAndDropImage = ({
                     justify-center content-center items-center text-center
                     h-60 
                     border-dashed rounded-md border-2 
-                    border-[#F2F4F4] hover:border-[#6858CB] focus:text-white "
+                    border-[#F2F4F4] hover:border-[#6858CB] focus:text-white"
                 >
                     {error ? (
-                        <p className="text-slate-500 mt-1">Error: {errorMessages}</p>
+                        <p className="text-red mt-1">Error: {errorMessages}</p>
                     ) : (
                         <>
                             {file ? (
-                                <p className="text-[#6858CB] mt-1">
-                                    File is accepted. File name: {file?.name} ✅
-                                </p>
+                                <div>
+                                    <p className="text-purple mt-1">File is accepted.</p>
+                                    <p>File name: {file?.name} ✅</p>
+                                </div>
                             ) : (
                                 <>
                                     <Image src={ImageIcon} width={"50"} height={"50"} />
-                                    <p className="text-[#CCCCCC] mt-6 text-sm px-4">
+                                    <p className="text-gray2 mt-6 text-sm px-4">
                                         PNG, JPEG and JPG accept. Max 1mb.
                                     </p>
                                 </>
