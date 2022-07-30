@@ -11,11 +11,9 @@ import Link from "next/link";
 
 interface LoadingDialogProps {
     dialog: DisclosureState;
-    className?: string;
     activeStep: number;
-    contractAddress: string;
-    linkToPage: any;
-    //children: React.ReactNode;
+    children?: React.ReactNode;
+    className?: string;
 }
 
 const steps = [
@@ -32,15 +30,8 @@ const steps = [
         description: "",
     },
 ];
-// TODO: Send updated variables to objects: contractAddress and linkToPage
-// TODO: Create children for next page and address
-export const StepperDialog = ({
-    dialog,
-    className,
-    activeStep,
-    contractAddress,
-    linkToPage,
-}: LoadingDialogProps) => {
+
+export const StepperDialog = ({ dialog, className, activeStep, children }: LoadingDialogProps) => {
     const SpinnerLoading = () => {
         return (
             <div role="status">
@@ -102,22 +93,11 @@ export const StepperDialog = ({
                         </Step>
                     ))}
                 </Stepper>
-                {activeStep === steps.length && (
-                    <div className="p-3">
-                        <div>All steps completed - you&apos;re created NFT</div>
-                        <div>Contract address: {contractAddress}</div>
-                        {/* <Link href={linkToPage}> */}
-                        <button
-                            onClick={() => {
-                                dialog.toggle();
-                            }}
-                            className="mt-1 mr-1 py-2 px-4 rounded-2xl bg-[#6858CB] text-white"
-                        >
-                            Go to DAO page
-                        </button>
-                        {/* </Link> */}
-                    </div>
-                )}
+
+                {
+                    //final step and children
+                    activeStep === steps.length && <div className="p-3">{children}</div>
+                }
             </div>
         </Dialog>
     );
