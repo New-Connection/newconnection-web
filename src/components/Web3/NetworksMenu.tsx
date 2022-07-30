@@ -47,7 +47,7 @@ export const NetworksMenu = () => {
             </SelectLabel>
             <Select
                 state={select}
-                className="nav-button hidden items-center justify-between gap-2 sm:flex hover:bg-[#6858CB] hover:text-white "
+                className="nav-button hidden items-center justify-between gap-2 sm:flex"
             >
                 <>
                     <div className="flex h-5 w-5 items-center rounded-full">
@@ -68,7 +68,7 @@ export const NetworksMenu = () => {
             {select.mounted && (
                 <SelectPopover
                     state={select}
-                    className="shadow-2 z-10 max-h-[280px] w-fit min-w-[12rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
+                    className="shadow-2 z-10 max-h-[280px] w-fit min-w-[13rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
                     {/* <SelectGroup>
                         <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">
@@ -100,7 +100,7 @@ export const NetworksMenu = () => {
                     </SelectGroup> */}
                     {/* <SelectSeparator className="my-2" /> */}
                     <SelectGroup>
-                        <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">
+                        <SelectGroupLabel className="p-2 text-sm font-normal text-graySupport">
                             Testnets
                         </SelectGroupLabel>
                         {testnets.map((value) => {
@@ -109,19 +109,17 @@ export const NetworksMenu = () => {
                                 <SelectItem
                                     key={value.id}
                                     value={value.id?.toString()}
-                                    className="flex rounded-md cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 hover:bg-[#6858CB] hover:text-white"
+                                    className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
                                     onClick={() => switchNetwork(value.id)}
                                 >
-                                    <div className="flex h-5 w-5 items-center rounded-full">
-                                        <Image
-                                            src={network?.logoURI ?? defaultImage}
-                                            alt={value.name}
-                                            objectFit="contain"
-                                            width="20px"
-                                            height="20px"
-                                            priority
-                                        />
-                                    </div>
+                                    <Image
+                                        src={network?.logoURI ?? defaultImage}
+                                        alt={value.name}
+                                        objectFit="contain"
+                                        width="20px"
+                                        height="20px"
+                                        priority
+                                    />
                                     <span>{value.name}</span>
                                 </SelectItem>
                             );

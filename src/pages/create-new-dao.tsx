@@ -30,7 +30,7 @@ const CreateNewDAO: NextPage = () => {
 
     return (
         <div>
-            <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8 bg-[#ffffff]">
+            <Layout className="layout-base">
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4">
                         <h1 className="text-highlighter">Create new DAO</h1>

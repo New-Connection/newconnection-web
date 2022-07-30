@@ -130,18 +130,18 @@ const CreateDAO: NextPage = () => {
 
     return (
         <div>
-            <Layout className="app-section mx-auto mt-32 flex w-full flex-col items-center space-y-6 pb-8">
+            <Layout className="layout-base">
                 <section className="relative w-full">
                     <form className="mx-auto flex flex-col max-w-4xl gap-4" onSubmit={onSubmit}>
                         <h1 className="text-highlighter">Create DAO</h1>
                         <div className="flex flex-row">
-                            <h2 className={"my-2 text-xl font-medium"}>DAO Name and Goals</h2>
+                            <h2 className="my-2 text-xl font-medium">DAO Name and Goals</h2>
                         </div>
                         <div className="flex flex-row">
                             <DragAndDropImage
                                 label="Profile Image"
                                 name="profileImage"
-                                className={"w-1/3 mr-10"}
+                                className="w-1/3 mr-10"
                                 handleChange={(file) =>
                                     handleImageChange(file, setFormData, "profileImage")
                                 }
@@ -149,7 +149,7 @@ const CreateDAO: NextPage = () => {
                             <DragAndDropImage
                                 label="Cover Image"
                                 name="coverImage"
-                                className={"w-2/3"}
+                                className="w-2/3"
                                 handleChange={(file) =>
                                     handleImageChange(file, setFormData, "coverImage")
                                 }
@@ -183,9 +183,9 @@ const CreateDAO: NextPage = () => {
                         />
                         <div className="flex justify-between">
                             <InputAmount
-                                label={"Voting Period"}
+                                label="Voting Period"
                                 name="votingPeriod"
-                                className={"w-2/5"}
+                                className="w-2/5"
                                 labelTitle="Length of period during which people can cast their vote."
                                 placeholder="Voting period in days"
                                 min={1}
@@ -227,7 +227,7 @@ const CreateDAO: NextPage = () => {
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
 
-                        <SubmitButton className="mt-5">Create Contract</SubmitButton>
+                        <SubmitButton className="mt-5 nav-button">Create Contract</SubmitButton>
                     </form>
                 </section>
                 <LoadingDialog
