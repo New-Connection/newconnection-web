@@ -7,8 +7,6 @@ import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
-import globeLogo from "assets/social/globe.png";
-import contractLogo from "assets/smart-contract.png";
 import { Box } from "@mui/system";
 import { Tab, Tabs } from "@mui/material";
 import { useMoralisQuery } from "react-moralis";
@@ -19,6 +17,9 @@ import NFTExample from "assets/nft-example.png";
 import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import BlockchainExample from "assets/chains/Polygon.png";
 import Link from "next/link";
+import { useDialogState } from "ariakit";
+import { NFTDetailDialog } from "components/Dialog";
+import classNames from "classnames";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -36,7 +37,6 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams
     const result: DAOPageProps = {
         address: address.toString(),
     };
-
     return {
         props: result,
     };
@@ -67,6 +67,7 @@ function TabPanel(props: TabPanelProps) {
 const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [tabState, setTabState] = React.useState(0);
     const [DAO, setDAO] = useState<DAOPageForm>();
+    const detailNFTDialog = useDialogState();
 
     const { fetch } = useMoralisQuery(
         "DAO",
@@ -151,22 +152,45 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
+    const DetailsInfo = ["Blockchain", "Type", "Collection"];
+
+    function detailNFT() {
+        console.log("Press Button");
+        detailNFTDialog.toggle();
+    }
+
+    interface INFTImage {
+        image?: string;
+        className?: string;
+    }
+    const NFTImage = ({ className }: INFTImage) => {
+        return (
+            <div className="flex justify-center">
+                <Image
+                    src={NFTExample}
+                    className={classNames("rounded-t-md", className)}
+                    objectFit="contain"
+                />
+            </div>
+        );
+    };
+
     const NFTCard = ({ tokenAddress, chainId, daoTitle }) => {
         return (
-            <a href={getChainScanner(chainId, tokenAddress)} target={"_blank"} className="nft-card">
+            <button className="nft-card" onClick={detailNFT}>
+                {/* <a href={getChainScanner(chainId, tokenAddress)} target={"_blank"} className="nft-card"> */}
                 {/* //Wrap to div for center elements */}
-                <div className="flex justify-center">
-                    <Image src={NFTExample} className="rounded-t-md" objectFit="contain" />
-                </div>
+                <NFTImage />
 
                 <div className="p-4 gap-y-6">
-                    <p>{daoTitle}: Membership </p>
+                    <p className="text-start">{daoTitle}: Membership </p>
                     <div className="flex pt-4 justify-between">
                         <p className="font-light text-sm text-[#AAAAAA]">Type: Art</p>
                         <Image src={BlockchainExample} height="24" width="24" />
                     </div>
                 </div>
-            </a>
+                {/* </a> */}
+            </button>
         );
     };
 
@@ -317,6 +341,29 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         )}
                     </>
                 </section>
+                <NFTDetailDialog
+                    dialog={detailNFTDialog}
+                    className="h-3/4 items-center text-center "
+                >
+                    <NFTImage className="rounded-lg h-14 w-14" />
+                    <p className="mt-4 text-black">Membership NFT</p>
+
+                    <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
+                        Transfer
+                    </button>
+                    <p className="text-gray2 font-light text-sm">
+                        Try to transfer your NFT to another network
+                    </p>
+                    <p className="w-full mt-12 text-start text-black">Details</p>
+                    <ul className="py-6 divide-y divide-slate-200">
+                        {DetailsInfo.map((element) => (
+                            <li className="flex py-4 justify-between">
+                                <p className="font-light text-gray2">{element}</p>
+                                <p className="font-normal text-black">{element}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </NFTDetailDialog>
             </Layout>
         </div>
     ) : (
