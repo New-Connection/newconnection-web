@@ -1,13 +1,12 @@
 import * as React from "react";
 import { DisclosureState } from "ariakit";
-import { Dialog, DialogHeading } from "ariakit/dialog";
+import { Dialog } from "ariakit/dialog";
 import classNames from "classnames";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepContent from "@mui/material/StepContent";
 import Typography from "@mui/material/Typography";
 import { CheckCircleIcon } from "@heroicons/react/solid";
-import Link from "next/link";
 
 interface StepperDialogProps {
     dialog: DisclosureState;
