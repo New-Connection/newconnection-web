@@ -185,6 +185,14 @@
         @apply form-submit-button mt-8 text-base no-underline;
     }
 
+    .gradient-btn-color {
+        @apply bg-gradient-to-r from-purple via-[#E07DA4] to-[#F8E155];
+    }
+
+    .reverse-gradient-btn-color {
+        @apply bg-gradient-to-r from-[#F8E155] via-[#E07DA4] to-purple;
+    }
+
     @media (max-width: 360px) {
         .balance-wrap {
             flex-direction: column !important;
