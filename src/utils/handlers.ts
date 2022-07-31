@@ -9,6 +9,14 @@ export const handleChangeBasic = <T extends ICreate>(
     set((prev) => ({ ...prev, [field]: value }));
 };
 
+export const handleChangeBasicNewMember = <T>(
+    value: string | boolean | number,
+    set: Dispatch<SetStateAction<T>>,
+    field: string
+) => {
+    set((prev) => ({ ...prev, [field]: value }));
+};
+
 export const promisedHandleChangeBasic = <T extends ICreate>(
     value: string | boolean | number,
     set: Dispatch<SetStateAction<T>>,
