@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
 import Link from "next/link";
-import { CreateDAO } from "types/forms";
+import { ICreateDAO } from "types/forms";
 import { validateForm } from "utils/validate";
 import Layout from "components/Layout";
 import {
@@ -56,7 +56,7 @@ interface QueryUrlParams extends ParsedUrlQuery {
 const CreateDAO: NextPage = () => {
     const router = useRouter();
 
-    const [formData, setFormData] = useState<CreateDAO>({
+    const [formData, setFormData] = useState<ICreateDAO>({
         name: "",
         goals: "",
         profileImage: {},

@@ -3,7 +3,7 @@ export interface ICreate {
     description?: string;
 }
 
-export interface CreateDAO extends ICreate {
+export interface ICreateDAO extends ICreate {
     goals: string;
     profileImage: object;
     coverImage: object;
@@ -16,7 +16,7 @@ export interface CreateDAO extends ICreate {
     chainId?: number;
 }
 
-export interface DAOPageForm extends CreateDAO {
+export interface DAOPageForm extends ICreateDAO {
     discordURL?: string;
     twitterURL?: string;
     URL?: string;
@@ -58,4 +58,11 @@ export interface ICreateProposal extends ICreate {
     linkForum?: object;
     options: string[];
     blockchain: string[];
+}
+
+export interface IAddNewMember {
+    walletAddress: string;
+    nftID: string;
+    blockchainSelected: string;
+    note?: string;
 }
