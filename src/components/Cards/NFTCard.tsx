@@ -3,10 +3,15 @@ import NFTExample from "assets/nft-example.png";
 import Image from "next/image";
 import BlockchainExample from "assets/chains/Polygon.png";
 import { getChainScanner } from "utils/network";
+import classNames from "classnames";
 
 interface INFTCard {
     tokenAddress: string;
     chainId: number;
+}
+
+interface INFTCardMockup {
+    className?: string;
 }
 
 const NFTCard = ({ tokenAddress, chainId }: INFTCard) => {
@@ -28,9 +33,9 @@ const NFTCard = ({ tokenAddress, chainId }: INFTCard) => {
     );
 };
 
-const NFTCardMockup = () => {
+const NFTCardMockup = ({ className }: INFTCardMockup) => {
     return (
-        <div className="nft-card">
+        <div className={classNames("nft-card", className)}>
             {/* //Wrap to div for center elements */}
             <div className="flex justify-center">
                 <Image src={NFTExample} className="rounded-t-md" objectFit="contain" />
