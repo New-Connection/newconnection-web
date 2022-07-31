@@ -20,7 +20,7 @@ const CreateNewDAO: NextPage = () => {
                 <p className="input-label font-medium text-lg">{title}</p>
                 <p className="pb-6">{subtitle}</p>
                 <Link href={linkToPage}>
-                    <SubmitButton className="mt-5 mb-5 py-4 border-2" disabled={isDisabled}>
+                    <SubmitButton className="mt-5 mb-5 py-4 border-2 w-full" disabled={isDisabled}>
                         {buttonTitle}
                     </SubmitButton>
                 </Link>

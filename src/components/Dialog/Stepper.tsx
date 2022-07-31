@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { CheckCircleIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 
-interface LoadingDialogProps {
+interface StepperDialogProps {
     dialog: DisclosureState;
     activeStep: number;
     children?: React.ReactNode;
@@ -31,7 +31,7 @@ const steps = [
     },
 ];
 
-export const StepperDialog = ({ dialog, className, activeStep, children }: LoadingDialogProps) => {
+export const StepperDialog = ({ dialog, className, activeStep, children }: StepperDialogProps) => {
     const SpinnerLoading = () => {
         return (
             <div role="status">

@@ -9,6 +9,14 @@ export const handleChangeBasic = <T extends ICreate>(
     set((prev) => ({ ...prev, [field]: value }));
 };
 
+export const handleChangeBasicNewMember = <T>(
+    value: string | boolean | number,
+    set: Dispatch<SetStateAction<T>>,
+    field: string
+) => {
+    set((prev) => ({ ...prev, [field]: value }));
+};
+
 export const promisedHandleChangeBasic = <T extends ICreate>(
     value: string | boolean | number,
     set: Dispatch<SetStateAction<T>>,
@@ -29,6 +37,16 @@ E extends HTMLInputElement | HTMLTextAreaElement>(
 
 export const handleTextChange = <
     T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement
+>(
+    event: ChangeEvent<E>,
+    set: Dispatch<SetStateAction<T>>
+) => {
+    set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+};
+
+export const handleTextChangeAddNewMember = <
+    T,
     E extends HTMLInputElement | HTMLTextAreaElement
 >(
     event: ChangeEvent<E>,
@@ -66,6 +84,17 @@ export const handleCheckboxChange = <T extends ICreate>(
 };
 
 export const handleSelectorChange = <T extends ICreate>(
+    event: BaseSyntheticEvent,
+    set: Dispatch<SetStateAction<T>>,
+    field: string
+) => {
+    const elem = event.currentTarget;
+    const label = elem.parentNode.textContent;
+    set((prev) => ({ ...prev, [field]: label }));
+    return true;
+};
+
+export const handleSelectorChangeNewMember = <T>(
     event: BaseSyntheticEvent,
     set: Dispatch<SetStateAction<T>>,
     field: string

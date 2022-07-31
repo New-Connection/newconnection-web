@@ -122,7 +122,7 @@ const CreateNFT: NextPage = () => {
                                     <TypeSelector
                                         label="NFT type"
                                         name="NFTtype"
-                                        handlerChange={(event) =>
+                                        handleChange={(event) =>
                                             handleSelectorChange(event, setFormData, "NFTtype")
                                         }
                                         className="w-1/2 mt-6"

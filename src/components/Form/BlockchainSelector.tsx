@@ -1,14 +1,10 @@
 import { Select, SelectArrow, SelectItem, SelectPopover, useSelectState } from "ariakit/select";
 
-import { SelectorProps } from "./types";
-
-import Ethereum from "assets/chains/Ethereum.png";
-import Polygon from "assets/chains/Polygon.png";
-import Arbitrum from "assets/chains/Arbitrum.png";
-import Binance from "assets/chains/Binance.png";
+import { ISelectorProps } from "./types";
+import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 
 function renderValue(chain: string) {
-    const image = images[chain];
+    const image = CHAINS_IMG[chain];
     return (
         <>
             <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full" />
@@ -17,16 +13,7 @@ function renderValue(chain: string) {
     );
 }
 
-const chains = ["Ethereum", "Polygon", "Arbitrum", "Binance"];
-
-const images = {
-    Ethereum: Ethereum,
-    Polygon: Polygon,
-    Arbitrum: Arbitrum,
-    Binance: Binance,
-};
-
-export const BlockchainSelector = ({ name, label, className, handlerChange }: SelectorProps) => {
+export const BlockchainSelector = ({ name, label, className, handleChange }: ISelectorProps) => {
     const select = useSelectState({
         defaultValue: "Ethereum",
         setValueOnMove: true,
@@ -35,13 +22,15 @@ export const BlockchainSelector = ({ name, label, className, handlerChange }: Se
     });
     return (
         <div className={className}>
-            <span className="input-label">{label}</span>
-            <div className="flex flex-col w-full">
+            <label>
+                <div className="input-label">{label}</div>
+            </label>
+            <div className="flex flex-col w-full ">
                 <Select
                     state={select}
                     name={name}
                     className={
-                        "input-field text-slate-500 hover:bg-[#23BD8F] hover:text-gray-50 w-full flex cursor-default items-center whitespace-nowrap text-base justify-start gap-3"
+                        "input-field btn-state w-full flex cursor-pointer items-center whitespace-nowrap text-base justify-start gap-3"
                     }
                 >
                     {renderValue(select.value)}
@@ -49,15 +38,15 @@ export const BlockchainSelector = ({ name, label, className, handlerChange }: Se
                 </Select>
                 <SelectPopover
                     state={select}
-                    className="input-field bg-white text-slate-500 flex flex-col overflow-auto overscroll-contain p-1 data-focus-visible focus-visible:ring focus:outline-none"
+                    className="shadow-1 z-10 max-h-[280px] w-fit min-w-full overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
-                    {chains.map((chain) => (
-                        <label key={chain.toUpperCase()} className="input-label">
+                    {CHAINS.map((chain) => (
+                        <label key={chain.toUpperCase()} className="">
                             <SelectItem
                                 key={chain}
                                 value={chain}
-                                className="input-field border-0 flex cursor-default scroll-m-2 items-center gap-2 p-1 hover:bg-[#23BD8F] hover:text-gray-50"
-                                setValueOnClick={handlerChange}
+                                className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"
+                                setValueOnClick={handleChange}
                             >
                                 {renderValue(chain)}
                             </SelectItem>

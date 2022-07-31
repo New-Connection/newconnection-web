@@ -32,11 +32,11 @@ export interface InputAmountProps {
     isDisabled?: boolean;
 }
 
-export interface SelectorProps {
+export interface ISelectorProps {
     name: string;
     label: string;
     className?: string;
-    handlerChange?: (event: BaseSyntheticEvent) => boolean;
+    handleChange?: (event: BaseSyntheticEvent) => boolean;
 }
 
 export interface IDragAndDropProps {
