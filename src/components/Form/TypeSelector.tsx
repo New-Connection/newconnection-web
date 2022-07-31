@@ -1,11 +1,11 @@
 import { Select, SelectArrow, SelectItem, SelectPopover, useSelectState } from "ariakit/select";
 
 import classNames from "classnames";
-import { SelectorProps } from "./types";
+import { ISelectorProps } from "./types";
 
 const types = ["Member", "Design", "VC"];
 
-export const TypeSelector = ({ name, label, className, handlerChange }: SelectorProps) => {
+export const TypeSelector = ({ name, label, className, handleChange }: ISelectorProps) => {
     const select = useSelectState({
         defaultValue: "Member",
         setValueOnMove: true,
@@ -37,7 +37,7 @@ export const TypeSelector = ({ name, label, className, handlerChange }: Selector
                                 key={type}
                                 value={type}
                                 className="input-selector btn-state border-0 flex cursor-default scroll-m-2 items-center py-3"
-                                setValueOnClick={handlerChange}
+                                setValueOnClick={handleChange}
                             >
                                 {type}
                             </SelectItem>
