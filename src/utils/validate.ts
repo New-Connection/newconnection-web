@@ -2,7 +2,7 @@ import { ICreate } from "types/forms";
 import { arrayIsEmpty, objectIsEmpty, stringIsEmpty } from "./basic";
 import toast from "react-hot-toast";
 
-export const validateForm = (formData: ICreate, ignoreFields?: string[]): boolean => {
+export const validateForm = (formData, ignoreFields?: string[]): boolean => {
     const fields: string[] = [];
     for (const key in formData) {
         const value = formData[key];
