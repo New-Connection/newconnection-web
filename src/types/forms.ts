@@ -62,6 +62,7 @@ export interface ICreateProposal extends ICreate {
 
 export interface IAddNewMember {
     walletAddress: string;
+    daoName: string;
     nftID: string;
     blockchainSelected: string;
     note?: string;

@@ -193,7 +193,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             </div>
                             <h1 className="dao-label">{DAO.name}</h1>
                         </div>
-                        <button className="secondary-button mt-6">Become a member</button>
+                        <Link
+                            href={{
+                                pathname: "/daos/add-new-member",
+                                query: { daoName: DAO.name, nftAddress: DAO.tokenAddress },
+                            }}
+                        >
+                            <button className="secondary-button mt-6">Become a member</button>
+                        </Link>
                     </div>
                     <div className="flex justify-between gap-10 w-full">
                         <div className="flex w-1/2 justify-between">
