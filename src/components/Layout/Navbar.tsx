@@ -37,7 +37,7 @@ const Navbar = () => {
                 </div>
             </Link>
 
-            <nav className={styles.nav}>
+            {/* <nav className={styles.nav}>
                 {navigation.map(({ id, title, path }) => (
                     <Link key={id} href={path}>
                         <div
@@ -50,7 +50,7 @@ const Navbar = () => {
                         </div>
                     </Link>
                 ))}
-            </nav>
+            </nav> */}
 
             <div className="flex gap-3">
                 {isMounted && isConnected ? (

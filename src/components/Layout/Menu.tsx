@@ -98,7 +98,7 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
                 </Menu>
             )} */}
 
-            {isLg && (
+            {/* {isLg && (
                 <MenuItem
                     label={
                         <Link passHref href="/">
@@ -135,7 +135,7 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
                         </Link>
                     }
                 />
-            )}
+            )} */}
 
             <MenuItem
                 label={

@@ -15,6 +15,7 @@ import NFTCardMockup from "components/Cards/NFTCard";
 import ProporsalCard from "components/Cards/ProporsalCard";
 import { StepperDialog } from "components/Dialog";
 import { useIsMounted } from "hooks";
+import DAOsPage from "./daos/index";
 
 import { TabsType } from "types/tabs";
 
@@ -160,7 +161,8 @@ const Home: NextPage = () => {
             <Head>
                 <title>New Connection: Home</title>
             </Head>
-            <Layout className="layout-base">
+            <DAOsPage />
+            {/* <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     {isMounted && isConnected ? (
                         <div>
@@ -182,7 +184,7 @@ const Home: NextPage = () => {
                         </div>
                     )}
                 </section>
-            </Layout>
+            </Layout> */}
         </div>
     );
 };
