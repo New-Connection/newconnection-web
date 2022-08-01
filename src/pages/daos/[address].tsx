@@ -11,7 +11,7 @@ import { Box } from "@mui/system";
 import { Tab, Tabs } from "@mui/material";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useState } from "react";
-import { DAOPageForm } from "types/forms";
+import { IDAOPageForm } from "types/forms";
 import { getChainScanner } from "utils/network";
 import NFTExample from "assets/nft-example.png";
 import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
@@ -66,7 +66,7 @@ function TabPanel(props: TabPanelProps) {
 
 const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [tabState, setTabState] = React.useState(0);
-    const [DAO, setDAO] = useState<DAOPageForm>();
+    const [DAO, setDAO] = useState<IDAOPageForm>();
     const detailNFTDialog = useDialogState();
 
     const { fetch } = useMoralisQuery(
@@ -82,7 +82,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         fetch({
             onSuccess: (results) => {
                 const moralisInstance = results[0];
-                const newDao: DAOPageForm = {
+                const newDao: IDAOPageForm = {
                     name: moralisInstance.get("name"),
                     description: moralisInstance.get("description"),
                     goals: moralisInstance.get("goals"),

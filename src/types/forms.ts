@@ -16,7 +16,7 @@ export interface ICreateDAO extends ICreate {
     chainId?: number;
 }
 
-export interface DAOPageForm extends ICreateDAO {
+export interface IDAOPageForm extends ICreateDAO {
     discordURL?: string;
     twitterURL?: string;
     URL?: string;
