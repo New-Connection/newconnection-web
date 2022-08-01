@@ -44,7 +44,7 @@ const CreateNewDAO: NextPage = () => {
                                 title="Existing NFT collection (Comming Soon)"
                                 subtitle="Add NFT smart contract if you have an existing collection"
                                 buttonTitle="Add a created NFT"
-                                linkToPage="create-nft"
+                                linkToPage="/create-nft"
                                 isDisabled={true}
                             />
 
@@ -52,7 +52,7 @@ const CreateNewDAO: NextPage = () => {
                                 title="New NFT collection"
                                 subtitle="If you don't have any NFT collections created, you can mint them here"
                                 buttonTitle="Mint NFT"
-                                linkToPage="create-nft"
+                                linkToPage="/create-nft"
                             />
                         </div>
                     </form>

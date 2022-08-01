@@ -13,9 +13,9 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 
 export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureState }) {
-    const { address: accountData } = useAccount();
+    const { address: accountData, isConnected } = useAccount();
     const { setTheme, resolvedTheme } = useTheme();
-    // const isMounted = useIsMounted();
+    const isMounted = useIsMounted();
     // const isDark = resolvedTheme === "dark";
 
     const address = accountData ? formatAddress(accountData) : null;
@@ -44,7 +44,7 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
                 </>
             }
         >
-            {address ? (
+            {isConnected && isMounted ? (
                 <MenuItem
                     label={
                         <div className="flex flex-col gap-1 p-2 cursor-pointer">
