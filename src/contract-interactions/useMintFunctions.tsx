@@ -5,12 +5,15 @@ import { ethers, Signer } from "ethers";
 export async function mintClick(contractAddress: string, signer: Signer) {
     const erc20_rw = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, signer);
     const tx = await erc20_rw.reserve(1);
-    const address = await signer.getAddress();
-    const delegateTx = await erc20_rw.delegate(address);
     console.log(tx);
-    console.log(delegateTx);
+    console.log("Tx hash", tx.hash);
 
-    toast.success(`DONE ✅ successful mint!`);
+    if (tx) {
+        if (tx.blockNumber) {
+            toast.success(`DONE ✅ successful mint!`);
+            console.log(tx);
+        }
+    }
     // const supply = await erc20_rw.totalSupply();
     // console.log(supply);
 }

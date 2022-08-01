@@ -1,5 +1,6 @@
 import * as React from "react";
 import type { GetServerSideProps, NextPage } from "next";
+import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
 import Head from "next/head";
 import { ParsedUrlQuery } from "querystring";
@@ -20,6 +21,8 @@ import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { NFTDetailDialog } from "components/Dialog";
 import classNames from "classnames";
+import { mintClick } from "contract-interactions/useMintFunctions";
+import { useSigner } from "wagmi";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -67,7 +70,9 @@ function TabPanel(props: TabPanelProps) {
 const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [tabState, setTabState] = React.useState(0);
     const [DAO, setDAO] = useState<IDAOPageForm>();
+    const [buttonState, setButtonState] = useState(false);
     const detailNFTDialog = useDialogState();
+    const { data: signer_data } = useSigner();
 
     const { fetch } = useMoralisQuery(
         "DAO",
@@ -193,6 +198,46 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             </button>
         );
     };
+
+    const LoadingSpinner = () => {
+        return (
+            <button
+                disabled
+                type="button"
+                className="secondary-button w-full text-center h-12 text-gray-900 border pr-10"
+            >
+                <svg
+                    role="status"
+                    className="inline mr-2 w-4 h-4 text-gray-200 animate-spin text-white"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="#E5E7EB"
+                    />
+                </svg>
+                Loading...
+            </button>
+        );
+    };
+
+    async function mint() {
+        if (!DAO) return null;
+        setButtonState(true);
+        try {
+            const tx = await mintClick(DAO.tokenAddress, signer_data as Signer);
+            // window.setTimeout(slowAlert, 4000);// 2 sec
+            setButtonState(true);
+            console.log("Congratulation your nft is minted");
+        } catch (e) {
+            setButtonState(false);
+            console.log("Transaction canceled");
+        }
+
+        console.log("TX Succes");
+    }
 
     return DAO ? (
         <div>
@@ -343,7 +388,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 </section>
                 <NFTDetailDialog
                     dialog={detailNFTDialog}
-                    className="h-3/4 items-center text-center "
+                    className="h-full items-center text-center "
                 >
                     <NFTImage className="rounded-lg h-14 w-14" />
                     <p className="mt-4 text-black">Membership NFT</p>
@@ -354,6 +399,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     <p className="text-gray2 font-light text-sm">
                         Try to transfer your NFT to another network
                     </p>
+
                     <p className="w-full mt-12 text-start text-black">Details</p>
                     <ul className="py-6 divide-y divide-slate-200">
                         {DetailsInfo.map((element) => (
@@ -363,6 +409,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             </li>
                         ))}
                     </ul>
+                    {buttonState ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <button className="secondary-button w-full h-12 mt-4 mb-6" onClick={mint}>
+                            Mint NFT
+                        </button>
+                    )}
                 </NFTDetailDialog>
             </Layout>
         </div>

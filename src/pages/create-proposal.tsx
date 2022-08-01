@@ -6,12 +6,7 @@ import toast from "react-hot-toast";
 import { useSigner } from "wagmi";
 
 import Layout from "components/Layout/Layout";
-import {
-    handleTextChange,
-    handleCheckboxChange,
-    handleDatePicker,
-    handleChangeBasic,
-} from "utils/handlers";
+import { handleTextChange, handleCheckboxChange, handleChangeBasic } from "utils/handlers";
 import { CheckboxGroup, InputText, SubmitButton, InputTextArea } from "components/Form";
 import { ICreateProposal } from "types/forms";
 import BackButton from "components/Button/backButton";
@@ -97,7 +92,7 @@ const CreateProposal: NextPage = () => {
 
         try {
             const chainId = await signer_data.getChainId();
-            handleChangeBasic(chainId, setFormData, "chainId");
+            handleChangeBasic(chainId.toString(), setFormData, "chainId");
 
             const moralisProposal = getMoralisInstance(MoralisClassEnum.PROPOSAL);
             setFieldsIntoMoralisInstance(moralisProposal, formData);
