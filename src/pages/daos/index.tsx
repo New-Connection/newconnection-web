@@ -36,7 +36,7 @@ const DAOsPage: NextPage = () => {
             <Link href={`/daos/${address}`}>
                 <div
                     className={
-                        "flex justify-between w-full h-36 p-3 mt-3 rounded border-b-2 cursor-pointer"
+                        "flex justify-between w-full h-36 p-3 mt-3 border-b-2 border-gray cursor-pointer"
                     }
                 >
                     <div className={"flex gap-10 w-2/3 overflow-hidden"}>
