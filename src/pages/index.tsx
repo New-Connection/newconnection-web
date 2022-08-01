@@ -14,6 +14,7 @@ import DAOCard from "components/Cards/DAOCard";
 import NFTCardMockup from "components/Cards/NFTCard";
 import ProporsalCard from "components/Cards/ProporsalCard";
 import { StepperDialog } from "components/Dialog";
+import { useIsMounted } from "hooks";
 
 import { TabsType } from "types/tabs";
 
@@ -53,11 +54,11 @@ const tabs: TabsType = [
 ];
 
 const Home: NextPage = () => {
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
+    const isMounted = useIsMounted();
     const confirmDialog = useDialogState();
     // Just mock up for test DAO profile, NFT section and po
     const USERDATA = true;
-    console.log(address);
 
     const [selectedTab, setSelectedTab] = React.useState<number>(tabs[0].index);
     // Wallet information when connect wallet
@@ -161,7 +162,7 @@ const Home: NextPage = () => {
             </Head>
             <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    {address ? (
+                    {isMounted && isConnected ? (
                         <div>
                             <AccountInfo />
                             {USERDATA ? <TabsSection /> : <ReccomendationSection />}
@@ -169,7 +170,6 @@ const Home: NextPage = () => {
                             <NFTSection />
                         </div>
                     ) : (
-                        //<h1 className="text-center font-bold">Please connect wallet</h1>
                         <div>
                             <div className="flex justify-between">
                                 <NFTCardMockup />

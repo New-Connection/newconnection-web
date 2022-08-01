@@ -31,45 +31,44 @@ const Navbar = () => {
     return (
         <>
             <Link href="/" passHref>
-                <a>
+                <div className="cursor-pointer">
                     <span className="sr-only">Navigate to Home Page</span>
                     <Logo />
-                </a>
+                </div>
             </Link>
 
             <nav className={styles.nav}>
                 {navigation.map(({ id, title, path }) => (
                     <Link key={id} href={path}>
-                        <a
+                        <div
                             className={classNames(
                                 styles.navMenuButton,
                                 router.pathname == path ? styles.navButtonActive : null
                             )}
                         >
                             {title}
-                        </a>
+                        </div>
                     </Link>
                 ))}
             </nav>
 
             <div className="flex gap-3">
-                <>
-                    {isMounted && isConnected ? (
-                        <>
-                            <NetworksMenu />
-                            <Account showAccountInfo={walletDailog.toggle} />
-                        </>
-                    ) : (
-                        <button
-                            className="form-submit-button hidden md:block"
-                            onClick={walletDailog.toggle}
-                        >
-                            Connect Wallet
-                        </button>
-                    )}
-                </>
+                {isMounted && isConnected ? (
+                    <>
+                        <NetworksMenu />
+                        <Account showAccountInfo={walletDailog.toggle} />
+                    </>
+                ) : (
+                    <button
+                        className="form-submit-button hidden md:block"
+                        onClick={walletDailog.toggle}
+                    >
+                        Connect Wallet
+                    </button>
+                )}
+
                 {/* //notification for switch network, because it's wrong network */}
-                <>
+                {/* <>
                     {isConnected ? (
                         <>
                             {isIncludeNumber(chain?.id?.toString()!) ? (
@@ -81,7 +80,7 @@ const Navbar = () => {
                     ) : (
                         <></>
                     )}
-                </>
+                </> */}
                 <Menu walletDialog={walletDailog} />
             </div>
             <WalletSelector dialog={walletDailog} />
