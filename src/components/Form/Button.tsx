@@ -11,7 +11,11 @@ export const SubmitButton = ({
 }: ButtonProps) => {
     return (
         <button
-            className={classNames("nav-button shadow-none", className)}
+            className={classNames(
+                "nav-button shadow-none",
+                className,
+                disabled ? "cursor-not-allowed" : "cursor-pointer"
+            )}
             type={type}
             disabled={disabled}
             {...props}

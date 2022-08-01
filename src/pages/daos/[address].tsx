@@ -199,7 +199,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             <Head>
                 <title>{DAO.name}</title>
             </Head>
-            <Layout className="layout-base mt-20">
+            <Layout className="layout-base mt-0">
                 <div className="cover h-36 w-full relative justify-center">
                     <Image src={basicAvatar} layout={"fill"} />
                 </div>
