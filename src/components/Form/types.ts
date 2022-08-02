@@ -39,6 +39,14 @@ export interface ISelectorProps {
     handleChange?: (event: BaseSyntheticEvent) => boolean;
 }
 
+export interface IRadioSelector {
+    name: string;
+    labels: string[];
+    className?: string;
+    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+
+}
+
 export interface IDragAndDropProps {
     name: string;
     label: string;
