@@ -2,7 +2,7 @@ import { BaseSyntheticEvent, ChangeEvent, Dispatch, SetStateAction } from "react
 import { ICreate } from "types/forms";
 
 export const handleChangeBasic = <T extends ICreate>(
-    value: string | boolean | number,
+    value: string | boolean | number | object,
     set: Dispatch<SetStateAction<T>>,
     field: string
 ) => {
@@ -28,27 +28,22 @@ export const promisedHandleChangeBasic = <T extends ICreate>(
 };
 
 export const handleDatePicker = <T extends ICreate,
-E extends HTMLInputElement | HTMLTextAreaElement>(
-    event: ChangeEvent<E>,
-    set: Dispatch<SetStateAction<T>>
-) => {
-    set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-}
-
-export const handleTextChange = <
-    T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement
->(
+    E extends HTMLInputElement | HTMLTextAreaElement>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>
 ) => {
     set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 };
 
-export const handleTextChangeAddNewMember = <
-    T,
-    E extends HTMLInputElement | HTMLTextAreaElement
->(
+export const handleTextChange = <T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement>(
+    event: ChangeEvent<E>,
+    set: Dispatch<SetStateAction<T>>
+) => {
+    set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+};
+
+export const handleTextChangeAddNewMember = <T, E extends HTMLInputElement | HTMLTextAreaElement>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>
 ) => {

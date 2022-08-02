@@ -17,6 +17,7 @@ export interface ICreateDAO extends ICreate {
     discordURL?: string;
     twitterURL?: string;
     websiteURL?: string;
+    enabledBlockchains?: string[];
 }
 
 export interface IDAOPageForm extends ICreateDAO {

@@ -3,25 +3,57 @@ import { Group, GroupLabel } from "ariakit/group";
 
 import styles from "styles/components/Form/Checkmox.module.css";
 import { CheckboxProps } from "./types";
+import Image, { StaticImageData } from "next/image";
 
-export function CheckboxGroup({ label, description, values, handleChange }: CheckboxProps) {
+export function CheckboxGroup({
+    label,
+    description,
+    values,
+    images,
+    enabledValues,
+    handleChange,
+}: CheckboxProps) {
+    let isDisabled;
+
     return (
         <Group>
             <GroupLabel className="input-label">{label}</GroupLabel>
             <div className="input-label text-xs text-gray-500 mb-2">{description}</div>
             <div className="flex flex-row gap-6 flex-wrap">
-                {values.map((value) => (
-                    <label key={value.toUpperCase()} className="input-label">
-                        <Checkbox
-                            as="div"
-                            value={value}
-                            className={styles.checkbox}
-                            onChange={handleChange}
+                {values.map((value) => {
+                    if (enabledValues) {
+                        isDisabled = !enabledValues.includes(value);
+                    }
+
+                    return (
+                        <label
+                            key={value.toUpperCase()}
+                            className={
+                                isDisabled ? "input-label cursor-not-allowed" : "input-label"
+                            }
                         >
-                            {value}
-                        </Checkbox>
-                    </label>
-                ))}
+                            <Checkbox
+                                as="div"
+                                value={value}
+                                className={styles.checkbox}
+                                onChange={handleChange}
+                                disabled={isDisabled}
+                            >
+                                {value}
+                                {images ? (
+                                    <Image
+                                        src={images[value] as StaticImageData}
+                                        height="25"
+                                        width="25"
+                                        layout="fixed"
+                                    />
+                                ) : (
+                                    <></>
+                                )}
+                            </Checkbox>
+                        </label>
+                    );
+                })}
             </div>
         </Group>
     );

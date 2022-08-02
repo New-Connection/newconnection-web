@@ -14,13 +14,13 @@ import {
     InputAmount,
     InputText,
     InputTextArea,
-    SubmitButton,
+    SubmitButton
 } from "components/Form";
 import {
     handleChangeBasic,
     handleCheckboxChange,
     handleImageChange,
-    handleTextChange,
+    handleTextChange
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
 import { BLOCKS_IN_DAY } from "utils/constants";
@@ -28,7 +28,7 @@ import {
     getMoralisInstance,
     MoralisClassEnum,
     saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
+    setFieldsIntoMoralisInstance
 } from "database/interactions";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
@@ -37,19 +37,10 @@ import { StepperDialog } from "../components/Dialog";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
-const BlockchainValues = [
-    "Arbitrum",
-    "Aurora",
-    "Avalanche",
-    "Binance",
-    "Ethereum",
-    "Fantom",
-    "Optimism",
-    "Polygon",
-];
 
 interface QueryUrlParams extends ParsedUrlQuery {
     tokenAddress: string;
+    enabledBlockchains: string[];
 }
 
 const CreateDAO: NextPage = () => {
@@ -65,15 +56,16 @@ const CreateDAO: NextPage = () => {
         quorumPercentage: "",
         type: [],
         blockchain: [],
-        description: "",
+        description: ""
     });
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
-    let contract;
+
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
+
     const handleReset = () => {
         setActiveStep(0);
     };
@@ -82,6 +74,7 @@ const CreateDAO: NextPage = () => {
         const query = router.query as QueryUrlParams;
 
         handleChangeBasic(query.tokenAddress, setFormData, "tokenAddress");
+        handleChangeBasic(query.enabledBlockchains, setFormData, "enabledBlockchains");
 
         console.log(`tokenAddress from query: ${query.tokenAddress}`);
     }, []);
@@ -107,7 +100,7 @@ const CreateDAO: NextPage = () => {
                 name: formData.name,
                 tokenAddress: formData.tokenAddress,
                 votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
-                quorumPercentage: +formData.quorumPercentage,
+                quorumPercentage: +formData.quorumPercentage
             });
             handleNext();
             await contract.deployed();
@@ -232,6 +225,8 @@ const CreateDAO: NextPage = () => {
                             label={"DAO Blockchain"}
                             description={"You can choose one or more blockchains"}
                             values={CHAINS}
+                            images={CHAINS_IMG}
+                            enabledValues={formData.enabledBlockchains}
                             handleChange={(event) =>
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }

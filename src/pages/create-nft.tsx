@@ -6,7 +6,7 @@ import {
     SubmitButton,
     TypeSelector,
     InputTextArea,
-    InputSupplyOfNFT,
+    InputSupplyOfNFT
 } from "components/Form";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ import {
     handleChangeBasic,
     handleImageChange,
     handleSelectorChange,
-    handleTextChange,
+    handleTextChange
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
@@ -41,13 +41,12 @@ const CreateNFT: NextPage = () => {
         price: 0,
         contractAddress: "",
         ipfsAddress: "",
-        Polygon: "",
+        Polygon: ""
     });
 
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
-    let contract;
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -78,11 +77,12 @@ const CreateNFT: NextPage = () => {
         console.log(fullPath);
         handleChangeBasic(fullPath, setFormData, "ipfsAddress");
 
+        let contract;
         try {
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
-                numberNFT: +formData.Polygon!,
+                numberNFT: +formData.Polygon!
             });
             handleNext();
             await contract.deployed();
@@ -97,6 +97,7 @@ const CreateNFT: NextPage = () => {
             return;
         }
     }
+
     return (
         <div>
             <Layout className="layout-base">
@@ -217,7 +218,10 @@ const CreateNFT: NextPage = () => {
                     <Link
                         href={{
                             pathname: "create-dao",
-                            query: { tokenAddress: formData.contractAddress },
+                            query: {
+                                tokenAddress: formData.contractAddress,
+                                enabledBlockchains: CHAINS.filter((chain) => formData[chain])
+                            }
                         }}
                     >
                         <button
@@ -226,7 +230,7 @@ const CreateNFT: NextPage = () => {
                                 confirmDialog.toggle();
                             }}
                         >
-                            Go to DAO page
+                            Go to DAO creation page
                         </button>
                     </Link>
                 </StepperDialog>

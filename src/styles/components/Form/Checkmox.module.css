@@ -1,7 +1,7 @@
 .checkbox {
     display: flex;
     height: 3rem;
-    width: 8rem;
+    width: 9rem;
     cursor: pointer;
     align-items: center;
     justify-content: center;
@@ -22,6 +22,8 @@
 
 .checkbox[aria-disabled="true"] {
     opacity: 0.5;
+    background-color: #F2F3F4;
+    cursor: not-allowed;
 }
 
 .checkbox[aria-checked="true"] {

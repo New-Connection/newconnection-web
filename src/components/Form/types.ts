@@ -7,7 +7,7 @@ export interface InputTextProps {
     value?: string;
     labelTitle?: string;
     isRequired?: boolean;
-    disabled?:boolean;
+    disabled?: boolean;
     className?: string;
     handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     placeholder?: string;
@@ -81,6 +81,8 @@ export interface CheckboxProps {
     label: string;
     description?: string;
     values: string[];
+    images?: object;
+    enabledValues?: string[];
     handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
