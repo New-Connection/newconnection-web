@@ -112,6 +112,7 @@ const CreateDAO: NextPage = () => {
             handleNext();
             await contract.deployed();
             handleNext();
+            handleNext();
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
             confirmDialog.toggle();
