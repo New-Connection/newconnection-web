@@ -1,14 +1,17 @@
 import React from "react";
-
+// TODO: Change to this
+// https://flowbite.com/docs/components/progress/
 interface ProgressBarInterface {
     bgColor: 1 | 2 | 3;
     percentage: number;
+    title?: string;
+    votes?: number;
 }
 
 const color = {
-    1: "bg-[#6858CB]", //purple
-    2: "bg-[#EFDA20]", //yellow
-    3: "bg-[#20a3ef]", //sky
+    1: "bg-[#7343DF]", //purple
+    2: "bg-[#F8E155]", //yellow
+    3: "bg-[#EF5390]", //red
 };
 
 // better to use [1/2, 1/3, 1/4, 1/5, 1/6] - no more than six
@@ -28,7 +31,7 @@ const numbersWeight = {
     100: "w-full",
 };
 
-const ProgressBar = ({ bgColor, percentage }: ProgressBarInterface) => {
+const ProgressBar = ({ bgColor, percentage, title }: ProgressBarInterface) => {
     function getClosestNumber(dict, value: number) {
         var key, found, found_value;
         for (key in dict) {
@@ -44,7 +47,11 @@ const ProgressBar = ({ bgColor, percentage }: ProgressBarInterface) => {
 
     return (
         <div>
-            <span className={`p-2.5`}>{`${percentageNumber}%`}</span>
+            <div className="flex py-2.5 justify-between text-sm">
+                <span>{title}</span>
+                <span className="">{`${percentageNumber}%`}</span>
+            </div>
+
             <div className={`h-[6px] w-full bg-[#F1F1F1] rounded-lg mb-4`}>
                 <div
                     className={`h-full ${styleNumber} ${color[bgColor]} rounded-lg text-right`}
