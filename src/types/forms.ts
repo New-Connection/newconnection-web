@@ -14,12 +14,12 @@ export interface ICreateDAO extends ICreate {
     blockchain: string[];
     contractAddress?: string;
     chainId?: number;
+    discordURL?: string;
+    twitterURL?: string;
+    websiteURL?: string;
 }
 
 export interface IDAOPageForm extends ICreateDAO {
-    discordURL?: string;
-    twitterURL?: string;
-    URL?: string;
     scanURL?: string;
     totalVotes?: number;
     totalMembers?: number;

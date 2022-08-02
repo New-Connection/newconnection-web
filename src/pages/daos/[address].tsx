@@ -107,7 +107,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         //todo: parse below values
                         discordURL: "",
                         twitterURL: "",
-                        URL: "",
+                        websiteURL: "",
                         scanURL: getChainScanner(
                             moralisInstance.get("chainId"),
                             moralisInstance.get("contractAddress")
@@ -278,7 +278,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     </div>
                     <div className="flex justify-between gap-10 w-full">
                         <div className="flex w-1/2 justify-between">
-                            <a href={DAO.URL} target={"_blank"} className={"hover:text-[#7343DF]"}>
+                            <a
+                                href={DAO.websiteURL}
+                                target={"_blank"}
+                                className={"hover:text-[#7343DF]"}
+                            >
                                 About DAO
                             </a>
                             <a
@@ -289,14 +293,18 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 Smart Contract
                                 <ExternalLinkIcon className="h-6 w-5" />
                             </a>
-                            <a href={DAO.URL} target={"_blank"} className="hover:text-[#7343DF]">
+                            <a
+                                href={DAO.websiteURL}
+                                target={"_blank"}
+                                className="hover:text-[#7343DF]"
+                            >
                                 DAO Blockchains
                             </a>
                         </div>
                         <div className="flex w-1/3 justify-end gap-7">
                             <ImageLink url={DAO.discordURL} image={discordLogo} />
                             <ImageLink url={DAO.twitterURL} image={twitterLogo} />
-                            <a href={DAO.URL}>
+                            <a href={DAO.websiteURL}>
                                 <GlobeAltIcon className="h-6 w-6" />
                             </a>
                         </div>
