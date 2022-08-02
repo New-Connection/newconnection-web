@@ -32,7 +32,7 @@ const NewFeaturesBanner = () => {
             <TextDialog dialog={textDialog} title="Version 0.1">
                 <ul className="list-disc py-4 pl-4 space-y-4 text-graySupport">
                     {firstVersion.map((element) => (
-                        <li>{element}</li>
+                        <li key={element}>{element}</li>
                     ))}
                 </ul>
             </TextDialog>
