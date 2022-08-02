@@ -23,6 +23,7 @@ import { NFTDetailDialog } from "components/Dialog";
 import classNames from "classnames";
 import { mintClick } from "contract-interactions/useMintFunctions";
 import { useSigner } from "wagmi";
+import { useMoralis } from "react-moralis";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -73,6 +74,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [buttonState, setButtonState] = useState(false);
     const detailNFTDialog = useDialogState();
     const { data: signer_data } = useSigner();
+    const { isInitialized } = useMoralis();
 
     const { fetch } = useMoralisQuery(
         "DAO",
@@ -83,47 +85,50 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         }
     );
 
-    const fetchDB = () => {
-        fetch({
-            onSuccess: (results) => {
-                const moralisInstance = results[0];
-                const newDao: IDAOPageForm = {
-                    name: moralisInstance.get("name"),
-                    description: moralisInstance.get("description"),
-                    goals: moralisInstance.get("goals"),
-                    profileImage: moralisInstance.get("profileImage"),
-                    coverImage: moralisInstance.get("coverImage"),
-                    tokenAddress: moralisInstance.get("tokenAddress"),
-                    votingPeriod: moralisInstance.get("votingPeriod"),
-                    quorumPercentage: moralisInstance.get("quorumPercentage"),
-                    type: moralisInstance.get("type"),
-                    blockchain: moralisInstance.get("blockchain"),
-                    contractAddress: moralisInstance.get("contractAddress"),
-                    chainId: moralisInstance.get("chainId"),
-                    //todo: parse below values
-                    discordURL: "",
-                    twitterURL: "",
-                    URL: "",
-                    scanURL: getChainScanner(
-                        moralisInstance.get("chainId"),
-                        moralisInstance.get("contractAddress")
-                    ),
-                    totalVotes: 0,
-                    totalMembers: 0,
-                    totalProposals: 0,
-                    activeProposals: 0,
-                };
-                setDAO(() => newDao);
-            },
-            onError: (error) => {
-                console.log("Error fetching db query" + error);
-            },
-        });
+    const fetchDB = async () => {
+        if (isInitialized) {
+            await fetch({
+                onSuccess: (results) => {
+                    const moralisInstance = results[0];
+                    console.log("Parse Instance", moralisInstance);
+                    const newDao: IDAOPageForm = {
+                        name: moralisInstance.get("name"),
+                        description: moralisInstance.get("description"),
+                        goals: moralisInstance.get("goals"),
+                        profileImage: moralisInstance.get("profileImage"),
+                        coverImage: moralisInstance.get("coverImage"),
+                        tokenAddress: moralisInstance.get("tokenAddress"),
+                        votingPeriod: moralisInstance.get("votingPeriod"),
+                        quorumPercentage: moralisInstance.get("quorumPercentage"),
+                        type: moralisInstance.get("type"),
+                        blockchain: moralisInstance.get("blockchain"),
+                        contractAddress: moralisInstance.get("contractAddress"),
+                        chainId: moralisInstance.get("chainId"),
+                        //todo: parse below values
+                        discordURL: "",
+                        twitterURL: "",
+                        URL: "",
+                        scanURL: getChainScanner(
+                            moralisInstance.get("chainId"),
+                            moralisInstance.get("contractAddress")
+                        ),
+                        totalVotes: 0,
+                        totalMembers: 0,
+                        totalProposals: 0,
+                        activeProposals: 0,
+                    };
+                    setDAO(() => newDao);
+                },
+                onError: (error) => {
+                    console.log("Error fetching db query" + error);
+                },
+            });
+        }
     };
 
     useEffect(() => {
         fetchDB();
-    }, []);
+    }, [isInitialized]);
 
     const handleTabStateChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabState(newValue);

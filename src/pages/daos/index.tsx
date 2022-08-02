@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Moralis from "moralis";
 import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
+import { useMoralis } from "react-moralis";
 
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<Moralis.Object<Moralis.Attributes>[]>();
@@ -15,21 +16,25 @@ const DAOsPage: NextPage = () => {
     const { fetch } = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
         autoFetch: false,
     });
+    const { isInitialized } = useMoralis();
 
-    const fetchDB = () => {
-        fetch({
-            onSuccess: (results) => {
-                setDAOs(() => results);
-            },
-            onError: (error) => {
-                console.log("Error fetching db query" + error);
-            },
-        });
+    const fetchDB = async () => {
+        if (isInitialized) {
+            await fetch({
+                onSuccess: (results) => {
+                    setDAOs(() => results);
+                },
+                onError: (error) => {
+                    console.log("Error fetching db query" + error);
+                },
+            });
+        }
     };
 
+    // if we use isInitialized we call fetch only once when reload page or move to new page
     useEffect(() => {
         fetchDB();
-    }, []);
+    }, [isInitialized]);
 
     const DAOCard = ({ name, description, profileImage, address, isActive, proposals, votes }) => {
         return (
