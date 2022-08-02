@@ -105,9 +105,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         contractAddress: moralisInstance.get("contractAddress"),
                         chainId: moralisInstance.get("chainId"),
                         //todo: parse below values
-                        discordURL: "",
-                        twitterURL: "",
-                        websiteURL: "",
+                        discordURL: moralisInstance.get("discordURL"),
+                        twitterURL: moralisInstance.get("twitterURL"),
+                        websiteURL: moralisInstance.get("websiteURL"),
                         scanURL: getChainScanner(
                             moralisInstance.get("chainId"),
                             moralisInstance.get("contractAddress")
@@ -302,11 +302,18 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             </a>
                         </div>
                         <div className="flex w-1/3 justify-end gap-7">
-                            <ImageLink url={DAO.discordURL} image={discordLogo} />
-                            <ImageLink url={DAO.twitterURL} image={twitterLogo} />
-                            <a href={DAO.websiteURL}>
-                                <GlobeAltIcon className="h-6 w-6" />
-                            </a>
+                            {DAO.discordURL ? (
+                                <ImageLink url={DAO.discordURL} image={discordLogo} />
+                            ) : null}
+                            {DAO.twitterURL ? (
+                                <ImageLink url={DAO.twitterURL} image={twitterLogo} />
+                            ) : null}
+
+                            {DAO.websiteURL ? (
+                                <a href={DAO.websiteURL}>
+                                    <GlobeAltIcon className="h-6 w-6" />
+                                </a>
+                            ) : null}
                         </div>
                     </div>
 
