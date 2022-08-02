@@ -1,5 +1,5 @@
 import { CreateGovernorContract } from "./ContractFactory";
-import { Signer } from "ethers";
+import { Signer, Contract } from "ethers";
 
 export interface IConstructorGovernor {
     name: string;
@@ -11,7 +11,7 @@ export interface IConstructorGovernor {
 export async function deployGovernorContract(
     signer: Signer,
     constructor: IConstructorGovernor
-): Promise<string> {
+): Promise<Contract> {
     const factory = CreateGovernorContract(signer);
     const contract = await factory.deploy(
         constructor.name,
@@ -19,7 +19,5 @@ export async function deployGovernorContract(
         constructor.votingPeriod,
         constructor.quorumPercentage
     );
-    await contract.deployed();
-    console.log(`Deployment successful! Contract Address: ${contract.address}`);
-    return contract.address;
+    return contract;
 }

@@ -24,8 +24,6 @@ import {
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
 import { BLOCKS_IN_DAY } from "utils/constants";
-import { BeatLoader } from "react-spinners";
-import { LoadingDialog } from "components/Dialog";
 import {
     getMoralisInstance,
     MoralisClassEnum,
@@ -34,6 +32,7 @@ import {
 } from "database/interactions";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
+import { StepperDialog } from "../components/Dialog";
 
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 
@@ -69,8 +68,15 @@ const CreateDAO: NextPage = () => {
         description: "",
     });
     const { data: signer_data } = useSigner();
-    const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
+    const [activeStep, setActiveStep] = useState(0);
+    let contract;
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+    const handleReset = () => {
+        setActiveStep(0);
+    };
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
@@ -91,22 +97,25 @@ const CreateDAO: NextPage = () => {
         if (!validateForm(formData)) {
             return;
         }
-
+        handleReset();
         confirmDialog.toggle();
 
-        let contractAddress;
+        let contract;
         try {
-            contractAddress = await deployGovernorContract(signer_data as Signer, {
+            console.log(formData);
+            contract = await deployGovernorContract(signer_data as Signer, {
                 name: formData.name,
                 tokenAddress: formData.tokenAddress,
                 votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
                 quorumPercentage: +formData.quorumPercentage,
             });
-            handleChangeBasic(contractAddress, setFormData, "contractAddress");
-            setConfirmFromBlockchain(true);
+            handleNext();
+            await contract.deployed();
+            handleNext();
+            handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
             confirmDialog.toggle();
-            setConfirmFromBlockchain(false);
+            handleReset();
             toast.error("Please approve transaction to create DAO");
             return;
         }
@@ -114,16 +123,15 @@ const CreateDAO: NextPage = () => {
         try {
             const chainId = await signer_data.getChainId();
             handleChangeBasic(chainId, setFormData, "chainId");
-
             const moralisDao = getMoralisInstance(MoralisClassEnum.DAO);
             setFieldsIntoMoralisInstance(moralisDao, formData);
-            moralisDao.set("contractAddress", contractAddress);
+            console.log("Contract Address for Moralis", contract.address);
+            moralisDao.set("contractAddress", contract.address);
             moralisDao.set("chainId", chainId);
             await saveMoralisInstance(moralisDao);
         } catch (error) {
             confirmDialog.toggle();
-            setConfirmFromBlockchain(false);
-            toast.error("Сouldn't save your DAO. Please try again");
+            toast.error("Сouldn't save your DAO on backend. Please try again");
             return;
         }
     };
@@ -136,24 +144,6 @@ const CreateDAO: NextPage = () => {
                         <h1 className="text-highlighter">Create DAO</h1>
                         <div className="flex flex-row">
                             <h2 className="my-2 text-xl font-medium">DAO Name and Goals</h2>
-                        </div>
-                        <div className="flex flex-row">
-                            <DragAndDropImage
-                                label="Profile Image"
-                                name="profileImage"
-                                className="w-1/3 mr-10"
-                                handleChange={(file) =>
-                                    handleImageChange(file, setFormData, "profileImage")
-                                }
-                            />
-                            <DragAndDropImage
-                                label="Cover Image"
-                                name="coverImage"
-                                className="w-2/3"
-                                handleChange={(file) =>
-                                    handleImageChange(file, setFormData, "coverImage")
-                                }
-                            />
                         </div>
                         <InputText
                             label="DAO Name"
@@ -181,15 +171,23 @@ const CreateDAO: NextPage = () => {
                             maxLength={100}
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
+                        <InputTextArea
+                            name={"description"}
+                            label={"DAO Description"}
+                            placeholder={"A description about the DAO and what it does"}
+                            // isRequired
+                            maxLength={2000}
+                            handleChange={(event) => handleTextChange(event, setFormData)}
+                        />
                         <div className="flex justify-between">
                             <InputAmount
                                 label="Voting Period"
                                 name="votingPeriod"
                                 className="w-2/5"
                                 labelTitle="Length of period during which people can cast their vote."
-                                placeholder="Voting period in days"
+                                placeholder="Voting period in days(1-7 days)"
                                 min={1}
-                                max={10000}
+                                max={7}
                                 handleChange={(event) => handleTextChange(event, setFormData)}
                             />
                             <InputAmount
@@ -197,8 +195,8 @@ const CreateDAO: NextPage = () => {
                                 name="quorumPercentage"
                                 className={"w-2/5"}
                                 labelTitle="Quorum percentage required for a proposal to pass."
-                                placeholder="Quorum percentage (1-100)%"
-                                min={1}
+                                placeholder="Quorum percentage (51-100)%"
+                                min={51}
                                 max={100}
                                 handleChange={(event) => handleTextChange(event, setFormData)}
                             />
@@ -211,6 +209,24 @@ const CreateDAO: NextPage = () => {
                                 handleCheckboxChange(event, formData, setFormData, "type")
                             }
                         />
+                        <div className="flex flex-row">
+                            <DragAndDropImage
+                                label="Profile Image"
+                                name="profileImage"
+                                className="w-1/3 mr-10"
+                                handleChange={(file) =>
+                                    handleImageChange(file, setFormData, "profileImage")
+                                }
+                            />
+                            <DragAndDropImage
+                                label="Cover Image"
+                                name="coverImage"
+                                className="w-2/3"
+                                handleChange={(file) =>
+                                    handleImageChange(file, setFormData, "coverImage")
+                                }
+                            />
+                        </div>
                         <CheckboxGroup
                             label={"DAO Blockchain"}
                             description={"You can choose one or more blockchains"}
@@ -219,48 +235,54 @@ const CreateDAO: NextPage = () => {
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
                         />
-                        <InputTextArea
-                            name={"description"}
-                            label={"DAO Description"}
-                            // isRequired
-                            maxLength={2000}
-                            handleChange={(event) => handleTextChange(event, setFormData)}
-                        />
+                        <h2 className="mt-2 text-xl font-medium">Social profiles (optional)</h2>
+                        <div className="flex w-full gap-10">
+                            <InputText
+                                label="Twitter"
+                                name="twitterURL"
+                                placeholder="twitter.com/username"
+                                labelTitle="Twitter URL"
+                                maxLength={100}
+                                className="w-1/3"
+                                handleChange={(event) => handleTextChange(event, setFormData)}
+                            />
+                            <InputText
+                                label="Discord"
+                                name="discordURL"
+                                placeholder="discord.com/invite/invitation code"
+                                labelTitle="Discord URL"
+                                maxLength={100}
+                                className="w-1/3"
+                                handleChange={(event) => handleTextChange(event, setFormData)}
+                            />
+                            <InputText
+                                label="Website"
+                                name="websiteURL"
+                                placeholder="website.io"
+                                labelTitle="Website"
+                                maxLength={100}
+                                className="w-1/3"
+                                handleChange={(event) => handleTextChange(event, setFormData)}
+                            />
+                        </div>
 
                         <SubmitButton className="mt-5 nav-button">Create Contract</SubmitButton>
                     </form>
                 </section>
-                <LoadingDialog
-                    dialog={confirmDialog}
-                    title="Loading into Blockchain"
-                    className="dialog"
-                >
-                    {
-                        <div>
-                            {confirmFromBlockchain ? (
-                                <>
-                                    <p>Deployment successful!</p>
-                                    <p>Contract Address: {formData.contractAddress}</p>
-                                    <Link href={`/daos/${formData.contractAddress}`}>
-                                        <button
-                                            className="form-submit-button"
-                                            onClick={() => {
-                                                confirmDialog.toggle();
-                                            }}
-                                        >
-                                            View DAO
-                                        </button>
-                                    </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <p>Please confirm transaction in wallet</p>
-                                    <BeatLoader />
-                                </>
-                            )}
-                        </div>
-                    }
-                </LoadingDialog>
+                <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
+                    <p className="ml-7">Deployment successful!</p>
+                    <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
+                    <Link href={`/daos/${formData.contractAddress}`}>
+                        <button
+                            className="form-submit-button"
+                            onClick={() => {
+                                confirmDialog.toggle();
+                            }}
+                        >
+                            View DAO
+                        </button>
+                    </Link>
+                </StepperDialog>
             </Layout>
         </div>
     );
