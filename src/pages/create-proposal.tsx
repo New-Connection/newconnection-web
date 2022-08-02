@@ -26,6 +26,7 @@ import {
 } from "../database/interactions";
 import { BeatLoader } from "react-spinners";
 import { LoadingDialog } from "../components/Dialog";
+import { StepperDialog } from "../components/Dialog";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     governorAddress: string;
@@ -44,8 +45,15 @@ const CreateProposal: NextPage = () => {
 
     const { data: signer_data } = useSigner();
 
-    const [confirmFromBlockchain, setConfirmFromBlockchain] = useState(false);
     const confirmDialog = useDialogState();
+    const [activeStep, setActiveStep] = useState(0);
+    let contract;
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+    const handleReset = () => {
+        setActiveStep(0);
+    };
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
@@ -67,7 +75,7 @@ const CreateProposal: NextPage = () => {
         if (!validateForm(formData, ["description", "options"])) {
             return;
         }
-
+        handleReset();
         confirmDialog.toggle();
 
         // TODO: Create Proporsal
@@ -78,14 +86,13 @@ const CreateProposal: NextPage = () => {
                 signer_data as Signer,
                 formData.name
             );
-
+            handleNext();
+            handleNext();
             handleChangeBasic(proposalId, setFormData, "proposalId");
-
-            setConfirmFromBlockchain(true);
+            handleNext();
         } catch (error) {
             console.log(error);
             confirmDialog.toggle();
-            setConfirmFromBlockchain(false);
             toast.error("Please approve transaction to create DAO");
             return;
         }
@@ -101,7 +108,6 @@ const CreateProposal: NextPage = () => {
             await saveMoralisInstance(moralisProposal);
         } catch (error) {
             confirmDialog.toggle();
-            setConfirmFromBlockchain(false);
             toast.error("Сouldn't save your DAO. Please try again");
             return;
         }
@@ -109,7 +115,7 @@ const CreateProposal: NextPage = () => {
 
     const FileAndLinkForm = () => {
         return (
-            <div className="flex justify-between gap-10">
+            <div className="flex justify-between gap-10 ">
                 {/* TODO: New to change it for drag and drop */}
                 <InputText
                     label="File (optional)"
@@ -117,6 +123,7 @@ const CreateProposal: NextPage = () => {
                     placeholder="Attached file"
                     handleChange={(event) => handleTextChange(event, setFormData)}
                     className="w-1/2"
+                    disabled={true}
                 />
                 <InputText
                     label="Link Forum (optional)"
@@ -124,6 +131,7 @@ const CreateProposal: NextPage = () => {
                     placeholder="Link to discussion forum"
                     handleChange={(event) => handleTextChange(event, setFormData)}
                     className="w-1/2"
+                    disabled
                 />
             </div>
         );
@@ -162,7 +170,7 @@ const CreateProposal: NextPage = () => {
                             maxLength={3000}
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
-                        <FileAndLinkForm />
+                        {/* <FileAndLinkForm /> */}
 
                         <CheckboxGroup
                             label="Proposal Blockchain"
@@ -175,37 +183,20 @@ const CreateProposal: NextPage = () => {
                         <SubmitButton className="mt-5">Create Proporsal</SubmitButton>
                     </form>
                 </section>
-                <LoadingDialog
-                    dialog={confirmDialog}
-                    title="Loading into Blockchain"
-                    className="dialog"
-                >
-                    {
-                        <div>
-                            {confirmFromBlockchain ? (
-                                <>
-                                    <p>Proposal created successful!</p>
-                                    <p>Proposal Id: {formData.proposalId}</p>
-                                    <Link href={`/daos/${formData.governorAddress}`}>
-                                        <button
-                                            className="form-submit-button"
-                                            onClick={() => {
-                                                confirmDialog.toggle();
-                                            }}
-                                        >
-                                            View DAO
-                                        </button>
-                                    </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <p>Please confirm transaction in wallet</p>
-                                    <BeatLoader />
-                                </>
-                            )}
-                        </div>
-                    }
-                </LoadingDialog>
+                <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
+                    <p>Proposal created successful!</p>
+                    <p>Proposal Id: {formData.proposalId}</p>
+                    <Link href={`/daos/${formData.governorAddress}`}>
+                        <button
+                            className="form-submit-button"
+                            onClick={() => {
+                                confirmDialog.toggle();
+                            }}
+                        >
+                            Back to DAO
+                        </button>
+                    </Link>
+                </StepperDialog>
             </Layout>
         </div>
     );
