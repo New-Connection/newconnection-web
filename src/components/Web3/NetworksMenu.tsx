@@ -47,7 +47,7 @@ export const NetworksMenu = () => {
             </SelectLabel>
             <Select
                 state={select}
-                className="nav-button hidden items-center justify-between gap-2 sm:flex"
+                className="nav-button shadow-none border-none hidden items-center justify-between gap-2 sm:flex"
             >
                 <>
                     <div className="flex h-5 w-5 items-center rounded-full">

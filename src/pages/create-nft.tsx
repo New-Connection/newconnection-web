@@ -6,7 +6,7 @@ import {
     SubmitButton,
     TypeSelector,
     InputTextArea,
-    InputSupplyOfNFT
+    InputSupplyOfNFT,
 } from "components/Form";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ import {
     handleChangeBasic,
     handleImageChange,
     handleSelectorChange,
-    handleTextChange
+    handleTextChange,
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
@@ -41,7 +41,7 @@ const CreateNFT: NextPage = () => {
         price: 0,
         contractAddress: "",
         ipfsAddress: "",
-        Polygon: ""
+        Polygon: "",
     });
 
     const { data: signer_data } = useSigner();
@@ -82,7 +82,7 @@ const CreateNFT: NextPage = () => {
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
-                numberNFT: +formData.Polygon!
+                numberNFT: +formData.Polygon!,
             });
             handleNext();
             await contract.deployed();
@@ -220,8 +220,8 @@ const CreateNFT: NextPage = () => {
                             pathname: "create-dao",
                             query: {
                                 tokenAddress: formData.contractAddress,
-                                enabledBlockchains: CHAINS.filter((chain) => formData[chain])
-                            }
+                                enabledBlockchains: CHAINS.filter((chain) => formData[chain]),
+                            },
                         }}
                     >
                         <button

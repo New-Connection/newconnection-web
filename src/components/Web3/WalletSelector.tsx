@@ -61,7 +61,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                 <>
                     <DialogHeader title="Account" dialog={dialog} />
                     <div className="mt-3 flex flex-col gap-2">
-                        <p className="text-sm font-thin text-gray2">
+                        <p className="text-sm text-gray2 font-light">
                             Connected to {connector?.name}
                         </p>
                         <p className="flex items-center gap-4 break-words text-gray2">
@@ -77,14 +77,14 @@ export const WalletSelector = ({ dialog }: Props) => {
                 <>
                     <DialogHeader title="Connect Wallet" dialog={dialog} />
                     {/* choose profile: metamask, wallet connect  */}
-                    <div className="mt-3 flex flex-col gap-2">
+                    <div className="mt-4 flex flex-col gap-4">
                         {connectors.map((x) => (
                             <button
                                 key={x?.id}
                                 onClick={() => {
                                     handleConnect(x);
                                 }}
-                                className="flex gap-4 btn-connect-wallets"
+                                className="flex gap-4 btn-connect-wallets text-purple justify-center pr-12 rounded-full"
                             >
                                 <img src={imageID[x.name]} className="w-8 h-8" />
                                 {x?.name}
