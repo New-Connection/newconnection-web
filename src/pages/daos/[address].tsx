@@ -423,7 +423,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     <p className="w-full mt-12 text-start text-black">Details</p>
                     <ul className="py-6 divide-y divide-slate-200">
                         {DetailsInfo.map((element) => (
-                            <li className="flex py-4 justify-between">
+                            <li key={element} className="flex py-4 justify-between">
                                 <p className="font-light text-gray2">{element}</p>
                                 <p className="font-normal text-black">{element}</p>
                             </li>
