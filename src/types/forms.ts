@@ -28,6 +28,12 @@ export interface IDAOPageForm extends ICreateDAO {
     activeProposals?: number;
 }
 
+export interface IMembershipForm {
+    walletAddress?: string;
+    note?: string;
+    blockchainSelected?: string;
+}
+
 export interface IBlockchains {
     Polygon?: string;
     Ethereum?: string;
