@@ -44,8 +44,9 @@ const CreateNewDAO: NextPage = () => {
                                 title="Existing NFT collection (Comming Soon)"
                                 subtitle="Add NFT smart contract if you have an existing collection"
                                 buttonTitle="Add a created NFT"
-                                linkToPage="/create-nft"
-                                isDisabled={true}
+                                //todo remove
+                                linkToPage="/create-dao"
+                                // isDisabled={true}
                             />
 
                             <Card

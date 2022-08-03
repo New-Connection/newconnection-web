@@ -75,7 +75,7 @@ const CreateNFT: NextPage = () => {
         try {
             const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
             console.log(UID);
-            const fullPath = ipfsFullPath(UID.ipnft);
+            const fullPath = ipfsFullPath(UID.url);
             console.log(fullPath);
             handleChangeBasic(fullPath, setFormData, "ipfsAddress");
             //todo: set url to contract
