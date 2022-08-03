@@ -28,6 +28,7 @@ import { deployNFTContract } from "../contract-interactions/useDeployNFTContract
 
 import { ipfsFullPath, storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
+import { chainIds, layerzeroEndpoints } from "../utils/layerzero";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -71,18 +72,31 @@ const CreateNFT: NextPage = () => {
         handleReset();
         confirmDialog.toggle();
 
-        const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
-        console.log(UID);
-        const fullPath = ipfsFullPath(UID.ipnft);
-        console.log(fullPath);
-        handleChangeBasic(fullPath, setFormData, "ipfsAddress");
+        try {
+            const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
+            console.log(UID);
+            const fullPath = ipfsFullPath(UID.ipnft);
+            console.log(fullPath);
+            handleChangeBasic(fullPath, setFormData, "ipfsAddress");
+            //todo: set url to contract
+        } catch (error) {
+            confirmDialog.toggle();
+            handleReset();
+            toast.error("Couldn't save your NFT on IPFS. Please try again");
+            return;
+        }
 
         let contract;
         try {
+            const chainId = await signer_data.getChainId();
+            const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
-                numberNFT: +formData.Polygon!
+                layerzeroEndpoint: endpoint,
+                //todo: need to calculate when few blockchains
+                startMintId: 0,
+                endMintId: +formData.Polygon!
             });
             handleNext();
             await contract.deployed();
@@ -91,6 +105,7 @@ const CreateNFT: NextPage = () => {
             handleNext();
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
+            console.log(error);
             confirmDialog.toggle();
             handleReset();
             toast.error("Please approve transaction to create DAO");
