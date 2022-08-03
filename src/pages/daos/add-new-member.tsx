@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { useSigner } from "wagmi";
 import toast from "react-hot-toast";
+import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 
 import Layout from "components/Layout/Layout";
 import { SubmitButton, InputText, BlockchainSelector, InputTextArea } from "components/Form";
@@ -16,43 +17,70 @@ import {
     handleTextChangeAddNewMember,
     handleSelectorChangeNewMember,
     handleChangeBasicNewMember,
+    handleChangeBasicArray,
 } from "utils/handlers";
+
+import {
+    getMoralisInstance,
+    MoralisClassEnum,
+    saveMoralisInstance,
+    setFieldsIntoMoralisInstance,
+} from "database/interactions";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     daoName: string;
     nftAddress: string;
+    daoAddress: string;
+    blockchains: string[];
 }
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IAddNewMember>({
-        walletAddress: "",
-        nftID: "",
-        blockchainSelected: "Ethereum",
-        note: "",
         daoName: "",
+        walletAddress: "",
+        daoAddress: "",
+        nftID: [0],
+        blockchainSelected: "Ethereum",
+        blockchainEnabled: [],
+        note: "",
     });
 
+    const ButtonStatus = ["Active", "Loading", "Success"];
+    const [buttonStatus, setButtonStatus] = useState(ButtonStatus[0]);
+
     const router = useRouter();
-    const { data: signer_data } = useSigner();
+    // const { data: signer_data } = useSigner();
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
-        handleChangeBasicNewMember(query.nftAddress, setFormData, "nftID");
+        handleChangeBasicNewMember(query.daoAddress, setFormData, "daoAddress");
         handleChangeBasicNewMember(query.daoName, setFormData, "daoName");
-        console.log(`governorAddress from query: ${query.daoName}`);
+        handleChangeBasicArray(query.blockchains, setFormData, "blockchainEnabled");
+        // console.log(`DAO Address from query: ${query.daoAddress}`);
     }, []);
+
+    let disabledBlockchains = CHAINS.filter((x) => !formData.blockchainEnabled.includes(x));
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         // TODO: Need to create Signature Request
         // https://wagmi.sh/examples/sign-in-with-ethereum
-        if (!signer_data) {
-            toast.error("Please connect wallet");
-            return;
-        }
+        // if (!signer_data) {
+        //     toast.error("Please connect wallet");
+        //     return;
+        // }
         if (!validateForm(formData, ["note"])) {
             return;
         }
+        console.log(formData);
+        // try {
+        //     const moralisProposal = getMoralisInstance(MoralisClassEnum.PROPOSAL);
+        //     setFieldsIntoMoralisInstance(moralisProposal, formData);
+        //     await saveMoralisInstance(moralisProposal);
+        // } catch (error) {
+        //     toast.error("Сouldn't save your . Please try again");
+        //     return;
+        // }
     }
     return (
         <div>
@@ -83,6 +111,8 @@ const AddNewMember: NextPage = () => {
                         <BlockchainSelector
                             name="blockchainSelected"
                             label="Choose your priopity blockchain"
+                            defaultValue="Polygon"
+                            disablesValues={disabledBlockchains}
                             handleChange={(event) => {
                                 return handleSelectorChangeNewMember(
                                     event,
