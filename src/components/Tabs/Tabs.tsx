@@ -26,8 +26,8 @@ const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick }) => {
                     <button
                         className={
                             selectedTab === tab.index
-                                ? "border-b-2 border-solid w-36 border-[#6858CB] px-2 py-4 my-4 text-[#6858CB]"
-                                : "border-b-2 border-solid w-36 border-transparent px-2 py-4 my-4 focus:border-[#6858CB] focus:text-[#6858CB] hover:border-[#6858CB] hover:text-[#6858CB]"
+                                ? "border-b-2 border-solid w-36 border-[#6858CB] pb-4 my-4 text-purple"
+                                : "border-b-2 border-solid w-36 border-transparent pb-4 my-4 focus:border-[#6858CB] focus:text-[#6858CB] hover:border-[#6858CB] hover:text-[#6858CB]"
                         }
                         onClick={() => onClick(tab.index)}
                         key={tab.index}
@@ -41,7 +41,7 @@ const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick }) => {
                     </button>
                 ))}
             </div>
-            <div id={`tabpanel-${selectedTab}`} className="text-left py-4">
+            <div id={`tabpanel-${selectedTab}`} className="w-full py-2 px-2">
                 {Panel && <Panel.Component index={selectedTab} />}
             </div>
         </div>
