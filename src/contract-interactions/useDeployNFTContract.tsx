@@ -4,7 +4,9 @@ import { Signer, Contract } from "ethers";
 export interface IConstructorNFT {
     name: string;
     symbol: string;
-    numberNFT: number;
+    layerzeroEndpoint: string;
+    startMintId: number;
+    endMintId: number;
     isWalletApproved?: boolean;
 }
 
@@ -16,7 +18,9 @@ export async function deployNFTContract(
     const contract = await factory.deploy(
         constructor.name,
         constructor.symbol,
-        constructor.numberNFT
+        constructor.layerzeroEndpoint,
+        constructor.startMintId,
+        constructor.endMintId
     );
     console.log("Wallet approved");
     return contract;

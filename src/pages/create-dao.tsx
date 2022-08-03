@@ -35,6 +35,7 @@ import { ParsedUrlQuery } from "querystring";
 import { StepperDialog } from "../components/Dialog";
 
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
+import { ipfsFullPath, storeNFT } from "../utils/ipfsUpload";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 
@@ -93,6 +94,25 @@ const CreateDAO: NextPage = () => {
         handleReset();
         confirmDialog.toggle();
 
+        let profileImagePath;
+        let coverImagePath;
+        try {
+            const profileImageUID = await storeNFT(formData.profileImage as File, formData.name, "Profile Image");
+            profileImagePath = ipfsFullPath(profileImageUID.url);
+            console.log(profileImagePath);
+            handleChangeBasic(profileImagePath, setFormData, "profileImage");
+
+            const coverImageUID = await storeNFT(formData.coverImage as File, formData.name, "Cover Image");
+            coverImagePath = ipfsFullPath(coverImageUID.url);
+            console.log(coverImagePath);
+            handleChangeBasic(coverImagePath, setFormData, "coverImage");
+        } catch (error) {
+            confirmDialog.toggle();
+            handleReset();
+            toast.error("Couldn't save your NFT on IPFS. Please try again");
+            return;
+        }
+
         let contract;
         try {
             console.log(formData);
@@ -114,18 +134,23 @@ const CreateDAO: NextPage = () => {
             return;
         }
 
+
+        const chainId = await signer_data.getChainId();
+        handleChangeBasic(chainId, setFormData, "chainId");
+
         try {
-            const chainId = await signer_data.getChainId();
-            handleChangeBasic(chainId, setFormData, "chainId");
             const moralisDao = getMoralisInstance(MoralisClassEnum.DAO);
             setFieldsIntoMoralisInstance(moralisDao, formData);
             console.log("Contract Address for Moralis", contract.address);
+            // use state not update immediately
             moralisDao.set("contractAddress", contract.address);
             moralisDao.set("chainId", chainId);
+            moralisDao.set("profileImage", profileImagePath);
+            moralisDao.set("coverImage", coverImagePath);
             await saveMoralisInstance(moralisDao);
         } catch (error) {
             confirmDialog.toggle();
-            toast.error("Сouldn't save your DAO on backend. Please try again");
+            toast.error("Couldn't save your DAO on backend. Please try again");
             return;
         }
     };

@@ -6,7 +6,7 @@ import {
     SubmitButton,
     TypeSelector,
     InputTextArea,
-    InputSupplyOfNFT,
+    InputSupplyOfNFT
 } from "components/Form";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ import {
     handleChangeBasic,
     handleImageChange,
     handleSelectorChange,
-    handleTextChange,
+    handleTextChange
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
@@ -28,6 +28,7 @@ import { deployNFTContract } from "../contract-interactions/useDeployNFTContract
 
 import { ipfsFullPath, storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
+import { chainIds, layerzeroEndpoints } from "../utils/layerzero";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -41,7 +42,7 @@ const CreateNFT: NextPage = () => {
         price: 0,
         contractAddress: "",
         ipfsAddress: "",
-        Polygon: "",
+        Polygon: ""
     });
 
     const { data: signer_data } = useSigner();
@@ -71,18 +72,31 @@ const CreateNFT: NextPage = () => {
         handleReset();
         confirmDialog.toggle();
 
-        const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
-        console.log(UID);
-        const fullPath = ipfsFullPath(UID.ipnft);
-        console.log(fullPath);
-        handleChangeBasic(fullPath, setFormData, "ipfsAddress");
+        try {
+            const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
+            console.log(UID);
+            const fullPath = ipfsFullPath(UID.url);
+            console.log(fullPath);
+            handleChangeBasic(fullPath, setFormData, "ipfsAddress");
+            //todo: set url to contract
+        } catch (error) {
+            confirmDialog.toggle();
+            handleReset();
+            toast.error("Couldn't save your NFT on IPFS. Please try again");
+            return;
+        }
 
         let contract;
         try {
+            const chainId = await signer_data.getChainId();
+            const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
-                numberNFT: +formData.Polygon!,
+                layerzeroEndpoint: endpoint,
+                //todo: need to calculate when few blockchains
+                startMintId: 0,
+                endMintId: +formData.Polygon!
             });
             handleNext();
             await contract.deployed();
@@ -220,8 +234,8 @@ const CreateNFT: NextPage = () => {
                             pathname: "create-dao",
                             query: {
                                 tokenAddress: formData.contractAddress,
-                                enabledBlockchains: CHAINS.filter((chain) => formData[chain]),
-                            },
+                                enabledBlockchains: CHAINS.filter((chain) => formData[chain])
+                            }
                         }}
                     >
                         <button
