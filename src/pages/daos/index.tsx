@@ -14,7 +14,7 @@ const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<Moralis.Object<Moralis.Attributes>[]>();
 
     const { fetch } = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
-        autoFetch: false
+        autoFetch: false,
     });
     const { isInitialized } = useMoralis();
 
@@ -26,7 +26,7 @@ const DAOsPage: NextPage = () => {
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
-                }
+                },
             });
         }
     };
@@ -38,56 +38,53 @@ const DAOsPage: NextPage = () => {
 
     const DAOCard = ({ name, description, profileImage, address, isActive, proposals, votes }) => {
         return (
-            <div
-                className={
-                    "flex justify-between w-full h-36 p-3 mt-3 border-b-2 border-gray"
-                }
-            >
-                <div className={"flex gap-10 w-10/12"}>
-                    <div className={"w-28 h-28"}>
-                        <Image className={"w-28 h-28 rounded-2xl"} src={basicAvatar} />
-                    </div>
-                    <div className="w-2/3">
-                        <Link href={`/daos/${address}`}>
-                            <p className={"text-lg uppercase font-semibold cursor-pointer"}>{name}</p>
-                        </Link>
-                        <div className={"text-gray-500 mt-2 h-14 overflow-auto"}>{description}</div>
-                        <Link href={`/daos/${address}`}>
-                            <p className={"text-gray2 text-sm cursor-pointer"}>View more</p>
-                        </Link>
-                    </div>
-                </div>
+            <Link href={`/daos/${address}`}>
+                <div
+                    className={
+                        "flex justify-between w-full h-36 p-3 mt-3 border-b-2 border-gray cursor-pointer"
+                    }
+                >
+                    <div className={"flex gap-10 w-10/12"}>
+                        <div className="w-28 h-28">
+                            <Image className={"w-28 h-28 rounded-2xl"} src={basicAvatar} />
+                        </div>
+                        <div className="w-5/6 grid grid-cols-1 content-between">
+                            <div className="w-full">
+                                <p className="text-lg uppercase font-semibold cursor-pointer">
+                                    {name}
+                                </p>
+                                <div className="text-gray-500 line-clamp-2">{description}</div>
+                            </div>
 
-                <div className="flex flex-col w-32 text-center text-xs">
-                    {isActive ? (
-                        <p
-                            className={
-                                "font-medium text-[#7343DF] border-none bg-[#F6F6F6] mb-3 px-2 border-2 h-8 text-center rounded-3xl pt-2.5"
-                            }
-                        >
-                            Active voting now
-                        </p>
-                    ) : (
-                        <p
-                            className={
-                                "font-medium text-[#1B1A1D] border-none bg-[#F6F6F6] mb-3 px-2 border-2 h-8 text-center rounded-3xl pt-2.5"
-                            }
-                        >
-                            No active voting
-                        </p>
-                    )}
-                    <div className={"flex flex-col gap-3 mt-4"}>
-                        <div className={"flex justify-between"}>
-                            <div className={"text-gray-500"}>Proposals:</div>
-                            <div>{proposals}</div>
+                            <p
+                                className={
+                                    "text-gray2 text-sm cursor-pointer mb-1.5 hover:text-gray3 active:text-gray2"
+                                }
+                            >
+                                View more
+                            </p>
                         </div>
-                        <div className={"flex justify-between"}>
-                            <div className={"text-gray-500"}>Votes:</div>
-                            <div>{votes}</div>
+                    </div>
+
+                    <div className="flex flex-col w-32 text-center text-xs">
+                        {isActive ? (
+                            <div className={"badge-active"}>Active voting now</div>
+                        ) : (
+                            <div className={"badge-active text-black"}>No active voting</div>
+                        )}
+                        <div className={"flex flex-col gap-3 mt-4"}>
+                            <div className={"flex justify-between"}>
+                                <p className={"text-gray2"}>Proposals:</p>
+                                <p>{proposals}</p>
+                            </div>
+                            <div className={"flex justify-between"}>
+                                <p className={"text-gray2"}>Votes:</p>
+                                <p className="text-black">{votes}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </Link>
         );
     };
 
