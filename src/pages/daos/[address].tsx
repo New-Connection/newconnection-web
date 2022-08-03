@@ -1,4 +1,6 @@
 import * as React from "react";
+import { formatAddress } from "utils/address";
+import { FC } from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
@@ -9,10 +11,13 @@ import basicAvatar from "assets/basic_avatar.jpg";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import { Box } from "@mui/system";
-import { Tab, Tabs } from "@mui/material";
+import Moralis from "moralis";
+// import { Tab, Tabs } from "@mui/material";
+import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 import { useMoralisQuery } from "react-moralis";
+import Tabs from "components/Tabs/Tabs";
 import { useEffect, useState } from "react";
-import { IDAOPageForm } from "types/forms";
+import { IDAOPageForm, IMembershipForm } from "types/forms";
 import { getChainScanner } from "utils/network";
 import NFTExample from "assets/nft-example.png";
 import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
@@ -24,6 +29,7 @@ import classNames from "classnames";
 import { mintClick } from "contract-interactions/useMintFunctions";
 import { useSigner } from "wagmi";
 import { useMoralis } from "react-moralis";
+import { TabsType } from "types/tabs";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -32,6 +38,15 @@ interface QueryUrlParams extends ParsedUrlQuery {
 interface DAOPageProps {
     address: string;
 }
+
+const renderValue = (chain: string) => {
+    const image = CHAINS_IMG[chain];
+    return (
+        <>
+            <img src={image.src} alt="" aria-hidden className="h-7 w-7 rounded-full" />
+        </>
+    );
+};
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams> = async (
     context
@@ -46,31 +61,10 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams
     };
 };
 
-interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-        </div>
-    );
-}
-
 const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [tabState, setTabState] = React.useState(0);
     const [DAO, setDAO] = useState<IDAOPageForm>();
+    const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
     const [buttonState, setButtonState] = useState(false);
     const detailNFTDialog = useDialogState();
     const { data: signer_data } = useSigner();
@@ -84,6 +78,121 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
+
+    const { fetch: fetchWhitelis } = useMoralisQuery(
+        "Whitelist",
+        (query) => query.equalTo("daoAddress", address),
+        [],
+        {
+            autoFetch: false,
+        }
+    );
+
+    const TabOne: FC<{}> = () => {
+        return (
+            <div>
+                <MockupTextCard
+                    label={"No proposals here yet"}
+                    text={
+                        "You should first add NFTs so that members can vote " +
+                        "then click the button “Add new proposal” and initiate a proposal"
+                    }
+                />
+            </div>
+        );
+    };
+
+    const TabTwo: FC<{}> = () => {
+        return (
+            <div className="text-center">
+                <MockupTextCard
+                    label={"No members here yet"}
+                    text={
+                        "You should first add NFTs for members" +
+                        "then click the button “Add new proposal” and initiate a proposal"
+                    }
+                />
+            </div>
+        );
+    };
+
+    const fetchWhitelist = async () => {
+        await fetchWhitelis({
+            onSuccess: (results) => {
+                setWhitelist(() => results);
+            },
+            onError: (error) => {
+                console.log("Error fetching db query" + error);
+            },
+        });
+    };
+    useEffect(() => {
+        fetchWhitelist();
+    }, [isInitialized]);
+
+    const TabThree: FC<{}> = () => {
+        return whitelist ? (
+            <div className="w-full justify-between space-y-5 gap-5">
+                <div className="flex text-gray2 justify-between text-center pb-4 pt-0">
+                    <div className="flex w-1/4 pr-3">
+                        <p className="w-3/4 pr-4">Wallet Address</p>
+                        <p className="w-1/3">Blockchain</p>
+                    </div>
+                    <p className="w-1/2">Notes</p>
+
+                    <p className="w-1/4">Action</p>
+                </div>
+                {whitelist.map((wl) => {
+                    const walletAddress = wl.get("walletAddress");
+                    const note = wl.get("note");
+                    const blockchainSelected = wl.get("blockchainSelected");
+                    return (
+                        <div className="w-full flex gap-5">
+                            <div className="flex w-1/4">
+                                <p className="w-3/4 text-lg">{formatAddress(walletAddress)}</p>
+                                <p className="w-1/4">{renderValue(blockchainSelected)}</p>
+                            </div>
+                            <p className="w-1/2 text-sm line-clamp-3 text-center">{note}</p>
+
+                            <button className="w-1/4 settings-button py-2 bg-white border-gray2 border-2 btn-state">
+                                Add
+                            </button>
+                        </div>
+                    );
+                })}
+            </div>
+        ) : (
+            <div className="text-center">
+                <MockupTextCard
+                    label={"No members here yet"}
+                    text={
+                        "You can join DAO click to become member" +
+                        "then click the button “Add new proposal” and initiate a proposal"
+                    }
+                />
+            </div>
+        );
+    };
+
+    // Tabs Array
+    const tabs: TabsType = [
+        {
+            label: "PROPOSALS",
+            index: 1,
+            Component: TabOne,
+        },
+        {
+            label: "MEMBERS",
+            index: 2,
+            Component: TabTwo,
+        },
+        {
+            label: "WHITELIST",
+            index: 3,
+            Component: TabThree,
+        },
+    ];
+    const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
 
     const fetchDB = async () => {
         if (isInitialized) {
@@ -130,10 +239,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         fetchDB();
     }, [isInitialized]);
 
-    const handleTabStateChange = (event: React.SyntheticEvent, newValue: number) => {
-        setTabState(newValue);
-    };
-
     const StatisticCard = ({ label, counter }) => {
         return (
             <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg w-1/4 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] cursor-pointer">
@@ -149,7 +254,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         return (
             <div className="text-center my-32">
                 <div className="font-semibold">{label}</div>
-                <p className={"text-gray-400"}>{text}</p>
+                <p className="text-gray-400">{text}</p>
             </div>
         );
     };
@@ -233,16 +338,17 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         setButtonState(true);
         try {
             const tx = await mintClick(DAO.tokenAddress, signer_data as Signer);
-            // window.setTimeout(slowAlert, 4000);// 2 sec
             setButtonState(true);
             console.log("Congratulation your nft is minted");
         } catch (e) {
             setButtonState(false);
             console.log("Transaction canceled");
         }
-
-        console.log("TX Succes");
     }
+
+    const TabSection = () => {
+        return;
+    };
 
     return DAO ? (
         <div>
@@ -286,14 +392,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <a
                                 href={DAO.websiteURL}
                                 target={"_blank"}
-                                className={"hover:text-[#7343DF]"}
+                                className={"hover:text-purple"}
                             >
                                 About DAO
                             </a>
                             <a
                                 href={DAO.scanURL}
                                 target={"_blank"}
-                                className="hover:text-[#7343DF] flex gap-3"
+                                className="hover:text-purple flex gap-3"
                             >
                                 Smart Contract
                                 <ExternalLinkIcon className="h-6 w-5" />
@@ -301,7 +407,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <a
                                 href={DAO.websiteURL}
                                 target={"_blank"}
-                                className="hover:text-[#7343DF]"
+                                className="hover:text-purple"
                             >
                                 DAO Blockchains
                             </a>
@@ -328,63 +434,16 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         <StatisticCard label={"Total members"} counter={DAO.totalMembers} />
                     </div>
 
-                    <div className="dao-proposals-members">
-                        <div className="flex justify-between">
-                            <Box sx={{ borderBottom: 0, borderColor: "divider" }}>
-                                <Tabs
-                                    textColor={"inherit"}
-                                    TabIndicatorProps={{
-                                        sx: {
-                                            backgroundColor: "#6858CB",
-                                        },
-                                    }}
-                                    value={tabState}
-                                    onChange={handleTabStateChange}
-                                    aria-label="tabs"
-                                >
-                                    <Tab
-                                        label={`Proposals`}
-                                        className={"font-semibold text-lg capitalize"}
-                                    />
-                                    <Tab
-                                        label={`Members`}
-                                        className={"font-semibold text-lg capitalize"}
-                                    />
-                                </Tabs>
-                            </Box>
-
-                            <Link
+                    <div className="dao-proposals-members w-full">
+                        <Tabs selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs} />
+                        {/* <Link
                                 href={{
                                     pathname: "/create-proposal",
                                     query: { governorAddress: DAO.contractAddress },
                                 }}
                             >
                                 <button className="secondary-button">Add new proposal</button>
-                            </Link>
-                        </div>
-                        <TabPanel value={tabState} index={0}>
-                            {DAO.totalProposals ? (
-                                DAO.totalProposals
-                            ) : (
-                                <MockupTextCard
-                                    label={"No proposals here yet"}
-                                    text={
-                                        "You should first add NFTs so that members can vote " +
-                                        "then click the button “Add new proposal” and initiate a proposal"
-                                    }
-                                />
-                            )}
-                        </TabPanel>
-                        <TabPanel value={tabState} index={1}>
-                            {DAO.totalMembers ? (
-                                DAO.totalMembers
-                            ) : (
-                                <MockupTextCard
-                                    label="No members here yet"
-                                    text="You should first add NFTs for members"
-                                />
-                            )}
-                        </TabPanel>
+                            </Link> */}
                     </div>
 
                     <>
