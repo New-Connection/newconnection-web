@@ -6,14 +6,17 @@ export enum MoralisClassEnum {
     DAO = "DAO",
     PROPOSAL = "Proposal",
     USER = "User",
+    WHITELIST = "Whitelist",
 }
 
 const DaoMoralisObject = Moralis.Object.extend(MoralisClassEnum.DAO);
 const ProposalMoralisObject = Moralis.Object.extend(MoralisClassEnum.PROPOSAL);
 const UserMoralisObject = Moralis.Object.extend(MoralisClassEnum.USER);
+const WhitelistMoralisObject = Moralis.Object.extend(MoralisClassEnum.WHITELIST);
 Moralis.Object.registerSubclass("DAO", DaoMoralisObject);
 Moralis.Object.registerSubclass("Proposal", ProposalMoralisObject);
 Moralis.Object.registerSubclass("User", UserMoralisObject);
+Moralis.Object.registerSubclass("Whitelist", WhitelistMoralisObject);
 
 export const getMoralisInstance = (moralisClass: MoralisClassEnum) => {
     switch (moralisClass) {
@@ -23,6 +26,8 @@ export const getMoralisInstance = (moralisClass: MoralisClassEnum) => {
             return new ProposalMoralisObject();
         case MoralisClassEnum.USER:
             return new UserMoralisObject();
+        case MoralisClassEnum.WHITELIST:
+            return new WhitelistMoralisObject();
     }
 };
 
