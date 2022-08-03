@@ -270,7 +270,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         <Link
                             href={{
                                 pathname: "/daos/add-new-member",
-                                query: { daoName: DAO.name, nftAddress: DAO.tokenAddress },
+                                query: {
+                                    daoAddress: DAO.contractAddress,
+                                    daoName: DAO.name,
+                                    //TODO: DAO Blockchains supported
+                                    blockchains: ["Polygon", "Avalanche"],
+                                },
                             }}
                         >
                             <button className="secondary-button mt-6">Become a member</button>
