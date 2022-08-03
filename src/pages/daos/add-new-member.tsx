@@ -27,7 +27,7 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 
-interface QueryUrlParams extends ParsedUrlQuery {
+interface QueryUrlParams extends ParsedUrlQuery, NodeJS.Dict<string | string[]> {
     daoName: string;
     nftAddress: string;
     daoAddress: string;
@@ -40,7 +40,7 @@ const AddNewMember: NextPage = () => {
         walletAddress: "",
         daoAddress: "",
         nftID: [0],
-        blockchainSelected: "Ethereum",
+        blockchainSelected: "",
         blockchainEnabled: [],
         note: "",
     });
@@ -56,13 +56,21 @@ const AddNewMember: NextPage = () => {
         handleChangeBasicNewMember(query.daoAddress, setFormData, "daoAddress");
         handleChangeBasicNewMember(query.daoName, setFormData, "daoName");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainEnabled");
-        // console.log(`DAO Address from query: ${query.daoAddress}`);
+        console.log(`DAO Address from query: ${formData.blockchainEnabled}`);
+        console.log(`DAO Address from query: ${formData.blockchainEnabled[1]}`);
+        // handleChangeBasicNewMember(
+        //     formData.blockchainEnabled[0],
+        //     setFormData,
+        //     "blockchainSelected"
+        // );
     }, []);
 
+    // if
     let disabledBlockchains = CHAINS.filter((x) => !formData.blockchainEnabled.includes(x));
-
+    console.log("disabledBlockchain", disabledBlockchains);
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        const form = e.target as HTMLFormElement;
         // TODO: Need to create Signature Request
         // https://wagmi.sh/examples/sign-in-with-ethereum
         // if (!signer_data) {
@@ -73,14 +81,22 @@ const AddNewMember: NextPage = () => {
             return;
         }
         console.log(formData);
-        // try {
-        //     const moralisProposal = getMoralisInstance(MoralisClassEnum.PROPOSAL);
-        //     setFieldsIntoMoralisInstance(moralisProposal, formData);
-        //     await saveMoralisInstance(moralisProposal);
-        // } catch (error) {
-        //     toast.error("Сouldn't save your . Please try again");
-        //     return;
-        // }
+        try {
+            //const toastID = toast.loading("Please wait...", { position: "bottom-center" });
+            const moralisProposal = getMoralisInstance(MoralisClassEnum.WHITELIST);
+            setFieldsIntoMoralisInstance(moralisProposal, formData);
+            await saveMoralisInstance(moralisProposal);
+            //toast.dismiss(toastID);
+            toast.success("Wallet was saved", {
+                duration: 4000,
+                className: "bg-red",
+                position: "bottom-center",
+            });
+            form.reset();
+        } catch (error) {
+            toast.error("Сouldn't save your . Please try again");
+            return;
+        }
     }
     return (
         <div>
@@ -111,7 +127,6 @@ const AddNewMember: NextPage = () => {
                         <BlockchainSelector
                             name="blockchainSelected"
                             label="Choose your priopity blockchain"
-                            defaultValue="Polygon"
                             disablesValues={disabledBlockchains}
                             handleChange={(event) => {
                                 return handleSelectorChangeNewMember(
