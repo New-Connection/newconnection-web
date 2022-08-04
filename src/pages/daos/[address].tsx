@@ -177,18 +177,23 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
                             <button
                                 className="w-1/4 settings-button py-2 px-4 bg-white border-gray2 border-2 btn-state"
-                                onClick={() => {
+                                onClick={async () => {
                                     setClick(true);
                                     try {
-                                        AddToWhitelist({
+                                        const status = await AddToWhitelist({
                                             addressNFT: DAO!.tokenAddress,
                                             walletAddress: walletAddress,
                                             signer: signer_data as Signer,
                                         });
                                         console.log("WL DELETE");
+                                        status
+                                            ? toast.success("Wallet added to Whitelist")
+                                            : toast.error(
+                                                  "Only owner of DAO can add a new members"
+                                              );
                                         // TODO: DELETE ROW FROM MORALIS
                                         //removeItem(walletAddress);
-                                        toast.success("Wallet added to Whitelist");
+                                        //toast.success("Wallet added to Whitelist");
                                         setClick(false);
                                     } catch (error) {
                                         toast.error("Please approve transaction to create DAO");
