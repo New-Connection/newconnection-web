@@ -10,7 +10,6 @@ import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
-import { Box } from "@mui/system";
 import Moralis from "moralis";
 // import { Tab, Tabs } from "@mui/material";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
@@ -26,10 +25,10 @@ import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { NFTDetailDialog } from "components/Dialog";
 import classNames from "classnames";
-import { mintClick } from "contract-interactions/useMintFunctions";
 import { useSigner } from "wagmi";
 import { useMoralis } from "react-moralis";
 import { TabsType } from "types/tabs";
+import { AddToWhitelist, mintClick } from "contract-interactions/";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -105,6 +104,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const TabTwo: FC<{}> = () => {
         return (
             <div className="text-center">
+                <AddToWhitelist />
                 <MockupTextCard
                     label={"No members here yet"}
                     text={
@@ -142,21 +142,25 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
                     <p className="w-1/4">Action</p>
                 </div>
-                {whitelist.map((wl) => {
+                {whitelist.map((wl, index) => {
                     const walletAddress = wl.get("walletAddress");
                     const note = wl.get("note");
                     const blockchainSelected = wl.get("blockchainSelected");
                     return (
-                        <div className="w-full flex gap-5">
+                        <div className="w-full flex gap-5" key={index}>
                             <div className="flex w-1/4">
                                 <p className="w-3/4 text-lg">{formatAddress(walletAddress)}</p>
                                 <p className="w-1/4">{renderValue(blockchainSelected)}</p>
                             </div>
                             <p className="w-1/2 text-sm line-clamp-3 text-center">{note}</p>
 
-                            <button className="w-1/4 settings-button py-2 bg-white border-gray2 border-2 btn-state">
+                            {/* <button
+                                className="w-1/4 settings-button py-2 bg-white border-gray2 border-2 btn-state"
+                                onClick={() => null}
+                            >
                                 Add
-                            </button>
+                            </button> */}
+                            <AddToWhitelist />
                         </div>
                     );
                 })}
@@ -199,7 +203,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             await fetch({
                 onSuccess: (results) => {
                     const moralisInstance = results[0];
-                    console.log("Parse Instance", moralisInstance);
+                    // console.log("Parse Instance", moralisInstance);
                     const newDao: IDAOPageForm = {
                         name: moralisInstance.get("name"),
                         description: moralisInstance.get("description"),
