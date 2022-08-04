@@ -5,28 +5,77 @@ import Head from "next/head";
 import Link from "next/link";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useState } from "react";
-import Moralis from "moralis";
 import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
 import { useMoralis } from "react-moralis";
 
-const DAOsPage: NextPage = () => {
-    const [DAOs, setDAOs] = useState<Moralis.Object<Moralis.Attributes>[]>();
 
-    const { fetch } = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
-        autoFetch: false,
+interface IDAOListElement {
+    name: string;
+    address: string;
+    description: string;
+    profileImage: any;
+    isActive: boolean;
+    proposals: number;
+    votes: number;
+}
+
+const parseIpfsAddress = (address: string) => {
+    return "https://ipfs.io/ipfs/" + address.substring(7);
+};
+
+const DAOsPage: NextPage = () => {
+    const [DAOs, setDAOs] = useState<IDAOListElement[]>();
+
+    const moralisQuery = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
+        autoFetch: false
     });
     const { isInitialized } = useMoralis();
 
     const fetchDB = async () => {
         if (isInitialized) {
-            await fetch({
-                onSuccess: (results) => {
-                    setDAOs(() => results);
+            await moralisQuery.fetch({
+                onSuccess: async (results) => {
+                    const daos = await Promise.all(results.map(async (dao) => {
+                        const address = dao.get("contractAddress");
+                        const name = dao.get("name");
+                        const description = dao.get("description");
+
+                        const profileImageInfoURL = parseIpfsAddress(dao.get("profileImage"));
+                        let profileImage = await fetch(profileImageInfoURL)
+                            .then(response => response.json())
+                            .then(function(data) {
+                                const profileImageURL = parseIpfsAddress(data.image);
+                                return fetch(profileImageURL)
+                                    .then(response => response.blob())
+                                    .then(function(image) {
+                                        return URL.createObjectURL(image);
+                                    });
+                            })
+                            .catch(() => {
+                                console.log(`Invalid URL: ${profileImageInfoURL}`);
+                            });
+
+                        //TODO: write to db
+                        const isActive = true;
+                        const proposals = 0;
+                        const votes = 0;
+
+                        return {
+                            name,
+                            address,
+                            description,
+                            profileImage,
+                            votes,
+                            proposals,
+                            isActive
+                        } as IDAOListElement;
+                    }));
+                    setDAOs(() => daos);
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
-                },
+                }
             });
         }
     };
@@ -46,7 +95,8 @@ const DAOsPage: NextPage = () => {
                 >
                     <div className={"flex gap-10 w-10/12"}>
                         <div className="w-28 h-28">
-                            <Image className={"w-28 h-28 rounded-2xl"} src={basicAvatar} />
+                            <Image width={"150"} height={"150"} layout={"responsive"}
+                                   src={profileImage ? profileImage : basicAvatar} />
                         </div>
                         <div className="w-5/6 grid grid-cols-1 content-between">
                             <div className="w-full">
@@ -104,28 +154,18 @@ const DAOsPage: NextPage = () => {
 
                     <ul>
                         {DAOs &&
-                            DAOs.map((dao) => {
-                                const address = dao.get("contractAddress");
-                                const name = dao.get("name");
-                                const description = dao.get("description");
-                                const profileImage = dao.get("profileImage");
-
-                                //TODO: write to db
-                                const isActive = true;
-                                const proposals = 0;
-                                const votes = 0;
+                            DAOs.map((dao, index) => {
                                 return (
-                                    <li key={address}>
-                                        <DAOCard
-                                            name={name}
-                                            description={description}
-                                            address={address}
-                                            profileImage={profileImage}
-                                            isActive={isActive}
-                                            proposals={proposals}
-                                            votes={votes}
-                                        />
-                                    </li>
+                                    <DAOCard
+                                        key={index}
+                                        name={dao.name}
+                                        description={dao.description}
+                                        address={dao.address}
+                                        profileImage={dao.profileImage}
+                                        isActive={dao.isActive}
+                                        proposals={dao.proposals}
+                                        votes={dao.votes}
+                                    />
                                 );
                             })}
                     </ul>
