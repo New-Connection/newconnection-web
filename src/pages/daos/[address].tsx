@@ -11,7 +11,6 @@ import basicAvatar from "assets/basic_avatar.jpg";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import Moralis from "moralis";
-// import { Tab, Tabs } from "@mui/material";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 import { useMoralisQuery } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
@@ -29,6 +28,7 @@ import { useSigner } from "wagmi";
 import { useMoralis } from "react-moralis";
 import { TabsType } from "types/tabs";
 import { AddToWhitelist, mintClick } from "contract-interactions/";
+import toast from "react-hot-toast";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -40,11 +40,7 @@ interface DAOPageProps {
 
 const renderValue = (chain: string) => {
     const image = CHAINS_IMG[chain];
-    return (
-        <>
-            <img src={image.src} alt="" aria-hidden className="h-7 w-7 rounded-full" />
-        </>
-    );
+    return <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full" />;
 };
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams> = async (
@@ -60,11 +56,13 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams
     };
 };
 
+type ButtonState = "Mint" | "Loading" | "Success" | "Error";
+
 const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
-    const [tabState, setTabState] = React.useState(0);
+    const [click, setClick] = useState(false);
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
-    const [buttonState, setButtonState] = useState(false);
+    const [buttonState, setButtonState] = useState<ButtonState>("Mint");
     const detailNFTDialog = useDialogState();
     const { data: signer_data } = useSigner();
     const { isInitialized } = useMoralis();
@@ -104,7 +102,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const TabTwo: FC<{}> = () => {
         return (
             <div className="text-center">
-                <AddToWhitelist />
+                {/* <AddToWhitelist /> */}
                 <MockupTextCard
                     label={"No members here yet"}
                     text={
@@ -154,13 +152,29 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             </div>
                             <p className="w-1/2 text-sm line-clamp-3 text-center">{note}</p>
 
-                            {/* <button
-                                className="w-1/4 settings-button py-2 bg-white border-gray2 border-2 btn-state"
-                                onClick={() => null}
+                            <button
+                                className="w-1/4 settings-button py-2 px-4 bg-white border-gray2 border-2 btn-state"
+                                onClick={() => {
+                                    setClick(true);
+                                    try {
+                                        AddToWhitelist({
+                                            addressNFT: DAO!.tokenAddress,
+                                            walletAddress: walletAddress,
+                                            signer: signer_data as Signer,
+                                        });
+                                        // TODO: DELETE ROW FROM MORALIS
+                                        toast.success("Wallet added to Whitelist");
+                                        setClick(false);
+                                    } catch (error) {
+                                        toast.error("Please approve transaction to create DAO");
+                                        return;
+                                    }
+                                    setClick(false);
+                                }}
+                                disabled={click}
                             >
-                                Add
-                            </button> */}
-                            <AddToWhitelist />
+                                {click ? <p className="text-gray2">Loading...</p> : <p>Add</p>}
+                            </button>
                         </div>
                     );
                 })}
@@ -273,11 +287,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const DetailsInfo = ["Blockchain", "Type", "Collection"];
 
-    function detailNFT() {
-        console.log("Press Button");
-        detailNFTDialog.toggle();
-    }
-
     interface INFTImage {
         image?: string;
         className?: string;
@@ -296,11 +305,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const NFTCard = ({ tokenAddress, chainId, daoTitle }) => {
         return (
-            <button className="nft-card" onClick={detailNFT}>
-                {/* <a href={getChainScanner(chainId, tokenAddress)} target={"_blank"} className="nft-card"> */}
+            <button className="nft-card" onClick={() => detailNFTDialog.toggle()}>
                 {/* //Wrap to div for center elements */}
                 <NFTImage />
-
                 <div className="p-4 gap-y-6">
                     <p className="text-start">{daoTitle}: Membership </p>
                     <div className="flex pt-4 justify-between">
@@ -308,7 +315,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         <Image src={BlockchainExample} height="24" width="24" />
                     </div>
                 </div>
-                {/* </a> */}
             </button>
         );
     };
@@ -339,20 +345,16 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     async function mint() {
         if (!DAO) return null;
-        setButtonState(true);
+        setButtonState("Loading");
         try {
             const tx = await mintClick(DAO.tokenAddress, signer_data as Signer);
-            setButtonState(true);
-            console.log("Congratulation your nft is minted");
+            setButtonState("Success");
         } catch (e) {
-            setButtonState(false);
+            setButtonState("Error");
             console.log("Transaction canceled");
+            return;
         }
     }
-
-    const TabSection = () => {
-        return;
-    };
 
     return DAO ? (
         <div>
@@ -439,15 +441,15 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     </div>
 
                     <div className="dao-proposals-members w-full">
-                        <Tabs selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs} />
-                        {/* <Link
-                                href={{
-                                    pathname: "/create-proposal",
-                                    query: { governorAddress: DAO.contractAddress },
-                                }}
-                            >
-                                <button className="secondary-button">Add new proposal</button>
-                            </Link> */}
+                        <Tabs
+                            selectedTab={selectedTab}
+                            onClick={setSelectedTab}
+                            tabs={tabs}
+                            url={{
+                                pathname: "/create-proposal",
+                                query: { governorAddress: DAO.contractAddress },
+                            }}
+                        />
                     </div>
 
                     <>
@@ -497,13 +499,16 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             </li>
                         ))}
                     </ul>
-                    {buttonState ? (
-                        <LoadingSpinner />
-                    ) : (
-                        <button className="secondary-button w-full h-12 mt-4 mb-6" onClick={mint}>
-                            Mint NFT
+                    {
+                        <button
+                            className={`secondary-button w-full h-12 mt-4 mb-6 
+                            ${buttonState === "Success" ? "bg-green" : ""} 
+                            ${buttonState === "Error" ? "bg-red" : ""}`}
+                            onClick={mint}
+                        >
+                            {buttonState}
                         </button>
-                    )}
+                    }
                 </NFTDetailDialog>
             </Layout>
         </div>
