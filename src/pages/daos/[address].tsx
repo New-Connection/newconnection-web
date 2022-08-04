@@ -76,7 +76,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         }
     );
 
-    const { fetch: fetchWhitelis } = useMoralisQuery(
+    const { fetch: fetchWhitelisQuery } = useMoralisQuery(
         "Whitelist",
         (query) => query.equalTo("daoAddress", address),
         [],
@@ -115,7 +115,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     };
 
     const fetchWhitelist = async () => {
-        await fetchWhitelis({
+        await fetchWhitelisQuery({
             onSuccess: (results) => {
                 setWhitelist(() => results);
             },
@@ -127,6 +127,28 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     useEffect(() => {
         fetchWhitelist();
     }, [isInitialized]);
+
+    // function removeItem(walletAddress: string) {
+    //     console.log("hey");
+    //     // remove items from sale ETH
+    //     useMoralisQuery();
+    //     const query = new Moralis.Query("Whitelist");
+    //     console.log(query);
+    //     query.equalTo("daoAddress", address);
+    //     query.equalTo("walletAddress", walletAddress);
+    //     const object = await query.first({ useMasterKey: true });
+    //     console.log("Delete Object", object);
+    //     if (object) {
+    //         object.destroy({ useMasterKey: true }).then(
+    //             () => {
+    //                 console.log("The object was deleted from EthRemovedItems.");
+    //             },
+    //             (error) => {
+    //                 console.log(error);
+    //             }
+    //         );
+    //     }
+    // }
 
     const TabThree: FC<{}> = () => {
         return whitelist ? (
@@ -162,7 +184,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                             walletAddress: walletAddress,
                                             signer: signer_data as Signer,
                                         });
+                                        console.log("WL DELETE");
                                         // TODO: DELETE ROW FROM MORALIS
+                                        //removeItem(walletAddress);
                                         toast.success("Wallet added to Whitelist");
                                         setClick(false);
                                     } catch (error) {
