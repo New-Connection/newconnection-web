@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 
 import Layout from "components/Layout/Layout";
-import { SubmitButton } from "components/Form";
+import { Button } from "components/Form";
 
 const CreateNewDAO: NextPage = () => {
     interface ICard {
@@ -19,10 +19,12 @@ const CreateNewDAO: NextPage = () => {
             <div className="w-full border-2 border-[#F2F4F4] rounded-lg pb-6 px-4">
                 <p className="input-label font-medium text-lg">{title}</p>
                 <p className="pb-6">{subtitle}</p>
-                <Link href={linkToPage}>
-                    <SubmitButton className="mt-5 mb-5 py-4 border-2 w-full" disabled={isDisabled}>
-                        {buttonTitle}
-                    </SubmitButton>
+                <Link href={{ pathname: linkToPage }}>
+                    <a>
+                        <Button type={"button"} className="mt-5 mb-5 py-4 border-2 w-full" disabled={isDisabled}>
+                            {buttonTitle}
+                        </Button>
+                    </a>
                 </Link>
             </div>
         );

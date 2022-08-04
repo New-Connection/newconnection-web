@@ -3,7 +3,7 @@ import {
     DragAndDropImage,
     InputAmount,
     InputText,
-    SubmitButton,
+    Button,
     TypeSelector,
     InputTextArea,
     InputSupplyOfNFT
@@ -228,7 +228,7 @@ const CreateNFT: NextPage = () => {
                                 />
                             </div>
                         </div>
-                        <SubmitButton className="mt-5 w-2/3">Create Contract</SubmitButton>
+                        <Button className="mt-5 w-2/3">Create Contract</Button>
                     </form>
                 </section>
 

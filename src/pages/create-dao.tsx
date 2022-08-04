@@ -14,7 +14,7 @@ import {
     InputAmount,
     InputText,
     InputTextArea,
-    SubmitButton
+    Button
 } from "components/Form";
 import {
     handleChangeBasic,
@@ -35,7 +35,7 @@ import { ParsedUrlQuery } from "querystring";
 import { StepperDialog } from "../components/Dialog";
 
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
-import { ipfsFullPath, storeNFT } from "../utils/ipfsUpload";
+import { storeNFT } from "utils/ipfsUpload";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 
@@ -98,12 +98,12 @@ const CreateDAO: NextPage = () => {
         let coverImagePath;
         try {
             const profileImageUID = await storeNFT(formData.profileImage as File, formData.name, "Profile Image");
-            profileImagePath = ipfsFullPath(profileImageUID.url);
+            profileImagePath = profileImageUID.url;
             console.log(profileImagePath);
             handleChangeBasic(profileImagePath, setFormData, "profileImage");
 
             const coverImageUID = await storeNFT(formData.coverImage as File, formData.name, "Cover Image");
-            coverImagePath = ipfsFullPath(coverImageUID.url);
+            coverImagePath = coverImageUID.url;
             console.log(coverImagePath);
             handleChangeBasic(coverImagePath, setFormData, "coverImage");
         } catch (error) {
@@ -287,7 +287,7 @@ const CreateDAO: NextPage = () => {
                             />
                         </div>
 
-                        <SubmitButton className="mt-5 nav-button">Create Contract</SubmitButton>
+                        <Button className="mt-5 nav-button">Create Contract</Button>
                     </form>
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>

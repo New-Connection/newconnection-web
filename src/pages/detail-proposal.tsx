@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { NextPage } from "next";
-import Link from "next/link";
 import classNames from "classnames";
 import { useSigner } from "wagmi";
 import { useDialogState } from "ariakit";
@@ -8,7 +7,7 @@ import toast from "react-hot-toast";
 
 import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
-import { SubmitButton, RadioSelector } from "components/Form";
+import { Button, RadioSelector } from "components/Form";
 import { formatAddress } from "utils/address";
 import { validateForm } from "utils/validate";
 import ProgressBar from "components/ProgressBar/ProgressBar";
@@ -162,9 +161,9 @@ const DetailProposal: NextPage = () => {
                                 handleTextChangeAddNewMember(event, setFormData)
                             }
                         />
-                        <SubmitButton className="mt-10">
+                        <Button className="mt-10">
                             <p>Vote</p>
-                        </SubmitButton>
+                        </Button>
                     </form>
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>

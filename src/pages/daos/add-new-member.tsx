@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { useSigner } from "wagmi";
 import toast from "react-hot-toast";
 
 import Layout from "components/Layout/Layout";
-import { SubmitButton, InputText, BlockchainSelector, InputTextArea } from "components/Form";
+import { Button, InputText, BlockchainSelector, InputTextArea } from "components/Form";
 import BackButton from "components/Button/backButton";
 import NFTCardMockup from "components/Cards/NFTCard";
 import { validateForm } from "utils/validate";
@@ -100,7 +99,7 @@ const AddNewMember: NextPage = () => {
                                 handleTextChangeAddNewMember(event, setFormData)
                             }
                         />
-                        <SubmitButton className="mt-5 w-full">Send a request</SubmitButton>
+                        <Button className="mt-5 w-full">Send a request</Button>
                     </form>
                 </section>
             </Layout>

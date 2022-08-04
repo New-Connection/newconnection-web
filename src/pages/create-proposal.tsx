@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { NextPage } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import toast from "react-hot-toast";
 import { useSigner } from "wagmi";
 
 import Layout from "components/Layout/Layout";
 import { handleTextChange, handleCheckboxChange, handleChangeBasic } from "utils/handlers";
-import { CheckboxGroup, InputText, SubmitButton, InputTextArea } from "components/Form";
+import { CheckboxGroup, InputText, Button, InputTextArea } from "components/Form";
 import { ICreateProposal } from "types/forms";
 import BackButton from "components/Button/backButton";
 import { useDialogState } from "ariakit";
@@ -16,7 +15,6 @@ import { CHAINS } from "utils/blockchains";
 import { createProposal } from "../contract-interactions/stateGovernorContract";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { mintClick } from "../contract-interactions/useMintFunctions";
 import { Signer } from "ethers";
 import {
     getMoralisInstance,
@@ -24,8 +22,6 @@ import {
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
 } from "../database/interactions";
-import { BeatLoader } from "react-spinners";
-import { LoadingDialog } from "../components/Dialog";
 import { StepperDialog } from "../components/Dialog";
 
 interface QueryUrlParams extends ParsedUrlQuery {
@@ -47,7 +43,7 @@ const CreateProposal: NextPage = () => {
 
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
-    let contract;
+
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
@@ -180,7 +176,7 @@ const CreateProposal: NextPage = () => {
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
                         />
-                        <SubmitButton className="mt-5">Create Proporsal</SubmitButton>
+                        <Button className="mt-5">Create Proporsal</Button>
                     </form>
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>

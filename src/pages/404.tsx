@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 
 import Layout from "components/Layout/Layout";
-import { SubmitButton } from "components/Form";
+import { Button } from "components/Form";
 
 const Page404: NextPage = () => {
     return (
@@ -17,9 +17,9 @@ const Page404: NextPage = () => {
                     </div>
                     <div className="flex items-center justify-center">
                         <Link href="/">
-                            <SubmitButton className="mt-10 w-1/3 h-14 secondary-button">
+                            <Button className="mt-10 w-1/3 h-14 secondary-button">
                                 Back to Home
-                            </SubmitButton>
+                            </Button>
                         </Link>
                     </div>
                 </section>
