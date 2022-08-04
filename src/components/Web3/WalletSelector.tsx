@@ -17,7 +17,9 @@ interface Props {
 
 export const WalletSelector = ({ dialog }: Props) => {
     const { address, connector, isConnected } = useAccount();
-    const { data: ensName } = useEnsName({ address: address });
+    const ensName = null;
+    // const { data: ensName } = useEnsName({ address: address });
+
     const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
     const { disconnect } = useDisconnect();
 

@@ -9,7 +9,8 @@ interface Props {
 export const Account = ({ showAccountInfo }: Props) => {
     const { address } = useAccount();
     if (!address) return null;
-    const { data: ensName } = useEnsName({ address: address });
+    const ensName = null;
+    // const { data: ensName } = useEnsName({ address: address });
 
     const formattedAddress = formatAddress(address);
 
