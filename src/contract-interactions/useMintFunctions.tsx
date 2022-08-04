@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { GOVERNANCE_NFT_ABI } from "abis";
 import { ethers, Signer } from "ethers";
 
-export async function mintClick(contractAddress: string, signer: Signer) {
+export async function mintReverseAndDelegation(contractAddress: string, signer: Signer) {
     const erc20_rw = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, signer);
     const tx = await erc20_rw.reserve(1);
     const address = await signer.getAddress();
@@ -19,4 +19,11 @@ export async function mintClick(contractAddress: string, signer: Signer) {
     }
     // const supply = await erc20_rw.totalSupply();
     // console.log(supply);
+}
+
+export async function mintNFT(contractAddress: string, signer: Signer) {
+    const erc20_rw = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, signer);
+    const tx = await erc20_rw.mint();
+    console.log(tx);
+    console.log("Tx hash", tx.hash);
 }

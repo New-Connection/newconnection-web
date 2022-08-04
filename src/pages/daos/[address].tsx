@@ -28,7 +28,7 @@ import { useSigner } from "wagmi";
 import { useMoralis } from "react-moralis";
 import { loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
-import { AddToWhitelist, mintClick } from "contract-interactions/";
+import { AddToWhitelist, mintReverseAndDelegation, mintNFT } from "contract-interactions/";
 import toast from "react-hot-toast";
 
 interface QueryUrlParams extends ParsedUrlQuery {
@@ -373,7 +373,15 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         if (!DAO) return null;
         setButtonState("Loading");
         try {
-            const tx = await mintClick(DAO.tokenAddress, signer_data as Signer);
+            const tx = await mintReverseAndDelegation(DAO.tokenAddress, signer_data as Signer);
+            setButtonState("Success");
+        } catch (e) {
+            setButtonState("Error");
+            console.log("Transaction canceled");
+        }
+        try {
+            console.log("USE MINT NFT");
+            const tx = await mintNFT(DAO.tokenAddress, signer_data as Signer);
             setButtonState("Success");
         } catch (e) {
             setButtonState("Error");
