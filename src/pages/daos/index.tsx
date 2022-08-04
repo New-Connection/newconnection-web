@@ -8,24 +8,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
 import { useMoralis } from "react-moralis";
+import { IDAOPageForm } from "types/forms";
+import { loadImage } from "../../utils/ipfsUpload";
 
-
-interface IDAOListElement {
-    name: string;
-    address: string;
-    description: string;
-    profileImage: any;
-    isActive: boolean;
-    proposals: number;
-    votes: number;
-}
-
-const parseIpfsAddress = (address: string) => {
-    return "https://ipfs.io/ipfs/" + address.substring(7);
-};
 
 const DAOsPage: NextPage = () => {
-    const [DAOs, setDAOs] = useState<IDAOListElement[]>();
+    const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
 
     const moralisQuery = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
         autoFetch: false
@@ -37,24 +25,10 @@ const DAOsPage: NextPage = () => {
             await moralisQuery.fetch({
                 onSuccess: async (results) => {
                     const daos = await Promise.all(results.map(async (dao) => {
-                        const address = dao.get("contractAddress");
+                        const contractAddress = dao.get("contractAddress");
                         const name = dao.get("name");
                         const description = dao.get("description");
-
-                        const profileImageInfoURL = parseIpfsAddress(dao.get("profileImage"));
-                        let profileImage = await fetch(profileImageInfoURL)
-                            .then(response => response.json())
-                            .then(function(data) {
-                                const profileImageURL = parseIpfsAddress(data.image);
-                                return fetch(profileImageURL)
-                                    .then(response => response.blob())
-                                    .then(function(image) {
-                                        return URL.createObjectURL(image);
-                                    });
-                            })
-                            .catch(() => {
-                                console.log(`Invalid URL: ${profileImageInfoURL}`);
-                            });
+                        let profileImage = await loadImage(dao.get("profileImage"));
 
                         //TODO: write to db
                         const isActive = true;
@@ -63,13 +37,23 @@ const DAOsPage: NextPage = () => {
 
                         return {
                             name,
-                            address,
+                            contractAddress,
                             description,
                             profileImage,
                             votes,
                             proposals,
-                            isActive
-                        } as IDAOListElement;
+                            isActive,
+
+                            //mock
+                            blockchain: [],
+                            goals: "",
+                            chainId: 0,
+                            coverImage: null,
+                            tokenAddress: "",
+                            votingPeriod: "",
+                            type: [],
+                            quorumPercentage: ""
+                        } as IDAOPageForm;
                     }));
                     setDAOs(() => daos);
                 },
@@ -160,11 +144,11 @@ const DAOsPage: NextPage = () => {
                                         key={index}
                                         name={dao.name}
                                         description={dao.description}
-                                        address={dao.address}
+                                        address={dao.contractAddress}
                                         profileImage={dao.profileImage}
                                         isActive={dao.isActive}
-                                        proposals={dao.proposals}
-                                        votes={dao.votes}
+                                        proposals={dao.totalProposals}
+                                        votes={dao.totalVotes}
                                     />
                                 );
                             })}

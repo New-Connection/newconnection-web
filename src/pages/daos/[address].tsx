@@ -24,6 +24,7 @@ import classNames from "classnames";
 import { mintClick } from "contract-interactions/useMintFunctions";
 import { useSigner } from "wagmi";
 import { useMoralis } from "react-moralis";
+import { loadImage } from "../../utils/ipfsUpload";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -39,10 +40,10 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams
     const { address } = context.params as QueryUrlParams;
 
     const result: DAOPageProps = {
-        address: address.toString(),
+        address: address.toString()
     };
     return {
-        props: result,
+        props: result
     };
 };
 
@@ -81,22 +82,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         (query) => query.equalTo("contractAddress", address),
         [],
         {
-            autoFetch: false,
+            autoFetch: false
         }
     );
 
     const fetchDB = async () => {
         if (isInitialized) {
             await fetch({
-                onSuccess: (results) => {
+                onSuccess: async (results) => {
                     const moralisInstance = results[0];
                     console.log("Parse Instance", moralisInstance);
                     const newDao: IDAOPageForm = {
                         name: moralisInstance.get("name"),
                         description: moralisInstance.get("description"),
                         goals: moralisInstance.get("goals"),
-                        profileImage: moralisInstance.get("profileImage"),
-                        coverImage: moralisInstance.get("coverImage"),
+                        profileImage: await loadImage(moralisInstance.get("profileImage")),
+                        coverImage: await loadImage(moralisInstance.get("coverImage")),
                         tokenAddress: moralisInstance.get("tokenAddress"),
                         votingPeriod: moralisInstance.get("votingPeriod"),
                         quorumPercentage: moralisInstance.get("quorumPercentage"),
@@ -115,13 +116,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         totalVotes: 0,
                         totalMembers: 0,
                         totalProposals: 0,
-                        activeProposals: 0,
+                        activeProposals: 0
                     };
                     setDAO(() => newDao);
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
-                },
+                }
             });
         }
     };
@@ -136,7 +137,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const StatisticCard = ({ label, counter }) => {
         return (
-            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg w-1/4 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] cursor-pointer">
+            <div
+                className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg w-1/4 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] cursor-pointer">
                 <div className={"text-gray-400 group-hover:text-white"}>{label}</div>
                 <div className={"flex justify-end text-black text-5xl group-hover:text-white"}>
                     {counter || 0}
@@ -173,6 +175,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         image?: string;
         className?: string;
     }
+
     const NFTImage = ({ className }: INFTImage) => {
         return (
             <div className="flex justify-center">
@@ -251,7 +254,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             </Head>
             <Layout className="layout-base mt-0">
                 <div className="cover h-36 w-full relative justify-center">
-                    <Image src={basicAvatar} layout={"fill"} />
+                    <Image
+                        src={DAO.coverImage ? DAO.coverImage : basicAvatar}
+                        layout={"fill"}
+                    />
                 </div>
 
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
@@ -259,7 +265,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         <div className="flex">
                             <div className="mt-[-50px] ">
                                 <Image
-                                    src={basicAvatar}
+                                    src={DAO.profileImage ? DAO.profileImage : basicAvatar}
                                     height={"150px"}
                                     width={"150px"}
                                     className="rounded-xl"
@@ -270,7 +276,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         <Link
                             href={{
                                 pathname: "/daos/add-new-member",
-                                query: { daoName: DAO.name, nftAddress: DAO.tokenAddress },
+                                query: { daoName: DAO.name, nftAddress: DAO.tokenAddress }
                             }}
                         >
                             <button className="secondary-button mt-6">Become a member</button>
@@ -330,8 +336,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     textColor={"inherit"}
                                     TabIndicatorProps={{
                                         sx: {
-                                            backgroundColor: "#6858CB",
-                                        },
+                                            backgroundColor: "#6858CB"
+                                        }
                                     }}
                                     value={tabState}
                                     onChange={handleTabStateChange}
@@ -351,7 +357,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <Link
                                 href={{
                                     pathname: "/create-proposal",
-                                    query: { governorAddress: DAO.contractAddress },
+                                    query: { governorAddress: DAO.contractAddress }
                                 }}
                             >
                                 <button className="secondary-button">Add new proposal</button>
@@ -413,7 +419,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     <NFTImage className="rounded-lg h-14 w-14" />
                     <p className="mt-4 text-black">Membership NFT</p>
 
-                    <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
+                    <button
+                        className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
                         Transfer
                     </button>
                     <p className="text-gray2 font-light text-sm">

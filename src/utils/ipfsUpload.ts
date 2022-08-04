@@ -9,6 +9,9 @@ export const NFTStorageInitialization = (): NFTStorage => {
 
 export const ipfsFullPath = (address: string) => ("ipfs://" + `${address}`);
 
+const parseIpfsAddress = (address: string) => {
+    return "https://ipfs.io/ipfs/" + address.substring(7);
+};
 /**
  * Reads an image file from `imagePath` and stores an NFT with the given name and description.
  * @param image the path to an image file
@@ -33,4 +36,20 @@ export const storeNFT = async (image: File, name: String, description: String) =
     } catch (error) {
         console.log(error, "Token is invalid");
     }
+};
+
+export const loadImage = async (ipfsNFTStorageAddress: string) => {
+    return await fetch(parseIpfsAddress(ipfsNFTStorageAddress))
+        .then(response => response.json())
+        .then(function(data) {
+            const profileImageURL = parseIpfsAddress(data.image);
+            return fetch(profileImageURL)
+                .then(response => response.blob())
+                .then(function(image) {
+                    return URL.createObjectURL(image);
+                });
+        })
+        .catch(() => {
+            console.log(`Invalid URL: ${ipfsNFTStorageAddress}`);
+        });
 };

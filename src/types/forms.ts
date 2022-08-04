@@ -5,8 +5,8 @@ export interface ICreate {
 
 export interface ICreateDAO extends ICreate {
     goals: string;
-    profileImage: object;
-    coverImage: object;
+    profileImage: any;
+    coverImage: any;
     tokenAddress: string;
     votingPeriod: string;
     quorumPercentage: string;
@@ -26,6 +26,7 @@ export interface IDAOPageForm extends ICreateDAO {
     totalMembers?: number;
     totalProposals?: number;
     activeProposals?: number;
+    isActive?: boolean;
 }
 
 export interface IBlockchains {
