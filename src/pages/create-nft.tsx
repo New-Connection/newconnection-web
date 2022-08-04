@@ -26,9 +26,11 @@ import { useDialogState } from "ariakit";
 import { StepperDialog } from "../components/Dialog";
 import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
 
-import { ipfsFullPath, storeNFT } from "utils/ipfsUpload";
+import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "../utils/layerzero";
+import { setURI } from "../contract-interactions/stateNFTContract";
+import { createNFTSteps } from "../components/Dialog/Stepper";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -72,13 +74,13 @@ const CreateNFT: NextPage = () => {
         handleReset();
         confirmDialog.toggle();
 
+        let fullPath: string;
         try {
             const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
             console.log(UID);
-            const fullPath = ipfsFullPath(UID.url);
+            fullPath = UID.url;
             console.log(fullPath);
             handleChangeBasic(fullPath, setFormData, "ipfsAddress");
-            //todo: set url to contract
         } catch (error) {
             confirmDialog.toggle();
             handleReset();
@@ -101,6 +103,10 @@ const CreateNFT: NextPage = () => {
             handleNext();
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
+            handleNext();
+            const setTx = await setURI(contract.address, signer_data, fullPath);
+            handleNext();
+            await setTx.wait();
             handleNext();
             handleNext();
             handleChangeBasic(contract.address, setFormData, "contractAddress");
@@ -226,7 +232,7 @@ const CreateNFT: NextPage = () => {
                     </form>
                 </section>
 
-                <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
+                <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep} steps={createNFTSteps}>
                     <p className="ml-7">Deployment successful!</p>
                     <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
                     <Link

@@ -13,24 +13,49 @@ interface StepperDialogProps {
     activeStep: number;
     children?: React.ReactNode;
     className?: string;
+    steps?: { label: string, description: string }[];
 }
 
-const steps = [
+export const defaultSteps = [
     {
         label: "Waiting for the confirmation in your wallet",
-        description: ``,
+        description: ""
     },
     {
         label: "Waiting for the confirmation from blockchain",
-        description: "",
+        description: ""
     },
     {
         label: "Done",
-        description: "",
-    },
+        description: ""
+    }
 ];
 
-export const StepperDialog = ({ dialog, className, activeStep, children }: StepperDialogProps) => {
+export const createNFTSteps = [
+    {
+        label: "Waiting for the confirmation in your wallet to create contract",
+        description: ""
+    },
+    {
+        label: "Waiting for the confirmation from blockchain",
+        description: ""
+    },
+    {
+        label: "Waiting for the confirmation in your wallet to set IPFS URI",
+        description: ""
+    },
+    {
+        label: "Waiting for the confirmation from blockchain",
+        description: ""
+    },
+    {
+        label: "Done",
+        description: ""
+    }
+
+];
+
+export const StepperDialog = ({ dialog, className, activeStep, children, steps }: StepperDialogProps) => {
     const SpinnerLoading = () => {
         return (
             <div role="status">
@@ -53,7 +78,9 @@ export const StepperDialog = ({ dialog, className, activeStep, children }: Stepp
             </div>
         );
     };
-
+    if (!steps) {
+        steps = defaultSteps;
+    }
     return (
         <Dialog
             state={dialog}
@@ -64,24 +91,31 @@ export const StepperDialog = ({ dialog, className, activeStep, children }: Stepp
             <div className="h-full m-10">
                 <Stepper activeStep={activeStep} orientation="vertical">
                     {steps.map((step, index) => (
-                        <Step key={step.label}>
+                        <Step key={index}>
                             <div className="flex gap-2">
                                 {index === activeStep ? (
                                     //step for rn active message
                                     <>
-                                        <SpinnerLoading />
+                                        <div className={"w-7"}>
+                                            <SpinnerLoading />
+                                        </div>
                                         <div className="text-xl text-black">{step.label}</div>
                                     </>
                                 ) : index > activeStep - 1 ? (
                                     //steps for next messages
                                     <>
-                                        <CheckCircleIcon className="h-7 w-7 fill-gray3" />
+                                        <div className={"w-7"}>
+                                            <CheckCircleIcon className="h-7 w-7 fill-gray3" />
+                                        </div>
                                         <div className="text-xl text-gray3">{step.label}</div>
                                     </>
                                 ) : (
                                     //steps for previous messages
                                     <>
-                                        <CheckCircleIcon className="h-7 w-7 stroke-1 fill-purple" />
+                                        <div className={"w-7"}>
+                                            <CheckCircleIcon
+                                                className="h-7 w-7 stroke-1 fill-purple" />
+                                        </div>
                                         <div className="text-xl text-black2">{step.label}</div>
                                     </>
                                 )}
