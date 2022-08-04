@@ -115,11 +115,11 @@ const DAOsPage: NextPage = () => {
                         <div className={"flex flex-col gap-3 mt-4"}>
                             <div className={"flex justify-between"}>
                                 <p className={"text-gray2"}>Proposals:</p>
-                                <p>{proposals}</p>
+                                <p>{proposals || 0}</p>
                             </div>
                             <div className={"flex justify-between"}>
                                 <p className={"text-gray2"}>Votes:</p>
-                                <p className="text-black">{votes}</p>
+                                <p className="text-black">{votes || 0}</p>
                             </div>
                         </div>
                     </div>
