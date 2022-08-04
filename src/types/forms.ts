@@ -29,6 +29,12 @@ export interface IDAOPageForm extends ICreateDAO {
     isActive?: boolean;
 }
 
+export interface IMembershipForm {
+    walletAddress?: string;
+    note?: string;
+    blockchainSelected?: string;
+}
+
 export interface IBlockchains {
     Polygon?: string;
     Ethereum?: string;
@@ -63,9 +69,11 @@ export interface ICreateProposal extends ICreate {
 }
 
 export interface IAddNewMember {
-    walletAddress: string;
     daoName: string;
-    nftID: string;
+    walletAddress: string;
+    daoAddress: string;
+    nftID: number[];
     blockchainSelected: string;
+    blockchainEnabled: string[];
     note?: string;
 }

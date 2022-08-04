@@ -48,11 +48,7 @@ const ProposalsPage: NextPage = () => {
 
                     <div className="flex flex-col w-32 text-center text-xs">
                         {isActive ? (
-                            <p
-                                className={
-                                    "font-semibold border-gray-200 bg-gray-200 mb-3 px-1 border-2 rounded-3xl"
-                                }
-                            >
+                            <p className="font-semibold border-gray-200 bg-gray-200 mb-3 px-1 border-2 rounded-3xl">
                                 Active voting now
                             </p>
                         ) : (

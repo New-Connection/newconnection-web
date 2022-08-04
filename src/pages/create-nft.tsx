@@ -6,7 +6,7 @@ import {
     Button,
     TypeSelector,
     InputTextArea,
-    InputSupplyOfNFT
+    InputSupplyOfNFT,
 } from "components/Form";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ import {
     handleChangeBasic,
     handleImageChange,
     handleSelectorChange,
-    handleTextChange
+    handleTextChange,
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
@@ -44,7 +44,7 @@ const CreateNFT: NextPage = () => {
         price: 0,
         contractAddress: "",
         ipfsAddress: "",
-        Polygon: ""
+        Polygon: "",
     });
 
     const { data: signer_data } = useSigner();
@@ -91,14 +91,15 @@ const CreateNFT: NextPage = () => {
         let contract;
         try {
             const chainId = await signer_data.getChainId();
-            const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
+            const endpoint: string =
+                layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
-                endMintId: +formData.Polygon!
+                endMintId: +formData.Polygon!,
             });
             handleNext();
             await contract.deployed();
@@ -240,8 +241,8 @@ const CreateNFT: NextPage = () => {
                             pathname: "create-dao",
                             query: {
                                 tokenAddress: formData.contractAddress,
-                                enabledBlockchains: CHAINS.filter((chain) => formData[chain])
-                            }
+                                enabledBlockchains: CHAINS.filter((chain) => formData[chain]),
+                            },
                         }}
                     >
                         <button

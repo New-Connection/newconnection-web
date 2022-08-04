@@ -36,6 +36,8 @@ export interface ISelectorProps {
     name: string;
     label: string;
     className?: string;
+    defaultValue?: string;
+    disablesValues?: string[];
     handleChange?: (event: BaseSyntheticEvent) => boolean;
 }
 
