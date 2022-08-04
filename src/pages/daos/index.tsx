@@ -11,12 +11,11 @@ import { useMoralis } from "react-moralis";
 import { IDAOPageForm } from "types/forms";
 import { loadImage } from "../../utils/ipfsUpload";
 
-
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
 
     const moralisQuery = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
-        autoFetch: false
+        autoFetch: false,
     });
     const { isInitialized } = useMoralis();
 
@@ -24,42 +23,44 @@ const DAOsPage: NextPage = () => {
         if (isInitialized) {
             await moralisQuery.fetch({
                 onSuccess: async (results) => {
-                    const daos = await Promise.all(results.map(async (dao) => {
-                        const contractAddress = dao.get("contractAddress");
-                        const name = dao.get("name");
-                        const description = dao.get("description");
-                        let profileImage = await loadImage(dao.get("profileImage"));
+                    const daos = await Promise.all(
+                        results.map(async (dao) => {
+                            const contractAddress = dao.get("contractAddress");
+                            const name = dao.get("name");
+                            const description = dao.get("description");
+                            let profileImage = await loadImage(dao.get("profileImage"));
 
-                        //TODO: write to db
-                        const isActive = true;
-                        const proposals = 0;
-                        const votes = 0;
+                            //TODO: write to db
+                            const isActive = true;
+                            const proposals = 0;
+                            const votes = 0;
 
-                        return {
-                            name,
-                            contractAddress,
-                            description,
-                            profileImage,
-                            votes,
-                            proposals,
-                            isActive,
+                            return {
+                                name,
+                                contractAddress,
+                                description,
+                                profileImage,
+                                votes,
+                                proposals,
+                                isActive,
 
-                            //mock
-                            blockchain: [],
-                            goals: "",
-                            chainId: 0,
-                            coverImage: null,
-                            tokenAddress: "",
-                            votingPeriod: "",
-                            type: [],
-                            quorumPercentage: ""
-                        } as IDAOPageForm;
-                    }));
+                                //mock
+                                blockchain: [],
+                                goals: "",
+                                chainId: 0,
+                                coverImage: null,
+                                tokenAddress: "",
+                                votingPeriod: "",
+                                type: [],
+                                quorumPercentage: "",
+                            } as IDAOPageForm;
+                        })
+                    );
                     setDAOs(() => daos);
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
-                }
+                },
             });
         }
     };
@@ -79,8 +80,13 @@ const DAOsPage: NextPage = () => {
                 >
                     <div className={"flex gap-10 w-10/12"}>
                         <div className="w-28 h-28">
-                            <Image width={"150"} height={"150"} layout={"responsive"}
-                                   src={profileImage ? profileImage : basicAvatar} />
+                            <Image
+                                width={"150"}
+                                height={"150"}
+                                layout={"responsive"}
+                                src={profileImage ? profileImage : basicAvatar}
+                                className="rounded-2xl"
+                            />
                         </div>
                         <div className="w-5/6 grid grid-cols-1 content-between">
                             <div className="w-full">
