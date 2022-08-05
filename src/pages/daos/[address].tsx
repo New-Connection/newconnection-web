@@ -94,7 +94,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 setWhitelist(() => results);
             },
             onError: (error) => {
-                console.log("1Error fetching db query" + error);
+                console.log("Error fetching db query" + error);
             },
         });
     };

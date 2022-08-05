@@ -130,9 +130,6 @@ const DAOsPage: NextPage = () => {
 
     return (
         <div>
-            <Head>
-                <title>DAOs</title>
-            </Head>
             <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className={"flex justify-between items-center"}>
