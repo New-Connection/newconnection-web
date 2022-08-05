@@ -30,6 +30,7 @@ import { loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
 import { AddToWhitelist, mintReverseAndDelegation, mintNFT } from "contract-interactions/";
 import toast from "react-hot-toast";
+import ProporsalCard from "components/Cards/ProporsalCard";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -63,6 +64,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [click, setClick] = useState(false);
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
+    const [Proposals, setProposals] = useState<Moralis.Object<Moralis.Attributes>[]>();
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
     const detailNFTDialog = useDialogState();
     const { data: signer_data } = useSigner();
@@ -77,7 +79,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         }
     );
 
-    const { fetch: fetchWhitelisQuery } = useMoralisQuery(
+    const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
         (query) => query.equalTo("daoAddress", address),
         [],
@@ -86,8 +88,61 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         }
     );
 
+    const fetchWhitelist = async () => {
+        await WhitelistQuery({
+            onSuccess: (results) => {
+                setWhitelist(() => results);
+            },
+            onError: (error) => {
+                console.log("1Error fetching db query" + error);
+            },
+        });
+    };
+
+    const { fetch: ProposalQuery } = useMoralisQuery(
+        "Proposal",
+        (query) => query.equalTo("governorAddress", address),
+        [],
+        {
+            autoFetch: false,
+        }
+    );
+
+    const fetchProposal = async () => {
+        await ProposalQuery({
+            onSuccess: (results) => {
+                setProposals(() => results);
+            },
+            onError: (error) => {
+                console.log("Error fetching db query" + error);
+            },
+        });
+    };
+
     const TabOne: FC<{}> = () => {
-        return (
+        return Proposals ? (
+            <ul>
+                {Proposals.map((proposal, index) => {
+                    const id = proposal.get("id");
+                    const name = proposal.get("name");
+                    const description = proposal.get("description");
+
+                    //TODO: write to db
+                    const isActive = true;
+                    const votesFor = 0;
+                    const votesAgainst = 0;
+                    return (
+                        <li key={index} className="border-b-2 border-gray">
+                            <ProporsalCard
+                                title={name}
+                                description={description}
+                                shortDescription={description}
+                            />
+                        </li>
+                    );
+                })}
+            </ul>
+        ) : (
             <div>
                 <MockupTextCard
                     label={"No proposals here yet"}
@@ -114,20 +169,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             </div>
         );
     };
-
-    const fetchWhitelist = async () => {
-        await fetchWhitelisQuery({
-            onSuccess: (results) => {
-                setWhitelist(() => results);
-            },
-            onError: (error) => {
-                console.log("Error fetching db query" + error);
-            },
-        });
-    };
-    useEffect(() => {
-        fetchWhitelist();
-    }, [isInitialized]);
 
     // function removeItem(walletAddress: string) {
     //     console.log("hey");
@@ -285,6 +326,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     useEffect(() => {
         fetchDB();
+        fetchProposal();
+        fetchWhitelist();
     }, [isInitialized]);
 
     const StatisticCard = ({ label, counter }) => {
