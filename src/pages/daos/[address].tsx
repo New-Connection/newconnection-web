@@ -31,6 +31,7 @@ import { AddToWhitelist, mintReverseAndDelegation, mintNFT } from "contract-inte
 import toast from "react-hot-toast";
 import ProporsalCard from "components/Cards/ProporsalCard";
 import { getTokenURI } from "contract-interactions/viewNftContract";
+import defaultImage from "assets/empty-token.webp";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -142,6 +143,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     title={name}
                                     description={description}
                                     shortDescription={description}
+                                    daoName={DAO?.name}
                                 />
                             </li>
                         </Link>
@@ -207,7 +209,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         <p className="w-1/3">Blockchain</p>
                     </div>
                     <p className="w-1/2">Notes</p>
-
                     <p className="w-1/4">Action</p>
                 </div>
                 {whitelist.map((wl, index) => {
@@ -401,7 +402,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     <p className="text-start">{daoTitle}: Membership </p>
                     <div className="flex pt-4 justify-between">
                         <p className="font-light text-sm text-[#AAAAAA]">Type: Art</p>
-                        <Image src={BlockchainExample} height="24" width="24" />
+                        <BlockchainImage />
                     </div>
                 </div>
             </button>
@@ -452,6 +453,26 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             return;
         }
     }
+    // TODO: Create maping for array of blockchains
+    const BlockchainImage = () => {
+        return DAO ? (
+            <Image
+                src={CHAINS_IMG[DAO.blockchain[0]]["src"]}
+                height={22}
+                width={22}
+                objectFit={"contain"}
+                className="mb-4"
+            />
+        ) : (
+            <Image
+                src={defaultImage}
+                height={22}
+                width={22}
+                objectFit={"contain"}
+                className="mb-4"
+            />
+        );
+    };
 
     return DAO ? (
         <div>
@@ -504,13 +525,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 Smart Contract
                                 <ExternalLinkIcon className="h-6 w-5" />
                             </a>
-                            <a
-                                href={DAO.websiteURL}
-                                target={"_blank"}
-                                className="hover:text-purple"
-                            >
-                                DAO Blockchains
-                            </a>
+                            <div className="hover:text-purple gap-4 flex mb-4">
+                                <p>DAO Blockchains</p>
+                                <BlockchainImage />
+                            </div>
                         </div>
                         <div className="flex w-1/3 justify-end gap-7">
                             {DAO.discordURL ? (

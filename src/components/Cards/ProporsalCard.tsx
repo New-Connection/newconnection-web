@@ -6,10 +6,11 @@ interface IProporsalCard {
     title: string;
     shortDescription: string;
     description?: string;
+    daoName?: string;
     blockchain?: string[];
 }
 
-const ProporsalCard = ({ title, shortDescription }: IProporsalCard) => {
+const ProporsalCard = ({ title, shortDescription, daoName }: IProporsalCard) => {
     const isActive = true;
     // <Link href={`/proposals/${id}`}></Link>
     return (
@@ -33,7 +34,7 @@ const ProporsalCard = ({ title, shortDescription }: IProporsalCard) => {
                     <div className="flex gap-5 pb-2">
                         <div className="flex gap-5">
                             <p className="text-gray3">For</p>
-                            <p className="font-medium">PeaksDAO</p>
+                            <p className="font-medium">{daoName}</p>
                         </div>
                         <Image src={Polygon} height={12} width={23} />
                     </div>
