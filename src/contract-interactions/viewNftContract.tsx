@@ -6,3 +6,13 @@ export async function getName(contractAddress: string, chainId: number) {
     const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
     return await nft.name();
 }
+
+export async function getTokenURI(contractAddress: string, chainId: number) {
+    try {
+        let provider = ethers.getDefaultProvider(chainId);
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        return await nft.baseURI();
+    } catch (e) {
+        console.log("Error while parsing token URI");
+    }
+}

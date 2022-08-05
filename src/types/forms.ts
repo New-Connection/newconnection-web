@@ -26,6 +26,7 @@ export interface IDAOPageForm extends ICreateDAO {
     totalMembers?: number;
     totalProposals?: number;
     activeProposals?: number;
+    nftImage?: any;
     isActive?: boolean;
 }
 

@@ -11,7 +11,7 @@ import basicAvatar from "assets/basic_avatar.jpg";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import Moralis from "moralis";
-import {  CHAINS_IMG } from "utils/blockchains";
+import { CHAINS_IMG } from "utils/blockchains";
 import { useMoralisQuery } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
 import { useEffect, useState } from "react";
@@ -31,6 +31,7 @@ import { TabsType } from "types/tabs";
 import { AddToWhitelist, mintReverseAndDelegation, mintNFT } from "contract-interactions/";
 import toast from "react-hot-toast";
 import ProporsalCard from "components/Cards/ProporsalCard";
+import { getTokenURI } from "../../contract-interactions/viewNftContract";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -66,6 +67,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
     const [Proposals, setProposals] = useState<Moralis.Object<Moralis.Attributes>[]>();
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
+    const [nftImage, setNftImage] = useState("");
     const detailNFTDialog = useDialogState();
     const { data: signer_data } = useSigner();
     const { isInitialized } = useMoralis();
@@ -283,33 +285,32 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     ];
     const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
 
-    const fetchDB = async () => {
+    const fetchDAO = async () => {
         if (isInitialized) {
             await DAOsQuery({
                 onSuccess: async (results) => {
                     const moralisInstance = results[0];
-                    // console.log("Parse Instance", moralisInstance);
+                    const tokenAddress = moralisInstance.get("tokenAddress");
+                    const chainId = moralisInstance.get("chainId");
+                    const contractAddress = moralisInstance.get("contractAddress");
                     const newDao: IDAOPageForm = {
                         name: moralisInstance.get("name"),
                         description: moralisInstance.get("description"),
                         goals: moralisInstance.get("goals"),
                         profileImage: await loadImage(moralisInstance.get("profileImage")),
                         coverImage: await loadImage(moralisInstance.get("coverImage")),
-                        tokenAddress: moralisInstance.get("tokenAddress"),
+                        tokenAddress: tokenAddress,
                         votingPeriod: moralisInstance.get("votingPeriod"),
                         quorumPercentage: moralisInstance.get("quorumPercentage"),
                         type: moralisInstance.get("type"),
                         blockchain: moralisInstance.get("blockchain"),
-                        contractAddress: moralisInstance.get("contractAddress"),
-                        chainId: moralisInstance.get("chainId"),
+                        contractAddress: contractAddress,
+                        chainId: chainId,
                         //todo: parse below values
                         discordURL: moralisInstance.get("discordURL"),
                         twitterURL: moralisInstance.get("twitterURL"),
                         websiteURL: moralisInstance.get("websiteURL"),
-                        scanURL: getChainScanner(
-                            moralisInstance.get("chainId"),
-                            moralisInstance.get("contractAddress")
-                        ),
+                        scanURL: getChainScanner(chainId, contractAddress),
                         totalVotes: 0,
                         totalMembers: 0,
                         totalProposals: 0,
@@ -324,11 +325,20 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         }
     };
 
+    const fetchNftImage = async () => {
+        const image = await loadImage(await getTokenURI(DAO?.tokenAddress!, DAO?.chainId!));
+        setNftImage(() => image);
+    };
+
     useEffect(() => {
-        fetchDB();
+        fetchDAO();
         fetchProposal();
         fetchWhitelist();
     }, [isInitialized]);
+
+    useEffect(() => {
+        fetchNftImage();
+    }, [DAO]);
 
     const StatisticCard = ({ label, counter }) => {
         return (
@@ -369,9 +379,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         return (
             <div className="flex justify-center">
                 <Image
-                    src={NFTExample}
+                    src={nftImage ? nftImage : NFTExample}
+                    width={'200'}
+                    height={'200'}
                     className={classNames("rounded-t-md", className)}
-                    objectFit="contain"
                 />
             </div>
         );
