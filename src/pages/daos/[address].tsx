@@ -121,7 +121,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     };
 
     const TabOne: FC<{}> = () => {
-        return Proposals ? (
+        return Proposals && Proposals.length !== 0 ? (
             <ul>
                 {Proposals.map((proposal, index) => {
                     const id = proposal.get("id");
@@ -199,7 +199,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     // }
 
     const TabThree: FC<{}> = () => {
-        return whitelist ? (
+        return whitelist && whitelist.length !== 0 ? (
             <div className="w-full justify-between space-y-5 gap-5">
                 <div className="flex text-gray2 justify-between text-center pb-4 pt-0">
                     <div className="flex w-1/4 pr-3">
