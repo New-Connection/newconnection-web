@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import classNames from "classnames";
 import { useSigner } from "wagmi";
 import { useDialogState } from "ariakit";
 import toast from "react-hot-toast";
 import { ParsedUrlQuery } from "querystring";
 import type { GetServerSideProps, NextPage } from "next";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 
 import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
@@ -13,9 +14,9 @@ import { formatAddress } from "utils/address";
 import { validateForm } from "utils/validate";
 import ProgressBar from "components/ProgressBar/ProgressBar";
 import { StepperDialog } from "../../../components/Dialog";
-
+import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
-import { useMoralis, useMoralisQuery } from "react-moralis";
+import { MockupTextCard } from "components/Mockup";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     detailProposal: string;
@@ -28,9 +29,7 @@ interface DetailProposalProps {
 export const getServerSideProps: GetServerSideProps<DetailProposalProps, QueryUrlParams> = async (
     context
 ) => {
-    console.log("Context", context.params);
     const { detailProposal } = context.params as QueryUrlParams;
-    console.log("Server", detailProposal);
     const result: DetailProposalProps = {
         detailProposal: detailProposal,
     };
@@ -47,6 +46,8 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
     const [activeStep, setActiveStep] = useState(0);
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
+    const { isInitialized } = useMoralis();
+    const [proposalData, setProposal] = useState<IProposalDetail>();
 
     const { fetch } = useMoralisQuery(
         "Proposal",
@@ -56,6 +57,30 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
             autoFetch: false,
         }
     );
+
+    const fetchData = async () => {
+        if (isInitialized) {
+            await fetch({
+                onSuccess: async (results) => {
+                    const proposal = results[0];
+                    const newProposal: IProposalDetail = {
+                        title: proposal.get("name"),
+                        description: proposal.get("description"),
+                        shortDescription: proposal.get("shortDescription"),
+                        // TODO: Parse values from IProposalDetail
+                    };
+                    setProposal(() => newProposal);
+                },
+                onError: (error) => {
+                    console.log("Error fetching db query" + error);
+                },
+            });
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, [isInitialized]);
 
     const handleNext = (defaultStep = 1) => {
         setActiveStep((prevActiveStep) => prevActiveStep + defaultStep);
@@ -105,15 +130,10 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
         );
     };
 
-    const AboutCard = () => {
+    const AboutCard = ({ description }) => {
         return (
             <CardProposal title="About" className="w-1/3">
-                <p className="text-sm">
-                    The goals of this proposal are to establish a budget for the $PSP holdings of
-                    PeaksDAO unvested over a year. To do this, it seeks to lower the current staking
-                    rewards, rebalance the risk vs LPs, and establish upper spending limits for
-                    other DAO spending categories.
-                </p>
+                <p className="text-sm line-clamp-6">{description}</p>
             </CardProposal>
         );
     };
@@ -168,22 +188,19 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
         handleNext(3);
     }
 
-    return (
+    return proposalData ? (
         <div>
             <Layout className="layout-base">
                 <BackButton />
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <div className="flex">
-                            <h1 className="text-highlighter w-1/2">{detailProposal}</h1>
+                            <h1 className="text-highlighter w-1/2">{proposalData.title}</h1>
                             <BadgeIsActive isActive={false} />
                         </div>
-                        <p className="pb-4">
-                            To create your DAO, you first need to add a created NFT collection or
-                            mint a new one in our system
-                        </p>
+                        <p className="pb-4">{proposalData.shortDescription}</p>
                         <div className="flex gap-6 pb-10">
-                            <AboutCard />
+                            <AboutCard description={proposalData.description} />
                             <InfoCard />
                             <VotingResultsCard />
                         </div>
@@ -212,6 +229,17 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
                         Back to proposal
                     </button>
                 </StepperDialog>
+            </Layout>
+        </div>
+    ) : (
+        <div>
+            <Layout className="layout-base">
+                <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
+                    <MockupTextCard
+                        label={"DAO not found"}
+                        text={"Sorry, DAO not fount. Please try to reload page"}
+                    />
+                </section>
             </Layout>
         </div>
     );
