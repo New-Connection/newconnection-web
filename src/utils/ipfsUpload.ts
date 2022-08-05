@@ -2,12 +2,11 @@ import { NFT_STORAGE_KEY } from "./constants";
 //https://nft.storage/docs/troubleshooting/
 import { NFTStorage } from "nft.storage/dist/bundle.esm.min.js";
 
-
 export const NFTStorageInitialization = (): NFTStorage => {
     return new NFTStorage({ token: NFT_STORAGE_KEY });
 };
 
-export const ipfsFullPath = (address: string) => ("ipfs://" + `${address}`);
+export const ipfsFullPath = (address: string) => "ipfs://" + `${address}`;
 
 const parseIpfsAddress = (address: string) => {
     return "https://ipfs.io/ipfs/" + address.substring(7);
@@ -28,7 +27,7 @@ export const storeNFT = async (image: File, name: String, description: String) =
         const UID = await client.store({
             image,
             name,
-            description
+            description,
         });
         const status = await client.status(UID.ipnft);
         console.log(status);
@@ -39,17 +38,15 @@ export const storeNFT = async (image: File, name: String, description: String) =
 };
 
 export const loadImage = async (ipfsNFTStorageAddress: string) => {
-    return await fetch(parseIpfsAddress(ipfsNFTStorageAddress))
-        .then(response => response.json())
-        .then(function(data) {
-            const profileImageURL = parseIpfsAddress(data.image);
-            return fetch(profileImageURL)
-                .then(response => response.blob())
-                .then(function(image) {
-                    return URL.createObjectURL(image);
-                });
-        })
-        .catch(() => {
-            console.log(`Invalid URL: ${ipfsNFTStorageAddress}`);
-        });
+    const image = "";
+    try {
+        const responseData = await fetch(parseIpfsAddress(ipfsNFTStorageAddress));
+        const data = await responseData.json();
+        const responseImage = await fetch(parseIpfsAddress(data.image));
+        const blob = await responseImage.blob();
+        return URL.createObjectURL(blob);
+    } catch (e) {
+        console.log(`Invalid URL: ${ipfsNFTStorageAddress}`);
+    }
+    return image;
 };

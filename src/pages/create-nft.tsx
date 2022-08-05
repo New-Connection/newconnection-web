@@ -23,14 +23,14 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { StepperDialog } from "../components/Dialog";
-import { deployNFTContract } from "../contract-interactions/useDeployNFTContract";
+import { StepperDialog } from "components/Dialog";
+import { deployNFTContract } from "contract-interactions/useDeployNFTContract";
 
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
-import { chainIds, layerzeroEndpoints } from "../utils/layerzero";
-import { setURI } from "../contract-interactions/stateNFTContract";
-import { createNFTSteps } from "../components/Dialog/Stepper";
+import { chainIds, layerzeroEndpoints } from "utils/layerzero";
+import { setURI } from "contract-interactions/stateNFTContract";
+import { createNFTSteps } from "components/Dialog/Stepper";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -233,7 +233,12 @@ const CreateNFT: NextPage = () => {
                     </form>
                 </section>
 
-                <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep} steps={createNFTSteps}>
+                <StepperDialog
+                    dialog={confirmDialog}
+                    className="dialog"
+                    activeStep={activeStep}
+                    steps={createNFTSteps}
+                >
                     <p className="ml-7">Deployment successful!</p>
                     <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
                     <Link

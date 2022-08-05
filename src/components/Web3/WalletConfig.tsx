@@ -16,9 +16,9 @@ import { alchemyId, infuraId } from "utils/constants";
 export const { chains, provider, webSocketProvider } = configureChains(
     [...defaultChains, polygonTestnet, avalancheTestnet],
     [
-        alchemyProvider({ alchemyId }),
+        alchemyProvider({ apiKey: alchemyId }),
         publicProvider(),
-        infuraProvider({ infuraId }),
+        infuraProvider({ apiKey:infuraId }),
         jsonRpcProvider({
             rpc: (chain) => {
                 if (chain.id !== polygonTestnet.id) return null;
