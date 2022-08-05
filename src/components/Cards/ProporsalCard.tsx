@@ -1,7 +1,7 @@
 import ProgressBar from "components/ProgressBar/ProgressBar";
 import Image from "next/image";
 import Polygon from "assets/chains/Polygon.png";
-import { timestampToDate } from "../../utils/basic";
+import { timestampToDate } from "utils/basic";
 
 interface IProporsalCard {
     title: string;

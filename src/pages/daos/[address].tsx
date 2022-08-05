@@ -1,6 +1,6 @@
 import * as React from "react";
 import { formatAddress } from "utils/address";
-import { FC } from "react";
+import { FC, useLayoutEffect, useRef } from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
@@ -36,7 +36,7 @@ import {
     proposalAgainstVotes,
     proposalDeadline,
     proposalForVotes,
-} from "../../contract-interactions/viewGovernorContract";
+} from "contract-interactions/viewGovernorContract";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -76,6 +76,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const detailNFTDialog = useDialogState();
     const { data: signer_data } = useSigner();
     const { isInitialized } = useMoralis();
+    const firstUpdate = useRef(true);
 
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
@@ -353,7 +354,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         scanURL: getChainScanner(chainId, contractAddress),
                         totalVotes: 0,
                         totalMembers: 0,
-                        totalProposals: await getTotalProposals(contractAddress, chainId),
+                        totalProposals: 0,
                         activeProposals: 0,
                     };
                     setDAO(() => newDao);
@@ -379,6 +380,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     useEffect(() => {
         fetchNftImage();
     }, [DAO]);
+
+    useLayoutEffect(() => {
+        if (DAO && firstUpdate.current) {
+            firstUpdate.current = false;
+            fetchBlockchainData();
+        }
+    });
+
+    const fetchBlockchainData = async () => {
+        const totalProposals = await getTotalProposals(DAO!.contractAddress!, DAO!.chainId!);
+        const newDAO = {
+            ...DAO,
+            totalProposals: totalProposals,
+        } as IDAOPageForm;
+        setDAO(() => newDAO);
+    };
 
     const StatisticCard = ({ label, counter }) => {
         return (

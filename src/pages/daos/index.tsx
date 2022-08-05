@@ -9,10 +9,11 @@ import basicAvatar from "assets/basic_avatar.jpg";
 import { useMoralis } from "react-moralis";
 import { IDAOPageForm } from "types/forms";
 import { loadImage } from "utils/ipfsUpload";
-import { getTotalProposals } from "../../contract-interactions/viewGovernorContract";
+import { getTotalProposals } from "contract-interactions/viewGovernorContract";
 
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
+    const firstUpdate = useRef(true);
 
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
@@ -75,7 +76,6 @@ const DAOsPage: NextPage = () => {
         fetchDB();
     }, [isInitialized]);
 
-    const firstUpdate = useRef(true);
     useLayoutEffect(() => {
         if (DAOs && firstUpdate.current) {
             firstUpdate.current = false;
@@ -93,9 +93,7 @@ const DAOsPage: NextPage = () => {
                 } as IDAOPageForm;
             })
         );
-        setDAOs(() => {
-            return newDAOs;
-        });
+        setDAOs(() => newDAOs);
     };
 
     const DAOCard = ({ name, description, profileImage, address, isActive, proposals, votes }) => {

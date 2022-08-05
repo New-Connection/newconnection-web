@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { GOVERNANCE_NFT_ABI } from "abis";
-import { networkDetails } from "../utils/constants";
+import { networkDetails } from "utils/constants";
 import { BaseProvider } from "@ethersproject/providers/src.ts/base-provider";
 
 export async function getName(contractAddress: string, chainId: number) {
