@@ -126,19 +126,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     const id = proposal.get("id");
                     const name = proposal.get("name");
                     const description = proposal.get("description");
-
+                    const detailProposal = proposal.get("proposalId");
+                    console.log(detailProposal);
                     //TODO: write to db
                     const isActive = true;
                     const votesFor = 0;
                     const votesAgainst = 0;
                     return (
-                        <li key={index} className="border-b-2 border-gray">
-                            <ProporsalCard
-                                title={name}
-                                description={description}
-                                shortDescription={description}
-                            />
-                        </li>
+                        <Link href={`/daos/proposal/${detailProposal}`}>
+                            <li key={index} className="border-b-2 border-gray">
+                                <ProporsalCard
+                                    title={name}
+                                    description={description}
+                                    shortDescription={description}
+                                />
+                            </li>
+                        </Link>
                     );
                 })}
             </ul>

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { NextPage } from "next";
 import classNames from "classnames";
 import { useSigner } from "wagmi";
 import { useDialogState } from "ariakit";
 import toast from "react-hot-toast";
+import { ParsedUrlQuery } from "querystring";
+import type { GetServerSideProps, NextPage } from "next";
 
 import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
@@ -11,11 +12,34 @@ import { Button, RadioSelector } from "components/Form";
 import { formatAddress } from "utils/address";
 import { validateForm } from "utils/validate";
 import ProgressBar from "components/ProgressBar/ProgressBar";
-import { StepperDialog } from "../components/Dialog";
+import { StepperDialog } from "../../../components/Dialog";
 
 import { handleTextChangeAddNewMember } from "utils/handlers";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 
-const DetailProposal: NextPage = () => {
+interface QueryUrlParams extends ParsedUrlQuery {
+    detailProposal: string;
+}
+
+interface DetailProposalProps {
+    detailProposal: string;
+}
+
+export const getServerSideProps: GetServerSideProps<DetailProposalProps, QueryUrlParams> = async (
+    context
+) => {
+    console.log("Context", context.params);
+    const { detailProposal } = context.params as QueryUrlParams;
+    console.log("Server", detailProposal);
+    const result: DetailProposalProps = {
+        detailProposal: detailProposal,
+    };
+    return {
+        props: result,
+    };
+};
+
+const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
     const [formData, setFormData] = useState({
         voteResult: "",
         txConfirm: "",
@@ -23,6 +47,15 @@ const DetailProposal: NextPage = () => {
     const [activeStep, setActiveStep] = useState(0);
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
+
+    const { fetch } = useMoralisQuery(
+        "Proposal",
+        (query) => query.equalTo("proposalId", detailProposal),
+        [],
+        {
+            autoFetch: false,
+        }
+    );
 
     const handleNext = (defaultStep = 1) => {
         setActiveStep((prevActiveStep) => prevActiveStep + defaultStep);
@@ -142,7 +175,7 @@ const DetailProposal: NextPage = () => {
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <div className="flex">
-                            <h1 className="text-highlighter w-1/2">PeaksDAO budget for 2022</h1>
+                            <h1 className="text-highlighter w-1/2">{detailProposal}</h1>
                             <BadgeIsActive isActive={false} />
                         </div>
                         <p className="pb-4">
