@@ -101,7 +101,7 @@ const DAOsPage: NextPage = () => {
             <Link href={`/daos/${address}`}>
                 <div
                     className={
-                        "flex justify-between w-full h-36 p-3 mt-3 border-b-2 border-gray cursor-pointer"
+                        "flex justify-between w-full h-40 p-3 border-b-2 border-gray cursor-pointer active:bg-gray"
                     }
                 >
                     <div className={"flex gap-10 w-10/12"}>
@@ -143,10 +143,10 @@ const DAOsPage: NextPage = () => {
                                 <p className={"text-gray2"}>Proposals:</p>
                                 <p>{proposals || 0}</p>
                             </div>
-                            <div className={"flex justify-between"}>
+                            {/* <div className={"flex justify-between"}>
                                 <p className={"text-gray2"}>Votes:</p>
                                 <p className="text-black">{votes || 0}</p>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
