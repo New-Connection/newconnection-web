@@ -2,43 +2,47 @@ import ProgressBar from "components/ProgressBar/ProgressBar";
 import Image from "next/image";
 import Polygon from "assets/chains/Polygon.png";
 
-const ProporsalCard = () => {
+interface IProporsalCard {
+    title: string;
+    shortDescription: string;
+    description?: string;
+    blockchain?: string[];
+}
+
+const ProporsalCard = ({ title, shortDescription }: IProporsalCard) => {
     const isActive = true;
+    // <Link href={`/proposals/${id}`}></Link>
     return (
-        <div className="h-64 py-10">
-            <div className="flex justify-between py-6">
-                <p className="font-medium text-xl">PeaksDAO budget for 2022</p>
+        <div className="h-52 py-5">
+            <div className="flex justify-between pb-6">
+                <p className="font-medium text-xl">{title}</p>
                 <div>
                     {isActive ? (
-                        <div className="flex gap-14">
-                            <p className="font-light">Ends May 20, 2022, 10:00AM</p>
-                            <p className="text-[#116328] bg-[#F6F6F6] px-5 py-0.5 rounded-lg">
-                                Active
-                            </p>
+                        <div className="flex gap-5">
+                            <p className="font-light text-sm mt-1">Ends May 20, 2022, 10:00AM</p>
+                            <p className="text-green bg-gray px-5 py-0.5 rounded-full">Active</p>
                         </div>
                     ) : (
-                        <p className="text-[#9A1313] bg-[#F6F6F6] px-5 py-0.5 rounded-md">Closed</p>
+                        <p className="text-red bg-gray px-5 py-0.5 rounded-full">Closed</p>
                     )}
                 </div>
             </div>
-            <div className="flex gap-20 mb-6">
-                <p className="w-2/3 font-normal">
-                    The goals of this proposal are to establish a budget for the $PSP holdings of
-                    PeaksDAO unvested over a year. To do this, it seeks to lower the current staking
-                    rewards, rebalance the risk vs LPs, and establish upper spending limits for
-                    other DAO spending categories.
-                </p>
-                <div className="w-1/3 gap-10">
-                    <ProgressBar bgColor={1} percentage={33} />
-                    <ProgressBar bgColor={2} percentage={45} />
+            <div className="flex justify-between">
+                <div className="w-3/4 grid grid-cols-1 content-between">
+                    <p className="w-full font-normal line-clamp-3 pr-4">{shortDescription}</p>
+                    <div className="flex gap-5 pb-2">
+                        <div className="flex gap-5">
+                            <p className="text-gray3">For</p>
+                            <p className="font-medium">PeaksDAO</p>
+                        </div>
+                        <Image src={Polygon} height={12} width={23} />
+                    </div>
                 </div>
-            </div>
-            <div className="flex gap-20">
-                <div className="flex gap-5">
-                    <p className="text-[#CCCCCC]">For</p>
-                    <p className="font-medium">PeaksDAO</p>
+
+                <div className="w-1/4">
+                    <ProgressBar bgColor={1} percentage={55} title="Agains" />
+                    <ProgressBar bgColor={3} percentage={45} title="In favor" />
                 </div>
-                <Image src={Polygon} height={12} width={20} />
             </div>
         </div>
     );
