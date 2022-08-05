@@ -445,9 +445,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     return DAO ? (
         <div>
-            <Head>
-                <title>{DAO.name}</title>
-            </Head>
             <Layout className="layout-base mt-0">
                 <div className="cover h-36 w-full relative justify-center">
                     <Image src={DAO.coverImage ? DAO.coverImage : basicAvatar} layout={"fill"} />
@@ -601,9 +598,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         </div>
     ) : (
         <div>
-            <Head>
-                <title>Not found</title>
-            </Head>
             <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     <MockupTextCard
