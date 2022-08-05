@@ -554,7 +554,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     daoAddress: DAO.contractAddress,
                                     daoName: DAO.name,
                                     //TODO: DAO Blockchains supported
-                                    blockchains: ["Polygon", "Avalanche"],
+                                    blockchains: DAO.blockchain,
                                 },
                             }}
                         >
@@ -600,7 +600,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     </div>
 
                     <div className="dao-statistics flex flex-row justify-between">
-                        <StatisticCard label={"Total votes"} counter={DAO.totalVotes} />
+                        {/* <StatisticCard label={"Total votes"} counter={DAO.totalVotes} /> */}
                         <StatisticCard label={"Total proposals"} counter={DAO.totalProposals} />
                         <StatisticCard label={"Total members"} counter={DAO.totalMembers} />
                     </div>
