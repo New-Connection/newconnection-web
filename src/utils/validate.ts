@@ -11,8 +11,8 @@ export const validateForm = (formData, ignoreFields?: string[]): boolean => {
         }
         if (
             (typeof value === "string" && stringIsEmpty(value)) ||
-            (typeof value === "object" && (value == null || objectIsEmpty(value))) ||
-            (Array.isArray(value) && arrayIsEmpty(value))
+            (typeof value === "object" && (value === null || objectIsEmpty(value))) ||
+            (Array.isArray(value) && arrayIsEmpty(value)) || (value === undefined)
         ) {
             fields.push(key);
         }
