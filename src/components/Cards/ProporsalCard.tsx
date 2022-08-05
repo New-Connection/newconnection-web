@@ -1,17 +1,31 @@
 import ProgressBar from "components/ProgressBar/ProgressBar";
 import Image from "next/image";
 import Polygon from "assets/chains/Polygon.png";
+import { timestampToDate } from "../../utils/basic";
 
 interface IProporsalCard {
     title: string;
     shortDescription: string;
     description?: string;
     blockchain?: string[];
+    isActive?: boolean;
+    forVotes?: string;
+    againstVotes?: string;
+    deadline?: number;
 }
 
-const ProporsalCard = ({ title, shortDescription }: IProporsalCard) => {
-    const isActive = true;
-    // <Link href={`/proposals/${id}`}></Link>
+const ProporsalCard = ({
+    title,
+    shortDescription,
+    isActive,
+    forVotes,
+    againstVotes,
+    deadline,
+}: IProporsalCard) => {
+    const againstV = +againstVotes! ?? 0;
+    const forV = +forVotes! ?? 0;
+    const sumV = againstV + forV || 1;
+
     return (
         <div className="h-52 py-5">
             <div className="flex justify-between pb-6">
@@ -19,7 +33,9 @@ const ProporsalCard = ({ title, shortDescription }: IProporsalCard) => {
                 <div>
                     {isActive ? (
                         <div className="flex gap-5">
-                            <p className="font-light text-sm mt-1">Ends May 20, 2022, 10:00AM</p>
+                            <p className="font-light text-sm mt-1">
+                                Ends {timestampToDate(deadline || 0)}
+                            </p>
                             <p className="text-green bg-gray px-5 py-0.5 rounded-full">Active</p>
                         </div>
                     ) : (
@@ -40,8 +56,8 @@ const ProporsalCard = ({ title, shortDescription }: IProporsalCard) => {
                 </div>
 
                 <div className="w-1/4">
-                    <ProgressBar bgColor={1} percentage={55} title="Agains" />
-                    <ProgressBar bgColor={3} percentage={45} title="In favor" />
+                    <ProgressBar bgColor={1} percentage={againstV / sumV} title="Against" />
+                    <ProgressBar bgColor={3} percentage={forV / sumV} title="In favor" />
                 </div>
             </div>
         </div>

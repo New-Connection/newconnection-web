@@ -69,6 +69,13 @@ export interface ICreateProposal extends ICreate {
     blockchain: string[];
 }
 
+export interface IProposalPageForm extends ICreateProposal {
+    isActive?: boolean;
+    forVotes?: string;
+    againstVotes?: string;
+    deadline?: number;
+}
+
 export interface IAddNewMember {
     daoName: string;
     walletAddress: string;
@@ -83,7 +90,7 @@ export interface IProposalDetail {
     title: string;
     shortDescription: string;
     governorAddress: string;
-    description?: string
+    description?: string;
     startDate?: Date;
     endDate?: Date;
     results?: number;

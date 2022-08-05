@@ -1,22 +1,27 @@
 import * as React from "react";
 import type { NextPage } from "next";
 import Layout from "components/Layout/Layout";
-import Head from "next/head";
 import Link from "next/link";
 import { useMoralisQuery } from "react-moralis";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
 import { useMoralis } from "react-moralis";
 import { IDAOPageForm } from "types/forms";
 import { loadImage } from "utils/ipfsUpload";
+import { getTotalProposals } from "../../contract-interactions/viewGovernorContract";
 
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
 
-    const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
-        autoFetch: false
-    });
+    const { fetch: DAOsQuery } = useMoralisQuery(
+        "DAO",
+        (query) => query.notEqualTo("objectId", ""),
+        [],
+        {
+            autoFetch: false,
+        }
+    );
     const { isInitialized } = useMoralis();
 
     const fetchDB = async () => {
@@ -29,30 +34,30 @@ const DAOsPage: NextPage = () => {
                             const name = dao.get("name");
                             const description = dao.get("description");
                             let profileImage = await loadImage(dao.get("profileImage"));
-
+                            const chainId = await dao.get("chainId");
                             //TODO: write to db
                             const isActive = true;
-                            const proposals = 0;
-                            const votes = 0;
+                            const totalProposals = 0;
+                            const totalVotes = 0;
 
                             return {
                                 name,
                                 contractAddress,
                                 description,
                                 profileImage,
-                                votes,
-                                proposals,
+                                totalVotes,
+                                totalProposals,
                                 isActive,
+                                chainId,
 
                                 //mock
                                 blockchain: [],
                                 goals: "",
-                                chainId: 0,
                                 coverImage: null,
                                 tokenAddress: "",
                                 votingPeriod: "",
                                 type: [],
-                                quorumPercentage: ""
+                                quorumPercentage: "",
                             } as IDAOPageForm;
                         })
                     );
@@ -60,7 +65,7 @@ const DAOsPage: NextPage = () => {
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
-                }
+                },
             });
         }
     };
@@ -69,6 +74,29 @@ const DAOsPage: NextPage = () => {
     useEffect(() => {
         fetchDB();
     }, [isInitialized]);
+
+    const firstUpdate = useRef(true);
+    useLayoutEffect(() => {
+        if (DAOs && firstUpdate.current) {
+            firstUpdate.current = false;
+            fetchBlockchainData();
+        }
+    });
+
+    const fetchBlockchainData = async () => {
+        const newDAOs = await Promise.all(
+            DAOs!.map(async (dao) => {
+                const totalProposals = await getTotalProposals(dao.contractAddress!, dao.chainId!);
+                return {
+                    ...dao,
+                    totalProposals: totalProposals,
+                } as IDAOPageForm;
+            })
+        );
+        setDAOs(() => {
+            return newDAOs;
+        });
+    };
 
     const DAOCard = ({ name, description, profileImage, address, isActive, proposals, votes }) => {
         return (
