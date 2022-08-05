@@ -67,6 +67,7 @@ export interface ICreateProposal extends ICreate {
     linkForum?: object;
     options: string[];
     blockchain: string[];
+    enabledBlockchain?: string[];
 }
 
 export interface IProposalPageForm extends ICreateProposal {
