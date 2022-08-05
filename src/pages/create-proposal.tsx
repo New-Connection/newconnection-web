@@ -68,7 +68,7 @@ const CreateProposal: NextPage = () => {
             return;
         }
 
-        if (!validateForm(formData, ["description", "options"])) {
+        if (!validateForm(formData, ["options"])) {
             return;
         }
         handleReset();
@@ -159,11 +159,12 @@ const CreateProposal: NextPage = () => {
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
                         <InputTextArea
-                            label="Description (optional)"
+                            label="Description"
                             name="description"
                             placeholder="A full description of your proporsal"
                             maxLength={3000}
                             handleChange={(event) => handleTextChange(event, setFormData)}
+                            isRequired
                         />
                         {/* <FileAndLinkForm /> */}
 
