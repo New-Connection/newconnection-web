@@ -16,7 +16,7 @@ const color = {
 
 // better to use [1/2, 1/3, 1/4, 1/5, 1/6] - no more than six
 const numbersWeight = {
-    0: "",
+    0: "w-[0px]",
     16: "w-1/6",
     20: "w-1/5",
     25: "w-1/4",
