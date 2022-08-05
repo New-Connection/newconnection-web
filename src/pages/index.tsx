@@ -158,9 +158,6 @@ const Home: NextPage = () => {
 
     return (
         <div>
-            <Head>
-                <title>New Connection: Home</title>
-            </Head>
             <DAOsPage />
             {/* <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
