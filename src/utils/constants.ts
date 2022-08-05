@@ -18,6 +18,7 @@ export const NFT_STORAGE_KEY =
 export const infuraId = "9b42ce0bea0a40c98832bdef4f0fb5cc";
 export const alchemyId = "EYaU8KZOLuaFhqXUxa5zzXhaXk6qC2SW";
 export const BLOCKS_IN_DAY = 6545;
+export const SECONDS_IN_BLOCK = 13.2;
 
 //Moralis
 export const moralisAppId = "MDHlZXcGmw2p2n68x7Mk3RHI0yRxU630Rs2cBGKI";
@@ -44,45 +45,43 @@ export const defaultProvider = providers.getDefaultProvider(4, {
     infura: infuraId,
 });
 
-
-
 export const polygonTestnet: Chain = {
     id: 80001,
-    name: 'Polygon Mumbai',
-    network: 'Mumbai',
+    name: "Polygon Mumbai",
+    network: "Mumbai",
     nativeCurrency: {
-      decimals: 18,
-      name: 'Polygon',
-      symbol: 'MATIC',
+        decimals: 18,
+        name: "Polygon",
+        symbol: "MATIC",
     },
     rpcUrls: {
-      default: 'https://rpc-mumbai.matic.today',
+        default: "https://rpc-mumbai.matic.today",
     },
     blockExplorers: {
-      default: { name: 'Polygonscan', url: 'https://mumbai.polygonscan.com/' },
+        default: { name: "Polygonscan", url: "https://mumbai.polygonscan.com/" },
     },
     testnet: true,
-}
+};
 
 export const avalancheTestnet: Chain = {
     id: 43113,
     name: "Avalanche FUJI",
-    network: 'Fuji',
+    network: "Fuji",
     nativeCurrency: {
-      decimals: 18,
-      name: 'Avalanche',
-      symbol: 'AVAX',
+        decimals: 18,
+        name: "Avalanche",
+        symbol: "AVAX",
     },
     rpcUrls: {
-      default: 'https://api.avax-test.network/ext/bc/C/rpc',
+        default: "https://api.avax-test.network/ext/bc/C/rpc",
     },
     blockExplorers: {
-      default: { name: 'Snowtrace', url: 'https://testnet.snowtrace.io/' },
+        default: { name: "Snowtrace", url: "https://testnet.snowtrace.io/" },
     },
     testnet: true,
-}
+};
 
-export const SupportedChainName = ["Goerli", polygonTestnet.name, avalancheTestnet.name]
+export const SupportedChainName = ["Goerli", polygonTestnet.name, avalancheTestnet.name];
 
 export const networkDetails: INetworkDetails = {
     5: {
@@ -114,21 +113,23 @@ export const networkDetails: INetworkDetails = {
         prefix: "mumbai",
         logoURI: MATIC.src,
         tokenListId: "MATIC",
-    }, 
+    },
 
     43113: {
         rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
-        chainProviders: new ethers.providers.JsonRpcProvider("https://api.avax-test.network/ext/bc/C/rpc"),
+        chainProviders: new ethers.providers.JsonRpcProvider(
+            "https://api.avax-test.network/ext/bc/C/rpc"
+        ),
         blockExplorerURL: "https://testnet.snowtrace.io/",
         blockExplorerName: "Snowtrace",
         prefix: "fuji",
         logoURI: AVAX.src,
         tokenListId: "AVAX",
-    }
+    },
 };
 
 export const defaultChains: Chain[] = allChains.filter(
-    (chain) => chain.name === "Goerli" || chain.name === "Mainnet" 
+    (chain) => chain.name === "Goerli" || chain.name === "Mainnet"
 );
 
 const formattedChains = defaultChains.map((chain) => {
@@ -139,7 +140,7 @@ const formattedChains = defaultChains.map((chain) => {
     if (chain.name === "Goerli") {
         return { ...chain, name: "Goerli" };
     }
-    console.log(chain)
+    console.log(chain);
     return chain;
 });
 

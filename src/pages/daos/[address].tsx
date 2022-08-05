@@ -1,10 +1,9 @@
 import * as React from "react";
 import { formatAddress } from "utils/address";
-import { FC } from "react";
+import { FC, useLayoutEffect, useRef } from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
-import Head from "next/head";
 import { ParsedUrlQuery } from "querystring";
 import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
@@ -15,7 +14,7 @@ import { CHAINS_IMG } from "utils/blockchains";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
 import { useEffect, useState } from "react";
-import { IDAOPageForm } from "types/forms";
+import { IDAOPageForm, IProposalPageForm } from "types/forms";
 import { getChainScanner } from "utils/network";
 import NFTExample from "assets/nft-example.png";
 import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
@@ -32,6 +31,13 @@ import toast from "react-hot-toast";
 import ProporsalCard from "components/Cards/ProporsalCard";
 import { getTokenURI } from "contract-interactions/viewNftContract";
 import defaultImage from "assets/empty-token.webp";
+import {
+    getTotalProposals,
+    isProposalActive,
+    proposalAgainstVotes,
+    proposalDeadline,
+    proposalForVotes,
+} from "contract-interactions/viewGovernorContract";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -65,12 +71,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [click, setClick] = useState(false);
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
-    const [Proposals, setProposals] = useState<Moralis.Object<Moralis.Attributes>[]>();
+    const [proposals, setProposals] = useState<IProposalPageForm[]>();
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
     const [nftImage, setNftImage] = useState("");
     const detailNFTDialog = useDialogState();
     const { data: signer_data } = useSigner();
     const { isInitialized } = useMoralis();
+    const firstUpdate = useRef(true);
 
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
@@ -112,8 +119,34 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const fetchProposal = async () => {
         await ProposalQuery({
-            onSuccess: (results) => {
-                setProposals(() => results);
+            onSuccess: async (results) => {
+                const proposals: IProposalPageForm[] = await Promise.all(
+                    results.map(async (proposalMoralis) => {
+                        const governorAddress = proposalMoralis.get("governorAddress");
+                        const chainId = proposalMoralis.get("chainId");
+                        const proposalId = proposalMoralis.get("proposalId");
+                        const proposal: IProposalPageForm = {
+                            name: proposalMoralis.get("name"),
+                            governorAddress: governorAddress,
+                            chainId: chainId,
+                            proposalId: proposalId,
+                            description: proposalMoralis.get("description"),
+                            shortDescription: proposalMoralis.get("shortDescription"),
+                            isActive: await isProposalActive(governorAddress, chainId, proposalId),
+                            forVotes: await proposalForVotes(governorAddress, chainId, proposalId),
+                            againstVotes: await proposalAgainstVotes(
+                                governorAddress,
+                                chainId,
+                                proposalId
+                            ),
+                            deadline: await proposalDeadline(governorAddress, chainId, proposalId),
+                            options: [],
+                            blockchain: [],
+                        };
+                        return proposal;
+                    })
+                );
+                setProposals(() => proposals);
             },
             onError: (error) => {
                 console.log("Error fetching db query" + error);
@@ -122,28 +155,32 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     };
 
     const TabOne: FC<{}> = () => {
-        return Proposals && Proposals.length !== 0 ? (
+        return proposals && proposals.length !== 0 ? (
             <ul>
-                {Proposals.map((proposal, index) => {
-                    const id = proposal.get("id");
-                    const name = proposal.get("name");
-                    const description = proposal.get("description");
-                    const detailProposal = proposal.get("proposalId");
-                    //TODO: write to db
-                    const isActive = true;
-                    const votesFor = 0;
-                    const votesAgainst = 0;
+                {proposals.map((proposal, index) => {
+                    const proposalId = proposal.proposalId;
+                    const name = proposal.name;
+                    const description = proposal.description;
+                    const shortDescription = proposal.shortDescription;
+                    const isActive = proposal.isActive;
+                    const forVotes = proposal.forVotes;
+                    const againstVotes = proposal.againstVotes;
+                    const deadline = proposal.deadline;
                     return (
-                        <Link href={`/daos/proposal/${detailProposal}`}>
+                        <Link href={`/daos/proposal/${proposalId}`} key={proposalId}>
                             <li
-                                key={index}
+                                key={proposalId}
                                 className="border-b-2 border-gray cursor-pointer active:bg-gray"
                             >
                                 <ProporsalCard
                                     title={name}
                                     description={description}
-                                    shortDescription={description}
+                                    shortDescription={shortDescription}
                                     daoName={DAO?.name}
+                                    isActive={isActive}
+                                    forVotes={forVotes}
+                                    againstVotes={againstVotes}
+                                    deadline={deadline}
                                 />
                             </li>
                         </Link>
@@ -344,6 +381,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     useEffect(() => {
         fetchNftImage();
     }, [DAO]);
+
+    useLayoutEffect(() => {
+        if (DAO && firstUpdate.current) {
+            firstUpdate.current = false;
+            fetchBlockchainData();
+        }
+    });
+
+    const fetchBlockchainData = async () => {
+        const totalProposals = await getTotalProposals(DAO!.contractAddress!, DAO!.chainId!);
+        const newDAO = {
+            ...DAO,
+            totalProposals: totalProposals,
+        } as IDAOPageForm;
+        setDAO(() => newDAO);
+    };
 
     const StatisticCard = ({ label, counter }) => {
         return (
