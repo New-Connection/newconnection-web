@@ -13,49 +13,56 @@ interface StepperDialogProps {
     activeStep: number;
     children?: React.ReactNode;
     className?: string;
-    steps?: { label: string, description: string }[];
+    steps?: { label: string; description: string }[];
+    isClose?: boolean;
 }
 
 export const defaultSteps = [
     {
         label: "Waiting for the confirmation in your wallet",
-        description: ""
+        description: "",
     },
     {
         label: "Waiting for the confirmation from blockchain",
-        description: ""
+        description: "",
     },
     {
         label: "Done",
-        description: ""
-    }
+        description: "",
+    },
 ];
 
 export const createNFTSteps = [
     {
         label: "Waiting for the confirmation in your wallet to create contract",
-        description: ""
+        description: "",
     },
     {
         label: "Waiting for the confirmation from blockchain",
-        description: ""
+        description: "",
     },
     {
         label: "Waiting for the confirmation in your wallet to set IPFS URI",
-        description: ""
+        description: "",
     },
     {
         label: "Waiting for the confirmation from blockchain",
-        description: ""
+        description: "",
     },
     {
         label: "Done",
-        description: ""
-    }
-
+        description: "",
+    },
 ];
 
-export const StepperDialog = ({ dialog, className, activeStep, children, steps }: StepperDialogProps) => {
+export const StepperDialog = ({
+    dialog,
+    className,
+    activeStep,
+    children,
+    steps,
+    isClose = false,
+}: StepperDialogProps) => {
     const SpinnerLoading = () => {
         return (
             <div role="status">
@@ -85,8 +92,8 @@ export const StepperDialog = ({ dialog, className, activeStep, children, steps }
         <Dialog
             state={dialog}
             className={classNames("dialog", className)}
-            hideOnInteractOutside={false}
-            hideOnEscape={false}
+            hideOnInteractOutside={isClose}
+            hideOnEscape={isClose}
         >
             <div className="h-full m-10">
                 <Stepper activeStep={activeStep} orientation="vertical">
@@ -113,8 +120,7 @@ export const StepperDialog = ({ dialog, className, activeStep, children, steps }
                                     //steps for previous messages
                                     <>
                                         <div className={"w-7"}>
-                                            <CheckCircleIcon
-                                                className="h-7 w-7 stroke-1 fill-purple" />
+                                            <CheckCircleIcon className="h-7 w-7 stroke-1 fill-purple" />
                                         </div>
                                         <div className="text-xl text-black2">{step.label}</div>
                                     </>
