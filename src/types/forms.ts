@@ -77,3 +77,13 @@ export interface IAddNewMember {
     blockchainEnabled: string[];
     note?: string;
 }
+
+export interface IProposalDetail {
+    title: string;
+    shortDescription: string;
+    description?: string
+    startDate?: Date;
+    endDate?: Date;
+    results?: number;
+    ownerAddress?: string;
+}
