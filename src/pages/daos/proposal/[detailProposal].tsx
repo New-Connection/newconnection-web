@@ -229,13 +229,13 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <div className="flex">
                             <h1 className="text-highlighter w-1/2">{proposalData.title}</h1>
-                            <BadgeIsActive isActive={false} />
+                            {/* <BadgeIsActive isActive={false} /> */}
                         </div>
                         <p className="pb-4">{proposalData.shortDescription}</p>
                         <div className="flex gap-6 pb-10">
                             <AboutCard description={proposalData.description} />
-                            <InfoCard />
-                            <VotingResultsCard />
+                            {/* <InfoCard />
+                            <VotingResultsCard /> */}
                         </div>
                         <RadioSelector
                             name="voteResult"

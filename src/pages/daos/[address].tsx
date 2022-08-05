@@ -315,14 +315,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             index: 1,
             Component: TabOne,
         },
-        {
-            label: "MEMBERS",
-            index: 2,
-            Component: TabTwo,
-        },
+        // {
+        //     label: "MEMBERS",
+        //     index: 2,
+        //     Component: TabTwo,
+        // },
         {
             label: "WHITELIST",
-            index: 3,
+            index: 2,
             Component: TabThree,
         },
     ];
@@ -612,7 +612,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             tabs={tabs}
                             url={{
                                 pathname: "/create-proposal",
-                                query: { governorAddress: DAO.contractAddress },
+                                query: {
+                                    governorAddress: DAO.contractAddress,
+                                    blockchain: DAO.blockchain[0],
+                                },
                             }}
                         />
                     </div>

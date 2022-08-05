@@ -26,6 +26,7 @@ import { StepperDialog } from "../components/Dialog";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     governorAddress: string;
+    blockchain: string[];
 }
 
 const CreateProposal: NextPage = () => {
@@ -36,6 +37,7 @@ const CreateProposal: NextPage = () => {
         description: "",
         options: [],
         blockchain: [],
+        enabledBlockchain: [],
     });
     const router = useRouter();
 
@@ -55,8 +57,10 @@ const CreateProposal: NextPage = () => {
         const query = router.query as QueryUrlParams;
 
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
+        handleChangeBasic(query.blockchain, setFormData, "enabledBlockchain");
 
         console.log(`governorAddress from query: ${query.governorAddress}`);
+        console.log(`proposal blockchain ${query.blockchain}`);
     }, []);
 
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
@@ -172,6 +176,7 @@ const CreateProposal: NextPage = () => {
                             label="Proposal Blockchain"
                             description="You can choose one or more blockchains"
                             values={CHAINS}
+                            enabledValues={formData.enabledBlockchain}
                             handleChange={(event) =>
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
