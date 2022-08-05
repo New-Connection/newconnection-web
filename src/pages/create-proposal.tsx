@@ -137,12 +137,11 @@ const CreateProposal: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
+                    <BackButton />
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={createProposalContract}
                     >
-                        <BackButton />
-
                         <h1 className="text-highlighter">New Proporsal</h1>
                         <InputText
                             label="Title"

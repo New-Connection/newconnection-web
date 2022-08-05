@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import Layout from "components/Layout/Layout";
 import { Button } from "components/Form";
+import BackButton from "components/Button/backButton";
 
 const CreateNewDAO: NextPage = () => {
     interface ICard {
@@ -21,7 +22,11 @@ const CreateNewDAO: NextPage = () => {
                 <p className="pb-6">{subtitle}</p>
                 <Link href={{ pathname: linkToPage }}>
                     <a>
-                        <Button type={"button"} className="mt-5 mb-5 py-4 border-2 w-full" disabled={isDisabled}>
+                        <Button
+                            type={"button"}
+                            className="mt-5 mb-5 py-4 border-2 w-full"
+                            disabled={isDisabled}
+                        >
                             {buttonTitle}
                         </Button>
                     </a>
@@ -34,6 +39,7 @@ const CreateNewDAO: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
+                    <BackButton />
                     <form className="mx-auto flex max-w-4xl flex-col gap-4">
                         <h1 className="text-highlighter">Create new DAO</h1>
                         <p className="input-label text-lg font-medium">NFT smart contract</p>
