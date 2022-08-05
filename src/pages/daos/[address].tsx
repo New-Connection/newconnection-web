@@ -11,11 +11,11 @@ import basicAvatar from "assets/basic_avatar.jpg";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import Moralis from "moralis";
-import { CHAINS, CHAINS_IMG } from "utils/blockchains";
+import {  CHAINS_IMG } from "utils/blockchains";
 import { useMoralisQuery } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
 import { useEffect, useState } from "react";
-import { IDAOPageForm, IMembershipForm } from "types/forms";
+import { IDAOPageForm } from "types/forms";
 import { getChainScanner } from "utils/network";
 import NFTExample from "assets/nft-example.png";
 import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
@@ -70,7 +70,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const { data: signer_data } = useSigner();
     const { isInitialized } = useMoralis();
 
-    const { fetch } = useMoralisQuery(
+    const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
         (query) => query.equalTo("contractAddress", address),
         [],
@@ -285,7 +285,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const fetchDB = async () => {
         if (isInitialized) {
-            await fetch({
+            await DAOsQuery({
                 onSuccess: async (results) => {
                     const moralisInstance = results[0];
                     // console.log("Parse Instance", moralisInstance);

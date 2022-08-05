@@ -9,19 +9,19 @@ import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
 import { useMoralis } from "react-moralis";
 import { IDAOPageForm } from "types/forms";
-import { loadImage } from "../../utils/ipfsUpload";
+import { loadImage } from "utils/ipfsUpload";
 
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
 
-    const moralisQuery = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
-        autoFetch: false,
+    const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
+        autoFetch: false
     });
     const { isInitialized } = useMoralis();
 
     const fetchDB = async () => {
         if (isInitialized) {
-            await moralisQuery.fetch({
+            await DAOsQuery({
                 onSuccess: async (results) => {
                     const daos = await Promise.all(
                         results.map(async (dao) => {
@@ -52,7 +52,7 @@ const DAOsPage: NextPage = () => {
                                 tokenAddress: "",
                                 votingPeriod: "",
                                 type: [],
-                                quorumPercentage: "",
+                                quorumPercentage: ""
                             } as IDAOPageForm;
                         })
                     );
@@ -60,7 +60,7 @@ const DAOsPage: NextPage = () => {
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
-                },
+                }
             });
         }
     };
