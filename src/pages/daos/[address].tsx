@@ -12,7 +12,7 @@ import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import Moralis from "moralis";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
-import { useMoralisQuery } from "react-moralis";
+import { useMoralisQuery, useMoralis } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
 import { useEffect, useState } from "react";
 import { IDAOPageForm, IMembershipForm } from "types/forms";
@@ -25,7 +25,6 @@ import { useDialogState } from "ariakit";
 import { NFTDetailDialog } from "components/Dialog";
 import classNames from "classnames";
 import { useSigner } from "wagmi";
-import { useMoralis } from "react-moralis";
 import { loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
 import { AddToWhitelist, mintReverseAndDelegation, mintNFT } from "contract-interactions/";
@@ -127,14 +126,16 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     const name = proposal.get("name");
                     const description = proposal.get("description");
                     const detailProposal = proposal.get("proposalId");
-                    console.log(detailProposal);
                     //TODO: write to db
                     const isActive = true;
                     const votesFor = 0;
                     const votesAgainst = 0;
                     return (
                         <Link href={`/daos/proposal/${detailProposal}`}>
-                            <li key={index} className="border-b-2 border-gray">
+                            <li
+                                key={index}
+                                className="border-b-2 border-gray cursor-pointer active:bg-gray"
+                            >
                                 <ProporsalCard
                                     title={name}
                                     description={description}
@@ -174,7 +175,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     };
 
     // function removeItem(walletAddress: string) {
-    //     console.log("hey");
+    //
     //     // remove items from sale ETH
     //     useMoralisQuery();
     //     const query = new Moralis.Query("Whitelist");
@@ -229,15 +230,16 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                             walletAddress: walletAddress,
                                             signer: signer_data as Signer,
                                         });
-                                        console.log("WL DELETE");
+
                                         status
                                             ? toast.success("Wallet added to Whitelist")
                                             : toast.error(
                                                   "Only owner of DAO can add a new members"
                                               );
                                         // TODO: DELETE ROW FROM MORALIS
-                                        //removeItem(walletAddress);
-                                        //toast.success("Wallet added to Whitelist");
+                                        // removeItem(walletAddress);
+                                        // console.log("WL DELETE");
+                                        // toast.success("Wallet added to Whitelist");
                                         setClick(false);
                                     } catch (error) {
                                         toast.error("Please approve transaction to create DAO");
