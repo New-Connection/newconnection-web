@@ -17,6 +17,8 @@ import { StepperDialog } from "../../../components/Dialog";
 import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";
+import { castVote } from "contract-interactions/";
+import { VotingType } from "contract-interactions/voting";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     detailProposal: string;
@@ -38,9 +40,14 @@ export const getServerSideProps: GetServerSideProps<DetailProposalProps, QueryUr
     };
 };
 
+interface IProposal {
+    voteResult: VotingType;
+    txConfirm?: string;
+}
+
 const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
-    const [formData, setFormData] = useState({
-        voteResult: "",
+    const [formData, setFormData] = useState<IProposal>({
+        voteResult: undefined,
         txConfirm: "",
     });
     const [activeStep, setActiveStep] = useState(0);
@@ -67,6 +74,7 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
                         title: proposal.get("name"),
                         description: proposal.get("description"),
                         shortDescription: proposal.get("shortDescription"),
+                        governorAddress: proposal.get("governorAddress"),
                         // TODO: Parse values from IProposalDetail
                     };
                     setProposal(() => newProposal);
@@ -185,6 +193,31 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
         }
         handleReset();
         confirmDialog.toggle();
+        try {
+            const tx = await castVote(
+                proposalData!.governorAddress,
+                signer_data,
+                detailProposal,
+                formData!.voteResult
+            );
+            console.log(tx);
+            confirmDialog.toggle();
+            toast.success("Your vote is send");
+        } catch (e: any) {
+            if (e.code === 4001) {
+                confirmDialog.toggle();
+                toast.error("User reject transaction");
+                return;
+            } else if (e.error.code === -32603) {
+                confirmDialog.toggle();
+                toast.error("User already voted");
+                return;
+            } else {
+                confirmDialog.toggle();
+                toast.error(e.message);
+                return;
+            }
+        }
         handleNext(3);
     }
 
@@ -206,7 +239,7 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
                         </div>
                         <RadioSelector
                             name="voteResult"
-                            labels={["Against", "In favour"]}
+                            labels={["Against", "In favor"]}
                             handleChange={(event) =>
                                 handleTextChangeAddNewMember(event, setFormData)
                             }
@@ -216,7 +249,12 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
                         </Button>
                     </form>
                 </section>
-                <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
+                <StepperDialog
+                    dialog={confirmDialog}
+                    className="dialog"
+                    activeStep={activeStep}
+                    isClose={true}
+                >
                     <p className="ml-7">Deployment successful!</p>
                     <p className="ml-7 mb-10">Contract Address: {formData.txConfirm}</p>
 
