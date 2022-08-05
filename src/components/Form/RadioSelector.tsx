@@ -11,7 +11,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 <input
                     id="bordered-radio-1"
                     type="radio"
-                    value="InFavor"
+                    value={0}
                     name={name}
                     className="hidden peer"
                     onChange={handleChange}
@@ -23,14 +23,14 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                         "inline-flex justify-between items-center p-5 w-full text-black bg-white rounded-lg border border-gray2 cursor-pointer peer-checked:border-purple peer-checked:text-purple hover:text-btnHover hover:border-btnHover active:text-btnActive active:border-btnActive"
                     )}
                 >
-                    In favor
+                    {labels[0]}
                 </label>
             </div>
             <div>
                 <input
                     id="bordered-radio-2"
                     type="radio"
-                    value="Against"
+                    value={1}
                     name={name}
                     className="hidden peer"
                     onChange={handleChange}
@@ -42,7 +42,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                         "inline-flex justify-between items-center p-5 w-full text-black bg-white rounded-lg border border-gray2 cursor-pointer peer-checked:border-purple peer-checked:text-purple hover:text-btnHover hover:border-btnHover active:text-btnActive active:border-btnActive"
                     )}
                 >
-                    Against
+                    {labels[1]}
                 </label>
             </div>
         </>

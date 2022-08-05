@@ -82,6 +82,7 @@ export interface IAddNewMember {
 export interface IProposalDetail {
     title: string;
     shortDescription: string;
+    governorAddress: string;
     description?: string
     startDate?: Date;
     endDate?: Date;
