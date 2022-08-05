@@ -1,0 +1,1 @@
+export { MockupTextCard } from "./TextCard";
