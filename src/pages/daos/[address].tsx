@@ -31,7 +31,7 @@ import { TabsType } from "types/tabs";
 import { AddToWhitelist, mintReverseAndDelegation, mintNFT } from "contract-interactions/";
 import toast from "react-hot-toast";
 import ProporsalCard from "components/Cards/ProporsalCard";
-import { getTokenURI } from "../../contract-interactions/viewNftContract";
+import { getTokenURI } from "contract-interactions/viewNftContract";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -290,7 +290,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             await DAOsQuery({
                 onSuccess: async (results) => {
                     const moralisInstance = results[0];
-                    const tokenAddress = moralisInstance.get("tokenAddress");
                     const chainId = moralisInstance.get("chainId");
                     const contractAddress = moralisInstance.get("contractAddress");
                     const newDao: IDAOPageForm = {
@@ -299,7 +298,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         goals: moralisInstance.get("goals"),
                         profileImage: await loadImage(moralisInstance.get("profileImage")),
                         coverImage: await loadImage(moralisInstance.get("coverImage")),
-                        tokenAddress: tokenAddress,
+                        tokenAddress: moralisInstance.get("tokenAddress"),
                         votingPeriod: moralisInstance.get("votingPeriod"),
                         quorumPercentage: moralisInstance.get("quorumPercentage"),
                         type: moralisInstance.get("type"),
@@ -380,8 +379,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             <div className="flex justify-center">
                 <Image
                     src={nftImage ? nftImage : NFTExample}
-                    width={'200'}
-                    height={'200'}
+                    width={"200"}
+                    height={"200"}
                     className={classNames("rounded-t-md", className)}
                 />
             </div>
