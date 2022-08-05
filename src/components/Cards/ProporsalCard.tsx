@@ -58,8 +58,16 @@ const ProporsalCard = ({
                 </div>
 
                 <div className="w-1/4">
-                    <ProgressBar bgColor={1} percentage={againstV / sumV} title="Against" />
-                    <ProgressBar bgColor={3} percentage={forV / sumV} title="In favor" />
+                    <ProgressBar
+                        bgColor={1}
+                        percentage={(againstV / sumV) * 100}
+                        title={`Against  ${againstV}`}
+                    />
+                    <ProgressBar
+                        bgColor={3}
+                        percentage={(forV / sumV) * 100}
+                        title={`In favor ${forV}`}
+                    />
                 </div>
             </div>
         </div>
