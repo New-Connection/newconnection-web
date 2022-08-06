@@ -18,3 +18,13 @@ export async function getTokenURI(contractAddress: string, chainId: number) {
         console.log("Error while parsing token URI");
     }
 }
+
+export async function getSupplyNumber(contractAddress: string, chainId: number) {
+    try {
+        let provider = networkDetails[chainId].chainProviders as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        return await nft.maxMintId();
+    } catch (e) {
+        console.log("Error to get max mint id of NFT");
+    }
+}

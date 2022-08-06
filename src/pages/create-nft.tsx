@@ -31,6 +31,7 @@ import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { setURI } from "contract-interactions/stateNFTContract";
 import { createNFTSteps } from "components/Dialog/Stepper";
+import { getSupplyNumber } from "contract-interactions/viewNftContract";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -93,6 +94,8 @@ const CreateNFT: NextPage = () => {
             const chainId = await signer_data.getChainId();
             const endpoint: string =
                 layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
+
+            console.log("polygon", formData.Polygon!);
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
@@ -104,6 +107,8 @@ const CreateNFT: NextPage = () => {
             handleNext();
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
+            const supplyNFT = await getSupplyNumber(contract.address, chainId);
+            console.log("Supply of NFT", supplyNFT);
             handleNext();
             const setTx = await setURI(contract.address, signer_data, fullPath);
             handleNext();

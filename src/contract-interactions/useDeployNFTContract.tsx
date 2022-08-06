@@ -22,6 +22,6 @@ export async function deployNFTContract(
         constructor.startMintId,
         constructor.endMintId
     );
-    console.log("Wallet approved");
+    console.log("Wallet approved, endMintID:", constructor.endMintId);
     return contract;
 }
