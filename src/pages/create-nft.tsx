@@ -108,7 +108,8 @@ const CreateNFT: NextPage = () => {
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
             const supplyNFT = await getSupplyNumber(contract.address, chainId);
-            console.log("Supply of NFT", supplyNFT);
+            console.log("Supply of NFT String", supplyNFT.toString());
+            console.log("Supply of NFT HEX", supplyNFT);
             handleNext();
             const setTx = await setURI(contract.address, signer_data, fullPath);
             handleNext();
