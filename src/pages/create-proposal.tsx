@@ -78,7 +78,7 @@ const CreateProposal: NextPage = () => {
         handleReset();
         confirmDialog.toggle();
 
-        // TODO: Create Proporsal
+        // TODO: Create Proposal
         let proposalId;
         try {
             proposalId = await createProposal(
@@ -146,7 +146,7 @@ const CreateProposal: NextPage = () => {
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={createProposalContract}
                     >
-                        <h1 className="text-highlighter">New Proporsal</h1>
+                        <h1 className="text-highlighter">New Proposal</h1>
                         <InputText
                             label="Title"
                             name="name"
@@ -158,14 +158,14 @@ const CreateProposal: NextPage = () => {
                         <InputTextArea
                             label="Short Description"
                             name="shortDescription"
-                            placeholder="A short description of your proporsal"
+                            placeholder="A short description of your proposal"
                             maxLength={250}
                             handleChange={(event) => handleTextChange(event, setFormData)}
                         />
                         <InputTextArea
                             label="Description"
                             name="description"
-                            placeholder="A full description of your proporsal"
+                            placeholder="A full description of your proposal"
                             maxLength={3000}
                             handleChange={(event) => handleTextChange(event, setFormData)}
                             isRequired
@@ -181,7 +181,7 @@ const CreateProposal: NextPage = () => {
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
                         />
-                        <Button className="mt-5">Create Proporsal</Button>
+                        <Button className="mt-5">Create Proposal</Button>
                     </form>
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>

@@ -12,7 +12,7 @@ import { useDialogState } from "ariakit";
 import Tabs from "components/Tabs/Tabs";
 import DAOCard from "components/Cards/DAOCard";
 import NFTCardMockup from "components/Cards/NFTCard";
-import ProporsalCard from "components/Cards/ProporsalCard";
+import ProposalCard from "components/Cards/ProposalCard";
 import { StepperDialog } from "components/Dialog";
 import { useIsMounted } from "hooks";
 import DAOsPage from "./daos/index";
@@ -122,11 +122,11 @@ const Home: NextPage = () => {
         );
     };
 
-    const ProporsalsSection = () => {
+    const ProposalsSection = () => {
         return (
             <div className="my-24">
                 <div className="flex my-20 gap-2">
-                    <p className="text-lg font-bold">My Proporsal</p>
+                    <p className="text-lg font-bold">My Proposal</p>
                     <p className="text-lg font-bold  text-gray-400">0</p>
                 </div>
                 <div className="text-center my-32">
@@ -165,7 +165,7 @@ const Home: NextPage = () => {
                         <div>
                             <AccountInfo />
                             {USERDATA ? <TabsSection /> : <ReccomendationSection />}
-                            <ProporsalsSection />
+                            <ProposalsSection />
                             <NFTSection />
                         </div>
                     ) : (
@@ -175,9 +175,9 @@ const Home: NextPage = () => {
                                 <NFTCardMockup />
                                 <NFTCardMockup />
                             </div>
-                            <ProporsalCard />
-                            <ProporsalCard />
-                            <ProporsalCard />
+                            <ProposalCard />
+                            <ProposalCard />
+                            <ProposalCard />
                         </div>
                     )}
                 </section>
