@@ -10,7 +10,9 @@ export async function castVote(
     vote: VotingType
 ) {
     const governorContract = new ethers.Contract(contractAddress, GOVERNOR_ABI, signer);
-
+    console.log("Contract Address", contractAddress);
+    console.log("proposal Address", proposalAddress);
+    console.log("Vote", vote);
     // proposalId: uint256, support: uint8
     const proposeTx = await governorContract.castVote(proposalAddress, vote);
     const proposeReceipt = await proposeTx.wait();
