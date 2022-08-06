@@ -22,7 +22,7 @@ export const handleChangeBasicArray = <T>(
     set: Dispatch<SetStateAction<T>>,
     field: string
 ) => {
-    set((prev) => ({ ...prev, [field]: value }));
+    set((prev) => ({ ...prev, [field]: [value] }));
 };
 
 export const promisedHandleChangeBasic = <T extends ICreate>(
