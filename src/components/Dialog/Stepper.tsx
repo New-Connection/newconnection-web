@@ -7,6 +7,9 @@ import Step from "@mui/material/Step";
 import StepContent from "@mui/material/StepContent";
 import Typography from "@mui/material/Typography";
 import { CheckCircleIcon } from "@heroicons/react/solid";
+import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
+import { styled } from "@mui/material/styles";
+//https://mui.com/material-ui/react-stepper/
 
 interface StepperDialogProps {
     dialog: DisclosureState;
@@ -55,6 +58,14 @@ export const createNFTSteps = [
     },
 ];
 
+const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+    [`& .${stepConnectorClasses.line}`]: {
+        height: 3,
+        border: 0,
+        borderRadius: 1,
+    },
+}));
+
 export const StepperDialog = ({
     dialog,
     className,
@@ -96,7 +107,11 @@ export const StepperDialog = ({
             hideOnEscape={isClose}
         >
             <div className="h-full m-10">
-                <Stepper activeStep={activeStep} orientation="vertical">
+                <Stepper
+                    activeStep={activeStep}
+                    orientation="vertical"
+                    connector={<ColorlibConnector />}
+                >
                     {steps.map((step, index) => (
                         <Step key={index}>
                             <div className="flex gap-2">
