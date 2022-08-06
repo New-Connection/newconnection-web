@@ -8,8 +8,10 @@ import Image from "next/image";
 import basicAvatar from "assets/basic_avatar.jpg";
 import { useMoralis } from "react-moralis";
 import { IDAOPageForm } from "types/forms";
-import { loadImage } from "utils/ipfsUpload";
+import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { getTotalProposals } from "contract-interactions/viewGovernorContract";
+
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
@@ -25,43 +27,41 @@ const DAOsPage: NextPage = () => {
     );
     const { isInitialized } = useMoralis();
 
-    const fetchDB = async () => {
+    const fetchDB = () => {
         if (isInitialized) {
-            await DAOsQuery({
-                onSuccess: async (results) => {
-                    const daos = await Promise.all(
-                        results.map(async (dao) => {
-                            const contractAddress = dao.get("contractAddress");
-                            const name = dao.get("name");
-                            const description = dao.get("description");
-                            let profileImage = await loadImage(dao.get("profileImage"));
-                            const chainId = await dao.get("chainId");
-                            //TODO: write to db
-                            const isActive = true;
-                            const totalProposals = 0;
-                            const totalVotes = 0;
+            DAOsQuery({
+                onSuccess: (results) => {
+                    const daos = results.map((dao) => {
+                        const contractAddress = dao.get("contractAddress");
+                        const name = dao.get("name");
+                        const description = dao.get("description");
+                        const chainId = dao.get("chainId");
+                        let profileImage = dao.get("profileImage");
+                        const isActive = true;
+                        const totalProposals = 0;
+                        const totalVotes = 0;
 
-                            return {
-                                name,
-                                contractAddress,
-                                description,
-                                profileImage,
-                                totalVotes,
-                                totalProposals,
-                                isActive,
-                                chainId,
+                        return {
+                            name,
+                            contractAddress,
+                            description,
+                            profileImage,
+                            totalVotes,
+                            totalProposals,
+                            isActive,
+                            chainId,
 
-                                //mock
-                                blockchain: [],
-                                goals: "",
-                                coverImage: null,
-                                tokenAddress: "",
-                                votingPeriod: "",
-                                type: [],
-                                quorumPercentage: "",
-                            } as IDAOPageForm;
-                        })
-                    );
+                            //mock
+                            blockchain: [],
+                            goals: "",
+                            coverImage: null,
+                            tokenAddress: "",
+                            votingPeriod: "",
+                            type: [],
+                            quorumPercentage: "",
+                        } as IDAOPageForm;
+                    });
+
                     setDAOs(() => daos);
                 },
                 onError: (error) => {
@@ -76,27 +76,27 @@ const DAOsPage: NextPage = () => {
         fetchDB();
     }, [isInitialized]);
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (DAOs && firstUpdate.current) {
             firstUpdate.current = false;
-            fetchBlockchainData();
+            fetchLargeData();
         }
     });
 
-    const fetchBlockchainData = async () => {
+    const fetchLargeData = async () => {
         const newDAOs = await Promise.all(
             DAOs!.map(async (dao) => {
-                const totalProposals = await getTotalProposals(dao.contractAddress!, dao.chainId!);
                 return {
                     ...dao,
-                    totalProposals: totalProposals,
+                    totalProposals: await getTotalProposals(dao.contractAddress!, dao.chainId!),
+                    profileImage: await loadImage(dao.profileImage),
                 } as IDAOPageForm;
             })
         );
         setDAOs(() => newDAOs);
     };
 
-    const DAOCard = ({ name, description, profileImage, address, isActive, proposals, votes }) => {
+    const DAOCard = ({ name, description, profileImage, address, isActive, proposals }) => {
         return (
             <Link href={`/daos/${address}`}>
                 <div
@@ -110,7 +110,7 @@ const DAOsPage: NextPage = () => {
                                 width={"150"}
                                 height={"150"}
                                 layout={"responsive"}
-                                src={profileImage ? profileImage : basicAvatar}
+                                src={!isIpfsAddress(profileImage) ? profileImage : basicAvatar}
                                 className="rounded-2xl"
                             />
                         </div>
@@ -177,7 +177,6 @@ const DAOsPage: NextPage = () => {
                                         profileImage={dao.profileImage}
                                         isActive={dao.isActive}
                                         proposals={dao.totalProposals}
-                                        votes={dao.totalVotes}
                                     />
                                 );
                             })}

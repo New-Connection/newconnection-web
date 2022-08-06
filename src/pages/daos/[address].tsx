@@ -18,13 +18,12 @@ import { IDAOPageForm, IProposalPageForm } from "types/forms";
 import { getChainScanner } from "utils/network";
 import NFTExample from "assets/nft-example.png";
 import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
-import BlockchainExample from "assets/chains/Polygon.png";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { NFTDetailDialog } from "components/Dialog";
 import classNames from "classnames";
 import { useSigner } from "wagmi";
-import { loadImage } from "utils/ipfsUpload";
+import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
 import { AddToWhitelist, mintReverseAndDelegation, mintNFT } from "contract-interactions/";
 import toast from "react-hot-toast";
@@ -39,6 +38,8 @@ import {
     proposalForVotes,
 } from "contract-interactions/viewGovernorContract";
 import { isValidHttpUrl } from "utils/transformURL";
+
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -158,7 +159,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const TabOne: FC<{}> = () => {
         return proposals && proposals.length !== 0 ? (
             <ul>
-                {proposals.map((proposal, index) => {
+                {proposals.map((proposal) => {
                     const proposalId = proposal.proposalId;
                     const name = proposal.name;
                     const description = proposal.description;
@@ -329,10 +330,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     ];
     const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
 
-    const fetchDAO = async () => {
+    const fetchDAO = () => {
         if (isInitialized) {
-            await DAOsQuery({
-                onSuccess: async (results) => {
+            DAOsQuery({
+                onSuccess: (results) => {
                     const moralisInstance = results[0];
                     const chainId = moralisInstance.get("chainId");
                     const contractAddress = moralisInstance.get("contractAddress");
@@ -340,8 +341,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         name: moralisInstance.get("name"),
                         description: moralisInstance.get("description"),
                         goals: moralisInstance.get("goals"),
-                        profileImage: await loadImage(moralisInstance.get("profileImage")),
-                        coverImage: await loadImage(moralisInstance.get("coverImage")),
+                        profileImage: moralisInstance.get("profileImage"),
+                        coverImage: moralisInstance.get("coverImage"),
                         tokenAddress: moralisInstance.get("tokenAddress"),
                         votingPeriod: moralisInstance.get("votingPeriod"),
                         quorumPercentage: moralisInstance.get("quorumPercentage"),
@@ -383,18 +384,19 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         fetchNftImage();
     }, [DAO]);
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (DAO && firstUpdate.current) {
             firstUpdate.current = false;
-            fetchBlockchainData();
+            fetchLargeData();
         }
     });
 
-    const fetchBlockchainData = async () => {
-        const totalProposals = await getTotalProposals(DAO!.contractAddress!, DAO!.chainId!);
+    const fetchLargeData = async () => {
         const newDAO = {
             ...DAO,
-            totalProposals: totalProposals,
+            totalProposals: await getTotalProposals(DAO!.contractAddress!, DAO!.chainId!),
+            profileImage: await loadImage(DAO!.profileImage),
+            coverImage: await loadImage(DAO!.coverImage),
         } as IDAOPageForm;
         setDAO(() => newDAO);
     };
@@ -507,6 +509,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             return;
         }
     }
+
     // TODO: Create maping for array of blockchains
     const BlockchainImage = () => {
         return DAO ? (
@@ -532,7 +535,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         <div>
             <Layout className="layout-base mt-0">
                 <div className="cover h-36 w-full relative justify-center">
-                    <Image src={DAO.coverImage ? DAO.coverImage : basicAvatar} layout={"fill"} />
+                    <Image
+                        src={!isIpfsAddress(DAO.coverImage) ? DAO.coverImage : basicAvatar}
+                        layout={"fill"}
+                    />
                 </div>
 
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
@@ -540,7 +546,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         <div className="flex">
                             <div className="mt-[-50px] ">
                                 <Image
-                                    src={DAO.profileImage ? DAO.profileImage : basicAvatar}
+                                    src={
+                                        !isIpfsAddress(DAO.profileImage)
+                                            ? DAO.profileImage
+                                            : basicAvatar
+                                    }
                                     height={"150px"}
                                     width={"150px"}
                                     className="rounded-xl"

@@ -8,6 +8,10 @@ export const NFTStorageInitialization = (): NFTStorage => {
 
 export const ipfsFullPath = (address: string) => "ipfs://" + `${address}`;
 
+export const isIpfsAddress = (address: string) => {
+    return address.includes("ipfs://")
+};
+
 const parseIpfsAddress = (address: string) => {
     return "https://ipfs.io/ipfs/" + address.substring(7);
 };
