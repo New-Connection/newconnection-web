@@ -25,10 +25,14 @@ import classNames from "classnames";
 import { useSigner } from "wagmi";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
-import { AddToWhitelist, mintReverseAndDelegation, mintNFT } from "contract-interactions/";
+import { AddToWhitelist, mintReserveAndDelegation, mintNFT } from "contract-interactions/";
 import toast from "react-hot-toast";
-import ProporsalCard from "components/Cards/ProporsalCard";
-import { getTokenURI } from "contract-interactions/viewNftContract";
+import ProposalCard from "components/Cards/ProposalCard";
+import {
+    getNumAvailableToMint,
+    getSupplyNumber,
+    getTokenURI,
+} from "contract-interactions/viewNftContract";
 import defaultImage from "assets/empty-token.webp";
 import {
     getTotalProposals,
@@ -80,6 +84,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const { data: signer_data } = useSigner();
     const { isInitialized } = useMoralis();
     const firstUpdate = useRef(true);
+
+    async function getChainId(singer: Signer) {
+        return await singer.getChainId();
+    }
 
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
@@ -174,7 +182,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 key={proposalId}
                                 className="border-b-2 border-gray cursor-pointer active:bg-gray"
                             >
-                                <ProporsalCard
+                                <ProposalCard
                                     title={name}
                                     description={description}
                                     shortDescription={shortDescription}
@@ -491,17 +499,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     async function mint() {
         if (!DAO) return null;
+        // const chainID = await getChainId(signer_data as Signer);
+        // const availableNFT = await getSupplyNumber(DAO.tokenAddress, chainID);
+        // console.log("Available NFT", availableNFT.toString());
+        // console.log("On chainID:", chainID);
         setButtonState("Loading");
+        // 1. try to reserve for owner dao, if not it will try to normal mint function
         try {
-            const tx = await mintReverseAndDelegation(DAO.tokenAddress, signer_data as Signer);
+            await mintReserveAndDelegation(DAO.tokenAddress, signer_data as Signer);
             setButtonState("Success");
+            return;
         } catch (e) {
-            setButtonState("Error");
             console.log("Transaction canceled");
         }
         try {
-            console.log("USE MINT NFT");
-            const tx = await mintNFT(DAO.tokenAddress, signer_data as Signer);
+            console.log("Call MINT NFT function");
+            await mintNFT(DAO.tokenAddress, signer_data as Signer);
             setButtonState("Success");
         } catch (e) {
             setButtonState("Error");
@@ -677,7 +690,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             {buttonState}
                         </button>
                     }
-
                     <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
                         Transfer
                     </button>
