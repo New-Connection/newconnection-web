@@ -28,3 +28,13 @@ export async function getSupplyNumber(contractAddress: string, chainId: number) 
         console.log("Error to get max mint id of NFT");
     }
 }
+
+export async function getNumAvailableToMint(contractAddress: string, chainId: number) {
+    try {
+        let provider = networkDetails[chainId].chainProviders as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        return await nft.numAvailableToMint(contractAddress);
+    } catch (e) {
+        console.log("Error in num available to mint");
+    }
+}
