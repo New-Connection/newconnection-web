@@ -454,7 +454,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 <div className="p-4 gap-y-6">
                     <p className="text-start">{daoTitle}: Membership </p>
                     <div className="flex pt-4 justify-between">
-                        <p className="font-light text-sm text-[#AAAAAA]">Type: Art</p>
+                        <p className="font-light text-sm text-[#AAAAAA]">Type: Unknown</p>
                         <BlockchainImage />
                     </div>
                 </div>
@@ -649,24 +649,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     className="h-full items-center text-center "
                 >
                     <NFTImage className="rounded-lg h-14 w-14" />
-                    <p className="mt-4 text-black">Membership NFT</p>
-
-                    <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
-                        Transfer
-                    </button>
-                    <p className="text-gray2 font-light text-sm">
-                        Try to transfer your NFT to another network
-                    </p>
-
-                    <p className="w-full mt-12 text-start text-black">Details</p>
-                    <ul className="py-6 divide-y divide-slate-200">
-                        {DetailsInfo.map((element) => (
-                            <li key={element} className="flex py-4 justify-between">
-                                <p className="font-light text-gray2">{element}</p>
-                                <p className="font-normal text-black">{element}</p>
-                            </li>
-                        ))}
-                    </ul>
+                    <p className="mt-4 text-black">{`${DAO.name}: Membership NFT`}</p>
                     {
                         <button
                             className={`secondary-button w-full h-12 mt-4 mb-6 
@@ -677,6 +660,23 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             {buttonState}
                         </button>
                     }
+
+                    <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
+                        Transfer
+                    </button>
+                    <p className="text-gray2 font-light text-sm">
+                        Try to transfer your NFT to another network
+                    </p>
+
+                    {/* <p className="w-full mt-12 text-start text-black">Details</p>
+                    <ul className="py-6 divide-y divide-slate-200">
+                        {DetailsInfo.map((element) => (
+                            <li key={element} className="flex py-4 justify-between">
+                                <p className="font-light text-gray2">{element}</p>
+                                <p className="font-normal text-black">{element}</p>
+                            </li>
+                        ))}
+                    </ul> */}
                 </NFTDetailDialog>
             </Layout>
         </div>
