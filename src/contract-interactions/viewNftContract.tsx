@@ -29,12 +29,16 @@ export async function getSupplyNumber(contractAddress: string, chainId: number) 
     }
 }
 
-export async function getNumAvailableToMint(contractAddress: string, chainId: number) {
+export async function getNumAvailableToMint(
+    userAddress: string,
+    contractAddress: string,
+    chainId: number
+) {
     try {
         let provider = networkDetails[chainId].chainProviders as BaseProvider;
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
-        return await nft.numAvailableToMint(contractAddress);
+        return await nft.numAvailableToMint(userAddress);
     } catch (e) {
-        console.log("Error in num available to mint");
+        console.log("Error in getNumAvailableToMint()");
     }
 }
