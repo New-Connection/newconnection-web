@@ -11,18 +11,17 @@ export const infuraIpfsApiEndpoint = "https://ipfs.infura.io:5001";
 export const infuraIPFS = "";
 
 // NFT-STORAGE MODULE
-export const NFT_STORAGE_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEU3MkRmOTliNkJDZjhGODlmOTQ4ODkwMTYyN0M5MUZhQkZENUU3RDMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NzMwMzgxOTIwOCwibmFtZSI6Ik5ld0Nvbm5lY3Rpb24ifQ.1LBmCk5ZRmzQVjSDXmV8Vugt85blOz0PBwTdLX1a9Rk";
-
+export const NFT_STORAGE_KEY = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
+   
 // EVM MODULE
-export const infuraId = "9b42ce0bea0a40c98832bdef4f0fb5cc";
-export const alchemyId = "EYaU8KZOLuaFhqXUxa5zzXhaXk6qC2SW";
+export const infuraId = process.env.REACT_APP_INFURA_ID;
+export const alchemyId = process.env.REACT_APP_ALCHEMY_ID;
 export const BLOCKS_IN_DAY = 6545;
 export const SECONDS_IN_BLOCK = 13.2;
 
 //Moralis
-export const moralisAppId = "MDHlZXcGmw2p2n68x7Mk3RHI0yRxU630Rs2cBGKI";
-export const moralisServerUrl = "https://1ks75zkx0yhj.usemoralis.com:2053/server";
+export const moralisAppId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
+export const moralisServerUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID_URL;
 
 interface INetworkDetails {
     [key: number]: {
