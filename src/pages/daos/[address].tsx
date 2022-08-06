@@ -38,6 +38,7 @@ import {
     proposalDeadline,
     proposalForVotes,
 } from "contract-interactions/viewGovernorContract";
+import { isValidHttpUrl } from "utils/transformURL";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -585,14 +586,20 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         </div>
                         <div className="flex w-1/3 justify-end gap-7">
                             {DAO.discordURL ? (
-                                <ImageLink url={DAO.discordURL} image={discordLogo} />
+                                <ImageLink
+                                    url={isValidHttpUrl(DAO.discordURL)}
+                                    image={discordLogo}
+                                />
                             ) : null}
                             {DAO.twitterURL ? (
-                                <ImageLink url={DAO.twitterURL} image={twitterLogo} />
+                                <ImageLink
+                                    url={isValidHttpUrl(DAO.twitterURL)}
+                                    image={twitterLogo}
+                                />
                             ) : null}
 
                             {DAO.websiteURL ? (
-                                <a href={DAO.websiteURL}>
+                                <a href={isValidHttpUrl(DAO.websiteURL)} target="_blank">
                                     <GlobeAltIcon className="h-6 w-6" />
                                 </a>
                             ) : null}
