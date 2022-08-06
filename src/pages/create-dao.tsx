@@ -14,13 +14,13 @@ import {
     InputAmount,
     InputText,
     InputTextArea,
-    Button
+    Button,
 } from "components/Form";
 import {
     handleChangeBasic,
     handleCheckboxChange,
     handleImageChange,
-    handleTextChange
+    handleTextChange,
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
 import { BLOCKS_IN_DAY } from "utils/constants";
@@ -28,7 +28,7 @@ import {
     getMoralisInstance,
     MoralisClassEnum,
     saveMoralisInstance,
-    setFieldsIntoMoralisInstance
+    setFieldsIntoMoralisInstance,
 } from "database/interactions";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
@@ -57,7 +57,7 @@ const CreateDAO: NextPage = () => {
         quorumPercentage: "",
         type: [],
         blockchain: [],
-        description: ""
+        description: "",
     });
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
@@ -97,12 +97,20 @@ const CreateDAO: NextPage = () => {
         let profileImagePath;
         let coverImagePath;
         try {
-            const profileImageUID = await storeNFT(formData.profileImage as File, formData.name, "Profile Image");
+            const profileImageUID = await storeNFT(
+                formData.profileImage as File,
+                formData.name,
+                "Profile Image"
+            );
             profileImagePath = profileImageUID.url;
             console.log(profileImagePath);
             handleChangeBasic(profileImagePath, setFormData, "profileImage");
 
-            const coverImageUID = await storeNFT(formData.coverImage as File, formData.name, "Cover Image");
+            const coverImageUID = await storeNFT(
+                formData.coverImage as File,
+                formData.name,
+                "Cover Image"
+            );
             coverImagePath = coverImageUID.url;
             console.log(coverImagePath);
             handleChangeBasic(coverImagePath, setFormData, "coverImage");
@@ -120,7 +128,7 @@ const CreateDAO: NextPage = () => {
                 name: formData.name,
                 tokenAddress: formData.tokenAddress,
                 votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
-                quorumPercentage: +formData.quorumPercentage
+                quorumPercentage: +formData.quorumPercentage,
             });
             handleNext();
             await contract.deployed();
@@ -133,7 +141,6 @@ const CreateDAO: NextPage = () => {
             toast.error("Please approve transaction to create DAO");
             return;
         }
-
 
         const chainId = await signer_data.getChainId();
         handleChangeBasic(chainId, setFormData, "chainId");
@@ -214,8 +221,8 @@ const CreateDAO: NextPage = () => {
                                 name="quorumPercentage"
                                 className={"w-2/5"}
                                 labelTitle="Quorum percentage required for a proposal to pass."
-                                placeholder="Quorum percentage (51-100)%"
-                                min={51}
+                                placeholder="Quorum percentage (1-100)%"
+                                min={1}
                                 max={100}
                                 handleChange={(event) => handleTextChange(event, setFormData)}
                             />
