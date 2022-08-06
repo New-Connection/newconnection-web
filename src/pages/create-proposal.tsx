@@ -37,7 +37,7 @@ const CreateProposal: NextPage = () => {
         description: "",
         options: [],
         blockchain: [],
-        enabledBlockchain: [],
+        enabledBlockchains: [],
     });
     const router = useRouter();
 
@@ -57,7 +57,7 @@ const CreateProposal: NextPage = () => {
         const query = router.query as QueryUrlParams;
 
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        handleChangeBasic(query.blockchain, setFormData, "enabledBlockchain");
+        handleChangeBasic(query.blockchain, setFormData, "enabledBlockchains");
 
         console.log(`governorAddress from query: ${query.governorAddress}`);
         console.log(`proposal blockchain ${query.blockchain}`);
@@ -176,7 +176,7 @@ const CreateProposal: NextPage = () => {
                             label="Proposal Blockchain"
                             description="You can choose one or more blockchains"
                             values={CHAINS}
-                            enabledValues={formData.enabledBlockchain}
+                            enabledValues={formData.enabledBlockchains}
                             handleChange={(event) =>
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }

@@ -194,7 +194,7 @@ const CreateNFT: NextPage = () => {
                                 </label>
                                 <div className="grid w-full grid-cols-4 gap-4">
                                     {CHAINS.map((chain) =>
-                                        chain === "Polygon" || chain === "Avalanche" ? (
+                                        chain === "Polygon" ? (
                                             <InputSupplyOfNFT
                                                 key={chain}
                                                 label={chain}
