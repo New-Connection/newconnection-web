@@ -20,7 +20,7 @@ const DAOCard = (props) => {
             </div>
             <div>
                 <p>Active voting now</p>
-                <p className="text-gray-500 text-sm">Proporsals {props.proporsal}</p>
+                <p className="text-gray-500 text-sm">Proposals {props.proporsal}</p>
                 <p className="text-gray-500 text-sm">Voting {props.voting}</p>
             </div>
         </div>

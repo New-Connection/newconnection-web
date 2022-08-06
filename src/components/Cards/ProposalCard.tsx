@@ -3,7 +3,7 @@ import Image from "next/image";
 import Polygon from "assets/chains/Polygon.png";
 import { timestampToDate } from "utils/basic";
 
-interface IProporsalCard {
+interface IProposalCard {
     title: string;
     shortDescription: string;
     description?: string;
@@ -15,7 +15,7 @@ interface IProporsalCard {
     deadline?: number;
 }
 
-const ProporsalCard = ({
+const ProposalCard = ({
     title,
     shortDescription,
     daoName,
@@ -23,7 +23,7 @@ const ProporsalCard = ({
     forVotes,
     againstVotes,
     deadline,
-}: IProporsalCard) => {
+}: IProposalCard) => {
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
     const sumV = againstV + forV || 1;
@@ -74,4 +74,4 @@ const ProporsalCard = ({
     );
 };
 
-export default ProporsalCard;
+export default ProposalCard;

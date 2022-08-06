@@ -9,7 +9,7 @@ const NewFeaturesBanner = () => {
             "You can create your own DAO on three blockchain (Gorelic, Fuji, Mumbai)",
             "Create NFT(ERC721) for DAO",
             "Add people to waitlist",
-            "Create proporsals for DAO",
+            "Create proposals for DAO",
             "Voting with your NFT",
             "Transfer NFT to different networks",
         ],

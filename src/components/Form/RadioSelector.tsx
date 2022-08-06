@@ -1,4 +1,4 @@
-// Radio Selector. Using for detail-proporsal
+// Radio Selector. Using for detail-proposal
 // https://flowbite.com/docs/forms/radio/
 import { IRadioSelector } from "./types";
 import classNames from "classnames";
