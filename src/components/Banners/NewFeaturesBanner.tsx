@@ -6,12 +6,11 @@ const NewFeaturesBanner = () => {
     const textDialog = useDialogState();
     const textData = {
         "0.1": [
-            "You can create your own DAO on three blockchain (Gorelic, Fuji, Mumbai)",
-            "Create NFT(ERC721) for DAO",
-            "Add people to waitlist",
-            "Create proposals for DAO",
-            "Voting with your NFT",
-            "Transfer NFT to different networks",
+            "You can create your DAO on three blockchains (Goerli, Avax Fuji, Polygon Mumbai)",
+            "Create NFT(ERC721) Membership for DAO",
+            "Add people to the whitelist",
+            "Create proposals for DAO voting",
+            "Voting with your NFT Membership",
         ],
     };
     const firstVersion = textData["0.1"];
