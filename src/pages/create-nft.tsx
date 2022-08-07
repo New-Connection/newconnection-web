@@ -95,7 +95,6 @@ const CreateNFT: NextPage = () => {
             const endpoint: string =
                 layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
-            console.log("polygon", formData.Polygon!);
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
@@ -108,8 +107,6 @@ const CreateNFT: NextPage = () => {
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
             const supplyNFT = await getSupplyNumber(contract.address, chainId);
-            console.log("Supply of NFT String", supplyNFT.toString());
-            console.log("Supply of NFT HEX", supplyNFT);
             handleNext();
             const setTx = await setURI(contract.address, signer_data, fullPath);
             handleNext();
