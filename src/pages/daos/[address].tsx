@@ -30,6 +30,7 @@ import toast from "react-hot-toast";
 import ProposalCard from "components/Cards/ProposalCard";
 import {
     getNumAvailableToMint,
+    getNumberOfMintedTokens,
     getSupplyNumber,
     getTokenURI,
 } from "contract-interactions/viewNftContract";
@@ -403,6 +404,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         const newDAO = {
             ...DAO,
             totalProposals: await getTotalProposals(DAO!.contractAddress!, DAO!.chainId!),
+            totalMembers: await getNumberOfMintedTokens(DAO!.tokenAddress!, DAO!.chainId!),
             profileImage: await loadImage(DAO!.profileImage),
             coverImage: await loadImage(DAO!.coverImage),
         } as IDAOPageForm;
