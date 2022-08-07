@@ -11,7 +11,7 @@ import { MoralisProvider } from "react-moralis";
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient());
     return (
-        <MoralisProvider appId={moralisAppId} serverUrl={moralisServerUrl}>
+        <MoralisProvider appId={moralisAppId!} serverUrl={moralisServerUrl!}>
             <ThemeProvider defaultTheme="system" attribute="class">
                 <WagmiConfig client={WalletConfig}>
                     <QueryClientProvider client={queryClient}>
