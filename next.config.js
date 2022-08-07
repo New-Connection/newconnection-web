@@ -11,6 +11,9 @@ const nextConfig = {
     images: {
         domains: [""],
     },
+    eslint:{
+        ignoreDuringBuilds:true
+    },
     async redirects() {
         return [
             {
