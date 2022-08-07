@@ -24,9 +24,11 @@ export async function mintReserveAndDelegation(contractAddress: string, signer: 
 export async function mintNFT(contractAddress: string, signer: Signer) {
     const erc20_rw = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, signer);
     const tx = await erc20_rw.mint();
+    await tx.wait()
     // TODO: Ask ernest about delegation
     const address = await signer.getAddress();
     const delegateTx = await erc20_rw.delegate(address);
+    await delegateTx.wait()
     console.log(tx);
     console.log("Tx hash", tx.hash);
 }
