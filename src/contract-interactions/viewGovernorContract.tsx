@@ -85,6 +85,5 @@ export async function proposalAgainstVotes(
     let provider = networkDetails[chainId].chainProviders as BaseProvider;
     const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, provider);
     const votes = await governor.proposalVotes(proposalId);
-    console.log(votes);
     return votes["againstVotes"].toString();
 }

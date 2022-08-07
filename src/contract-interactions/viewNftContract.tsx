@@ -29,6 +29,18 @@ export async function getSupplyNumber(contractAddress: string, chainId: number) 
     }
 }
 
+export async function getNumberOfMintedTokens(contractAddress: string, chainId: number) {
+    try {
+        let provider = networkDetails[chainId].chainProviders as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        const nextMintId = await nft.nextMintId();
+        return nextMintId.toString()
+    } catch (e) {
+        console.log(e);
+        console.log("Error to get next mint id of NFT");
+    }
+}
+
 export async function getNumAvailableToMint(
     userAddress: string,
     contractAddress: string,
