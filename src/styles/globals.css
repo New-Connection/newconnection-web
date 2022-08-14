@@ -72,7 +72,7 @@
     }
 
     .text-highlighter {
-        @apply font-normal my-2 text-5xl text-[#3D3D3D];
+        @apply font-normal my-2 lg:text-5xl text-3xl text-[#3D3D3D];
     }
 
     .btn-connect-wallets {
