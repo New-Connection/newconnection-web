@@ -25,6 +25,7 @@ import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { StepperDialog } from "components/Dialog";
 import { deployNFTContract } from "contract-interactions/useDeployNFTContract";
+import BackButton from "components/Button/backButton";
 
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
@@ -125,6 +126,7 @@ const CreateNFT: NextPage = () => {
     return (
         <div>
             <Layout className="layout-base">
+                <BackButton />
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <h1 className="text-highlighter">Add NFT</h1>
