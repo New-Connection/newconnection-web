@@ -5,6 +5,9 @@ import ETH from "assets/chains/Ethereum.png";
 import BNB from "assets/chains/Binance.png";
 import MATIC from "assets/chains/Polygon.png";
 import AVAX from "assets/chains/Avalanche.png";
+import ARB from "assets/chains/Arbitrum.png";
+import OPT from "assets/chains/Optimism.png";
+import FTM from "assets/chains/Fantom.png";
 
 // IPFS MODULE
 export const infuraIpfsApiEndpoint = "https://ipfs.infura.io:5001";
@@ -12,7 +15,7 @@ export const infuraIPFS = "";
 
 // NFT-STORAGE MODULE
 export const NFT_STORAGE_KEY = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
-   
+
 // EVM MODULE
 export const infuraId = process.env.REACT_APP_INFURA_ID;
 export const alchemyId = process.env.REACT_APP_ALCHEMY_ID;
@@ -124,6 +127,57 @@ export const networkDetails: INetworkDetails = {
         prefix: "fuji",
         logoURI: AVAX.src,
         tokenListId: "AVAX",
+    },
+
+    4: {
+        rpcUrl: `https://rinkeby.infura.io/v3/${infuraId}`,
+        chainProviders: providers.getDefaultProvider(4, {
+            alchemy: alchemyId,
+            infura: infuraId,
+        }),
+        blockExplorerURL: "https://rinkeby.etherscan.io/",
+        blockExplorerName: "Etherscan",
+        prefix: "rinkeby",
+        logoURI: ETH.src,
+        tokenListId: "ETH",
+    },
+
+    97: {
+        rpcUrl: `https://data-seed-prebsc-1-s1.binance.org:8545`,
+        chainProviders: new ethers.providers.JsonRpcProvider(
+            "https://data-seed-prebsc-1-s1.binance.org:8545"
+        ),
+        blockExplorerURL: "https://testnet.bscscan.com",
+        blockExplorerName: "tBscscan",
+        prefix: "tBNB",
+        logoURI: BNB.src,
+    },
+
+    421611: {
+        rpcUrl: `https://rinkeby.arbitrum.io/rpc`,
+        chainProviders: new ethers.providers.JsonRpcProvider("https://rinkeby.arbitrum.io/rpc"),
+        blockExplorerURL: "https://testnet.arbiscan.io",
+        blockExplorerName: "tArbiscan",
+        prefix: "ETH",
+        logoURI: ARB.src,
+    },
+
+    69: {
+        rpcUrl: `https://kovan.optimism.io/`,
+        chainProviders: new ethers.providers.JsonRpcProvider("https://kovan.optimism.io/"),
+        blockExplorerURL: "https://kovan-optimistic.etherscan.io",
+        blockExplorerName: "tOptiscan",
+        prefix: "ETH",
+        logoURI: OPT.src,
+    },
+
+    4002: {
+        rpcUrl: `https://rpc.testnet.fantom.network/`,
+        chainProviders: new ethers.providers.JsonRpcProvider("https://rpc.testnet.fantom.network/"),
+        blockExplorerURL: "https://testnet.ftmscan.com",
+        blockExplorerName: "tFtmscan",
+        prefix: "FTM",
+        logoURI: FTM.src,
     },
 };
 
