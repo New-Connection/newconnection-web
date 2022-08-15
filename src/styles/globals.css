@@ -126,7 +126,7 @@
     }
 
     .nft-card {
-        @apply border-solid shadow-1 border-gray border-2 w-1/4 rounded-md;
+        @apply border-solid shadow-1 border-gray border-2 lg:w-1/4 w-1/2 rounded-md;
     }
 
     .table-row {
