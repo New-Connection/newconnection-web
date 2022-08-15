@@ -23,7 +23,7 @@ const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url }) => {
     const Panel = tabs && tabs.find((tab) => tab.index === selectedTab);
     return (
         <div>
-            <div className="flex justify-between">
+            <div className="lg:flex md:flex xl:flex justify-between">
                 <div className="flex-wrap relatives">
                     {tabs.map((tab) => (
                         <button

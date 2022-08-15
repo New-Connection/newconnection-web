@@ -101,10 +101,10 @@ const DAOsPage: NextPage = () => {
             <Link href={`/daos/${address}`}>
                 <div
                     className={
-                        "flex justify-between w-full h-40 p-3 border-b-2 border-gray cursor-pointer active:bg-gray"
+                        "flex justify-between w-full lg:h-40 h-50 p-3 border-b-2 border-gray cursor-pointer active:bg-gray"
                     }
                 >
-                    <div className={"flex gap-10 w-10/12"}>
+                    <div className="flex gap-10 w-10/12">
                         <div className="w-28 h-28">
                             <Image
                                 width={"150"}
@@ -116,7 +116,7 @@ const DAOsPage: NextPage = () => {
                         </div>
                         <div className="w-5/6 grid grid-cols-1 content-between">
                             <div className="w-full">
-                                <p className="text-lg uppercase font-semibold cursor-pointer">
+                                <p className="lg:text-lg text-base uppercase font-semibold cursor-pointer">
                                     {name}
                                 </p>
                                 <div className="text-gray-500 line-clamp-2">{description}</div>
@@ -132,11 +132,11 @@ const DAOsPage: NextPage = () => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col w-32 text-center text-xs">
+                    <div className="flex flex-col lg:w-32 w-24 text-center text-xs">
                         {isActive ? (
-                            <div className={"badge-active"}>Active voting now</div>
+                            <span className="badge-active">Active voting now</span>
                         ) : (
-                            <div className={"badge-active text-black"}>No active voting</div>
+                            <span className="badge-active text-black">No active voting</span>
                         )}
                         <div className={"flex flex-col gap-3 mt-4"}>
                             <div className={"flex justify-between"}>
@@ -157,30 +157,32 @@ const DAOsPage: NextPage = () => {
     return (
         <div>
             <Layout className="layout-base">
-                <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    <div className={"flex justify-between items-center"}>
-                        <h1 className={"text-highlighter"}>DAOs</h1>
-                        <Link href="./create-new-dao">
-                            <button className={"secondary-button h-10 "}>Create DAO</button>
-                        </Link>
-                    </div>
+                <section className="relative w-full">
+                    <form className="mx-auto flex max-w-4xl flex-col gap-4">
+                        <div className="lg:flex md:flex xl:flex justify-between items-center">
+                            <h1 className="text-highlighter">DAOs</h1>
+                            <Link href="./create-new-dao">
+                                <button className="secondary-button h-10">Create DAO</button>
+                            </Link>
+                        </div>
 
-                    <ul>
-                        {DAOs &&
-                            DAOs.map((dao, index) => {
-                                return (
-                                    <DAOCard
-                                        key={index}
-                                        name={dao.name}
-                                        description={dao.description}
-                                        address={dao.contractAddress}
-                                        profileImage={dao.profileImage}
-                                        isActive={dao.isActive}
-                                        proposals={dao.totalProposals}
-                                    />
-                                );
-                            })}
-                    </ul>
+                        <ul>
+                            {DAOs &&
+                                DAOs.map((dao, index) => {
+                                    return (
+                                        <DAOCard
+                                            key={index}
+                                            name={dao.name}
+                                            description={dao.description}
+                                            address={dao.contractAddress}
+                                            profileImage={dao.profileImage}
+                                            isActive={dao.isActive}
+                                            proposals={dao.totalProposals}
+                                        />
+                                    );
+                                })}
+                        </ul>
+                    </form>
                 </section>
             </Layout>
         </div>
