@@ -59,8 +59,12 @@
             0 1px 5px rgba(0, 0, 0, 0.12);
     }
 
+    .full-width-button {
+        @apply flex flex-row justify-center bg-purple text-white w-full py-4 mr-4 px-16 border-2 items-center rounded-full flex-1;
+    }
+
     .badge-active {
-        @apply grid place-items-center font-normal text-purple bg-gray mb-3 h-8 rounded-full;
+        @apply font-normal text-purple bg-gray rounded-full mr-2 px-[1.0erm] py-1;
     }
 
     .secondary-button {
@@ -84,7 +88,7 @@
     }
 
     .dao-label {
-        @apply font-normal text-black text-5xl ml-12 mt-6;
+        @apply font-normal text-black lg:text-5xl md:text-4xl md:ml-12 md:mt-6  text-2xl ml-2 lg:ml-12 lg:mt-6;
     }
 
     .settings-button {
