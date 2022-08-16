@@ -1,13 +1,11 @@
 import * as React from "react";
-import { useIsMounted } from "hooks";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
 const SwitchNetworkBanner = () => {
-    const chainIDs: number[] = [5, 80001, 43113]; // Goerli, Mumbai, FUJI
-    const isMounted = useIsMounted();
+    const chainIDs: number[] = [4, 80001, 43113, 97, 421611, 69, 4002]; // Goerli, Mumbai, FUJI
     const { isConnected } = useAccount();
     const { chain } = useNetwork();
-    const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
+    const { switchNetwork } = useSwitchNetwork();
 
     const isIncludeNumber = (id: number) => chainIDs.some((val) => val === id); // return true if we have this chainID in chainIDs
 
@@ -22,7 +20,7 @@ const SwitchNetworkBanner = () => {
                         className="hover:text-gray hover:underline"
                         onClick={() => switchNetwork(chainIDs[0])}
                     >
-                        Etherium Goerli
+                        Ethereum Rinkeby
                     </button>
                     ,{" "}
                     <button
