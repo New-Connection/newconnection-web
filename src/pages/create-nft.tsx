@@ -25,6 +25,7 @@ import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { StepperDialog } from "components/Dialog";
 import { deployNFTContract } from "contract-interactions/useDeployNFTContract";
+import BackButton from "components/Button/backButton";
 
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG } from "utils/blockchains";
@@ -125,11 +126,12 @@ const CreateNFT: NextPage = () => {
     return (
         <div>
             <Layout className="layout-base">
+                <BackButton />
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <h1 className="text-highlighter">Add NFT</h1>
-                        <div className="w-full flex">
-                            <div className="w-2/3">
+                        <div className="w-full lg:flex">
+                            <div className="lg:w-2/3 w-full">
                                 <InputText
                                     label="Name"
                                     name="name"
@@ -222,7 +224,7 @@ const CreateNFT: NextPage = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="w-1/3 ml-10">
+                            <div className="lg:w-1/3 lg:ml-10">
                                 <DragAndDropImage
                                     label="Image"
                                     name="file"

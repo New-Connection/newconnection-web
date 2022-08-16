@@ -140,7 +140,7 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
 
     const AboutCard = ({ description }) => {
         return (
-            <CardProposal title="About" className="w-1/3">
+            <CardProposal title="About" className="lg:w-1/3 w-full">
                 <p className="text-sm line-clamp-6">{description}</p>
             </CardProposal>
         );

@@ -47,7 +47,7 @@ const CreateNewDAO: NextPage = () => {
                             To create your DAO, you first need to add a created NFT collection or
                             mint a new one in our system
                         </p>
-                        <div className="flex gap-16">
+                        <div className="lg:flex gap-10">
                             <Card
                                 title="Existing NFT collection (Comming Soon)"
                                 subtitle="Add NFT smart contract if you have an existing collection"

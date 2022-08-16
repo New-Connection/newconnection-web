@@ -413,7 +413,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const StatisticCard = ({ label, counter }) => {
         return (
-            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg w-1/4 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
+            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
                 <div className={"text-gray-400 group-hover:text-white"}>{label}</div>
                 <div className={"flex justify-end text-black text-5xl group-hover:text-white"}>
                     {counter || 0}
@@ -557,7 +557,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 </div>
 
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    <div className="dao-info flex justify-between">
+                    <div className="dao-info lg:flex md:flex xl:flex justify-between">
                         <div className="flex">
                             <div className="mt-[-50px] ">
                                 <Image
@@ -587,8 +587,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <button className="secondary-button mt-6">Become a member</button>
                         </Link>
                     </div>
-                    <div className="flex justify-between gap-10 w-full">
-                        <div className="flex w-1/2 justify-between">
+                    <div className="lg:flex md:flex lg:justify-between gap-10 w-full">
+                        <div className="flex lg:w-1/2 justify-between">
                             <a
                                 href={DAO.websiteURL}
                                 target={"_blank"}
@@ -609,7 +609,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 <BlockchainImage />
                             </div>
                         </div>
-                        <div className="flex w-1/3 justify-end gap-7">
+                        <div className="flex lg:w-1/3 lg:justify-end justify-between gap-7">
                             {DAO.discordURL ? (
                                 <ImageLink
                                     url={isValidHttpUrl(DAO.discordURL)}
@@ -637,7 +637,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         <StatisticCard label={"Total members"} counter={DAO.totalMembers} />
                     </div>
 
-                    <div className="dao-proposals-members w-full">
+                    <div className="dao-proposals-members lg:w-full">
                         <Tabs
                             selectedTab={selectedTab}
                             onClick={setSelectedTab}
