@@ -7,10 +7,9 @@ import {
     useSelectState,
     SelectGroup,
     SelectGroupLabel,
-    SelectSeparator,
 } from "ariakit/select";
 import { SelectorIcon } from "@heroicons/react/solid";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import defaultImage from "assets/empty-token.webp";
 import { chainDetails } from "utils/network"; // this file to add more networks
@@ -18,7 +17,7 @@ import { SupportedChainName } from "utils/constants";
 
 export const NetworksMenu = () => {
     const { chain } = useNetwork();
-    const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
+    const { chains, switchNetwork } = useSwitchNetwork();
     const select = useSelectState({
         defaultValue: chain?.id?.toString() ?? "0",
         sameWidth: true,
@@ -28,18 +27,28 @@ export const NetworksMenu = () => {
     const { network } = chainDetails(chain?.id?.toString());
     // How to know what chain is it
     // console.log("Chain", chain?.id?.toString());
+    console.log("Chain", chain);
     // console.log("Error", error);
     if (!chain || !switchNetwork) return null;
 
     //const mainnets = chains.filter((chain) => !chain.testnet);
     // ONLY GOERLI. For using all testnets (=> chain.testnet)
     const testnets = chains.filter(
-        (chain) => chain.id === 5 || chain.id === 80001 || chain.id === 43113
+        (chain) =>
+            chain.id === 80001 ||
+            chain.id === 43113 ||
+            chain.id === 4 ||
+            chain.id === 97 ||
+            chain.id === 421611 ||
+            chain.id === 69 ||
+            chain.id === 4002
     );
+    console.log(testnets);
+    console.log("name:     " + chain.name);
 
     // To find name what we need
     const nameChain = SupportedChainName.find((name) => name === chain.name);
-
+    console.log(nameChain);
     return (
         <>
             <SelectLabel state={select} className="hidden sm:sr-only">

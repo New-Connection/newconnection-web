@@ -83,7 +83,87 @@ export const avalancheTestnet: Chain = {
     testnet: true,
 };
 
-export const SupportedChainName = ["Goerli", polygonTestnet.name, avalancheTestnet.name];
+export const bscTestnet: Chain = {
+    id: 97,
+    name: "BSC Testnet",
+    network: "BSC",
+    nativeCurrency: {
+        decimals: 18,
+        name: "BSC",
+        symbol: "BNB",
+    },
+    rpcUrls: {
+        default: "https://data-seed-prebsc-1-s1.binance.org:8545",
+    },
+    blockExplorers: {
+        default: { name: "bscscan", url: "https://testnet.bscscan.com" },
+    },
+    testnet: true,
+};
+
+export const arbitrumTestnet: Chain = {
+    id: 421611,
+    name: "Arbitrum Rinkeby",
+    network: "Arbitrum",
+    nativeCurrency: {
+        decimals: 18,
+        name: "Ethereum",
+        symbol: "ETH",
+    },
+    rpcUrls: {
+        default: "https://rinkeby.arbitrum.io/rpc",
+    },
+    blockExplorers: {
+        default: { name: "arbiscan", url: "https://testnet.arbiscan.io" },
+    },
+    testnet: true,
+};
+
+export const optimismTestnet: Chain = {
+    id: 69,
+    name: "Optimism Kovan",
+    network: "Optimism",
+    nativeCurrency: {
+        decimals: 18,
+        name: "Ethereum",
+        symbol: "ETH",
+    },
+    rpcUrls: {
+        default: "https://kovan.optimism.io/",
+    },
+    blockExplorers: {
+        default: { name: "optiscan", url: "https://kovan-optimistic.etherscan.io" },
+    },
+    testnet: true,
+};
+
+export const fantomTestnet: Chain = {
+    id: 4002,
+    name: "Fantom Testnet",
+    network: "Fantom",
+    nativeCurrency: {
+        decimals: 18,
+        name: "Fantom",
+        symbol: "FTM",
+    },
+    rpcUrls: {
+        default: "https://rpc.testnet.fantom.network/",
+    },
+    blockExplorers: {
+        default: { name: "ftmscan", url: "https://testnet.ftmscan.com" },
+    },
+    testnet: true,
+};
+
+export const SupportedChainName = [
+    polygonTestnet.name,
+    avalancheTestnet.name,
+    "Rinkeby",
+    bscTestnet.name,
+    arbitrumTestnet.name,
+    optimismTestnet.name,
+    fantomTestnet.name
+];
 
 export const networkDetails: INetworkDetails = {
     5: {
@@ -137,7 +217,7 @@ export const networkDetails: INetworkDetails = {
         }),
         blockExplorerURL: "https://rinkeby.etherscan.io/",
         blockExplorerName: "Etherscan",
-        prefix: "rinkeby",
+        prefix: "Rinkeby",
         logoURI: ETH.src,
         tokenListId: "ETH",
     },
