@@ -11,17 +11,8 @@ const nextConfig = {
     images: {
         domains: [""],
     },
-    eslint:{
-        ignoreDuringBuilds:true
-    },
-    async redirects() {
-        return [
-            {
-                source: "/create-dao",
-                destination: "/",
-                permanent: true,
-            },
-        ];
+    eslint: {
+        ignoreDuringBuilds: true,
     },
 };
 

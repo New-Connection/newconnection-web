@@ -27,7 +27,6 @@ export const NetworksMenu = () => {
     const { network } = chainDetails(chain?.id?.toString());
     // How to know what chain is it
     // console.log("Chain", chain?.id?.toString());
-    console.log("Chain", chain);
     // console.log("Error", error);
     if (!chain || !switchNetwork) return null;
 
@@ -43,12 +42,12 @@ export const NetworksMenu = () => {
             chain.id === 69 ||
             chain.id === 4002
     );
-    console.log(testnets);
-    console.log("name:     " + chain.name);
+    // console.log(testnets);
+    // console.log("name:     " + chain.name);
 
     // To find name what we need
     const nameChain = SupportedChainName.find((name) => name === chain.name);
-    console.log(nameChain);
+    // console.log(nameChain);
     return (
         <>
             <SelectLabel state={select} className="hidden sm:sr-only">

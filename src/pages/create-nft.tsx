@@ -99,6 +99,7 @@ const CreateNFT: NextPage = () => {
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
+                price: formData.price.toString(),
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
@@ -116,6 +117,7 @@ const CreateNFT: NextPage = () => {
             handleNext();
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
+            console.log(error);
             confirmDialog.toggle();
             handleReset();
             toast.error("Please approve transaction to create DAO");
@@ -187,12 +189,13 @@ const CreateNFT: NextPage = () => {
 
                                 <InputAmount
                                     label="Price"
-                                    placeholder="Soon you will be able to set the price of your NFT, but for now skip this field"
+                                    placeholder="Price in ETH"
                                     name="price"
                                     handleChange={(event) => handleTextChange(event, setFormData)}
-                                    isRequired={false}
                                     className="w-full"
-                                    isDisabled={true}
+                                    min={0}
+                                    step={0.0001}
+                                    max={10}
                                 />
                                 <label>
                                     <div className="input-label"> NFT Supply</div>
