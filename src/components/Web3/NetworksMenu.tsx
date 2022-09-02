@@ -118,7 +118,7 @@ export const NetworksMenu = () => {
                                     key={value.id}
                                     value={value.id?.toString()}
                                     className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
-                                    onClick={() => switchNetwork(value.id)}
+                                    onClick={() => switchNetwork?.(value.id)}
                                 >
                                     <Image
                                         src={network?.logoURI ?? defaultImage}

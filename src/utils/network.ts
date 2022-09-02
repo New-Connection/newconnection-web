@@ -12,6 +12,7 @@ export function chainDetails(chainId: unknown) {
         return { network, chain };
     } else {
         const network = networkDetails[id];
+        console.log(network);
         const chain = chains.find((c) => c.id === id);
         return { network, chain };
     }

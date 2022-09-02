@@ -57,7 +57,7 @@ export const polygonTestnet: Chain = {
         symbol: "MATIC",
     },
     rpcUrls: {
-        default: "https://rpc-mumbai.matic.today",
+        default: "https://rpc-mumbai.maticvigil.com",
     },
     blockExplorers: {
         default: { name: "Polygonscan", url: "https://mumbai.polygonscan.com/" },
