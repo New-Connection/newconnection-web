@@ -12,7 +12,7 @@ import BackButton from "components/Button/backButton";
 import { useDialogState } from "ariakit";
 import { validateForm } from "utils/validate";
 import { CHAINS } from "utils/blockchains";
-import { createProposal } from "../contract-interactions/stateGovernorContract";
+import { createProposal } from "contract-interactions/stateGovernorContract";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { Signer } from "ethers";
@@ -21,8 +21,8 @@ import {
     MoralisClassEnum,
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
-} from "../database/interactions";
-import { StepperDialog } from "../components/Dialog";
+} from "database/interactions";
+import { StepperDialog } from "components/Dialog";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     governorAddress: string;

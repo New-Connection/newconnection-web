@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { NextPage } from "next";
-import { useSigner } from "wagmi";
+import { useSigner, useSwitchNetwork } from "wagmi";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
@@ -34,7 +34,7 @@ import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { StepperDialog } from "../components/Dialog";
 
-import { CHAINS, CHAINS_IMG } from "utils/blockchains";
+import { CHAINS, CHAINS_IMG, TEST_CHAINS_IDS } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
@@ -62,6 +62,8 @@ const CreateDAO: NextPage = () => {
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
+
+    const { switchNetwork } = useSwitchNetwork();
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -91,6 +93,9 @@ const CreateDAO: NextPage = () => {
         if (!validateForm(formData)) {
             return;
         }
+
+        switchNetwork(TEST_CHAINS_IDS[formData.blockchain[0]]);
+
         handleReset();
         confirmDialog.toggle();
 

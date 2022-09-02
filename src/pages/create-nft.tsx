@@ -11,13 +11,14 @@ import {
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { Signer } from "ethers";
-import { useSigner } from "wagmi";
+import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import { ICreateNFT } from "types/forms";
 import {
     handleChangeBasic,
     handleImageChange,
+    handleNftSupplyChange,
     handleSelectorChange,
     handleTextChange,
 } from "utils/handlers";
@@ -26,9 +27,8 @@ import { useDialogState } from "ariakit";
 import { StepperDialog } from "components/Dialog";
 import { deployNFTContract } from "contract-interactions/useDeployNFTContract";
 import BackButton from "components/Button/backButton";
-
 import { storeNFT } from "utils/ipfsUpload";
-import { CHAINS, CHAINS_IMG } from "utils/blockchains";
+import { CHAINS, CHAINS_IMG, TEST_CHAINS_IDS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { setURI } from "contract-interactions/stateNFTContract";
 import { createNFTSteps } from "components/Dialog/Stepper";
@@ -46,12 +46,14 @@ const CreateNFT: NextPage = () => {
         price: 0,
         contractAddress: "",
         ipfsAddress: "",
-        Polygon: "",
+        blockchain: "",
     });
 
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
+
+    const { switchNetwork } = useSwitchNetwork();
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -61,9 +63,17 @@ const CreateNFT: NextPage = () => {
         setActiveStep(0);
     };
 
+    const calculateSupply = () => {
+        return formData[
+            CHAINS.find((chain) => {
+                const supply = formData[chain];
+                return supply !== 0 && supply !== "" && supply !== undefined;
+            })
+        ];
+    };
+
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-
         if (!signer_data) {
             toast.error("Please connect wallet");
             return;
@@ -73,6 +83,9 @@ const CreateNFT: NextPage = () => {
         ) {
             return;
         }
+
+        switchNetwork(TEST_CHAINS_IDS[formData.blockchain]);
+
         handleReset();
         confirmDialog.toggle();
 
@@ -103,7 +116,7 @@ const CreateNFT: NextPage = () => {
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
-                endMintId: +formData.Polygon!,
+                endMintId: calculateSupply(),
             });
             handleNext();
             await contract.deployed();
@@ -201,29 +214,41 @@ const CreateNFT: NextPage = () => {
                                     <div className="input-label"> NFT Supply</div>
                                 </label>
                                 <div className="grid w-full grid-cols-4 gap-4">
-                                    {CHAINS.map((chain) =>
-                                        chain === "Polygon" ? (
+                                    {CHAINS.map(
+                                        (chain) => (
+                                            // chain === "Polygon" ? (
                                             <InputSupplyOfNFT
                                                 key={chain}
                                                 label={chain}
                                                 name={chain}
                                                 image={CHAINS_IMG[chain]}
                                                 handleChange={(event) => {
-                                                    handleTextChange(event, setFormData);
+                                                    handleNftSupplyChange(
+                                                        event,
+                                                        setFormData,
+                                                        chain,
+                                                        "blockchain"
+                                                    );
                                                 }}
-                                            />
-                                        ) : (
-                                            <InputSupplyOfNFT
-                                                key={chain}
-                                                label={chain}
-                                                name={chain}
-                                                image={CHAINS_IMG[chain]}
-                                                handleChange={(event) => {
-                                                    handleTextChange(event, setFormData);
-                                                }}
-                                                isDisabled={true}
+                                                isDisabled={
+                                                    chain !== formData.blockchain &&
+                                                    formData.blockchain !== ""
+                                                }
                                             />
                                         )
+                                        // )
+                                        // : (
+                                        //     <InputSupplyOfNFT
+                                        //         key={chain}
+                                        //         label={chain}
+                                        //         name={chain}
+                                        //         image={CHAINS_IMG[chain]}
+                                        //         handleChange={(event) => {
+                                        //             handleTextChange(event, setFormData);
+                                        //         }}
+                                        //         isDisabled={true}
+                                        //     />
+                                        // )
                                     )}
                                 </div>
                             </div>

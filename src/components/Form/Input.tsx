@@ -162,7 +162,7 @@ export const InputSupplyOfNFT = ({
                     spellCheck="false"
                     inputMode="decimal"
                     title="Enter numbers only."
-                    min={min || 0}
+                    min={min === 0 ? 0 : min || 1}
                     max={max || 100} //Max number of NFT
                     step={step || 1}
                     disabled={isDisabled}

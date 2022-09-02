@@ -37,13 +37,13 @@ export interface IMembershipForm {
 }
 
 export interface IBlockchains {
-    Polygon?: string;
-    Ethereum?: string;
-    Arbitrum?: string;
-    Binance?: string;
-    Avalanche?: string;
-    Fantom?: string;
-    Optimism?: string;
+    Polygon?: number;
+    Ethereum?: number;
+    Arbitrum?: number;
+    Binance?: number;
+    Avalanche?: number;
+    Fantom?: number;
+    Optimism?: number;
 }
 
 export interface ICreateNFT extends ICreate, IBlockchains {
@@ -53,6 +53,7 @@ export interface ICreateNFT extends ICreate, IBlockchains {
     royalties: number;
     symbol: string;
     price: number;
+    blockchain: string;
     // numberOfNFT: { [blockchainName: string]: number };
     contractAddress?: string;
     ipfsAddress?: string;
