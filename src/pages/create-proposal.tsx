@@ -78,13 +78,13 @@ const CreateProposal: NextPage = () => {
         handleReset();
         confirmDialog.toggle();
 
-        // TODO: Create Proposal
         let proposalId;
         try {
             proposalId = await createProposal(
                 formData.governorAddress,
                 signer_data as Signer,
-                formData.name
+                formData.name,
+                "0x9bBCC04A57e5f4AAEa935522F6bBDD5b2e2C54bB"
             );
             handleNext();
             handleNext();

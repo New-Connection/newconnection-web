@@ -19,8 +19,10 @@ import {
 import {
     handleChangeBasic,
     handleCheckboxChange,
+    handleChangeBasicArray,
     handleImageChange,
     handleTextChange,
+    handleChangeBasicSimple,
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
 import { BLOCKS_IN_DAY } from "utils/constants";
@@ -52,7 +54,7 @@ const CreateDAO: NextPage = () => {
         goals: "",
         profileImage: {},
         coverImage: {},
-        tokenAddress: "",
+        tokenAddress: [],
         votingPeriod: "",
         quorumPercentage: "",
         type: [],
@@ -76,10 +78,12 @@ const CreateDAO: NextPage = () => {
     useEffect(() => {
         const query = router.query as QueryUrlParams;
 
-        handleChangeBasic(query.tokenAddress, setFormData, "tokenAddress");
+        handleChangeBasicSimple(query.tokenAddress, setFormData, "tokenAddress");
         handleChangeBasic(query.enabledBlockchains, setFormData, "enabledBlockchains");
 
-        console.log(`tokenAddress from query: ${query.tokenAddress}`);
+        // console.log(`tokenAddress from query: ${query.tokenAddress}`);
+        // console.log(`tokenAddress from formData: ${formData.tokenAddress}`);
+        // console.log(formData.tokenAddress);
     }, []);
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -122,16 +126,15 @@ const CreateDAO: NextPage = () => {
         } catch (error) {
             confirmDialog.toggle();
             handleReset();
-            toast.error("Couldn't save your NFT on IPFS. Please try again");
+            toast.error("Couldn't save your DAO images on IPFS. Please try again");
             return;
         }
 
         let contract;
         try {
-            console.log(formData);
             contract = await deployGovernorContract(signer_data as Signer, {
                 name: formData.name,
-                tokenAddress: formData.tokenAddress,
+                tokenAddress: formData.tokenAddress[0],
                 votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
                 quorumPercentage: +formData.quorumPercentage,
             });
@@ -190,7 +193,7 @@ const CreateDAO: NextPage = () => {
                             placeholder="NFT which will be used in DAO (Ox...)"
                             labelTitle="NFT Address"
                             pattern={"^0x[a-fA-F0-9]{40}$"}
-                            value={formData.tokenAddress}
+                            value={formData.tokenAddress[0]}
                             disabled={true}
                             // handleChange={(event) => handleTextChange(event, setFormData)}
                         />

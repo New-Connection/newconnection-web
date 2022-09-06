@@ -277,7 +277,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     setClick(true);
                                     try {
                                         const status = await AddToWhitelist({
-                                            addressNFT: DAO!.tokenAddress,
+                                            addressNFT: DAO!.tokenAddress[0],
                                             walletAddress: walletAddress,
                                             signer: signer_data as Signer,
                                         });
@@ -379,7 +379,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     };
 
     const fetchNftImage = async () => {
-        const image = await loadImage(await getTokenURI(DAO?.tokenAddress!, DAO?.chainId!));
+        const image = await loadImage(await getTokenURI(DAO?.tokenAddress[0]!, DAO?.chainId!));
         setNftImage(() => image);
     };
 
@@ -404,7 +404,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         const newDAO = {
             ...DAO,
             totalProposals: await getTotalProposals(DAO!.contractAddress!, DAO!.chainId!),
-            totalMembers: await getNumberOfMintedTokens(DAO!.tokenAddress!, DAO!.chainId!),
+            totalMembers: await getNumberOfMintedTokens(DAO!.tokenAddress[0]!, DAO!.chainId!),
             profileImage: await loadImage(DAO!.profileImage),
             coverImage: await loadImage(DAO!.coverImage),
         } as IDAOPageForm;
@@ -439,7 +439,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
-    const DetailsInfo = ["Blockchain", "Type", "Collection"];
+    const DetailsInfo = ["Blockchain", "Type", "Token Address"];
 
     interface INFTImage {
         image?: string;
@@ -465,7 +465,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 {/* //Wrap to div for center elements */}
                 <NFTImage />
                 <div className="p-4 gap-y-6">
-                    <p className="text-start">{daoTitle}: Membership </p>
+                    <p className="text-start">{daoTitle}</p>
                     <div className="flex pt-4 justify-between">
                         <p className="font-light text-sm text-[#AAAAAA]">Type: Unknown</p>
                         <BlockchainImage />
@@ -508,7 +508,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         setButtonState("Loading");
         // 1. try to reserve for owner dao, if not it will try to normal mint function
         try {
-            await mintReserveAndDelegation(DAO.tokenAddress, signer_data as Signer);
+            await mintReserveAndDelegation(DAO.tokenAddress[0], signer_data as Signer);
             setButtonState("Success");
             return;
         } catch (e) {
@@ -516,7 +516,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         }
         try {
             console.log("Call MINT NFT function");
-            await mintNFT(DAO.tokenAddress, signer_data as Signer);
+            await mintNFT(DAO.tokenAddress[0], signer_data as Signer);
             setButtonState("Success");
         } catch (e) {
             setButtonState("Error");
@@ -589,7 +589,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     </div>
                     <div className="lg:flex md:flex lg:justify-between gap-10 w-full">
                         <div className="flex lg:w-1/2 justify-between">
-                            <a
+                            {/* <a
                                 href={DAO.websiteURL}
                                 target={"_blank"}
                                 className={"hover:text-purple"}
@@ -607,7 +607,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <div className="hover:text-purple gap-4 flex mb-4">
                                 <p>DAO Blockchains</p>
                                 <BlockchainImage />
-                            </div>
+                            </div> */}
                         </div>
                         <div className="flex lg:w-1/3 lg:justify-end justify-between gap-7">
                             {DAO.discordURL ? (
@@ -655,7 +655,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     <>
                         <div className="flex flex-row justify-between mb-4 ">
                             <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
-                            <button className="settings-button cursor-not-allowed">Add NFT</button>
+                            <button className="settings-button bg-purple text-white">
+                                Add NFT
+                            </button>
                         </div>
                         {DAO.tokenAddress ? (
                             <div className="flex justify-between">
@@ -681,7 +683,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     className="h-full items-center text-center "
                 >
                     <NFTImage className="rounded-lg h-14 w-14" />
-                    <p className="mt-4 text-black">{`${DAO.name}: Membership NFT`}</p>
+                    <p className="mt-4 text-black">{`${DAO.name}`}</p>
                     {
                         <button
                             className={`secondary-button w-full h-12 mt-4 mb-6 
@@ -692,22 +694,21 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             {buttonState}
                         </button>
                     }
-                    <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
+                    {/* <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
                         Transfer
                     </button>
                     <p className="text-gray2 font-light text-sm">
                         Try to transfer your NFT to another network
-                    </p>
-
-                    {/* <p className="w-full mt-12 text-start text-black">Details</p>
+                    </p> */}
+                    <p className="w-full mt-12 text-start text-black">Details</p>
                     <ul className="py-6 divide-y divide-slate-200">
                         {DetailsInfo.map((element) => (
                             <li key={element} className="flex py-4 justify-between">
                                 <p className="font-light text-gray2">{element}</p>
-                                <p className="font-normal text-black">{element}</p>
+                                <p className="font-normal text-black">{DAO.name}</p>
                             </li>
                         ))}
-                    </ul> */}
+                    </ul>
                 </NFTDetailDialog>
             </Layout>
         </div>
