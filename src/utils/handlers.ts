@@ -25,6 +25,14 @@ export const handleChangeBasicArray = <T>(
     set((prev) => ({ ...prev, [field]: [value] }));
 };
 
+export const handleChangeBasicSimple = <T>(
+    value: string[] | string,
+    set: Dispatch<SetStateAction<T>>,
+    field: string
+) => {
+    set((prev) => ({ ...prev, [field]: [value] }));
+};
+
 export const promisedHandleChangeBasic = <T extends ICreate>(
     value: string | boolean | number,
     set: Dispatch<SetStateAction<T>>,

@@ -23,8 +23,11 @@ export const BLOCKS_IN_DAY = 6545;
 export const SECONDS_IN_BLOCK = 13.2;
 
 //Moralis
-export const moralisAppId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
-export const moralisServerUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID_URL;
+// export const moralisAppId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
+// export const moralisServerUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID_URL;
+
+export const moralisAppId = process.env.NEXT_PUBLIC_MORALIS_APP_ID_DEV_Ernest;
+export const moralisServerUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID_URL_DEV_Ernest;
 
 interface INetworkDetails {
     [key: number]: {

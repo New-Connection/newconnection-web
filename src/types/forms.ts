@@ -7,7 +7,7 @@ export interface ICreateDAO extends ICreate {
     goals: string;
     profileImage: any;
     coverImage: any;
-    tokenAddress: string;
+    tokenAddress: string[];
     votingPeriod: string;
     quorumPercentage: string;
     type: string[];
@@ -49,8 +49,6 @@ export interface IBlockchains {
 export interface ICreateNFT extends ICreate, IBlockchains {
     file: object;
     NFTtype: string;
-    collectionName: string;
-    royalties: number;
     symbol: string;
     price: number;
     blockchain: string;
