@@ -1,19 +1,13 @@
 import * as React from "react";
 import { FC } from "react";
 import type { NextPage } from "next";
-import Layout from "components/Layout/Layout";
-import Head from "next/head";
 import Image from "next/image";
 import { useAccount } from "wagmi";
 import Link from "next/link";
 import BasicAvatar from "assets/basic_avatar.jpg";
 import { useDialogState } from "ariakit";
-
 import Tabs from "components/Tabs/Tabs";
 import DAOCard from "components/Cards/DAOCard";
-import NFTCardMockup from "components/Cards/NFTCard";
-import ProposalCard from "components/Cards/ProposalCard";
-import { StepperDialog } from "components/Dialog";
 import { useIsMounted } from "hooks";
 import DAOsPage from "./daos/index";
 

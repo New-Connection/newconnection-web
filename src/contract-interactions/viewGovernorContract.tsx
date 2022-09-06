@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
-import { GOVERNOR_ABI } from "../abis";
-import { networkDetails, SECONDS_IN_BLOCK } from "../utils/constants";
+import { GOVERNOR_ABI } from "abis";
+import { networkDetails } from "utils/blockchains";
+import { SECONDS_IN_BLOCK } from "utils/constants";
 import { BaseProvider } from "@ethersproject/providers/src.ts/base-provider";
 
 enum ProposalState {

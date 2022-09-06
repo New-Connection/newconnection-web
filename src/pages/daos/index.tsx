@@ -10,6 +10,8 @@ import { useMoralis } from "react-moralis";
 import { IDAOPageForm } from "types/forms";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { getTotalProposals } from "contract-interactions/viewGovernorContract";
+import { useNetwork } from "wagmi";
+import { isBlockchainSupported } from "utils/blockchains";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -25,6 +27,7 @@ const DAOsPage: NextPage = () => {
             autoFetch: false,
         }
     );
+    const { chain } = useNetwork();
     const { isInitialized } = useMoralis();
 
     const fetchDB = () => {
@@ -162,7 +165,12 @@ const DAOsPage: NextPage = () => {
                         <div className="flex justify-between items-center">
                             <h1 className="text-highlighter">DAOs</h1>
                             <Link href="./create-new-dao">
-                                <button className="secondary-button h-10">Create DAO</button>
+                                <button
+                                    className="secondary-button h-10"
+                                    disabled={!isBlockchainSupported(chain.id)}
+                                >
+                                    Create DAO
+                                </button>
                             </Link>
                         </div>
 

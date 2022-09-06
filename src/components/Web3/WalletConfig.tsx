@@ -15,7 +15,7 @@ import {
     arbitrumTestnet,
     optimismTestnet,
     fantomTestnet,
-} from "utils/constants";
+} from "utils/blockchains";
 import { alchemyId, infuraId } from "utils/constants";
 
 // Configure chains & providers with the Alchemy provider.

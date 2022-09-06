@@ -1,4 +1,4 @@
-import { chains, networkDetails } from "./constants";
+import { chains, networkDetails } from "./blockchains";
 
 export function chainDetails(chainId: unknown) {
     if (typeof chainId !== "string") return {};

@@ -13,7 +13,7 @@ import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import defaultImage from "assets/empty-token.webp";
 import { chainDetails } from "utils/network"; // this file to add more networks
-import { SupportedChainName } from "utils/constants";
+import { SupportedChainNames } from "utils/blockchains";
 
 export const NetworksMenu = () => {
     const { chain } = useNetwork();
@@ -46,7 +46,7 @@ export const NetworksMenu = () => {
     // console.log("name:     " + chain.name);
 
     // To find name what we need
-    const nameChain = SupportedChainName.find((name) => name === chain.name);
+    const nameChain = SupportedChainNames.find((name) => name === chain.name);
     // console.log(nameChain);
     return (
         <>

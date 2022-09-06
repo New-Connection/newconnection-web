@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { networkDetails } from "utils/constants";
+import { networkDetails } from "utils/blockchains";
 import { useNetwork } from "wagmi";
 
 export type Provider = ethers.providers.BaseProvider;
