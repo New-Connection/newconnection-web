@@ -57,17 +57,15 @@ const ProposalCard = ({
                     </div>
                 </div>
 
-                <div className="w-1/4">
-                    <ProgressBar
-                        bgColor={1}
-                        percentage={(againstV / sumV) * 100}
-                        title={`Against  ${againstV}`}
-                    />
-                    <ProgressBar
-                        bgColor={3}
-                        percentage={(forV / sumV) * 100}
-                        title={`In favor ${forV}`}
-                    />
+                <div className="w-1/4 flex gap-10 items-right">
+                    <div className="text-center">
+                        <p className="text-2xl font-light">{forV}</p>
+                        <p>{"in favor"}</p>
+                    </div>
+                    <div className="text-center">
+                        <p className="text-2xl font-light">{againstV}</p>
+                        <p>{"against"}</p>
+                    </div>
                 </div>
             </div>
         </div>
