@@ -40,8 +40,6 @@ const CreateNFT: NextPage = () => {
         description: "",
         file: {},
         NFTtype: "Member",
-        collectionName: "",
-        royalties: 0,
         symbol: "",
         price: 0,
         contractAddress: "",
@@ -78,9 +76,7 @@ const CreateNFT: NextPage = () => {
             toast.error("Please connect wallet");
             return;
         }
-        if (
-            !validateForm(formData, ["collectionName", "ipfsAddress", "contractAddress", "price"])
-        ) {
+        if (!validateForm(formData, ["ipfsAddress", "contractAddress", "price"])) {
             return;
         }
 
@@ -162,32 +158,12 @@ const CreateNFT: NextPage = () => {
                                 />
                                 <div className="flex justify-between gap-10">
                                     <TypeSelector
-                                        label="NFT type"
+                                        label="Membership type"
                                         name="NFTtype"
                                         handleChange={(event) =>
                                             handleSelectorChange(event, setFormData, "NFTtype")
                                         }
                                         className="w-1/2 mt-6"
-                                    />
-                                    <InputText
-                                        label="Collection (optional)"
-                                        name="collectionName"
-                                        placeholder="Collection name"
-                                        handleChange={(event) =>
-                                            handleTextChange(event, setFormData)
-                                        }
-                                        className="w-1/2"
-                                    />
-                                </div>
-                                <div className="flex justify-between gap-10">
-                                    <InputAmount
-                                        label="Royalties"
-                                        name="royalties"
-                                        placeholder="NFT royalties"
-                                        handleChange={(event) =>
-                                            handleTextChange(event, setFormData)
-                                        }
-                                        className="w-1/2"
                                     />
                                     <InputText
                                         label="Symbol"
