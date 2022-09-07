@@ -62,8 +62,10 @@ const CreateProposal: NextPage = () => {
 
     const { fetch } = useMoralisQuery(
         "DAO",
-        (query) => query.equalTo("contractAddress", formData.governorAddress),
-        [],
+        (query) => {
+            return query.equalTo("contractAddress", formData.governorAddress);
+        },
+        [formData.governorAddress],
         {
             autoFetch: false,
         }
@@ -76,12 +78,13 @@ const CreateProposal: NextPage = () => {
             await fetch({
                 onSuccess: async (results) => {
                     const votingTokens = results[0];
-                    console.log("Results[0]", results);
                     const newVotingTokens: IVotingNFTs = {
                         daoAddress: votingTokens.get("contractAddress"),
                         daoTokenAddresess: votingTokens.get("tokenAddress"),
                     };
                     setVotingNFTs(() => newVotingTokens);
+                    // TODO: DELETE
+                    handleChangeBasic(votingNFTs.daoTokenAddresess[0], setFormData, "tokenAddress");
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
@@ -95,7 +98,6 @@ const CreateProposal: NextPage = () => {
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasic(query.blockchain, setFormData, "enabledBlockchains");
         //setGovernorAddress(query.governorAddress);
-        console.log("Setup Data", formData.governorAddress);
     };
 
     useEffect(() => {
@@ -104,7 +106,7 @@ const CreateProposal: NextPage = () => {
 
     useIsomorphicLayoutEffect(() => {
         if (formData.governorAddress && firstUpdate.current) {
-            console.log("IsomorphicLayou");
+            console.log("IsomorphicLayout", formData.governorAddress);
             firstUpdate.current = false;
             fetchData();
         }
@@ -147,7 +149,6 @@ const CreateProposal: NextPage = () => {
         try {
             const chainId = await signer_data.getChainId();
             handleChangeBasic(chainId.toString(), setFormData, "chainId");
-
             const moralisProposal = getMoralisInstance(MoralisClassEnum.PROPOSAL);
             setFieldsIntoMoralisInstance(moralisProposal, formData);
             moralisProposal.set("proposalId", proposalId);

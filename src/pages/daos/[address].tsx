@@ -648,7 +648,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 pathname: "/daos/create-proposal",
                                 query: {
                                     governorAddress: DAO.contractAddress,
-                                    //blockchain: DAO.blockchain[0],
+                                    blockchain: DAO.blockchain[0],
                                 },
                             }}
                         />
