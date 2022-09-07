@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { NextPage } from "next";
+import React, { useEffect, useState, useLayoutEffect, useRef } from "react";
+import type { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useSigner } from "wagmi";
-
+import { IDAOPageForm, IProposalPageForm, IVotingNFTs } from "types/forms";
 import Layout from "components/Layout/Layout";
 import { handleTextChange, handleCheckboxChange, handleChangeBasic } from "utils/handlers";
 import { CheckboxGroup, InputText, Button, InputTextArea } from "components/Form";
@@ -23,49 +23,96 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 import { StepperDialog } from "components/Dialog";
+import { useMoralisQuery, useMoralis } from "react-moralis";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     governorAddress: string;
-    blockchain: string[];
 }
+
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
         governorAddress: "",
         name: "",
         shortDescription: "",
+        tokenAddress: "",
         description: "",
         options: [],
         blockchain: [],
         enabledBlockchains: [],
     });
     const router = useRouter();
-
+    const [votingNFTs, setVotingNFTs] = useState<IVotingNFTs>();
     const { data: signer_data } = useSigner();
-
+    //const [governorAddress, setGovernorAddress] = useState(null);
+    //console.log("1", governorAddress);
+    const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
+    const firstUpdate = useRef(true);
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
+
     const handleReset = () => {
         setActiveStep(0);
     };
 
-    useEffect(() => {
-        const query = router.query as QueryUrlParams;
+    const { fetch } = useMoralisQuery(
+        "DAO",
+        (query) => query.equalTo("contractAddress", formData.governorAddress),
+        [],
+        {
+            autoFetch: false,
+        }
+    );
 
+    const fetchData = async () => {
+        console.log("isInitialized: ", isInitialized);
+        if (isInitialized) {
+            console.log("After Fetch Data");
+            await fetch({
+                onSuccess: async (results) => {
+                    const votingTokens = results[0];
+                    console.log("Results[0]", results);
+                    const newVotingTokens: IVotingNFTs = {
+                        daoAddress: votingTokens.get("contractAddress"),
+                        daoTokenAddresess: votingTokens.get("tokenAddress"),
+                    };
+                    setVotingNFTs(() => newVotingTokens);
+                },
+                onError: (error) => {
+                    console.log("Error fetching db query" + error);
+                },
+            });
+        }
+    };
+
+    const setupData = async () => {
+        const query = router.query as QueryUrlParams;
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasic(query.blockchain, setFormData, "enabledBlockchains");
+        //setGovernorAddress(query.governorAddress);
+        console.log("Setup Data", formData.governorAddress);
+    };
 
-        console.log(`governorAddress from query: ${query.governorAddress}`);
-        console.log(`proposal blockchain ${query.blockchain}`);
-    }, []);
+    useEffect(() => {
+        setupData();
+    }, [isInitialized]);
+
+    useIsomorphicLayoutEffect(() => {
+        if (formData.governorAddress && firstUpdate.current) {
+            console.log("IsomorphicLayou");
+            firstUpdate.current = false;
+            fetchData();
+        }
+    });
 
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        console.log();
+
         // await mintClick("0x6DF6474553A8B1cDe0Cc6Bc4c72d814CC2565B8F", signer_data as Signer);
         if (!signer_data) {
             toast.error("Please connect wallet");
@@ -84,7 +131,7 @@ const CreateProposal: NextPage = () => {
                 formData.governorAddress,
                 signer_data as Signer,
                 formData.name,
-                "0x9bBCC04A57e5f4AAEa935522F6bBDD5b2e2C54bB"
+                votingNFTs.daoTokenAddresess[0]
             );
             handleNext();
             handleNext();
@@ -181,6 +228,7 @@ const CreateProposal: NextPage = () => {
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
                         />
+                        {votingNFTs ? <h1>{votingNFTs.daoTokenAddresess}</h1> : <></>}
                         <Button className="mt-5">Create Proposal</Button>
                     </form>
                 </section>

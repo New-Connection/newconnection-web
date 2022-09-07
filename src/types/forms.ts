@@ -1,3 +1,5 @@
+import { StringLike } from "ariakit/ts/form/__utils";
+
 export interface ICreate {
     name: string;
     description?: string;
@@ -30,6 +32,12 @@ export interface IDAOPageForm extends ICreateDAO {
     isActive?: boolean;
 }
 
+export interface IVotingNFTs {
+    daoTokenAddresess: string[];
+    daoAddress: string;
+    
+}
+
 export interface IMembershipForm {
     walletAddress?: string;
     note?: string;
@@ -60,6 +68,7 @@ export interface ICreateNFT extends ICreate, IBlockchains {
 export interface ICreateProposal extends ICreate {
     proposalId?: string;
     governorAddress: string;
+    tokenAddress?: string;
     chainId?: number;
     shortDescription: string;
     file?: object;

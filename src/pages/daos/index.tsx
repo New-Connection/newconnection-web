@@ -55,7 +55,7 @@ const DAOsPage: NextPage = () => {
                             blockchain: [],
                             goals: "",
                             coverImage: null,
-                            tokenAddress: "",
+                            tokenAddress: [""],
                             votingPeriod: "",
                             type: [],
                             quorumPercentage: "",

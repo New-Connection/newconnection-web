@@ -346,6 +346,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     const moralisInstance = results[0];
                     const chainId = moralisInstance.get("chainId");
                     const contractAddress = moralisInstance.get("contractAddress");
+                    console.log(moralisInstance);
+                    console.log(moralisInstance.get("profileImage"));
                     const newDao: IDAOPageForm = {
                         name: moralisInstance.get("name"),
                         description: moralisInstance.get("description"),
@@ -643,10 +645,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             onClick={setSelectedTab}
                             tabs={tabs}
                             url={{
-                                pathname: "/create-proposal",
+                                pathname: "/daos/create-proposal",
                                 query: {
                                     governorAddress: DAO.contractAddress,
-                                    blockchain: DAO.blockchain[0],
+                                    //blockchain: DAO.blockchain[0],
                                 },
                             }}
                         />
