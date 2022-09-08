@@ -12,7 +12,7 @@ import BackButton from "components/Button/backButton";
 import { useDialogState } from "ariakit";
 import { validateForm } from "utils/validate";
 import { CHAINS } from "utils/blockchains";
-import { createProposal } from "contract-interactions/stateGovernorContract";
+import { governorCreateProposal } from "contract-interactions/writeGovernorContract";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { Signer } from "ethers";
@@ -129,7 +129,7 @@ const CreateProposal: NextPage = () => {
 
         let proposalId;
         try {
-            proposalId = await createProposal(
+            proposalId = await governorCreateProposal(
                 formData.governorAddress,
                 signer_data as Signer,
                 formData.name,

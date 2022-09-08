@@ -34,7 +34,7 @@ import { setURI } from "contract-interactions/writeNFTContract";
 import { createNFTSteps } from "components/Dialog/Stepper";
 import { getSupplyNumber } from "contract-interactions/viewNFTContract";
 
-const CreateNFT: NextPage = () => {
+const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
         name: "",
         description: "",
@@ -190,42 +190,27 @@ const CreateNFT: NextPage = () => {
                                     <div className="input-label"> NFT Supply</div>
                                 </label>
                                 <div className="grid w-full grid-cols-4 gap-4">
-                                    {CHAINS.map(
-                                        (chain) => (
-                                            // chain === "Polygon" ? (
-                                            <InputSupplyOfNFT
-                                                key={chain}
-                                                label={chain}
-                                                name={chain}
-                                                image={CHAINS_IMG[chain]}
-                                                handleChange={(event) => {
-                                                    handleNftSupplyChange(
-                                                        event,
-                                                        setFormData,
-                                                        chain,
-                                                        "blockchain"
-                                                    );
-                                                }}
-                                                isDisabled={
-                                                    chain !== formData.blockchain &&
-                                                    formData.blockchain !== ""
-                                                }
-                                            />
-                                        )
-                                        // )
-                                        // : (
-                                        //     <InputSupplyOfNFT
-                                        //         key={chain}
-                                        //         label={chain}
-                                        //         name={chain}
-                                        //         image={CHAINS_IMG[chain]}
-                                        //         handleChange={(event) => {
-                                        //             handleTextChange(event, setFormData);
-                                        //         }}
-                                        //         isDisabled={true}
-                                        //     />
-                                        // )
-                                    )}
+                                    {CHAINS.map((chain) => (
+                                        // chain === "Polygon" ? (
+                                        <InputSupplyOfNFT
+                                            key={chain}
+                                            label={chain}
+                                            name={chain}
+                                            image={CHAINS_IMG[chain]}
+                                            handleChange={(event) => {
+                                                handleNftSupplyChange(
+                                                    event,
+                                                    setFormData,
+                                                    chain,
+                                                    "blockchain"
+                                                );
+                                            }}
+                                            isDisabled={
+                                                chain !== formData.blockchain &&
+                                                formData.blockchain !== ""
+                                            }
+                                        />
+                                    ))}
                                 </div>
                             </div>
                             <div className="lg:w-1/3 lg:ml-10">
@@ -274,4 +259,4 @@ const CreateNFT: NextPage = () => {
     );
 };
 
-export default CreateNFT;
+export default AddNewNFT;

@@ -24,7 +24,7 @@ import {
     handleTextChange,
     handleChangeBasicSimple,
 } from "utils/handlers";
-import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
+import { deployGovernorContract } from "contract-interactions/DeployGovernorContract";
 import { BLOCKS_IN_DAY } from "utils/constants";
 import {
     getMoralisInstance,

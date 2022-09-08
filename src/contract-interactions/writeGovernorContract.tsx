@@ -1,7 +1,7 @@
 import { ethers, Signer } from "ethers";
 import { GOVERNOR_ABI, GOVERNANCE_NFT_ABI } from "../abis";
 
-export async function createProposal(
+export async function governorCreateProposal(
     contractAddress: string,
     signer: Signer,
     proposalDescription: string,
@@ -25,19 +25,29 @@ export async function createProposal(
 
 export type VotingType = 0 | 1 | 2 | undefined; //0 - Against, 1 - For, 2 - just results
 
-export async function castVote(
+export async function governorCastVote(
     contractAddress: string,
     signer: Signer,
     proposalAddress: string,
     vote: VotingType
 ) {
     const governorContract = new ethers.Contract(contractAddress, GOVERNOR_ABI, signer);
-    console.log("Contract Address", contractAddress);
-    console.log("proposal Address", proposalAddress);
-    console.log("Vote", vote);
+    // console.log("Contract Address", contractAddress);
+    // console.log("proposal Address", proposalAddress);
+    // console.log("Vote", vote);
     // proposalId: uint256, support: uint8
     const proposeTx = await governorContract.castVote(proposalAddress, vote);
     const proposeReceipt = await proposeTx.wait();
 
     return proposeReceipt.events![0].args!.proposalId._hex;
+}
+
+export async function governorAddToken(
+    contractAddress: string,
+    signer: Signer,
+    tokenAddress: string
+) {
+    const governorContract = new ethers.Contract(contractAddress, GOVERNOR_ABI, signer);
+    const addTokenTx = await governorContract.addToken(tokenAddress);
+    await addTokenTx.wait();
 }

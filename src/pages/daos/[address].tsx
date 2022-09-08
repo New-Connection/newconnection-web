@@ -37,7 +37,7 @@ import {
     getNumberOfMintedTokens,
     getSupplyNumber,
     getTokenURI,
-} from "contract-interactions/viewNftContract";
+} from "contract-interactions/viewNFTContract";
 import defaultImage from "assets/empty-token.webp";
 import {
     getTotalProposals,

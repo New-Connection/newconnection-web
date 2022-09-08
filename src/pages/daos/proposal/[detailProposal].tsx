@@ -17,7 +17,7 @@ import { StepperDialog } from "../../../components/Dialog";
 import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";
-import { VotingType, castVote } from "contract-interactions/writeGovernorContract";
+import { VotingType, governorCastVote } from "contract-interactions/writeGovernorContract";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     detailProposal: string;
@@ -193,7 +193,7 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
         handleReset();
         confirmDialog.toggle();
         try {
-            const tx = await castVote(
+            const tx = await governorCastVote(
                 proposalData!.governorAddress,
                 signer_data,
                 detailProposal,
