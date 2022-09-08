@@ -60,6 +60,7 @@ export interface ICreateNFT extends ICreate, IBlockchains {
     symbol: string;
     price: number;
     blockchain: string;
+    governorContractAddress?: string;
     // numberOfNFT: { [blockchainName: string]: number };
     contractAddress?: string;
     ipfsAddress?: string;

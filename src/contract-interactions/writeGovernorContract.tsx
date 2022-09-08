@@ -43,11 +43,11 @@ export async function governorCastVote(
 }
 
 export async function governorAddToken(
-    contractAddress: string,
+    governorContractAddress: string,
     signer: Signer,
     tokenAddress: string
 ) {
-    const governorContract = new ethers.Contract(contractAddress, GOVERNOR_ABI, signer);
+    const governorContract = new ethers.Contract(governorContractAddress, GOVERNOR_ABI, signer);
     const addTokenTx = await governorContract.addToken(tokenAddress);
     await addTokenTx.wait();
 }

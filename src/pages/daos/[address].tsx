@@ -665,8 +665,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 href={{
                                     pathname: "/daos/add-new-nft",
                                     query: {
-                                        daoAddress: DAO.contractAddress,
-                                        blockchains: DAO.blockchain,
+                                        governorAddress: DAO.contractAddress,
+                                        blockchain: DAO.blockchain,
                                     },
                                 }}
                             >

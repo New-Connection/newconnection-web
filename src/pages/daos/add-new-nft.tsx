@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import {
     DragAndDropImage,
     InputAmount,
@@ -9,6 +9,7 @@ import {
     InputSupplyOfNFT,
 } from "components/Form";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { Signer } from "ethers";
 import { useSigner, useSwitchNetwork } from "wagmi";
@@ -24,15 +25,24 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
+import { ParsedUrlQuery } from "querystring";
+
 import { StepperDialog } from "components/Dialog";
-import { deployNFTContract } from "contract-interactions/DeployNFTContract";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG, TEST_CHAINS_IDS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
-import { setURI } from "contract-interactions/writeNFTContract";
 import { createNFTSteps } from "components/Dialog/Stepper";
+
 import { getSupplyNumber } from "contract-interactions/viewNFTContract";
+import { setURI } from "contract-interactions/writeNFTContract";
+import { governorAddToken } from "contract-interactions/writeGovernorContract";
+import { deployNFTContract } from "contract-interactions/DeployNFTContract";
+
+interface QueryUrlParams extends ParsedUrlQuery {
+    governorAddress: string;
+    blockchain: string;
+}
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -43,12 +53,14 @@ const AddNewNFT: NextPage = () => {
         symbol: "",
         price: 0,
         contractAddress: "",
+        governorContractAddress: "",
         ipfsAddress: "",
         blockchain: "",
     });
 
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
+
     const [activeStep, setActiveStep] = useState(0);
 
     const { switchNetwork } = useSwitchNetwork();
@@ -69,6 +81,20 @@ const AddNewNFT: NextPage = () => {
             })
         ];
     };
+    const router = useRouter();
+    // useEffect(() => {
+    //     const query = router.query as QueryUrlParams;
+    //     handleChangeBasic(query.governorAddress, setFormData, "governorContractAddress");
+    //     handleChangeBasic(query.blockchain, setFormData, "blockchain");
+    //     //setGovernorAddress(query.governorAddress);
+    // });
+
+    useLayoutEffect(() => {
+        const query = router.query as QueryUrlParams;
+        handleChangeBasic(query.governorAddress, setFormData, "governorContractAddress");
+        handleChangeBasic(query.blockchain, setFormData, "blockchain");
+    }, [router]);
+    //let disabledBlockchains = CHAINS.filter((x) => !formData.blockchain.includes(x));
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -76,6 +102,7 @@ const AddNewNFT: NextPage = () => {
             toast.error("Please connect wallet");
             return;
         }
+        console.log(formData.blockchain);
         if (!validateForm(formData, ["ipfsAddress", "contractAddress", "price"])) {
             return;
         }
@@ -123,8 +150,11 @@ const AddNewNFT: NextPage = () => {
             handleNext();
             await setTx.wait();
             handleNext();
+            await governorAddToken(formData.governorContractAddress, signer_data, contract.address);
             handleNext();
             handleChangeBasic(contract.address, setFormData, "contractAddress");
+
+            //handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
             console.log(error);
             confirmDialog.toggle();
@@ -205,10 +235,7 @@ const AddNewNFT: NextPage = () => {
                                                     "blockchain"
                                                 );
                                             }}
-                                            isDisabled={
-                                                chain !== formData.blockchain &&
-                                                formData.blockchain !== ""
-                                            }
+                                            isDisabled={chain !== formData.blockchain}
                                         />
                                     ))}
                                 </div>
@@ -235,22 +262,14 @@ const AddNewNFT: NextPage = () => {
                 >
                     <p className="ml-7">Deployment successful!</p>
                     <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
-                    <Link
-                        href={{
-                            pathname: "create-dao",
-                            query: {
-                                tokenAddress: formData.contractAddress,
-                                enabledBlockchains: CHAINS.filter((chain) => formData[chain]),
-                            },
-                        }}
-                    >
+                    <Link href={`/daos/${formData.contractAddress}`}>
                         <button
                             className="form-submit-button"
                             onClick={() => {
                                 confirmDialog.toggle();
                             }}
                         >
-                            Go to DAO creation page
+                            Back to DAO
                         </button>
                     </Link>
                 </StepperDialog>
