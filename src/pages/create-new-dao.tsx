@@ -65,7 +65,7 @@ const CreateNewDAO: NextPage = () => {
                                 subtitle="If you don't have any NFT collections created, you can mint them here"
                                 buttonTitle="Mint NFT"
                                 linkToPage="/create-nft"
-                                isDisabled={!isBlockchainSupported(chain.id)}
+                                isDisabled={!isBlockchainSupported(chain)}
                             />
                         </div>
                     </form>

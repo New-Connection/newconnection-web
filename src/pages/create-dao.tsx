@@ -1,11 +1,11 @@
-import { FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
 import Link from "next/link";
-import { ICreateDAO } from "types/forms";
+import { ICreate, ICreateDAO } from "types/forms";
 import { validateForm } from "utils/validate";
 import Layout from "components/Layout";
 import {
@@ -36,6 +36,7 @@ import { StepperDialog } from "../components/Dialog";
 
 import { CHAINS, CHAINS_IMG, TEST_CHAINS_IDS } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
+import { useMoralisQuery } from "react-moralis";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 
@@ -44,10 +45,16 @@ interface QueryUrlParams extends ParsedUrlQuery {
     enabledBlockchains: string[];
 }
 
+const createUrl = (name: string): string => {
+    // console.log("url: ", name);
+    return name.replace(/ /g, "-");
+};
+
 const CreateDAO: NextPage = () => {
     const router = useRouter();
 
     const [formData, setFormData] = useState<ICreateDAO>({
+        url: "",
         name: "",
         goals: "",
         profileImage: {},
@@ -59,11 +66,21 @@ const CreateDAO: NextPage = () => {
         blockchain: [],
         description: "",
     });
+
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
 
     const { switchNetwork } = useSwitchNetwork();
+
+    const { fetch: urlFetch } = useMoralisQuery(
+        "DAO",
+        (query) => query.equalTo("url", formData.url),
+        [formData.url],
+        {
+            autoFetch: false,
+        }
+    );
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -71,6 +88,28 @@ const CreateDAO: NextPage = () => {
 
     const handleReset = () => {
         setActiveStep(0);
+    };
+
+    const checkUrlAvailability = async () => {
+        let available = false;
+        await urlFetch({
+            onSuccess: (results) => {
+                available = results.length === 0;
+            },
+        });
+        return available;
+    };
+
+    const handleDaoNameUrlChange = <
+        T extends ICreate,
+        E extends HTMLInputElement | HTMLTextAreaElement
+    >(
+        event: ChangeEvent<E>,
+        set: Dispatch<SetStateAction<T>>,
+        field: string
+    ) => {
+        set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+        handleChangeBasic(createUrl(event.target.value), set, field);
     };
 
     useEffect(() => {
@@ -84,7 +123,7 @@ const CreateDAO: NextPage = () => {
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        console.log(formData);
         if (!signer_data) {
             toast.error("Please connect wallet");
             return;
@@ -93,6 +132,13 @@ const CreateDAO: NextPage = () => {
         if (!validateForm(formData)) {
             return;
         }
+
+        const isUrlAvailable = await checkUrlAvailability();
+        if (!isUrlAvailable) {
+            toast.error("Name unavailable");
+            return;
+        }
+        console.log(formData.url);
 
         switchNetwork(TEST_CHAINS_IDS[formData.blockchain[0]]);
 
@@ -182,7 +228,9 @@ const CreateDAO: NextPage = () => {
                             placeholder="Unique DAO name"
                             labelTitle="Unique DAO name"
                             maxLength={30}
-                            handleChange={(event) => handleTextChange(event, setFormData)}
+                            handleChange={(event) =>
+                                handleDaoNameUrlChange(event, setFormData, "url")
+                            }
                         />
                         <InputText
                             label="NFT Address"
@@ -305,7 +353,7 @@ const CreateDAO: NextPage = () => {
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
                     <p className="ml-7">Deployment successful!</p>
                     <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
-                    <Link href={`/daos/${formData.contractAddress}`}>
+                    <Link href={`/daos/${formData.url}`}>
                         <button
                             className="form-submit-button"
                             onClick={() => {

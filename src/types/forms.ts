@@ -4,6 +4,7 @@ export interface ICreate {
 }
 
 export interface ICreateDAO extends ICreate {
+    url: string;
     goals: string;
     profileImage: any;
     coverImage: any;

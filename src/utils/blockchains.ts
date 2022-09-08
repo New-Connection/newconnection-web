@@ -57,8 +57,11 @@ export const CHAINS_IDS = {
     Optimism: 10,
 };
 
-export const isBlockchainSupported = (chainId: number) => {
-    return SupportedChainIds.includes(chainId);
+export const isBlockchainSupported = (chain: { id }) => {
+    if (!chain) {
+        return false;
+    }
+    return SupportedChainIds.includes(chain.id);
 };
 
 export const defaultProvider = providers.getDefaultProvider(4, {

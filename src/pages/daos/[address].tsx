@@ -92,7 +92,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
-        (query) => query.equalTo("contractAddress", address),
+        (query) => query.equalTo("url", address),
         [],
         {
             autoFetch: false,
@@ -347,6 +347,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     const chainId = moralisInstance.get("chainId");
                     const contractAddress = moralisInstance.get("contractAddress");
                     const newDao: IDAOPageForm = {
+                        url: moralisInstance.get("url"),
                         name: moralisInstance.get("name"),
                         description: moralisInstance.get("description"),
                         goals: moralisInstance.get("goals"),

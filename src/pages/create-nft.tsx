@@ -112,7 +112,7 @@ const CreateNFT: NextPage = () => {
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
-                price: formData.price.toString(),
+                price: formData.price ? formData.price.toString() : "0",
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
