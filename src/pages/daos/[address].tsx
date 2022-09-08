@@ -25,7 +25,11 @@ import classNames from "classnames";
 import { useSigner } from "wagmi";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
-import { AddToWhitelist, mintReserveAndDelegation, mintNFT } from "contract-interactions/";
+import {
+    AddToWhitelist,
+    mintReserveAndDelegation,
+    mintNFT,
+} from "contract-interactions/writeNFTContract";
 import toast from "react-hot-toast";
 import ProposalCard from "components/Cards/ProposalCard";
 import {
@@ -657,9 +661,19 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     <>
                         <div className="flex flex-row justify-between mb-4 ">
                             <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
-                            <button className="settings-button bg-purple text-white">
-                                Add NFT
-                            </button>
+                            <Link
+                                href={{
+                                    pathname: "/daos/add-new-nft",
+                                    query: {
+                                        daoAddress: DAO.contractAddress,
+                                        blockchains: DAO.blockchain,
+                                    },
+                                }}
+                            >
+                                <button className="settings-button bg-purple text-white">
+                                    Add NFT
+                                </button>
+                            </Link>
                         </div>
                         {DAO.tokenAddress ? (
                             <div className="flex justify-between">
