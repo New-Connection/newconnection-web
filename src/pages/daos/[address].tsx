@@ -84,7 +84,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
-    const [nftImage, setNftImage] = useState("");
+    const [nftImage, setNFTImage] = useState([]);
     const detailNFTDialog = useDialogState();
     const { data: signer_data } = useSigner();
     const { isInitialized } = useMoralis();
@@ -350,8 +350,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     const moralisInstance = results[0];
                     const chainId = moralisInstance.get("chainId");
                     const contractAddress = moralisInstance.get("contractAddress");
-                    console.log(moralisInstance);
-                    console.log(moralisInstance.get("profileImage"));
                     const newDao: IDAOPageForm = {
                         name: moralisInstance.get("name"),
                         description: moralisInstance.get("description"),
@@ -384,9 +382,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         }
     };
 
-    const fetchNftImage = async () => {
-        const image = await loadImage(await getTokenURI(DAO?.tokenAddress[0]!, DAO?.chainId!));
-        setNftImage(() => image);
+    const fetchNftImage = async (tokenIndex: number) => {
+        const image = await loadImage(
+            await getTokenURI(DAO?.tokenAddress[tokenIndex]!, DAO?.chainId!)
+        );
+        return image;
+        //setNFTImage[image];
     };
 
     useEffect(() => {
@@ -396,7 +397,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     }, [isInitialized]);
 
     useEffect(() => {
-        fetchNftImage();
+        fetchNftImage(0);
     }, [DAO]);
 
     useIsomorphicLayoutEffect(() => {
@@ -450,17 +451,21 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     interface INFTImage {
         image?: string;
         className?: string;
+        index?: number;
     }
 
-    const NFTImage = ({ className }: INFTImage) => {
+    const NFTImage = ({ className, index }: INFTImage) => {
+        let tempImage;
         return (
             <div className="flex justify-center">
-                <Image
-                    src={nftImage ? nftImage : NFTExample}
-                    width={"200"}
-                    height={"200"}
-                    className={classNames("rounded-t-md", className)}
-                />
+                {
+                    <Image
+                        src={true ? basicAvatar : basicAvatar}
+                        width={"200"}
+                        height={"200"}
+                        className={classNames("rounded-t-md", className)}
+                    />
+                }
             </div>
         );
     };
@@ -469,7 +474,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         return (
             <button className="nft-card" onClick={() => detailNFTDialog.toggle()}>
                 {/* //Wrap to div for center elements */}
-                <NFTImage />
+                <NFTImage index={chainId} />
                 <div className="p-4 gap-y-6">
                     <p className="text-start">{daoTitle}</p>
                     <div className="flex pt-4 justify-between">
@@ -481,36 +486,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
-    const LoadingSpinner = () => {
-        return (
-            <button
-                disabled
-                type="button"
-                className="secondary-button w-full text-center h-12 text-gray-900 border pr-10"
-            >
-                <svg
-                    role="status"
-                    className="inline mr-2 w-4 h-4 text-gray-200 animate-spin text-white"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                        fill="#E5E7EB"
-                    />
-                </svg>
-                Loading...
-            </button>
-        );
-    };
-
     async function mint() {
         if (!DAO) return null;
-        // const chainID = await getChainId(signer_data as Signer);
-        // const availableNFT = await getSupplyNumber(DAO.tokenAddress, chainID);
-        // console.log("Available NFT", availableNFT.toString());
-        // console.log("On chainID:", chainID);
         setButtonState("Loading");
         // 1. try to reserve for owner dao, if not it will try to normal mint function
         try {
@@ -585,7 +562,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 query: {
                                     daoAddress: DAO.contractAddress,
                                     daoName: DAO.name,
-                                    //TODO: DAO Blockchains supported
                                     blockchains: DAO.blockchain,
                                 },
                             }}
@@ -594,27 +570,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         </Link>
                     </div>
                     <div className="lg:flex md:flex lg:justify-between gap-10 w-full">
-                        <div className="flex lg:w-1/2 justify-between">
-                            {/* <a
-                                href={DAO.websiteURL}
-                                target={"_blank"}
-                                className={"hover:text-purple"}
-                            >
-                                About DAO
-                            </a>
-                            <a
-                                href={DAO.scanURL}
-                                target={"_blank"}
-                                className="hover:text-purple flex gap-3"
-                            >
-                                Smart Contract
-                                <ExternalLinkIcon className="h-6 w-5" />
-                            </a>
-                            <div className="hover:text-purple gap-4 flex mb-4">
-                                <p>DAO Blockchains</p>
-                                <BlockchainImage />
-                            </div> */}
-                        </div>
                         <div className="flex lg:w-1/3 lg:justify-end justify-between gap-7">
                             {DAO.discordURL ? (
                                 <ImageLink
@@ -677,11 +632,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         </div>
                         {DAO.tokenAddress ? (
                             <div className="flex justify-between">
-                                <NFTCard
-                                    chainId={DAO.chainId}
-                                    tokenAddress={DAO.tokenAddress}
-                                    daoTitle={DAO.name}
-                                />
+                                {DAO.tokenAddress.map((nftToken, index) => (
+                                    <NFTCard
+                                        chainId={index}
+                                        tokenAddress={nftToken}
+                                        daoTitle={DAO.name}
+                                    />
+                                ))}
                             </div>
                         ) : (
                             <MockupTextCard
