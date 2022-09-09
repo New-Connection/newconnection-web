@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { Signer } from "ethers";
+import { useMoralisQuery, useMoralis } from "react-moralis";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
 import Layout from "components/Layout/Layout";
@@ -60,10 +61,11 @@ const AddNewNFT: NextPage = () => {
 
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
-
     const [activeStep, setActiveStep] = useState(0);
-
     const { switchNetwork } = useSwitchNetwork();
+    const { isInitialized } = useMoralis();
+
+    const ADD_NFT_CONTRACT = "0x7AC8ab6094Fc7f816420a7FfAc942A554831627c";
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -82,19 +84,38 @@ const AddNewNFT: NextPage = () => {
         ];
     };
     const router = useRouter();
-    // useEffect(() => {
-    //     const query = router.query as QueryUrlParams;
-    //     handleChangeBasic(query.governorAddress, setFormData, "governorContractAddress");
-    //     handleChangeBasic(query.blockchain, setFormData, "blockchain");
-    //     //setGovernorAddress(query.governorAddress);
-    // });
+    const { fetch: DAOsQuery } = useMoralisQuery(
+        "DAO",
+        (query) => query.equalTo("contractAddress", formData.governorContractAddress),
+        [formData.governorContractAddress],
+        {
+            autoFetch: false,
+        }
+    );
+
+    const saveNewNFTContractAddress = async (nftTokenAddress: string) => {
+        console.log("nft token address", nftTokenAddress);
+        if (isInitialized && nftTokenAddress) {
+            await DAOsQuery({
+                onSuccess: async (results) => {
+                    const moralisInstance = results[0];
+                    console.log("Result", results);
+                    console.log("Result Moralis Contract Address", nftTokenAddress);
+                    moralisInstance.addUnique("tokenAddress", nftTokenAddress);
+                    await moralisInstance.save();
+                },
+                onError: (error) => {
+                    console.log("Error fetching saveNewNFTContractAddress query" + error);
+                },
+            });
+        }
+    };
 
     useLayoutEffect(() => {
         const query = router.query as QueryUrlParams;
         handleChangeBasic(query.governorAddress, setFormData, "governorContractAddress");
         handleChangeBasic(query.blockchain, setFormData, "blockchain");
     }, [router]);
-    //let disabledBlockchains = CHAINS.filter((x) => !formData.blockchain.includes(x));
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -102,7 +123,7 @@ const AddNewNFT: NextPage = () => {
             toast.error("Please connect wallet");
             return;
         }
-        console.log(formData.blockchain);
+
         if (!validateForm(formData, ["ipfsAddress", "contractAddress", "price"])) {
             return;
         }
@@ -141,6 +162,8 @@ const AddNewNFT: NextPage = () => {
                 startMintId: 0,
                 endMintId: calculateSupply(),
             });
+            //console.log("formData contract address", formData.contractAddress);
+            //console.log("MORALIS SAVE\n\n");
             handleNext();
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
@@ -151,15 +174,25 @@ const AddNewNFT: NextPage = () => {
             await setTx.wait();
             handleNext();
             await governorAddToken(formData.governorContractAddress, signer_data, contract.address);
-            handleNext();
+            console.log("token added");
             handleChangeBasic(contract.address, setFormData, "contractAddress");
-
-            //handleChangeBasic(contract.address, setFormData, "contractAddress");
+            console.log("Moralis saving");
+            await saveNewNFTContractAddress(contract.address);
+            console.log("Moralis saving");
+            handleNext();
         } catch (error) {
             console.log(error);
             confirmDialog.toggle();
             handleReset();
             toast.error("Please approve transaction to create DAO");
+            return;
+        }
+        try {
+        } catch (error) {
+            console.log(error);
+            confirmDialog.toggle();
+            handleReset();
+            toast.error("Can't save token into backend");
             return;
         }
     }
@@ -262,7 +295,7 @@ const AddNewNFT: NextPage = () => {
                 >
                     <p className="ml-7">Deployment successful!</p>
                     <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
-                    <Link href={`/daos/${formData.contractAddress}`}>
+                    <Link href={`/daos/${formData.governorContractAddress}`}>
                         <button
                             className="form-submit-button"
                             onClick={() => {
