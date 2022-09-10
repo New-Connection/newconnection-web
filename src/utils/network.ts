@@ -22,8 +22,5 @@ export function getChainScanner(chainId: number | undefined, address: string | u
     if (!chainId || !address) {
         return "";
     }
-    switch (chainId) {
-        case 5:
-            return "https://goerli.etherscan.io/address/" + address;
-    }
+    return `${networkDetails[chainId].blockExplorerURL}/address/${address}`;
 }

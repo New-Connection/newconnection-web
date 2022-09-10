@@ -22,18 +22,13 @@ import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { NFTDetailDialog } from "components/Dialog";
 import classNames from "classnames";
-import { useSigner } from "wagmi";
+import { useNetwork, useSigner } from "wagmi";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
 import { AddToWhitelist, mintReserveAndDelegation, mintNFT } from "contract-interactions/";
 import toast from "react-hot-toast";
 import ProposalCard from "components/Cards/ProposalCard";
-import {
-    getNumAvailableToMint,
-    getNumberOfMintedTokens,
-    getSupplyNumber,
-    getTokenURI,
-} from "contract-interactions/viewNftContract";
+import { getNumberOfMintedTokens, getTokenURI } from "contract-interactions/viewNftContract";
 import defaultImage from "assets/empty-token.webp";
 import {
     getTotalProposals,
@@ -85,6 +80,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const { data: signer_data } = useSigner();
     const { isInitialized } = useMoralis();
     const firstUpdate = useRef(true);
+    const { chain } = useNetwork();
 
     async function getChainId(singer: Signer) {
         return await singer.getChainId();

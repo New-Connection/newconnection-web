@@ -13,7 +13,7 @@ import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import defaultImage from "assets/empty-token.webp";
 import { chainDetails } from "utils/network"; // this file to add more networks
-import { SupportedChainNames } from "utils/blockchains";
+import { MAIN_CHAINS, TEST_CHAINS } from "utils/blockchains";
 
 export const NetworksMenu = () => {
     const { chain } = useNetwork();
@@ -30,23 +30,15 @@ export const NetworksMenu = () => {
     // console.log("Error", error);
     if (!chain || !switchNetwork) return null;
 
-    //const mainnets = chains.filter((chain) => !chain.testnet);
     // ONLY GOERLI. For using all testnets (=> chain.testnet)
-    const testnets = chains.filter(
-        (chain) =>
-            chain.id === 80001 ||
-            chain.id === 43113 ||
-            chain.id === 4 ||
-            chain.id === 97 ||
-            chain.id === 421611 ||
-            chain.id === 69 ||
-            chain.id === 4002
-    );
-    // console.log(testnets);
+    // console.log(supportedTestChainIds);
+    const testnets = chains.filter((chain) => TEST_CHAINS.getChainIds().includes(chain.id));
     // console.log("name:     " + chain.name);
 
     // To find name what we need
-    const nameChain = SupportedChainNames.find((name) => name === chain.name);
+    const nameChain = TEST_CHAINS.getChainNames()
+        .concat(MAIN_CHAINS.getChainNames())
+        .find((name) => name === chain.name);
     // console.log(nameChain);
     return (
         <>
@@ -78,34 +70,36 @@ export const NetworksMenu = () => {
                     state={select}
                     className="shadow-2 z-10 max-h-[280px] w-fit min-w-[13rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
-                    {/* <SelectGroup>
-                        <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">
-                            Mainnets
-                        </SelectGroupLabel>
-                        {mainnets.map((value) => {
-                            const { network } = chainDetails(value?.id?.toString());
-                            return (
-                                <SelectItem
-                                    key={value.id}
-                                    value={value.id?.toString()}
-                                    className="flex rounded-md cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 hover:bg-[#6858CB] hover:text-white"
-                                    onClick={() => switchNetwork(value.id)}
-                                >
-                                    <div className="flex h-5 w-5 items-center rounded-full">
-                                        <Image
-                                            src={network?.logoURI ?? defaultImage}
-                                            alt={value.name}
-                                            objectFit="contain"
-                                            width="20px"
-                                            height="20px"
-                                            priority
-                                        />
-                                    </div>
-                                    <span>{value.name}</span>
-                                </SelectItem>
-                            );
-                        })}
-                    </SelectGroup> */}
+                    {/*{*/}
+                    {/*    <SelectGroup>*/}
+                    {/*        <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">*/}
+                    {/*            Mainnets*/}
+                    {/*        </SelectGroupLabel>*/}
+                    {/*        {mainnets.map((value) => {*/}
+                    {/*            const { network } = chainDetails(value?.id?.toString());*/}
+                    {/*            return (*/}
+                    {/*                <SelectItem*/}
+                    {/*                    key={value.id}*/}
+                    {/*                    value={value.id?.toString()}*/}
+                    {/*                    className="flex rounded-md cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 hover:bg-[#6858CB] hover:text-white"*/}
+                    {/*                    onClick={() => switchNetwork(value.id)}*/}
+                    {/*                >*/}
+                    {/*                    <div className="flex h-5 w-5 items-center rounded-full">*/}
+                    {/*                        <Image*/}
+                    {/*                            src={network?.logoURI ?? defaultImage}*/}
+                    {/*                            alt={value.name}*/}
+                    {/*                            objectFit="contain"*/}
+                    {/*                            width="20px"*/}
+                    {/*                            height="20px"*/}
+                    {/*                            priority*/}
+                    {/*                        />*/}
+                    {/*                    </div>*/}
+                    {/*                    <span>{value.name}</span>*/}
+                    {/*                </SelectItem>*/}
+                    {/*            );*/}
+                    {/*        })}*/}
+                    {/*    </SelectGroup>*/}
+                    {/*}*/}
                     {/* <SelectSeparator className="my-2" /> */}
                     <SelectGroup>
                         <SelectGroupLabel className="p-2 text-sm font-normal text-graySupport">

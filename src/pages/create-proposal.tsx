@@ -175,7 +175,7 @@ const CreateProposal: NextPage = () => {
                         <CheckboxGroup
                             label="Proposal Blockchain"
                             description="You can choose one or more blockchains"
-                            values={CHAINS}
+                            values={[...CHAINS]}
                             enabledValues={formData.enabledBlockchains}
                             handleChange={(event) =>
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")

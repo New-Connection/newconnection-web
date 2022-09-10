@@ -34,7 +34,7 @@ import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { StepperDialog } from "../components/Dialog";
 
-import { CHAINS, CHAINS_IMG, TEST_CHAINS_IDS } from "utils/blockchains";
+import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
 import { useMoralisQuery } from "react-moralis";
 
@@ -140,7 +140,7 @@ const CreateDAO: NextPage = () => {
         }
         console.log(formData.url);
 
-        switchNetwork(TEST_CHAINS_IDS[formData.blockchain[0]]);
+        switchNetwork(TEST_CHAINS[formData.blockchain[0]].id);
 
         handleReset();
         confirmDialog.toggle();
@@ -309,7 +309,7 @@ const CreateDAO: NextPage = () => {
                         <CheckboxGroup
                             label={"DAO Blockchain"}
                             description={"You can choose one or more blockchains"}
-                            values={CHAINS}
+                            values={[...CHAINS]}
                             images={CHAINS_IMG}
                             enabledValues={formData.enabledBlockchains}
                             handleChange={(event) =>
