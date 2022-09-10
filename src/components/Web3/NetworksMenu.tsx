@@ -13,7 +13,7 @@ import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import defaultImage from "assets/empty-token.webp";
 import { chainDetails } from "utils/network"; // this file to add more networks
-import { MAIN_CHAINS, TEST_CHAINS } from "utils/blockchains";
+import { getChainIds, getChainNames, MAIN_CHAINS, TEST_CHAINS } from "utils/blockchains";
 
 export const NetworksMenu = () => {
     const { chain } = useNetwork();
@@ -32,12 +32,12 @@ export const NetworksMenu = () => {
 
     // ONLY GOERLI. For using all testnets (=> chain.testnet)
     // console.log(supportedTestChainIds);
-    const testnets = chains.filter((chain) => TEST_CHAINS.getChainIds().includes(chain.id));
+    const testnets = chains.filter((chain) => getChainIds(TEST_CHAINS).includes(chain.id));
     // console.log("name:     " + chain.name);
 
     // To find name what we need
-    const nameChain = TEST_CHAINS.getChainNames()
-        .concat(MAIN_CHAINS.getChainNames())
+    const nameChain = getChainNames(TEST_CHAINS)
+        .concat(getChainNames(MAIN_CHAINS))
         .find((name) => name === chain.name);
     // console.log(nameChain);
     return (

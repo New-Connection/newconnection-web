@@ -6,6 +6,7 @@ import Avalanche from "assets/chains/Avalanche.png";
 import Fantom from "assets/chains/Fantom.png";
 import Optimism from "assets/chains/Optimism.png";
 import Aurora from "assets/chains/Aurora.png";
+import Skale from "assets/chains/Skale.png";
 import { ethers, providers } from "ethers";
 import { allChains, Chain } from "wagmi";
 import { alchemyId, infuraId } from "./constants";
@@ -20,6 +21,7 @@ export const CHAINS = [
     "Fantom",
     "Optimism",
     "Aurora",
+    "Skale",
 ] as const;
 
 export const CHAINS_IMG: {
@@ -33,9 +35,12 @@ export const CHAINS_IMG: {
     Fantom: Fantom,
     Optimism: Optimism,
     Aurora: Aurora,
+    Skale: Skale,
 };
 
-export const TEST_CHAINS = {
+export const TEST_CHAINS: {
+    [key in typeof CHAINS[number]]?: Chain;
+} = {
     Polygon: {
         id: 80001,
         name: "Polygon Mumbai",
@@ -162,35 +167,31 @@ export const TEST_CHAINS = {
         testnet: true,
     },
 
-    getChains: function (): Chain[] {
-        return Object.values(this)
-            .filter((value) => typeof value == "object")
-            .map((chain: Chain) => chain);
-    },
-
-    getChainIds: function () {
-        return Object.values(this)
-            .filter((value) => typeof value == "object")
-            .map((chain: Chain) => chain.id)
-            .concat(4); // rinkeby
-    },
-
-    getChainNames: function () {
-        return Object.values(this)
-            .filter((value) => typeof value == "object")
-            .map((chain: Chain) => chain.name)
-            .concat("Rinkeby"); // rinkeby
-    },
-
-    getChain: function (id: number): Chain {
-        return Object.values(this)
-            .filter((value) => typeof value == "object")
-            .map((chain: Chain) => chain)
-            .find((chain: Chain) => chain.id === id);
+    Skale: {
+        id: 0x2696efe5,
+        name: "Skale Testnet",
+        network: "Skale",
+        nativeCurrency: {
+            decimals: 18,
+            name: "Skale",
+            symbol: "SFUEL",
+        },
+        rpcUrls: {
+            default: "https://eth-online.skalenodes.com/v1/hackathon-complex-easy-naos",
+        },
+        blockExplorers: {
+            default: {
+                name: "skalescan",
+                url: "https://hackathon-complex-easy-naos.explorer.eth-online.skalenodes.com/",
+            },
+        },
+        testnet: true,
     },
 };
 
-export const MAIN_CHAINS = {
+export const MAIN_CHAINS: {
+    [key in typeof CHAINS[number]]?: Chain;
+} = {
     Aurora: {
         id: 1313161554,
         name: "Aurora",
@@ -208,40 +209,44 @@ export const MAIN_CHAINS = {
         },
         testnet: false,
     },
+};
 
-    getChains: function (): Chain[] {
-        return Object.values(this)
-            .filter((value) => typeof value == "object")
-            .map((chain: Chain) => chain);
-    },
+export const getChains = (chains: {
+    [key in typeof CHAINS[number]]?: Chain;
+}): Chain[] => {
+    return Object.values(chains);
+};
 
-    getChainIds: function () {
-        return Object.values(this)
-            .filter((value) => typeof value == "object")
-            .map((chain: Chain) => chain.id)
-            .concat(1); // ethereum
-    },
+export const getChainIds = (chains: {
+    [key in typeof CHAINS[number]]?: Chain;
+}) => {
+    return Object.values(chains)
+        .map((chain) => chain.id)
+        .concat(chains === TEST_CHAINS ? 4 : 1); // rinkeby/ethereum
+};
 
-    getChainNames: function () {
-        return Object.values(this)
-            .filter((value) => typeof value == "object")
-            .map((chain: Chain) => chain.name)
-            .concat("Ethereum"); // ethereum
-    },
+export const getChainNames = (chains: {
+    [key in typeof CHAINS[number]]?: Chain;
+}) => {
+    return Object.values(chains)
+        .map((chain) => chain.name)
+        .concat(chains === TEST_CHAINS ? "Rinkeby" : "Ethereum"); // rinkeby/ethereum
+};
 
-    getChain: function (id: number): Chain {
-        return Object.values(this)
-            .filter((value) => typeof value == "object")
-            .map((chain: Chain) => chain)
-            .find((chain: Chain) => chain.id === id);
+export const getChain = (
+    chains: {
+        [key in typeof CHAINS[number]]?: Chain;
     },
+    id: number
+): Chain => {
+    return Object.values(chains).find((chain) => chain.id === id);
 };
 
 export const isBlockchainSupported = (chain: { id }) => {
     if (!chain) {
         return false;
     }
-    return TEST_CHAINS.getChainIds().concat(MAIN_CHAINS.getChainIds()).includes(chain.id);
+    return getChainIds(TEST_CHAINS).concat(getChainIds(MAIN_CHAINS)).includes(chain.id);
 };
 
 export const defaultProvider = providers.getDefaultProvider(4, {
@@ -273,7 +278,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: "https://goerli.etherscan.io",
         blockExplorerName: "Etherscan",
         prefix: "goerli",
-        logoURI: Ethereum.src,
+        logoURI: CHAINS_IMG["Ethereum"].src,
     },
 
     80001: {
@@ -282,7 +287,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: TEST_CHAINS.Polygon.blockExplorers.default.url,
         blockExplorerName: "Polygonscan",
         prefix: "mumbai",
-        logoURI: Polygon.src,
+        logoURI: CHAINS_IMG["Polygon"].src,
         tokenListId: "MATIC",
     },
 
@@ -292,7 +297,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: TEST_CHAINS.Avalanche.blockExplorers.default.url,
         blockExplorerName: "Snowtrace",
         prefix: "fuji",
-        logoURI: Avalanche.src,
+        logoURI: CHAINS_IMG["Avalanche"].src,
         tokenListId: "AVAX",
     },
 
@@ -305,7 +310,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: "https://rinkeby.etherscan.io/",
         blockExplorerName: "Etherscan",
         prefix: "Rinkeby",
-        logoURI: Ethereum.src,
+        logoURI: CHAINS_IMG["Ethereum"].src,
         tokenListId: "ETH",
     },
 
@@ -315,7 +320,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: TEST_CHAINS.Binance.blockExplorers.default.url,
         blockExplorerName: "tBscscan",
         prefix: "tBNB",
-        logoURI: Binance.src,
+        logoURI: CHAINS_IMG["Binance"].src,
     },
 
     421611: {
@@ -324,7 +329,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: TEST_CHAINS.Arbitrum.blockExplorers.default.url,
         blockExplorerName: "tArbiscan",
         prefix: "ETH",
-        logoURI: Arbitrum.src,
+        logoURI: CHAINS_IMG["Arbitrum"].src,
     },
 
     69: {
@@ -333,7 +338,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: TEST_CHAINS.Optimism.blockExplorers.default.url,
         blockExplorerName: "tOptiscan",
         prefix: "ETH",
-        logoURI: Optimism.src,
+        logoURI: CHAINS_IMG["Optimism"].src,
     },
 
     4002: {
@@ -342,7 +347,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: TEST_CHAINS.Fantom.blockExplorers.default.url,
         blockExplorerName: "tFtmscan",
         prefix: "FTM",
-        logoURI: Fantom.src,
+        logoURI: CHAINS_IMG["Fantom"].src,
     },
 
     1313161555: {
@@ -351,7 +356,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: TEST_CHAINS.Aurora.blockExplorers.default.url,
         blockExplorerName: "aurorascan",
         prefix: "ETH",
-        logoURI: Aurora.src,
+        logoURI: CHAINS_IMG["Aurora"].src,
     },
 
     //Mainnets
@@ -362,7 +367,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: "https://etherscan.io/",
         blockExplorerName: "Etherscan",
         prefix: "ethereum",
-        logoURI: Ethereum.src,
+        logoURI: CHAINS_IMG["Ethereum"].src,
         tokenListId: "ethereum",
     },
 
@@ -372,7 +377,16 @@ export const networkDetails: INetworkDetails = {
         blockExplorerURL: MAIN_CHAINS.Aurora.blockExplorers.default.url,
         blockExplorerName: "aurorascan",
         prefix: "ETH",
-        logoURI: Aurora.src,
+        logoURI: CHAINS_IMG["Aurora"].src,
+    },
+
+    0x2696efe5: {
+        rpcUrl: TEST_CHAINS.Skale.rpcUrls.default,
+        chainProviders: new ethers.providers.JsonRpcProvider(TEST_CHAINS.Skale.rpcUrls.default),
+        blockExplorerURL: TEST_CHAINS.Skale.blockExplorers.default.url,
+        blockExplorerName: "skalescan",
+        prefix: "SFUEL",
+        logoURI: CHAINS_IMG["Skale"].src,
     },
 };
 

@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { MAIN_CHAINS, TEST_CHAINS } from "../../utils/blockchains";
+import { getChainIds, MAIN_CHAINS, TEST_CHAINS } from "../../utils/blockchains";
 
 const SwitchNetworkBanner = () => {
-    const chainIDs: number[] = MAIN_CHAINS.getChainIds().concat(TEST_CHAINS.getChainIds()); // Goerli, Mumbai, FUJI
+    const chainIDs: number[] = getChainIds(MAIN_CHAINS).concat(getChainIds(TEST_CHAINS)); // Goerli, Mumbai, FUJI
     const { isConnected } = useAccount();
     const { chain } = useNetwork();
     const { switchNetwork } = useSwitchNetwork();
