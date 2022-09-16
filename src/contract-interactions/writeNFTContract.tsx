@@ -1,6 +1,29 @@
-import toast from "react-hot-toast";
-import { GOVERNANCE_NFT_ABI } from "abis";
 import { ethers, Signer } from "ethers";
+import { GOVERNANCE_NFT_ABI } from "../abis";
+
+interface IAddToWhitelist {
+    addressNFT: string;
+    walletAddress?: string;
+    signer?: Signer;
+}
+
+export async function AddToWhitelist({ addressNFT, walletAddress, signer }: IAddToWhitelist) {
+    const erc721_rw = new ethers.Contract(addressNFT, GOVERNANCE_NFT_ABI, signer);
+    try {
+        const tx = await erc721_rw.setAllowList([walletAddress], 1);
+        console.log("Transaction add to WL", tx);
+        return true;
+    } catch (e) {
+        console.log("[ERROR] add to whitelist", e);
+        return false;
+    }
+}
+
+export async function setURI(contractAddress: string, signer: Signer, URI: string) {
+    const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, signer);
+
+    return await nft.setBaseURI(URI);
+}
 
 export async function mintReserveAndDelegation(contractAddress: string, signer: Signer) {
     const erc20_rw = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, signer);
@@ -12,12 +35,7 @@ export async function mintReserveAndDelegation(contractAddress: string, signer: 
     console.log(delegateTx);
     console.log("Tx hash", tx.hash);
 
-    if (tx) {
-        if (tx.blockNumber) {
-            toast.success(`DONE ✅ successful mint!`);
-            console.log(tx);
-        }
-    }
+    return tx
     // const supply = await erc20_rw.totalSupply();
     // console.log(supply);
 }

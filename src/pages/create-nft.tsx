@@ -25,12 +25,12 @@ import {
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { StepperDialog } from "components/Dialog";
-import { deployNFTContract } from "contract-interactions/useDeployNFTContract";
+import { deployNFTContract } from "contract-interactions/";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
-import { setURI } from "contract-interactions/stateNFTContract";
+import { setURI } from "contract-interactions/writeNFTContract";
 import { createNFTSteps } from "components/Dialog/Stepper";
 import { getSupplyNumber } from "contract-interactions/viewNftContract";
 

@@ -30,6 +30,10 @@ const DAOsPage: NextPage = () => {
     const { chain } = useNetwork();
     const { isInitialized } = useMoralis();
 
+    //
+    // FUNCTIONS
+    // ----------------------------------------------------------------------
+
     const fetchDB = () => {
         if (isInitialized) {
             DAOsQuery({
@@ -76,18 +80,6 @@ const DAOsPage: NextPage = () => {
         }
     };
 
-    // if we use isInitialized we call fetch only once when reload page or move to new page
-    useEffect(() => {
-        fetchDB();
-    }, [isInitialized]);
-
-    useIsomorphicLayoutEffect(() => {
-        if (DAOs && firstUpdate.current) {
-            firstUpdate.current = false;
-            fetchLargeData();
-        }
-    });
-
     const fetchLargeData = async () => {
         const newDAOs = await Promise.all(
             DAOs!.map(async (dao) => {
@@ -100,6 +92,26 @@ const DAOsPage: NextPage = () => {
         );
         setDAOs(() => newDAOs);
     };
+
+    //
+    // EFFECTS
+    // ----------------------------------------------------------------------
+
+    // if we use isInitialized we call fetch only once when reload page or move to new page
+    useEffect(() => {
+        fetchDB();
+    }, [isInitialized]);
+
+    useIsomorphicLayoutEffect(() => {
+        if (DAOs && firstUpdate.current) {
+            firstUpdate.current = false;
+            fetchLargeData();
+        }
+    });
+
+    //
+    // CUSTOM COMPONENTS
+    // ----------------------------------------------------------------------
 
     const DAOCard = ({ name, description, profileImage, address, isActive, proposals }) => {
         return (

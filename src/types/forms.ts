@@ -29,6 +29,7 @@ export interface IDAOPageForm extends ICreateDAO {
     activeProposals?: number;
     nftImage?: any;
     isActive?: boolean;
+    treasuryAddress?: string;
 }
 
 export interface IMembershipForm {

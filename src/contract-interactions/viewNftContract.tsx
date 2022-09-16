@@ -3,7 +3,7 @@ import { GOVERNANCE_NFT_ABI } from "abis";
 import { networkDetails } from "utils/blockchains";
 import { BaseProvider } from "@ethersproject/providers/src.ts/base-provider";
 
-export async function getName(contractAddress: string, chainId: number) {
+export async function getNftName(contractAddress: string, chainId: number) {
     let provider = networkDetails[chainId].chainProviders as BaseProvider;
     const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
     return await nft.name();

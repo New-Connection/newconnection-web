@@ -18,7 +18,7 @@ import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";
 import { castVote } from "contract-interactions/";
-import { VotingType } from "contract-interactions/voting";
+import { VotingType } from "contract-interactions/";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     detailProposal: string;

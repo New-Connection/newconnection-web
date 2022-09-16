@@ -22,7 +22,7 @@ import {
     handleImageChange,
     handleTextChange,
 } from "utils/handlers";
-import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
+import { deployGovernorContract } from "contract-interactions/";
 import { BLOCKS_IN_DAY } from "utils/constants";
 import {
     getMoralisInstance,
