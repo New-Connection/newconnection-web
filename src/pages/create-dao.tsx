@@ -32,7 +32,7 @@ import {
 } from "database/interactions";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { StepperDialog } from "../components/Dialog";
+import { StepperDialog, handleReset, handleNext } from "../components/Dialog";
 
 import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
@@ -81,14 +81,6 @@ const CreateDAO: NextPage = () => {
             autoFetch: false,
         }
     );
-
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
 
     const checkUrlAvailability = async () => {
         let available = false;
@@ -142,7 +134,7 @@ const CreateDAO: NextPage = () => {
 
         switchNetwork(TEST_CHAINS[formData.blockchain[0]].id);
 
-        handleReset();
+        handleReset(setActiveStep);
         confirmDialog.toggle();
 
         let profileImagePath;
@@ -167,7 +159,7 @@ const CreateDAO: NextPage = () => {
             handleChangeBasic(coverImagePath, setFormData, "coverImage");
         } catch (error) {
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Couldn't save your NFT on IPFS. Please try again");
             return;
         }
@@ -181,14 +173,14 @@ const CreateDAO: NextPage = () => {
                 votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
                 quorumPercentage: +formData.quorumPercentage,
             });
-            handleNext();
+            handleNext(setActiveStep);
             await contract.deployed();
-            handleNext();
-            handleNext();
+            handleNext(setActiveStep);
+            handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Please approve transaction to create DAO");
             return;
         }

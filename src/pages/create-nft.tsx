@@ -24,7 +24,7 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { StepperDialog } from "components/Dialog";
+import { StepperDialog, handleReset, handleNext } from "components/Dialog";
 import { deployNFTContract } from "contract-interactions/";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
@@ -55,14 +55,6 @@ const CreateNFT: NextPage = () => {
 
     const { switchNetwork } = useSwitchNetwork();
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
-
     const calculateSupply = () => {
         return formData[
             CHAINS.find((chain) => {
@@ -86,7 +78,7 @@ const CreateNFT: NextPage = () => {
 
         switchNetwork(TEST_CHAINS[formData.blockchain].id);
 
-        handleReset();
+        handleReset(setActiveStep);
         confirmDialog.toggle();
 
         let fullPath: string;
@@ -98,7 +90,7 @@ const CreateNFT: NextPage = () => {
             handleChangeBasic(fullPath, setFormData, "ipfsAddress");
         } catch (error) {
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Couldn't save your NFT on IPFS. Please try again");
             return;
         }
@@ -118,21 +110,20 @@ const CreateNFT: NextPage = () => {
                 startMintId: 0,
                 endMintId: calculateSupply(),
             });
-            handleNext();
+            handleNext(setActiveStep);
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            const supplyNFT = await getSupplyNumber(contract.address, chainId);
-            handleNext();
+            handleNext(setActiveStep);
             const setTx = await setURI(contract.address, signer_data, fullPath);
-            handleNext();
+            handleNext(setActiveStep);
             await setTx.wait();
-            handleNext();
-            handleNext();
+            handleNext(setActiveStep);
+            handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
             console.log(error);
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Please approve transaction to create DAO");
             return;
         }

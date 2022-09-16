@@ -20,9 +20,9 @@ import NFTExample from "assets/nft-example.png";
 import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
-import { NFTDetailDialog } from "components/Dialog";
+import { handleNext, handleReset, NFTDetailDialog, StepperDialog } from "components/Dialog";
 import classNames from "classnames";
-import { useNetwork, useSigner } from "wagmi";
+import { useSigner, useSwitchNetwork } from "wagmi";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
 import {
@@ -30,6 +30,8 @@ import {
     mintReserveAndDelegation,
     mintNFT,
     getGovernorOwnerAddress,
+    deployTreasuryContract,
+    transferTreasuryOwnership,
 } from "contract-interactions/";
 import toast from "react-hot-toast";
 import ProposalCard from "components/Cards/ProposalCard";
@@ -43,6 +45,9 @@ import {
     proposalForVotes,
 } from "contract-interactions/viewGovernorContract";
 import { isValidHttpUrl } from "utils/transformURL";
+import { handleChangeBasic } from "../../utils/handlers";
+import { saveMoralisInstance } from "../../database/interactions";
+import { createTreasurySteps } from "../../components/Dialog/Stepper";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -75,20 +80,18 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams
 type ButtonState = "Mint" | "Loading" | "Success" | "Error";
 
 const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
-    const [click, setClick] = useState(false);
+    const { data: signer_data } = useSigner();
+    const { switchNetwork } = useSwitchNetwork();
+    const { isInitialized } = useMoralis();
+    const firstUpdate = useRef(true);
+    const [DAOMoralisInstance, setDAOMoralisInstance] = useState(null);
+
+    // DB states
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
-    const [buttonState, setButtonState] = useState<ButtonState>("Mint");
-    const [nftImage, setNftImage] = useState("");
-    const [treasuryBalance, setTreasuryBalance] = useState(0);
-    const [isOwner, setIsOwner] = useState(false);
-    const detailNFTDialog = useDialogState();
-    const { data: signer_data } = useSigner();
-    const { isInitialized } = useMoralis();
-    const firstUpdate = useRef(true);
-    const { chain } = useNetwork();
 
+    // DB queries
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
         (query) => query.equalTo("url", address),
@@ -97,7 +100,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
-
     const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
         (query) => query.equalTo("daoAddress", address),
@@ -106,7 +108,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
-
     const { fetch: ProposalQuery } = useMoralisQuery(
         "Proposal",
         (query) => query.equalTo("governorAddress", address),
@@ -115,6 +116,17 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
+
+    // nft section
+    const [buttonState, setButtonState] = useState<ButtonState>("Mint");
+    const [nftImage, setNftImage] = useState("");
+    const detailNFTDialog = useDialogState();
+
+    // treasury section
+    const [isOwner, setIsOwner] = useState(false);
+    const [treasuryBalance, setTreasuryBalance] = useState(0);
+    const [createTreasuryStep, setCreateTreasuryStep] = useState(0);
+    const createTreasuryDialog = useDialogState();
 
     //
     // FUNCTIONS
@@ -153,6 +165,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         activeProposals: 0,
                     };
                     // console.log(newDao);
+                    setDAOMoralisInstance(() => moralisInstance);
                     setDAO(() => newDao);
                 },
                 onError: (error) => {
@@ -274,6 +287,51 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             toast.error("Please connect wallet");
             return;
         }
+        switchNetwork(DAO.chainId);
+
+        handleReset(setCreateTreasuryStep);
+        createTreasuryDialog.toggle();
+
+        let treasuryContract;
+        try {
+            treasuryContract = await deployTreasuryContract(signer_data as Signer, {});
+            handleNext(setCreateTreasuryStep);
+            await treasuryContract.deployed();
+            console.log(
+                `Deployment successful! Treasury Contract Address: ${treasuryContract.address}`
+            );
+            handleNext(setCreateTreasuryStep);
+            const renounceTx = await transferTreasuryOwnership(
+                treasuryContract.address,
+                DAO.contractAddress,
+                signer_data
+            );
+            handleNext(setCreateTreasuryStep);
+            await renounceTx.wait();
+            handleNext(setCreateTreasuryStep);
+            handleNext(setCreateTreasuryStep);
+
+            handleChangeBasic(treasuryContract.address, setDAO, "treasuryAddress");
+        } catch (error) {
+            console.log(error);
+            createTreasuryDialog.toggle();
+            handleReset(setCreateTreasuryStep);
+            toast.error("Please approve transaction to create Treasury");
+            return;
+        }
+
+        try {
+            if (DAOMoralisInstance) {
+                DAO.treasuryAddress;
+                DAOMoralisInstance.set("treasuryAddress", treasuryContract.address);
+                await saveMoralisInstance(DAOMoralisInstance);
+            }
+        } catch (error) {
+            createTreasuryDialog.toggle();
+            toast.error("Couldn't save your DAO on database. Please try again");
+            return;
+        }
+
         //TODO
     };
 
@@ -316,6 +374,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     //
     // TABS COMPONENTS & STATES
     // ----------------------------------------------------------------------
+
+    const [click, setClick] = useState(false);
 
     const TabOne: FC<{}> = () => {
         return proposals && proposals.length !== 0 ? (
@@ -671,7 +731,21 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             "treasury flex flex-col justify-between justify-center border-2 text-center border-lightGray rounded-lg h-40 p-3"
                         }
                     >
-                        <div className={"text-xl text-gray5"}>Treasury</div>
+                        {DAO.treasuryAddress ? (
+                            <div className={"flex justify-center text-xl text-gray5"}>
+                                <a
+                                    href={getChainScanner(DAO.chainId, DAO.treasuryAddress)}
+                                    target={"_blank"}
+                                    className="hover:text-purple flex gap-3"
+                                >
+                                    Treasury
+                                    <ExternalLinkIcon className="h-6 w-5" />
+                                </a>
+                            </div>
+                        ) : (
+                            <div className={"flex justify-center text-xl text-gray5"}>Treasury</div>
+                        )}
+
                         <div className={"text-3xl font-semibold"}>$ {treasuryBalance}</div>
                         <div>
                             {!DAO.treasuryAddress && isOwner ? (
@@ -768,6 +842,23 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         ))}
                     </ul> */}
                 </NFTDetailDialog>
+                <StepperDialog
+                    dialog={createTreasuryDialog}
+                    className="dialog"
+                    activeStep={createTreasuryStep}
+                    steps={createTreasurySteps}
+                >
+                    <p className="ml-7">Deployment successful!</p>
+                    <p className="ml-7 mb-10">Treasury Contract Address: {DAO.treasuryAddress}</p>
+                    <button
+                        className="form-submit-button"
+                        onClick={() => {
+                            createTreasuryDialog.toggle();
+                        }}
+                    >
+                        Close
+                    </button>
+                </StepperDialog>
             </Layout>
         </div>
     ) : (

@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import { CheckCircleIcon } from "@heroicons/react/solid";
 import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
+
 //https://mui.com/material-ui/react-stepper/
 
 interface StepperDialogProps {
@@ -58,7 +59,30 @@ export const createNFTSteps = [
     },
 ];
 
-const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+export const createTreasurySteps = [
+    {
+        label: "Waiting for the confirmation in your wallet to create Treasury contract",
+        description: "",
+    },
+    {
+        label: "Waiting for the confirmation from blockchain",
+        description: "",
+    },
+    {
+        label: "Waiting for the confirmation in your wallet to renounce ownership to Governor",
+        description: "",
+    },
+    {
+        label: "Waiting for the confirmation from blockchain",
+        description: "",
+    },
+    {
+        label: "Done",
+        description: "",
+    },
+];
+
+const ColorlibConnector = styled(StepConnector)(({}) => ({
     [`& .${stepConnectorClasses.line}`]: {
         height: 3,
         border: 0,

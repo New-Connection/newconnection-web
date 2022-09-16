@@ -33,8 +33,8 @@ export const getMoralisInstance = (moralisClass: MoralisClassEnum) => {
 
 export const saveMoralisInstance = async <T extends Moralis.Object>(moralisInstance: T) => {
     await moralisInstance.save().then(
-        (dao) => {
-            console.log("New object created with id: " + dao.id);
+        (instance) => {
+            console.log("New object updated with id: " + instance.id);
         },
         (error) => {
             toast.error(`Failed to create, please try again. Error(${error.message})`);

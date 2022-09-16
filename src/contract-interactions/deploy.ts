@@ -70,7 +70,7 @@ export async function deployNFTContract(
 // For future constructor arguments
 export interface IConstructorTreasury {}
 
-export async function deployTreasury(
+export async function deployTreasuryContract(
     signer: Signer,
     constructor: IConstructorTreasury
 ): Promise<Contract> {
