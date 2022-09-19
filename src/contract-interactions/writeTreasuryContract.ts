@@ -10,13 +10,3 @@ export async function transferTreasuryOwnership(
 
     return await treasury.transferOwnership(newOwnerAddress);
 }
-
-export async function getBalance(
-    contractAddress: string,
-    newOwnerAddress: string,
-    signer: Signer
-) {
-    const treasury = new ethers.Contract(contractAddress, TREASURY_ABI, signer);
-
-    return await treasury.balance();
-}

@@ -279,6 +279,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerName: "Etherscan",
         prefix: "goerli",
         logoURI: CHAINS_IMG["Ethereum"].src,
+        tokenListId: "ETH",
     },
 
     80001: {
@@ -321,6 +322,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerName: "tBscscan",
         prefix: "tBNB",
         logoURI: CHAINS_IMG["Binance"].src,
+        tokenListId: "BNB",
     },
 
     421611: {
@@ -330,6 +332,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerName: "tArbiscan",
         prefix: "ETH",
         logoURI: CHAINS_IMG["Arbitrum"].src,
+        tokenListId: "ETH",
     },
 
     69: {
@@ -339,6 +342,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerName: "tOptiscan",
         prefix: "ETH",
         logoURI: CHAINS_IMG["Optimism"].src,
+        tokenListId: "ETH",
     },
 
     4002: {
@@ -348,6 +352,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerName: "tFtmscan",
         prefix: "FTM",
         logoURI: CHAINS_IMG["Fantom"].src,
+        tokenListId: "FTM",
     },
 
     1313161555: {
@@ -357,6 +362,17 @@ export const networkDetails: INetworkDetails = {
         blockExplorerName: "aurorascan",
         prefix: "ETH",
         logoURI: CHAINS_IMG["Aurora"].src,
+        tokenListId: "ETH",
+    },
+
+    0x2696efe5: {
+        rpcUrl: TEST_CHAINS.Skale.rpcUrls.default,
+        chainProviders: new ethers.providers.JsonRpcProvider(TEST_CHAINS.Skale.rpcUrls.default),
+        blockExplorerURL: TEST_CHAINS.Skale.blockExplorers.default.url,
+        blockExplorerName: "skalescan",
+        prefix: "SFUEL",
+        logoURI: CHAINS_IMG["Skale"].src,
+        tokenListId: "SKL",
     },
 
     //Mainnets
@@ -368,7 +384,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerName: "Etherscan",
         prefix: "ethereum",
         logoURI: CHAINS_IMG["Ethereum"].src,
-        tokenListId: "ethereum",
+        tokenListId: "ETH",
     },
 
     1313161554: {
@@ -378,15 +394,7 @@ export const networkDetails: INetworkDetails = {
         blockExplorerName: "aurorascan",
         prefix: "ETH",
         logoURI: CHAINS_IMG["Aurora"].src,
-    },
-
-    0x2696efe5: {
-        rpcUrl: TEST_CHAINS.Skale.rpcUrls.default,
-        chainProviders: new ethers.providers.JsonRpcProvider(TEST_CHAINS.Skale.rpcUrls.default),
-        blockExplorerURL: TEST_CHAINS.Skale.blockExplorers.default.url,
-        blockExplorerName: "skalescan",
-        prefix: "SFUEL",
-        logoURI: CHAINS_IMG["Skale"].src,
+        tokenListId: "ETH",
     },
 };
 

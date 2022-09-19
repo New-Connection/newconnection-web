@@ -32,6 +32,7 @@ import {
     getGovernorOwnerAddress,
     deployTreasuryContract,
     transferTreasuryOwnership,
+    getTreasuryBalance,
 } from "contract-interactions/";
 import toast from "react-hot-toast";
 import ProposalCard from "components/Cards/ProposalCard";
@@ -224,11 +225,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     };
 
     const fetchNftImage = async () => {
-        const image = await loadImage(await getTokenURI(DAO?.tokenAddress!, DAO?.chainId!));
+        const image = await loadImage(await getTokenURI(DAO.tokenAddress, DAO.chainId));
         setNftImage(() => image);
     };
 
-    const fetchTreasuryBalance = async () => {};
+    const fetchTreasuryBalance = async () => {
+        const balance = await getTreasuryBalance(DAO.contractAddress, DAO.chainId);
+        setTreasuryBalance(() => balance);
+    };
 
     const fetchLargeData = async () => {
         const newDAO = {
@@ -353,15 +357,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         fetchWhitelist();
     }, [isInitialized]);
 
-    useEffect(() => {
-        fetchNftImage();
-        fetchTreasuryBalance();
-    }, [DAO]);
-
     useIsomorphicLayoutEffect(() => {
         if (DAO && firstUpdate.current) {
             firstUpdate.current = false;
             fetchLargeData();
+            fetchNftImage();
+            fetchTreasuryBalance();
         }
     });
 
