@@ -10,17 +10,17 @@ import basicAvatar from "assets/basic_avatar.jpg";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import Moralis from "moralis";
-import { CHAINS_IMG } from "utils/blockchains";
+import { CHAINS_IMG, networkDetails } from "utils/blockchains";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
 import { useEffect, useState } from "react";
 import { IDAOPageForm, IProposalPageForm } from "types/forms";
 import { getChainScanner } from "utils/network";
 import NFTExample from "assets/nft-example.png";
-import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
+import { ClipboardCopyIcon, ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
-import { handleNext, handleReset, NFTDetailDialog, StepperDialog } from "components/Dialog";
+import { handleNext, handleReset, CustomDialog, StepperDialog } from "components/Dialog";
 import classNames from "classnames";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
@@ -46,9 +46,11 @@ import {
     proposalForVotes,
 } from "contract-interactions/viewGovernorContract";
 import { isValidHttpUrl } from "utils/transformURL";
-import { handleChangeBasic } from "../../utils/handlers";
-import { saveMoralisInstance } from "../../database/interactions";
-import { createTreasurySteps } from "../../components/Dialog/Stepper";
+import { handleChangeBasic } from "utils/handlers";
+import { saveMoralisInstance } from "database/interactions";
+import { createTreasurySteps, SpinnerLoading } from "components/Dialog/Stepper";
+import { InputAmount } from "components/Form";
+import { sendEthToAddress } from "contract-interactions/utils";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -125,9 +127,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     // treasury section
     const [isOwner, setIsOwner] = useState(false);
-    const [treasuryBalance, setTreasuryBalance] = useState(0);
+    const [treasuryBalance, setTreasuryBalance] = useState("0");
     const [createTreasuryStep, setCreateTreasuryStep] = useState(0);
+    const [contributeAmount, setContributeAmount] = useState("0");
+    const [sending, setSending] = useState(false);
     const createTreasuryDialog = useDialogState();
+    const contributeTreasuryDialog = useDialogState();
 
     //
     // FUNCTIONS
@@ -230,8 +235,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     };
 
     const fetchTreasuryBalance = async () => {
-        const balance = await getTreasuryBalance(DAO.contractAddress, DAO.chainId);
-        setTreasuryBalance(() => balance);
+        const balance = await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId);
+        setTreasuryBalance(() => balance.toString().slice(0, 7));
     };
 
     const fetchLargeData = async () => {
@@ -291,7 +296,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             toast.error("Please connect wallet");
             return;
         }
-        switchNetwork(DAO.chainId);
 
         handleReset(setCreateTreasuryStep);
         createTreasuryDialog.toggle();
@@ -335,16 +339,32 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             toast.error("Couldn't save your DAO on database. Please try again");
             return;
         }
-
-        //TODO
     };
 
-    const contributeToTreasury = async () => {
-        if (!signer_data) {
-            toast.error("Please connect wallet");
+    const contributeToTreasury = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        switchNetwork(DAO.chainId);
+
+        try {
+            const sendTx = await sendEthToAddress(
+                DAO.treasuryAddress,
+                contributeAmount,
+                signer_data
+            );
+            await sendTx.wait(1);
+            setSending(() => false);
+        } catch (error) {
+            console.log(error);
+            contributeTreasuryDialog.hide();
+            setSending(() => false);
+            toast.error("Something went wrong");
             return;
         }
-        //TODO
+
+        toast.success("Successfully contributed!");
+        contributeTreasuryDialog.hide();
+        setSending(() => false);
     };
 
     //
@@ -597,30 +617,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
-    const LoadingSpinner = () => {
-        return (
-            <button
-                disabled
-                type="button"
-                className="secondary-button w-full text-center h-12 text-gray-900 border pr-10"
-            >
-                <svg
-                    role="status"
-                    className="inline mr-2 w-4 h-4 text-gray-200 animate-spin text-white"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                        fill="#E5E7EB"
-                    />
-                </svg>
-                Loading...
-            </button>
-        );
-    };
-
     // TODO: Create maping for array of blockchains
     const BlockchainImage = () => {
         return DAO ? (
@@ -667,7 +663,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     className="rounded-xl"
                                 />
                             </div>
-                            <h1 className="dao-label">{DAO.name}</h1>
+                            <h1 className="dao-label capitalize">{DAO.name}</h1>
                         </div>
                         <Link
                             href={{
@@ -758,7 +754,18 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     Treasury not added
                                 </button>
                             ) : (
-                                <button className="secondary-button" onClick={contributeToTreasury}>
+                                <button
+                                    className="secondary-button"
+                                    onClick={() => {
+                                        if (!signer_data) {
+                                            toast.error("Please connect wallet");
+                                            return;
+                                        }
+                                        switchNetwork(DAO.chainId);
+
+                                        contributeTreasuryDialog.toggle();
+                                    }}
+                                >
                                     Contribute
                                 </button>
                             )}
@@ -810,10 +817,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         )}
                     </>
                 </section>
-                <NFTDetailDialog
-                    dialog={detailNFTDialog}
-                    className="h-full items-center text-center "
-                >
+                <CustomDialog dialog={detailNFTDialog} className="h-full items-center text-center">
                     <NFTImage className="rounded-lg h-14 w-14" />
                     <p className="mt-4 text-black">{`${DAO.name}: Membership NFT`}</p>
                     {
@@ -842,7 +846,69 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             </li>
                         ))}
                     </ul> */}
-                </NFTDetailDialog>
+                </CustomDialog>
+                <CustomDialog
+                    dialog={contributeTreasuryDialog}
+                    className="items-center text-center"
+                >
+                    <div className={"flex items-center gap-2"}>
+                        <Image
+                            src={!isIpfsAddress(DAO.profileImage) ? DAO.profileImage : basicAvatar}
+                            height={"50px"}
+                            width={"50px"}
+                            className="rounded-xl"
+                        />
+                        <div>
+                            <div className={"text-xl capitalize font-semibold"}>
+                                {DAO.name} treasury
+                            </div>
+                            <div
+                                className={
+                                    "flex text-lightGray hover:text-gray5 hover:cursor-pointer"
+                                }
+                                onClick={() => navigator.clipboard.writeText(DAO.treasuryAddress)}
+                            >
+                                {DAO.treasuryAddress.slice(0, 6) +
+                                    "..." +
+                                    DAO.treasuryAddress.slice(-4)}
+                                <ClipboardCopyIcon className="h-6 w-5" />
+                            </div>
+                        </div>
+                    </div>
+                    <form
+                        onSubmit={(event) => {
+                            setSending(() => true);
+                            contributeToTreasury(event);
+                        }}
+                    >
+                        <InputAmount
+                            placeholder={"Amount in " + networkDetails[DAO.chainId].tokenListId}
+                            name="price"
+                            handleChange={(event) => setContributeAmount(() => event.target.value)}
+                            className="w-full"
+                            min={0.0001}
+                            step={0.0001}
+                            max={10}
+                        />
+                        {!sending ? (
+                            <button
+                                disabled={+contributeAmount === 0}
+                                className="secondary-button h-12 mt-4 mb-2 gradient-btn-color transition delay-150 hover:reverse-gradient-btn-color"
+                            >
+                                Send
+                            </button>
+                        ) : (
+                            <div className={"flex gap-2"}>
+                                <div className={"w-7"}>
+                                    <SpinnerLoading />
+                                </div>
+                                <div className="text-xl text-black">
+                                    Waiting confirmation from blockchain
+                                </div>
+                            </div>
+                        )}
+                    </form>
+                </CustomDialog>
                 <StepperDialog
                     dialog={createTreasuryDialog}
                     className="dialog"

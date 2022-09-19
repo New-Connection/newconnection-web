@@ -17,7 +17,7 @@ export interface InputTextProps {
 
 export interface InputAmountProps {
     name: string;
-    label: string;
+    label?: string;
     labelTitle?: string;
     isRequired?: boolean;
     className?: string;
