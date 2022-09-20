@@ -8,6 +8,7 @@ import "../styles/globals.css";
 import { WalletConfig } from "../components/Web3";
 import { MoralisProvider } from "react-moralis";
 import Script from "next/script";
+import "nprogress/nprogress.css";
 
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient());
