@@ -6,7 +6,7 @@ import Footer from "./Footer";
 import CustomToast from "../Toast/CustomToast";
 import HeadInfo from "./HeadInfo";
 import SwitchNetworkBanner from "components/Banners/SwitchNetworksBanner";
-import NewFeaturesBanner from "components/Banners/NewFeaturesBanner";
+// import NewFeaturesBanner from "components/Banners/NewFeaturesBanner";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -22,9 +22,9 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
             <HeadInfo />
             <div className="relative min-h-screen">
                 <Header />
-                <NewFeaturesBanner />
+                {/* <NewFeaturesBanner /> */}
                 <SwitchNetworkBanner />
-                <main className={classNames("flex-1 pb-20", className)} {...props}>
+                <main className={classNames("flex-1 pb-20 mt-[6.5em]", className)} {...props}>
                     {children}
                 </main>
                 <Footer />
