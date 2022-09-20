@@ -1,5 +1,5 @@
 import { ethers, Signer } from "ethers";
-import { TREASURY_ABI } from "../abis";
+import { TREASURY_ABI } from "abis";
 
 export async function transferTreasuryOwnership(
     contractAddress: string,

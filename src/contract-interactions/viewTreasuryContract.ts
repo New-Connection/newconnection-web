@@ -1,8 +1,8 @@
-import { ethers, Signer } from "ethers";
-import { TREASURY_ABI } from "../abis";
-import { networkDetails } from "../utils/blockchains";
+import { ethers } from "ethers";
+import { TREASURY_ABI } from "abis";
+import { networkDetails } from "utils/blockchains";
 import { BaseProvider } from "@ethersproject/providers/src.ts/base-provider";
-import { getExchangeRate } from "../utils/cryptocompare";
+import { getExchangeRate } from "utils/cryptocompare";
 
 export async function getTreasuryOwnerAddress(contractAddress: string, chainId: number) {
     let provider = networkDetails[chainId].chainProviders as BaseProvider;
@@ -20,5 +20,5 @@ export async function getTreasuryBalance(contractAddress: string, chainId: numbe
     const exchangeRate = await getExchangeRate(networkDetails[chainId].tokenListId, "USD");
     // console.log(x);
 
-    return ethBalance * exchangeRate
+    return ethBalance * exchangeRate;
 }

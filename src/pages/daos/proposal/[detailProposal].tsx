@@ -13,7 +13,7 @@ import { Button, RadioSelector } from "components/Form";
 import { formatAddress } from "utils/address";
 import { validateForm } from "utils/validate";
 import ProgressBar from "components/ProgressBar/ProgressBar";
-import { StepperDialog } from "../../../components/Dialog";
+import { StepperDialog } from "components/Dialog";
 import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";

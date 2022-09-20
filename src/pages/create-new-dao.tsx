@@ -5,7 +5,7 @@ import Link from "next/link";
 import Layout from "components/Layout/Layout";
 import { Button } from "components/Form";
 import BackButton from "components/Button/backButton";
-import { isBlockchainSupported } from "../utils/blockchains";
+import { isBlockchainSupported } from "utils/blockchains";
 import { useNetwork } from "wagmi";
 
 interface ICard {

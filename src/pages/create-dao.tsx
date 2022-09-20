@@ -32,7 +32,7 @@ import {
 } from "database/interactions";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { StepperDialog, handleReset, handleNext } from "../components/Dialog";
+import { StepperDialog, handleReset, handleNext } from "components/Dialog";
 
 import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";

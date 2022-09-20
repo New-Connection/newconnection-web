@@ -1,5 +1,5 @@
 import { ethers, Signer } from "ethers";
-import { GOVERNANCE_NFT_ABI } from "../abis";
+import { GOVERNANCE_NFT_ABI } from "abis";
 
 interface IAddToWhitelist {
     addressNFT: string;
@@ -35,7 +35,7 @@ export async function mintReserveAndDelegation(contractAddress: string, signer: 
     console.log(delegateTx);
     console.log("Tx hash", tx.hash);
 
-    return tx
+    return tx;
     // const supply = await erc20_rw.totalSupply();
     // console.log(supply);
 }

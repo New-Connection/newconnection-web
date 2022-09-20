@@ -1,5 +1,5 @@
 import { ethers, Signer } from "ethers";
-import { GOVERNOR_ABI } from "../abis";
+import { GOVERNOR_ABI } from "abis";
 
 export async function createProposal(contractAddress: string, signer: Signer, proposalDescription) {
     const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, signer);
