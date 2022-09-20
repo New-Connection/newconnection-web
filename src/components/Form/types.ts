@@ -35,9 +35,9 @@ export interface InputAmountProps {
 export interface ISelectorProps {
     name: string;
     label: string;
+    enabledValues?: string[];
     className?: string;
     defaultValue?: string;
-    disablesValues?: string[];
     handleChange?: (event: BaseSyntheticEvent) => boolean;
 }
 
@@ -46,7 +46,6 @@ export interface IRadioSelector {
     labels: string[];
     className?: string;
     handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-
 }
 
 export interface IDragAndDropProps {

@@ -95,23 +95,23 @@ export const TEST_CHAINS: {
         testnet: true,
     },
 
-    Arbitrum: {
-        id: 421611,
-        name: "Arbitrum Rinkeby",
-        network: "Arbitrum",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Ethereum",
-            symbol: "ETH",
-        },
-        rpcUrls: {
-            default: "https://rinkeby.arbitrum.io/rpc",
-        },
-        blockExplorers: {
-            default: { name: "arbiscan", url: "https://testnet.arbiscan.io" },
-        },
-        testnet: true,
-    },
+    // Arbitrum: {
+    //     id: 421611,
+    //     name: "Arbitrum Rinkeby",
+    //     network: "Arbitrum",
+    //     nativeCurrency: {
+    //         decimals: 18,
+    //         name: "Ethereum",
+    //         symbol: "ETH",
+    //     },
+    //     rpcUrls: {
+    //         default: "https://rinkeby.arbitrum.io/rpc",
+    //     },
+    //     blockExplorers: {
+    //         default: { name: "arbiscan", url: "https://testnet.arbiscan.io" },
+    //     },
+    //     testnet: true,
+    // },
 
     Optimism: {
         id: 69,
@@ -325,15 +325,15 @@ export const networkDetails: INetworkDetails = {
         tokenListId: "BNB",
     },
 
-    421611: {
-        rpcUrl: TEST_CHAINS.Arbitrum.rpcUrls.default,
-        chainProviders: new ethers.providers.JsonRpcProvider(TEST_CHAINS.Arbitrum.rpcUrls.default),
-        blockExplorerURL: TEST_CHAINS.Arbitrum.blockExplorers.default.url,
-        blockExplorerName: "tArbiscan",
-        prefix: "ETH",
-        logoURI: CHAINS_IMG["Arbitrum"].src,
-        tokenListId: "ETH",
-    },
+    // 421611: {
+    //     rpcUrl: TEST_CHAINS.Arbitrum.rpcUrls.default,
+    //     chainProviders: new ethers.providers.JsonRpcProvider(TEST_CHAINS.Arbitrum.rpcUrls.default),
+    //     blockExplorerURL: TEST_CHAINS.Arbitrum.blockExplorers.default.url,
+    //     blockExplorerName: "tArbiscan",
+    //     prefix: "ETH",
+    //     logoURI: CHAINS_IMG["Arbitrum"].src,
+    //     tokenListId: "ETH",
+    // },
 
     69: {
         rpcUrl: TEST_CHAINS.Optimism.rpcUrls.default,
