@@ -113,30 +113,6 @@ const CreateProposal: NextPage = () => {
         }
     }
 
-    const FileAndLinkForm = () => {
-        return (
-            <div className="flex justify-between gap-10 ">
-                {/* TODO: New to change it for drag and drop */}
-                <InputText
-                    label="File (optional)"
-                    name="file"
-                    placeholder="Attached file"
-                    handleChange={(event) => handleTextChange(event, setFormData)}
-                    className="w-1/2"
-                    disabled={true}
-                />
-                <InputText
-                    label="Link Forum (optional)"
-                    name="linkForum"
-                    placeholder="Link to discussion forum"
-                    handleChange={(event) => handleTextChange(event, setFormData)}
-                    className="w-1/2"
-                    disabled
-                />
-            </div>
-        );
-    };
-
     return (
         <div>
             <Layout className="layout-base">

@@ -667,7 +667,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         </div>
                         <Link
                             href={{
-                                pathname: "/daos/add-new-member",
+                                pathname: `${address}/add-new-member`,
                                 query: {
                                     daoAddress: DAO.contractAddress,
                                     daoName: DAO.name,
@@ -784,7 +784,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             onClick={setSelectedTab}
                             tabs={tabs}
                             url={{
-                                pathname: "/create-proposal",
+                                pathname: `${address}/create-proposal`,
                                 query: {
                                     governorAddress: DAO.contractAddress,
                                     blockchain: DAO.blockchain[0],

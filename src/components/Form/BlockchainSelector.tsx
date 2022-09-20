@@ -26,7 +26,7 @@ export const BlockchainSelector = ({
             </>
         );
     };
-    console.log(enabledValues);
+
     return (
         <div className={className}>
             <label>
