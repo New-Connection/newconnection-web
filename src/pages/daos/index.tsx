@@ -40,7 +40,7 @@ const DAOsPage: NextPage = () => {
                 onSuccess: (results) => {
                     const daos = results.map((dao) => {
                         const url = dao.get("url");
-                        const contractAddress = dao.get("contractAddress");
+                        const governorAddress = dao.get("governorAddress");
                         const name = dao.get("name");
                         const description = dao.get("description");
                         const chainId = dao.get("chainId");
@@ -52,7 +52,7 @@ const DAOsPage: NextPage = () => {
                         return {
                             url,
                             name,
-                            contractAddress,
+                            governorAddress: governorAddress,
                             description,
                             profileImage,
                             totalVotes,
@@ -85,7 +85,7 @@ const DAOsPage: NextPage = () => {
             DAOs!.map(async (dao) => {
                 return {
                     ...dao,
-                    totalProposals: await getTotalProposals(dao.contractAddress!, dao.chainId!),
+                    totalProposals: await getTotalProposals(dao.governorAddress!, dao.chainId!),
                     profileImage: await loadImage(dao.profileImage),
                 } as IDAOPageForm;
             })

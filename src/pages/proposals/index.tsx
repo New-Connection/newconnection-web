@@ -89,7 +89,6 @@ const ProposalsPage: NextPage = () => {
                                 const name = proposal.get("name");
                                 const description = proposal.get("description");
 
-                                //TODO: write to db
                                 const isActive = true;
                                 const votesFor = 0;
                                 const votesAgainst = 0;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from "react";
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetServerSideProps, NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useSigner } from "wagmi";
@@ -26,13 +26,20 @@ import { StepperDialog } from "components/Dialog";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 
 interface QueryUrlParams extends ParsedUrlQuery {
+    address: string;
     governorAddress: string;
 }
+
+export const getServerSideProps = async (context: NextPageContext) => {
+    const { query } = context;
+    return { props: { query } };
+};
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
+        address: "",
         governorAddress: "",
         name: "",
         shortDescription: "",
@@ -95,6 +102,8 @@ const CreateProposal: NextPage = () => {
 
     const setupData = async () => {
         const query = router.query as QueryUrlParams;
+
+        handleChangeBasic(query.address, setFormData, "address");
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasic(query.blockchain, setFormData, "enabledBlockchains");
         //setGovernorAddress(query.governorAddress);
@@ -212,7 +221,7 @@ const CreateProposal: NextPage = () => {
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
                     <p>Proposal created successful!</p>
                     <p>Proposal Id: {formData.proposalId}</p>
-                    <Link href={`/daos/${formData.governorAddress}`}>
+                    <Link href={`/daos/${formData.address}`}>
                         <button
                             className="form-submit-button"
                             onClick={() => {

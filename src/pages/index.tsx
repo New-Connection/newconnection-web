@@ -109,16 +109,6 @@ const Home: NextPage = () => {
         );
     };
 
-    const TabsSection = () => {
-        return (
-            <>
-                <ReccomendationHeader title="My DAOs" />
-                <Tabs selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs} />
-                <ViewAll />
-            </>
-        );
-    };
-
     const ProposalsSection = () => {
         return (
             <div className="my-24">
@@ -133,6 +123,16 @@ const Home: NextPage = () => {
                     </p>
                 </div>
             </div>
+        );
+    };
+
+    const TabsSection = () => {
+        return (
+            <>
+                <ReccomendationHeader title="My DAOs" />
+                <Tabs selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs} />
+                <ViewAll />
+            </>
         );
     };
 
