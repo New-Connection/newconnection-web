@@ -6,7 +6,8 @@ import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
 import { ParsedUrlQuery } from "querystring";
 import Image from "next/image";
-import basicAvatar from "assets/basic_avatar.jpg";
+import basicAvatar from "assets/basic-dao-logo.png";
+import basicCover from "assets/basic-dao-cover.png";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import Moralis from "moralis";
@@ -643,7 +644,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             <Layout className="layout-base mt-0">
                 <div className="cover h-36 w-full relative justify-center">
                     <Image
-                        src={!isIpfsAddress(DAO.coverImage) ? DAO.coverImage : basicAvatar}
+                        priority={true}
+                        src={!isIpfsAddress(DAO.coverImage) ? DAO.coverImage : basicCover}
                         layout={"fill"}
                     />
                 </div>

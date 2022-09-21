@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
-import basicAvatar from "assets/basic_avatar.jpg";
+import basicAvatar from "assets/basic-dao-logo.png";
 import { useMoralis } from "react-moralis";
 import { IDAOPageForm } from "types/forms";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
@@ -127,6 +127,7 @@ const DAOsPage: NextPage = () => {
                                 width={"150"}
                                 height={"150"}
                                 layout={"responsive"}
+                                priority={true}
                                 src={!isIpfsAddress(profileImage) ? profileImage : basicAvatar}
                                 className="rounded-2xl"
                             />
