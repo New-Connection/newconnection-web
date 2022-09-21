@@ -177,7 +177,7 @@ const CreateDAO: NextPage = () => {
             await contract.deployed();
             handleNext(setActiveStep);
             handleNext(setActiveStep);
-            handleChangeBasic(contract.address, setFormData, "contractAddress");
+            handleChangeBasic(contract.address, setFormData, "governorAddress");
         } catch (error) {
             confirmDialog.toggle();
             handleReset(setActiveStep);
@@ -193,7 +193,7 @@ const CreateDAO: NextPage = () => {
             setFieldsIntoMoralisInstance(moralisDao, formData);
             console.log("Contract Address for Moralis", contract.address);
             // use state not update immediately
-            moralisDao.set("contractAddress", contract.address);
+            moralisDao.set("governorAddress", contract.address);
             moralisDao.set("chainId", chainId);
             moralisDao.set("profileImage", profileImagePath);
             moralisDao.set("coverImage", coverImagePath);
@@ -344,7 +344,7 @@ const CreateDAO: NextPage = () => {
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
                     <p className="ml-7">Deployment successful!</p>
-                    <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
+                    <p className="ml-7 mb-10">Contract Address: {formData.governorAddress}</p>
                     <Link href={`/daos/${formData.url}`}>
                         <button
                             className="form-submit-button"

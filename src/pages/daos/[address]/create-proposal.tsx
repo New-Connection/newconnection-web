@@ -25,12 +25,14 @@ import {
 import { StepperDialog } from "components/Dialog";
 
 interface QueryUrlParams extends ParsedUrlQuery {
+    address: string;
     governorAddress: string;
     blockchain: string[];
 }
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
+        address: "",
         governorAddress: "",
         name: "",
         shortDescription: "",
@@ -56,6 +58,7 @@ const CreateProposal: NextPage = () => {
     useEffect(() => {
         const query = router.query as QueryUrlParams;
 
+        handleChangeBasic(query.address, setFormData, "address");
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasic(query.blockchain, setFormData, "enabledBlockchains");
 
@@ -163,7 +166,7 @@ const CreateProposal: NextPage = () => {
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
                     <p>Proposal created successful!</p>
                     <p>Proposal Id: {formData.proposalId}</p>
-                    <Link href={`/daos/${formData.governorAddress}`}>
+                    <Link href={`/daos/${formData.address}`}>
                         <button
                             className="form-submit-button"
                             onClick={() => {

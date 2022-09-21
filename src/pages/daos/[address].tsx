@@ -106,16 +106,16 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     );
     const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
-        (query) => query.equalTo("daoAddress", address),
-        [],
+        (query) => query.equalTo("daoAddress", DAO?.governorAddress),
+        [DAO],
         {
             autoFetch: false,
         }
     );
     const { fetch: ProposalQuery } = useMoralisQuery(
         "Proposal",
-        (query) => query.equalTo("governorAddress", address),
-        [],
+        (query) => query.equalTo("governorAddress", DAO?.governorAddress),
+        [DAO],
         {
             autoFetch: false,
         }
@@ -145,7 +145,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 onSuccess: (results) => {
                     const moralisInstance = results[0];
                     const chainId = moralisInstance.get("chainId");
-                    const contractAddress = moralisInstance.get("contractAddress");
+                    const governorAddress = moralisInstance.get("governorAddress");
                     const newDao: IDAOPageForm = {
                         url: moralisInstance.get("url"),
                         name: moralisInstance.get("name"),
@@ -158,14 +158,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         quorumPercentage: moralisInstance.get("quorumPercentage"),
                         type: moralisInstance.get("type"),
                         blockchain: moralisInstance.get("blockchain"),
-                        contractAddress: contractAddress,
+                        governorAddress: governorAddress,
                         chainId: chainId,
                         //todo: parse below values
                         discordURL: moralisInstance.get("discordURL"),
                         twitterURL: moralisInstance.get("twitterURL"),
                         websiteURL: moralisInstance.get("websiteURL"),
                         treasuryAddress: moralisInstance.get("treasuryAddress"),
-                        scanURL: getChainScanner(chainId, contractAddress),
+                        scanURL: getChainScanner(chainId, governorAddress),
                         totalVotes: 0,
                         totalMembers: 0,
                         totalProposals: 0,
@@ -236,14 +236,17 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     };
 
     const fetchTreasuryBalance = async () => {
-        const balance = await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId);
+        const balance = DAO.treasuryAddress
+            ? await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId)
+            : 0;
         setTreasuryBalance(() => balance.toString().slice(0, 7));
     };
 
     const fetchLargeData = async () => {
+        console.log(DAO);
         const newDAO = {
             ...DAO,
-            totalProposals: await getTotalProposals(DAO!.contractAddress!, DAO!.chainId!),
+            totalProposals: await getTotalProposals(DAO!.governorAddress!, DAO!.chainId!),
             totalMembers: await getNumberOfMintedTokens(DAO!.tokenAddress!, DAO!.chainId!),
             profileImage: await loadImage(DAO!.profileImage),
             coverImage: await loadImage(DAO!.coverImage),
@@ -286,7 +289,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const fetchIsOwner = async () => {
         if (
             (await signer_data.getAddress()) ===
-            (await getGovernorOwnerAddress(DAO.contractAddress, DAO.chainId))
+            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
         ) {
             setIsOwner(true);
         }
@@ -312,7 +315,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             handleNext(setCreateTreasuryStep);
             const renounceTx = await transferTreasuryOwnership(
                 treasuryContract.address,
-                DAO.contractAddress,
+                DAO.governorAddress,
                 signer_data
             );
             handleNext(setCreateTreasuryStep);
@@ -374,14 +377,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     useEffect(() => {
         fetchDAO();
-        fetchProposal();
-        fetchWhitelist();
     }, [isInitialized]);
 
     useIsomorphicLayoutEffect(() => {
         if (DAO && firstUpdate.current) {
             firstUpdate.current = false;
             fetchLargeData();
+            fetchProposal();
+            fetchWhitelist();
             fetchNftImage();
             fetchTreasuryBalance();
         }
@@ -671,7 +674,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             href={{
                                 pathname: `${address}/add-new-member`,
                                 query: {
-                                    daoAddress: DAO.contractAddress,
+                                    daoAddress: DAO.governorAddress,
                                     daoName: DAO.name,
                                     //TODO: DAO Blockchains supported
                                     blockchains: DAO.blockchain,
@@ -788,7 +791,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             url={{
                                 pathname: `${address}/create-proposal`,
                                 query: {
-                                    governorAddress: DAO.contractAddress,
+                                    address: DAO.url,
+                                    governorAddress: DAO.governorAddress,
                                     blockchain: DAO.blockchain[0],
                                 },
                             }}
@@ -864,17 +868,23 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <div className={"text-xl capitalize font-semibold"}>
                                 {DAO.name} treasury
                             </div>
-                            <div
-                                className={
-                                    "flex text-lightGray hover:text-gray5 hover:cursor-pointer"
-                                }
-                                onClick={() => navigator.clipboard.writeText(DAO.treasuryAddress)}
-                            >
-                                {DAO.treasuryAddress.slice(0, 6) +
-                                    "..." +
-                                    DAO.treasuryAddress.slice(-4)}
-                                <ClipboardCopyIcon className="h-6 w-5" />
-                            </div>
+                            {DAO.treasuryAddress ? (
+                                <div
+                                    className={
+                                        "flex text-lightGray hover:text-gray5 hover:cursor-pointer"
+                                    }
+                                    onClick={() =>
+                                        navigator.clipboard.writeText(DAO.treasuryAddress)
+                                    }
+                                >
+                                    {DAO.treasuryAddress.slice(0, 6) +
+                                        "..." +
+                                        DAO.treasuryAddress.slice(-4)}
+                                    <ClipboardCopyIcon className="h-6 w-5" />
+                                </div>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                     <form
@@ -900,7 +910,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 Send
                             </button>
                         ) : (
-                            <div className={"flex gap-2"}>
+                            <div className={"flex mt-4 gap-2"}>
                                 <div className={"w-7"}>
                                     <SpinnerLoading />
                                 </div>
