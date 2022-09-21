@@ -18,7 +18,7 @@ export const BlockchainSelector = ({
     });
 
     const renderValue = (chain: string) => {
-        const image = CHAINS_IMG[chain];
+        const image = chain ? CHAINS_IMG[chain] : CHAINS_IMG["Ethereum"];
         return (
             <>
                 <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full" />

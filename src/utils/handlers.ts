@@ -1,16 +1,8 @@
 import { BaseSyntheticEvent, ChangeEvent, Dispatch, SetStateAction } from "react";
 import { ICreate } from "types/forms";
 
-export const handleChangeBasic = <T extends ICreate>(
+export const handleChangeBasic = <T>(
     value: string | boolean | number | object,
-    set: Dispatch<SetStateAction<T>>,
-    field: string
-) => {
-    set((prev) => ({ ...prev, [field]: value }));
-};
-
-export const handleChangeBasicNewMember = <T>(
-    value: string | boolean | number,
     set: Dispatch<SetStateAction<T>>,
     field: string
 ) => {

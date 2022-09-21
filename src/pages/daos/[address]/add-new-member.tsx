@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { NextPage, NextPageContext } from "next";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import toast from "react-hot-toast";
-
 import Layout from "components/Layout/Layout";
 import { Button, InputText, BlockchainSelector, InputTextArea } from "components/Form";
 import BackButton from "components/Button/backButton";
@@ -13,10 +12,9 @@ import { IAddNewMember } from "types/forms";
 import {
     handleTextChangeAddNewMember,
     handleSelectorChangeNewMember,
-    handleChangeBasicNewMember,
     handleChangeBasicArray,
+    handleChangeBasic,
 } from "utils/handlers";
-
 import {
     getMoralisInstance,
     MoralisClassEnum,
@@ -24,17 +22,12 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 
-interface QueryUrlParams extends ParsedUrlQuery, NodeJS.Dict<string | string[]> {
+interface QueryUrlParams extends ParsedUrlQuery {
     daoName: string;
     nftAddress: string;
     governorAddress: string;
     blockchains: string[];
 }
-
-export const getServerSideProps = async (context: NextPageContext) => {
-    const { query } = context;
-    return { props: { query } };
-};
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IAddNewMember>({
@@ -50,17 +43,10 @@ const AddNewMember: NextPage = () => {
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
-        console.log("query:" + router.query.daoAddress);
-        handleChangeBasicNewMember(query.governorAddress, setFormData, "daoAddress");
-        handleChangeBasicNewMember(query.daoName, setFormData, "daoName");
+        handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
+        handleChangeBasic(query.daoName, setFormData, "daoName");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainEnabled");
-        // console.log(`DAO Address from query: ${formData.blockchainEnabled}`);
-        // console.log(`DAO Address from query: ${formData.blockchainEnabled[1]}`);
-    }, []);
-
-    // if
-    // let disabledBlockchains = CHAINS.filter((x) => !formData.blockchainEnabled.includes(x));
-    // console.log("disabledBlockchain",formData.blockchainEnabled);
+    }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();

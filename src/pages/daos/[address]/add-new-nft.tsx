@@ -35,12 +35,18 @@ import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { createNFTSteps } from "components/Dialog/Stepper";
 import { setURI } from "contract-interactions/writeNFTContract";
-import { addToken, deployNFTContract, getSupplyNumber } from "../../contract-interactions";
+import { addToken, deployNFTContract, getSupplyNumber } from "contract-interactions";
 
 interface QueryUrlParams extends ParsedUrlQuery {
+    url: string;
     governorAddress: string;
     blockchain: string;
 }
+
+// export const getServerSideProps = async (context: NextPageContext) => {
+//     const { query } = context;
+//     return { props: { query } };
+// };
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -51,16 +57,17 @@ const AddNewNFT: NextPage = () => {
         symbol: "",
         price: 0,
         contractAddress: "",
-        governorContractAddress: "",
+        governorAddress: "",
         ipfsAddress: "",
         blockchain: "",
     });
 
+    const router = useRouter();
     const { data: signer_data } = useSigner();
-    const confirmDialog = useDialogState();
-    const [activeStep, setActiveStep] = useState(0);
     const { switchNetwork } = useSwitchNetwork();
     const { isInitialized } = useMoralis();
+    const confirmDialog = useDialogState();
+    const [activeStep, setActiveStep] = useState(0);
 
     const ADD_NFT_CONTRACT = "0x7AC8ab6094Fc7f816420a7FfAc942A554831627c";
 
@@ -80,11 +87,10 @@ const AddNewNFT: NextPage = () => {
             })
         ];
     };
-    const router = useRouter();
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
-        (query) => query.equalTo("contractAddress", formData.governorContractAddress),
-        [formData.governorContractAddress],
+        (query) => query.equalTo("governorAddress", formData.governorAddress),
+        [formData.governorAddress],
         {
             autoFetch: false,
         }
@@ -109,10 +115,15 @@ const AddNewNFT: NextPage = () => {
     };
 
     useLayoutEffect(() => {
-        const query = router.query as QueryUrlParams;
-        handleChangeBasic(query.governorAddress, setFormData, "governorContractAddress");
-        handleChangeBasic(query.blockchain, setFormData, "blockchain");
+        fetchQuery();
     }, [router]);
+
+    const fetchQuery = () => {
+        const query = router.query as QueryUrlParams;
+        handleChangeBasic(query.url, setFormData, "governorUrl");
+        handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
+        handleChangeBasic(query.blockchain, setFormData, "blockchain");
+    };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -164,13 +175,13 @@ const AddNewNFT: NextPage = () => {
             handleNext();
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            const supplyNFT = await getSupplyNumber(contract.address, chainId);
+            // const supplyNFT = await getSupplyNumber(contract.address, chainId);
             handleNext();
             const setTx = await setURI(contract.address, signer_data, fullPath);
             handleNext();
             await setTx.wait();
             handleNext();
-            await addToken(formData.governorContractAddress, signer_data, contract.address);
+            await addToken(formData.governorAddress, signer_data, contract.address);
             console.log("token added");
             handleChangeBasic(contract.address, setFormData, "contractAddress");
             console.log("Moralis saving");
@@ -264,6 +275,7 @@ const AddNewNFT: NextPage = () => {
                                                     chain,
                                                     "blockchain"
                                                 );
+                                                fetchQuery();
                                             }}
                                             isDisabled={chain !== formData.blockchain}
                                         />
@@ -292,7 +304,7 @@ const AddNewNFT: NextPage = () => {
                 >
                     <p className="ml-7">Deployment successful!</p>
                     <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
-                    <Link href={`/daos/${formData.governorContractAddress}`}>
+                    <Link href={`/daos/${formData.governorUrl}`}>
                         <button
                             className="form-submit-button"
                             onClick={() => {

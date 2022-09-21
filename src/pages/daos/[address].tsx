@@ -17,7 +17,6 @@ import Tabs from "components/Tabs/Tabs";
 import { useEffect, useState } from "react";
 import { IDAOPageForm, IProposalPageForm } from "types/forms";
 import { getChainScanner } from "utils/network";
-import NFTExample from "assets/nft-example.png";
 import { ClipboardCopyIcon, ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
@@ -810,8 +809,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
                             <Link
                                 href={{
-                                    pathname: "/daos/add-new-nft",
+                                    pathname: `${address}/add-new-nft`,
                                     query: {
+                                        url: address,
                                         governorAddress: DAO.governorAddress,
                                         blockchain: DAO.blockchain,
                                     },

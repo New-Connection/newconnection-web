@@ -4,18 +4,18 @@ import Layout from "components/Layout";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ParsedUrlQuery } from "querystring";
-import { IDAOPageForm, IProposalPageForm } from "../../../../types/forms";
+import { IDAOPageForm, IProposalPageForm } from "types/forms";
 import {
     isProposalActive,
     proposalAgainstVotes,
     proposalDeadline,
     proposalForVotes,
 } from "contract-interactions";
-import ProposalCard from "../../../../components/Cards/ProposalCard";
+import ProposalCard from "components/Cards/ProposalCard";
 import * as React from "react";
-import { MockupTextCard } from "../../../../components/Mockup";
+import { MockupTextCard } from "components/Mockup";
 import { useRouter } from "next/router";
-import BackButton from "../../../../components/Button/backButton";
+import BackButton from "components/Button/backButton";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 

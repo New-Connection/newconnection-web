@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from "react";
-import type { GetServerSideProps, NextPage, NextPageContext } from "next";
+import type { NextPage } from "next";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useSigner } from "wagmi";
-import { IDAOPageForm, IProposalPageForm, IVotingNFTs } from "types/forms";
+import { IVotingNFTs } from "types/forms";
 import Layout from "components/Layout/Layout";
 import { handleTextChange, handleCheckboxChange, handleChangeBasic } from "utils/handlers";
 import { CheckboxGroup, InputText, Button, InputTextArea } from "components/Form";
@@ -29,11 +29,6 @@ interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
     governorAddress: string;
 }
-
-export const getServerSideProps = async (context: NextPageContext) => {
-    const { query } = context;
-    return { props: { query } };
-};
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -70,7 +65,7 @@ const CreateProposal: NextPage = () => {
     const { fetch } = useMoralisQuery(
         "DAO",
         (query) => {
-            return query.equalTo("contractAddress", formData.governorAddress);
+            return query.equalTo("governorAddress", formData.governorAddress);
         },
         [formData.governorAddress],
         {
@@ -86,12 +81,16 @@ const CreateProposal: NextPage = () => {
                 onSuccess: async (results) => {
                     const votingTokens = results[0];
                     const newVotingTokens: IVotingNFTs = {
-                        daoAddress: votingTokens.get("contractAddress"),
+                        daoAddress: votingTokens.get("governorAddress"),
                         daoTokenAddresess: votingTokens.get("tokenAddress"),
                     };
                     setVotingNFTs(() => newVotingTokens);
                     // TODO: DELETE
-                    handleChangeBasic(votingNFTs.daoTokenAddresess[0], setFormData, "tokenAddress");
+                    handleChangeBasic(
+                        newVotingTokens.daoTokenAddresess[0],
+                        setFormData,
+                        "tokenAddress"
+                    );
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
@@ -111,7 +110,7 @@ const CreateProposal: NextPage = () => {
 
     useEffect(() => {
         setupData();
-    }, [isInitialized]);
+    }, [router]);
 
     useIsomorphicLayoutEffect(() => {
         if (formData.governorAddress && firstUpdate.current) {
