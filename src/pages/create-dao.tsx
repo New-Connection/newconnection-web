@@ -19,7 +19,6 @@ import {
 import {
     handleChangeBasic,
     handleCheckboxChange,
-    handleChangeBasicArray,
     handleImageChange,
     handleTextChange,
     handleChangeBasicSimple,

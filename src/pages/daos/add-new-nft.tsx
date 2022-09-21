@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import {
     DragAndDropImage,
     InputAmount,
@@ -31,14 +31,11 @@ import { ParsedUrlQuery } from "querystring";
 import { StepperDialog } from "components/Dialog";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
-import { CHAINS, CHAINS_IMG, TEST_CHAINS_IDS } from "utils/blockchains";
+import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { createNFTSteps } from "components/Dialog/Stepper";
-
-import { getSupplyNumber } from "contract-interactions/viewNFTContract";
 import { setURI } from "contract-interactions/writeNFTContract";
-import { governorAddToken } from "contract-interactions/writeGovernorContract";
-import { deployNFTContract } from "contract-interactions/DeployNFTContract";
+import { addToken, deployNFTContract, getSupplyNumber } from "../../contract-interactions";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     governorAddress: string;
@@ -128,7 +125,7 @@ const AddNewNFT: NextPage = () => {
             return;
         }
 
-        switchNetwork(TEST_CHAINS_IDS[formData.blockchain]);
+        switchNetwork(TEST_CHAINS[formData.blockchain].id);
 
         handleReset();
         confirmDialog.toggle();
@@ -173,7 +170,7 @@ const AddNewNFT: NextPage = () => {
             handleNext();
             await setTx.wait();
             handleNext();
-            await governorAddToken(formData.governorContractAddress, signer_data, contract.address);
+            await addToken(formData.governorContractAddress, signer_data, contract.address);
             console.log("token added");
             handleChangeBasic(contract.address, setFormData, "contractAddress");
             console.log("Moralis saving");
