@@ -27,7 +27,7 @@ import {
 interface QueryUrlParams extends ParsedUrlQuery, NodeJS.Dict<string | string[]> {
     daoName: string;
     nftAddress: string;
-    daoAddress: string;
+    governorAddress: string;
     blockchains: string[];
 }
 
@@ -51,7 +51,7 @@ const AddNewMember: NextPage = () => {
     useEffect(() => {
         const query = router.query as QueryUrlParams;
         console.log("query:" + router.query.daoAddress);
-        handleChangeBasicNewMember(query.daoAddress, setFormData, "daoAddress");
+        handleChangeBasicNewMember(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasicNewMember(query.daoName, setFormData, "daoName");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainEnabled");
         // console.log(`DAO Address from query: ${formData.blockchainEnabled}`);

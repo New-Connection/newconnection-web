@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NextPage } from "next";
+import { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useSigner } from "wagmi";
@@ -29,6 +29,11 @@ interface QueryUrlParams extends ParsedUrlQuery {
     governorAddress: string;
     blockchain: string[];
 }
+
+export const getServerSideProps = async (context: NextPageContext) => {
+    const { query } = context;
+    return { props: { query } };
+};
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
@@ -81,7 +86,6 @@ const CreateProposal: NextPage = () => {
         handleReset();
         confirmDialog.toggle();
 
-        // TODO: Create Proposal
         let proposalId;
         try {
             proposalId = await createProposal(

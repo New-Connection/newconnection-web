@@ -17,8 +17,8 @@ import { StepperDialog } from "components/Dialog";
 import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";
-import { castVote } from "contract-interactions/";
-import { VotingType } from "contract-interactions/";
+import { castVote } from "contract-interactions";
+import { VotingType } from "contract-interactions";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     detailProposal: string;
