@@ -250,10 +250,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         const newDAO = {
             ...DAO,
             totalProposals: await getTotalProposals(DAO!.governorAddress!, DAO!.chainId!),
-            totalMembers: await getNumberOfMintedTokens(DAO!.tokenAddress!, DAO!.chainId!),
+            totalMembers: await getNumberOfMintedTokens(DAO!.tokenAddress[0]!, DAO!.chainId!),
             profileImage: await loadImage(DAO!.profileImage),
             coverImage: await loadImage(DAO!.coverImage),
         } as IDAOPageForm;
+        console.log("DAO", DAO!.governorAddress!);
         setDAO(() => newDAO);
     };
 
