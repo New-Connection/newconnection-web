@@ -9,7 +9,7 @@ import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 import Layout from "components/Layout/Layout";
 import { Button, InputText, BlockchainSelector, InputTextArea } from "components/Form";
 import BackButton from "components/Button/backButton";
-import NFTCardMockup from "components/Cards/NFTCard";
+import { NFTCardMockup } from "components/Cards/NFTCard";
 import { validateForm } from "utils/validate";
 import { IAddNewMember } from "types/forms";
 import {

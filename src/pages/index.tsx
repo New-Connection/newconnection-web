@@ -11,7 +11,7 @@ import { useDialogState } from "ariakit";
 
 import Tabs from "components/Tabs/Tabs";
 import DAOCard from "components/Cards/DAOCard";
-import NFTCardMockup from "components/Cards/NFTCard";
+import { NFTCardMockup } from "components/Cards/NFTCard";
 import ProposalCard from "components/Cards/ProposalCard";
 import { StepperDialog } from "components/Dialog";
 import { useIsMounted } from "hooks";

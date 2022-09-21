@@ -455,7 +455,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     }
 
     const NFTImage = ({ className, index }: INFTImage) => {
-        let tempImage;
         return (
             <div className="flex justify-center">
                 {
