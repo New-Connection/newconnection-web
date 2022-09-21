@@ -12,7 +12,7 @@ import BackButton from "components/Button/backButton";
 import { useDialogState } from "ariakit";
 import { validateForm } from "utils/validate";
 import { CHAINS } from "utils/blockchains";
-import { governorCreateProposal } from "contract-interactions/writeGovernorContract";
+import { createProposal } from "contract-interactions/writeGovernorContract";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { Signer } from "ethers";
@@ -129,7 +129,7 @@ const CreateProposal: NextPage = () => {
 
         let proposalId;
         try {
-            proposalId = await governorCreateProposal(
+            proposalId = await createProposal(
                 formData.governorAddress,
                 signer_data as Signer,
                 formData.name,
@@ -160,30 +160,6 @@ const CreateProposal: NextPage = () => {
             return;
         }
     }
-
-    const FileAndLinkForm = () => {
-        return (
-            <div className="flex justify-between gap-10 ">
-                {/* TODO: New to change it for drag and drop */}
-                <InputText
-                    label="File (optional)"
-                    name="file"
-                    placeholder="Attached file"
-                    handleChange={(event) => handleTextChange(event, setFormData)}
-                    className="w-1/2"
-                    disabled={true}
-                />
-                <InputText
-                    label="Link Forum (optional)"
-                    name="linkForum"
-                    placeholder="Link to discussion forum"
-                    handleChange={(event) => handleTextChange(event, setFormData)}
-                    className="w-1/2"
-                    disabled
-                />
-            </div>
-        );
-    };
 
     return (
         <div>
@@ -223,7 +199,7 @@ const CreateProposal: NextPage = () => {
                         <CheckboxGroup
                             label="Proposal Blockchain"
                             description="You can choose one or more blockchains"
-                            values={CHAINS}
+                            values={[...CHAINS]}
                             enabledValues={formData.enabledBlockchains}
                             handleChange={(event) =>
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")

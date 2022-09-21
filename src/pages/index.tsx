@@ -1,14 +1,11 @@
 import * as React from "react";
 import { FC } from "react";
 import type { NextPage } from "next";
-import Layout from "components/Layout/Layout";
-import Head from "next/head";
 import Image from "next/image";
 import { useAccount } from "wagmi";
 import Link from "next/link";
-import BasicAvatar from "assets/basic_avatar.jpg";
+import basicAvatar from "assets/basic-dao-logo.png";
 import { useDialogState } from "ariakit";
-
 import Tabs from "components/Tabs/Tabs";
 import DAOCard from "components/Cards/DAOCard";
 import { NFTCardMockup } from "components/Cards/NFTCard";
@@ -66,7 +63,7 @@ const Home: NextPage = () => {
     const AccountInfo = () => {
         return (
             <div className="flex p-4 gap-5 content-center">
-                <Image src={BasicAvatar} width={"100"} height={"100"} />
+                <Image src={basicAvatar} width={"100"} height={"100"} />
                 <div>
                     <p>Hello,</p>
                     <p className="text-2xl font-bold">{address}</p>

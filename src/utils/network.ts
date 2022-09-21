@@ -1,4 +1,4 @@
-import { chains, networkDetails } from "./constants";
+import { chains, networkDetails } from "./blockchains";
 
 export function chainDetails(chainId: unknown) {
     if (typeof chainId !== "string") return {};
@@ -12,7 +12,7 @@ export function chainDetails(chainId: unknown) {
         return { network, chain };
     } else {
         const network = networkDetails[id];
-        //console.log(network);
+        // console.log(network);
         const chain = chains.find((c) => c.id === id);
         return { network, chain };
     }
@@ -22,8 +22,5 @@ export function getChainScanner(chainId: number | undefined, address: string | u
     if (!chainId || !address) {
         return "";
     }
-    switch (chainId) {
-        case 5:
-            return "https://goerli.etherscan.io/address/" + address;
-    }
+    return `${networkDetails[chainId].blockExplorerURL}/address/${address}`;
 }

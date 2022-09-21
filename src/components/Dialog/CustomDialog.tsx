@@ -11,7 +11,7 @@ interface NFTDetailDialogProps {
     className?: string;
 }
 
-export const NFTDetailDialog = ({ dialog, className, children }: NFTDetailDialogProps) => {
+export const CustomDialog = ({ dialog, className, children }: NFTDetailDialogProps) => {
     return (
         <Dialog state={dialog} className={classNames("dialog", className)}>
             <DialogHeader title="" dialog={dialog}></DialogHeader>

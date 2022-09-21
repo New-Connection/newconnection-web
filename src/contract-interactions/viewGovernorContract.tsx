@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
-import { GOVERNOR_ABI } from "../abis";
-import { networkDetails, SECONDS_IN_BLOCK } from "../utils/constants";
+import { GOVERNOR_ABI } from "abis";
+import { networkDetails } from "utils/blockchains";
+import { SECONDS_IN_BLOCK } from "utils/constants";
 import { BaseProvider } from "@ethersproject/providers/src.ts/base-provider";
 
 enum ProposalState {
@@ -14,7 +15,7 @@ enum ProposalState {
     Executed,
 }
 
-export async function getName(contractAddress: string, chainId: number) {
+export async function getGovernorName(contractAddress: string, chainId: number) {
     let provider = networkDetails[chainId].chainProviders as BaseProvider;
     const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, provider);
     return await governor.name();
@@ -24,6 +25,12 @@ export async function getGovernorInfoURI(contractAddress: string, chainId: numbe
     let provider = networkDetails[chainId].chainProviders as BaseProvider;
     const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, provider);
     return await governor.governorInfoURI();
+}
+
+export async function getGovernorOwnerAddress(contractAddress: string, chainId: number) {
+    let provider = networkDetails[chainId].chainProviders as BaseProvider;
+    const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, provider);
+    return await governor.owner();
 }
 
 export async function getTotalProposals(contractAddress: string, chainId: number) {

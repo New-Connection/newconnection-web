@@ -1,6 +1,5 @@
 import { ethers, Signer } from "ethers";
-import { GOVERNANCE_NFT_ABI } from "../abis";
-import toast from "react-hot-toast";
+import { GOVERNANCE_NFT_ABI } from "abis";
 
 interface IAddToWhitelist {
     addressNFT: string;
@@ -36,12 +35,7 @@ export async function mintReserveAndDelegation(contractAddress: string, signer: 
     console.log(delegateTx);
     console.log("Tx hash", tx.hash);
 
-    if (tx) {
-        if (tx.blockNumber) {
-            toast.success(`DONE ✅ successful mint!`);
-            console.log(tx);
-        }
-    }
+    return tx;
     // const supply = await erc20_rw.totalSupply();
     // console.log(supply);
 }

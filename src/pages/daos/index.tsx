@@ -5,11 +5,13 @@ import Link from "next/link";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
-import basicAvatar from "assets/basic_avatar.jpg";
+import basicAvatar from "assets/basic-dao-logo.png";
 import { useMoralis } from "react-moralis";
 import { IDAOPageForm } from "types/forms";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { getTotalProposals } from "contract-interactions/viewGovernorContract";
+import { useNetwork } from "wagmi";
+import { isBlockchainSupported } from "utils/blockchains";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -25,13 +27,19 @@ const DAOsPage: NextPage = () => {
             autoFetch: false,
         }
     );
+    const { chain } = useNetwork();
     const { isInitialized } = useMoralis();
+
+    //
+    // FUNCTIONS
+    // ----------------------------------------------------------------------
 
     const fetchDB = () => {
         if (isInitialized) {
             DAOsQuery({
                 onSuccess: (results) => {
                     const daos = results.map((dao) => {
+                        const url = dao.get("url");
                         const contractAddress = dao.get("contractAddress");
                         const name = dao.get("name");
                         const description = dao.get("description");
@@ -42,6 +50,7 @@ const DAOsPage: NextPage = () => {
                         const totalVotes = 0;
 
                         return {
+                            url,
                             name,
                             contractAddress,
                             description,
@@ -71,18 +80,6 @@ const DAOsPage: NextPage = () => {
         }
     };
 
-    // if we use isInitialized we call fetch only once when reload page or move to new page
-    useEffect(() => {
-        fetchDB();
-    }, [isInitialized]);
-
-    useIsomorphicLayoutEffect(() => {
-        if (DAOs && firstUpdate.current) {
-            firstUpdate.current = false;
-            fetchLargeData();
-        }
-    });
-
     const fetchLargeData = async () => {
         const newDAOs = await Promise.all(
             DAOs!.map(async (dao) => {
@@ -95,6 +92,26 @@ const DAOsPage: NextPage = () => {
         );
         setDAOs(() => newDAOs);
     };
+
+    //
+    // EFFECTS
+    // ----------------------------------------------------------------------
+
+    // if we use isInitialized we call fetch only once when reload page or move to new page
+    useEffect(() => {
+        fetchDB();
+    }, [isInitialized]);
+
+    useIsomorphicLayoutEffect(() => {
+        if (DAOs && firstUpdate.current) {
+            firstUpdate.current = false;
+            fetchLargeData();
+        }
+    });
+
+    //
+    // CUSTOM COMPONENTS
+    // ----------------------------------------------------------------------
 
     const DAOCard = ({ name, description, profileImage, address, isActive, proposals }) => {
         return (
@@ -110,6 +127,7 @@ const DAOsPage: NextPage = () => {
                                 width={"150"}
                                 height={"150"}
                                 layout={"responsive"}
+                                priority={true}
                                 src={!isIpfsAddress(profileImage) ? profileImage : basicAvatar}
                                 className="rounded-2xl"
                             />
@@ -162,7 +180,12 @@ const DAOsPage: NextPage = () => {
                         <div className="flex justify-between items-center">
                             <h1 className="text-highlighter">DAOs</h1>
                             <Link href="./create-new-dao">
-                                <button className="secondary-button h-10">Create DAO</button>
+                                <button
+                                    className="secondary-button h-10"
+                                    disabled={!isBlockchainSupported(chain)}
+                                >
+                                    Create DAO
+                                </button>
                             </Link>
                         </div>
 
@@ -174,7 +197,7 @@ const DAOsPage: NextPage = () => {
                                             key={index}
                                             name={dao.name}
                                             description={dao.description}
-                                            address={dao.contractAddress}
+                                            address={dao.url}
                                             profileImage={dao.profileImage}
                                             isActive={dao.isActive}
                                             proposals={dao.totalProposals}

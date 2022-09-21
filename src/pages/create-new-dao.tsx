@@ -5,15 +5,19 @@ import Link from "next/link";
 import Layout from "components/Layout/Layout";
 import { Button } from "components/Form";
 import BackButton from "components/Button/backButton";
+import { isBlockchainSupported } from "utils/blockchains";
+import { useNetwork } from "wagmi";
+
+interface ICard {
+    title: string;
+    subtitle: string;
+    buttonTitle: string;
+    linkToPage: string;
+    isDisabled?: boolean;
+}
 
 const CreateNewDAO: NextPage = () => {
-    interface ICard {
-        title: string;
-        subtitle: string;
-        buttonTitle: string;
-        linkToPage: string;
-        isDisabled?: boolean;
-    }
+    const { chain } = useNetwork();
 
     const Card = ({ title, subtitle, buttonTitle, linkToPage, isDisabled = false }: ICard) => {
         return (
@@ -61,6 +65,7 @@ const CreateNewDAO: NextPage = () => {
                                 subtitle="If you don't have any NFT collections created, you can mint them here"
                                 buttonTitle="Mint NFT"
                                 linkToPage="/create-nft"
+                                isDisabled={!isBlockchainSupported(chain)}
                             />
                         </div>
                     </form>

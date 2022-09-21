@@ -6,6 +6,7 @@ export interface ICreate {
 }
 
 export interface ICreateDAO extends ICreate {
+    url: string;
     goals: string;
     profileImage: any;
     coverImage: any;
@@ -30,6 +31,7 @@ export interface IDAOPageForm extends ICreateDAO {
     activeProposals?: number;
     nftImage?: any;
     isActive?: boolean;
+    treasuryAddress?: string;
 }
 
 export interface IVotingNFTs {

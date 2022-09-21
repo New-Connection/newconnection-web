@@ -1,11 +1,11 @@
 import React from "react";
-import { moralisAppId, moralisServerUrl } from "../utils/constants";
+import { moralisAppId, moralisServerUrl } from "utils/constants";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "react-query"; // it makes fetching, caching, synchronizing and updating server state
 import { WagmiConfig } from "wagmi";
 import type { AppProps } from "next/app";
-import "../styles/globals.css";
-import { WalletConfig } from "../components/Web3";
+import "styles/globals.css";
+import { WalletConfig } from "components/Web3";
 import { MoralisProvider } from "react-moralis";
 import Script from "next/script";
 import "nprogress/nprogress.css";

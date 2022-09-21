@@ -24,11 +24,11 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { StepperDialog } from "components/Dialog";
-import { deployNFTContract } from "contract-interactions/DeployNFTContract";
+import { StepperDialog, handleReset, handleNext } from "components/Dialog";
+import { deployNFTContract } from "contract-interactions/";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
-import { CHAINS, CHAINS_IMG, TEST_CHAINS_IDS } from "utils/blockchains";
+import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { setURI } from "contract-interactions/writeNFTContract";
 import { createNFTSteps } from "components/Dialog/Stepper";
@@ -53,14 +53,6 @@ const CreateNFT: NextPage = () => {
 
     const { switchNetwork } = useSwitchNetwork();
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
-
     const calculateSupply = () => {
         return formData[
             CHAINS.find((chain) => {
@@ -80,9 +72,9 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        switchNetwork(TEST_CHAINS_IDS[formData.blockchain]);
+        switchNetwork(TEST_CHAINS[formData.blockchain].id);
 
-        handleReset();
+        handleReset(setActiveStep);
         confirmDialog.toggle();
 
         let fullPath: string;
@@ -94,7 +86,7 @@ const CreateNFT: NextPage = () => {
             handleChangeBasic(fullPath, setFormData, "ipfsAddress");
         } catch (error) {
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Couldn't save your NFT on IPFS. Please try again");
             return;
         }
@@ -108,27 +100,26 @@ const CreateNFT: NextPage = () => {
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
-                price: formData.price.toString(),
+                price: formData.price ? formData.price.toString() : "0",
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
                 endMintId: calculateSupply(),
             });
-            handleNext();
+            handleNext(setActiveStep);
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            const supplyNFT = await getSupplyNumber(contract.address, chainId);
-            handleNext();
+            handleNext(setActiveStep);
             const setTx = await setURI(contract.address, signer_data, fullPath);
-            handleNext();
+            handleNext(setActiveStep);
             await setTx.wait();
-            handleNext();
-            handleNext();
+            handleNext(setActiveStep);
+            handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
             console.log(error);
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Please approve transaction to create DAO");
             return;
         }

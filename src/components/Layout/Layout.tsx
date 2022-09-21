@@ -3,7 +3,7 @@ import classNames from "classnames";
 
 import Header from "./Header";
 import Footer from "./Footer";
-import CustomToast from "../Toast/CustomToast";
+import CustomToast from "components/Toast/CustomToast";
 import HeadInfo from "./HeadInfo";
 import SwitchNetworkBanner from "components/Banners/SwitchNetworksBanner";
 // import NewFeaturesBanner from "components/Banners/NewFeaturesBanner";

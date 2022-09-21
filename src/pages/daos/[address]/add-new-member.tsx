@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { NextPage } from "next";
+import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { useSigner } from "wagmi";
 import toast from "react-hot-toast";
-import { CHAINS, CHAINS_IMG } from "utils/blockchains";
 
 import Layout from "components/Layout/Layout";
 import { Button, InputText, BlockchainSelector, InputTextArea } from "components/Form";
@@ -33,6 +31,11 @@ interface QueryUrlParams extends ParsedUrlQuery, NodeJS.Dict<string | string[]> 
     blockchains: string[];
 }
 
+export const getServerSideProps = async (context: NextPageContext) => {
+    const { query } = context;
+    return { props: { query } };
+};
+
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IAddNewMember>({
         daoName: "",
@@ -43,30 +46,22 @@ const AddNewMember: NextPage = () => {
         blockchainEnabled: [],
         note: "",
     });
-
-    const ButtonStatus = ["Active", "Loading", "Success"];
-    const [buttonStatus, setButtonStatus] = useState(ButtonStatus[0]);
-
     const router = useRouter();
-    // const { data: signer_data } = useSigner();
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
+        console.log("query:" + router.query.daoAddress);
         handleChangeBasicNewMember(query.daoAddress, setFormData, "daoAddress");
         handleChangeBasicNewMember(query.daoName, setFormData, "daoName");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainEnabled");
-        console.log(`DAO Address from query: ${formData.blockchainEnabled}`);
-        console.log(`DAO Address from query: ${formData.blockchainEnabled[1]}`);
-        // handleChangeBasicNewMember(
-        //     formData.blockchainEnabled[0],
-        //     setFormData,
-        //     "blockchainSelected"
-        // );
+        // console.log(`DAO Address from query: ${formData.blockchainEnabled}`);
+        // console.log(`DAO Address from query: ${formData.blockchainEnabled[1]}`);
     }, []);
 
     // if
-    let disabledBlockchains = CHAINS.filter((x) => !formData.blockchainEnabled.includes(x));
-    console.log("disabledBlockchain", disabledBlockchains);
+    // let disabledBlockchains = CHAINS.filter((x) => !formData.blockchainEnabled.includes(x));
+    // console.log("disabledBlockchain",formData.blockchainEnabled);
+
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
@@ -93,10 +88,11 @@ const AddNewMember: NextPage = () => {
             });
             form.reset();
         } catch (error) {
-            toast.error("Сouldn't save your . Please try again");
+            toast.error("Couldn't save your . Please try again");
             return;
         }
     }
+
     return (
         <div>
             <Layout className="layout-base">
@@ -111,8 +107,8 @@ const AddNewMember: NextPage = () => {
                         <InputText
                             label="Wallet"
                             name="walletAddress"
-                            placeholder="Your wallet adress"
-                            labelTitle="Your wallet adress"
+                            placeholder="Your wallet address"
+                            labelTitle="Your wallet address"
                             maxLength={42}
                             handleChange={(event) =>
                                 handleTextChangeAddNewMember(event, setFormData)
@@ -123,18 +119,22 @@ const AddNewMember: NextPage = () => {
                         </label>
                         <NFTCardMockup className="border-purple border-4 rounded-xl" />
 
-                        <BlockchainSelector
-                            name="blockchainSelected"
-                            label="Choose your priopity blockchain"
-                            disablesValues={disabledBlockchains}
-                            handleChange={(event) => {
-                                return handleSelectorChangeNewMember(
-                                    event,
-                                    setFormData,
-                                    "blockchainSelected"
-                                );
-                            }}
-                        />
+                        {formData.blockchainEnabled.length > 0 ? (
+                            <BlockchainSelector
+                                name="blockchainSelected"
+                                label="Choose your priority blockchain"
+                                enabledValues={formData.blockchainEnabled}
+                                handleChange={(event) => {
+                                    return handleSelectorChangeNewMember(
+                                        event,
+                                        setFormData,
+                                        "blockchainSelected"
+                                    );
+                                }}
+                            />
+                        ) : (
+                            <></>
+                        )}
                         <InputTextArea
                             name="note"
                             label="Note (optional)"

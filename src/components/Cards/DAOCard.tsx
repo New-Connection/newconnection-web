@@ -1,5 +1,5 @@
 import * as React from "react";
-import BasicAvatar from "assets/basic_avatar.jpg";
+import BasicAvatar from "assets/basic-dao-logo.png";
 import Image from "next/image";
 
 const DAOCard = (props) => {

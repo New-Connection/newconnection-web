@@ -7,12 +7,11 @@ export const BlockchainSelector = ({
     name,
     label,
     className,
-    defaultValue = "Ethereum",
-    disablesValues,
+    enabledValues,
     handleChange,
 }: ISelectorProps) => {
     const select = useSelectState({
-        defaultValue: defaultValue,
+        defaultValue: enabledValues[0],
         setValueOnMove: true,
         sameWidth: true,
         gutter: 4,
@@ -48,56 +47,68 @@ export const BlockchainSelector = ({
                     state={select}
                     className="shadow-1 z-10 max-h-[280px] w-fit min-w-full overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
-                    {CHAINS.map((chain) => (
-                        <>
-                            {
-                                // if disablesValues exist
-                                disablesValues ? (
-                                    <>
-                                        {disablesValues.includes(chain) ? (
-                                            <label key={chain.toUpperCase()} className="">
-                                                <SelectItem
-                                                    key={chain}
-                                                    value={chain}
-                                                    className="btn-state h-12 border-none bg-gray rounded-md text-gray2 flex scroll-m-2 items-center gap-2 p-2"
-                                                    setValueOnClick={handleChange}
-                                                    disabled={true}
-                                                >
-                                                    {renderValue(chain)}
-                                                </SelectItem>
-                                            </label>
-                                        ) : (
-                                            <label key={chain.toUpperCase()} className="">
-                                                <SelectItem
-                                                    key={chain}
-                                                    value={chain}
-                                                    className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"
-                                                    setValueOnClick={handleChange}
-                                                    disabled={false}
-                                                >
-                                                    {renderValue(chain)}
-                                                </SelectItem>
-                                            </label>
-                                        )}
-                                    </>
-                                ) : (
-                                    <label key={chain.toUpperCase()} className="">
-                                        <SelectItem
-                                            key={chain}
-                                            value={chain}
-                                            className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"
-                                            setValueOnClick={handleChange}
-                                            disabled={false}
-                                        >
-                                            {renderValue(chain)}
-                                        </SelectItem>
-                                    </label>
-                                )
-                            }
-                        </>
-                    ))}
+                    {CHAINS.filter((chain) => chain != select.value).map((chain) =>
+                        enabledValues.includes(chain) ? (
+                            <SelectItem
+                                key={chain}
+                                value={chain}
+                                className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"
+                                setValueOnClick={handleChange}
+                                disabled={false}
+                            >
+                                {renderValue(chain)}
+                            </SelectItem>
+                        ) : (
+                            <SelectItem
+                                key={chain}
+                                value={chain}
+                                className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"
+                                setValueOnClick={handleChange}
+                                disabled={true}
+                            >
+                                {renderValue(chain)}
+                            </SelectItem>
+                        )
+                    )}
                 </SelectPopover>
             </div>
         </div>
     );
 };
+
+{
+    /*{CHAINS.filter((x) => x != select.value).map((chain, index) => (*/
+}
+
+<>
+    {/*{console.log(index + "  " + chain)}*/}
+    <>
+        {/*{enabledValues.includes(chain) ? (*/}
+        {/*    <label key={chain.toUpperCase()} className="">*/}
+        {/*        <SelectItem*/}
+        {/*            key={chain}*/}
+        {/*            value={chain}*/}
+        {/*            className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"*/}
+        {/*            setValueOnClick={handleChange}*/}
+        {/*            disabled={false}*/}
+        {/*        >*/}
+        {/*            {renderValue(chain)}*/}
+        {/*        </SelectItem>*/}
+        {/*    </label>*/}
+        {/*) : (*/}
+        {/*<label key={index} className="">*/}
+        {/*    <SelectItem*/}
+        {/*        value={chain}*/}
+        {/*        className="btn-state h-12 border-none bg-gray rounded-md text-gray2 flex scroll-m-2 items-center gap-2 p-2"*/}
+        {/*        setValueOnClick={handleChange}*/}
+        {/*        disabled={false}*/}
+        {/*    >*/}
+        {/*        {renderValue(chain)}*/}
+        {/*    </SelectItem>*/}
+        {/*</label>*/}
+        {/*)}*/}
+    </>
+</>;
+{
+    /*))}*/
+}
