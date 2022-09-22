@@ -87,6 +87,13 @@ export interface IProposalPageForm extends ICreateProposal {
     deadline?: number;
 }
 
+export interface INFTVoting {
+    title: string;
+    type: string;
+    image: string;
+    tokenAddress: string;
+}
+
 export interface IAddNewMember {
     daoName: string;
     walletAddress: string;
