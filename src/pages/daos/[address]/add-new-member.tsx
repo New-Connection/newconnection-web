@@ -4,7 +4,13 @@ import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
-import { Button, InputText, BlockchainSelector, InputTextArea } from "components/Form";
+import {
+    Button,
+    InputText,
+    BlockchainSelector,
+    InputTextArea,
+    RadioSelector,
+} from "components/Form";
 import BackButton from "components/Button/backButton";
 import { NFTCardMockup } from "components/Cards/NFTCard";
 import { validateForm } from "utils/validate";
@@ -34,6 +40,7 @@ const AddNewMember: NextPage = () => {
         daoName: "",
         walletAddress: "",
         daoAddress: "",
+        tokenAddress: [],
         nftID: [0],
         blockchainSelected: "",
         blockchainEnabled: [],
@@ -51,16 +58,10 @@ const AddNewMember: NextPage = () => {
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
-        // TODO: Need to create Signature Request
-        // https://wagmi.sh/examples/sign-in-with-ethereum
-        // if (!signer_data) {
-        //     toast.error("Please connect wallet");
-        //     return;
-        // }
         if (!validateForm(formData, ["note"])) {
             return;
         }
-        console.log(formData);
+
         try {
             //const toastID = toast.loading("Please wait...", { position: "bottom-center" });
             const moralisProposal = getMoralisInstance(MoralisClassEnum.WHITELIST);
@@ -101,11 +102,22 @@ const AddNewMember: NextPage = () => {
                             }
                         />
                         <label>
-                            <div className="input-label">Membership NFT</div>
+                            <div className="input-label">Choose voting tokens</div>
                         </label>
-                        <NFTCardMockup className="border-purple border-4 rounded-xl" />
+                        {formData ? (
+                            <RadioSelector
+                                name="tokenAddress"
+                                labels={[...formData.tokenAddress]}
+                                handleChange={(event) =>
+                                    handleTextChangeAddNewMember(event, setFormData)
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
+                        {/* <NFTCardMockup className="border-purple border-4 rounded-xl" /> */}
 
-                        {formData.blockchainEnabled.length > 0 ? (
+                        {/* {formData.blockchainEnabled.length > 0 ? (
                             <BlockchainSelector
                                 name="blockchainSelected"
                                 label="Choose your priority blockchain"
@@ -120,7 +132,7 @@ const AddNewMember: NextPage = () => {
                             />
                         ) : (
                             <></>
-                        )}
+                        )} */}
                         <InputTextArea
                             name="note"
                             label="Note (optional)"

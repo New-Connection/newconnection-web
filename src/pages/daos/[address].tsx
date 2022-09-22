@@ -846,7 +846,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     },
                                 }}
                             >
-                                <button className="settings-button bg-purple text-white">
+                                <button className="secondary-button bg-purple text-white">
                                     Add NFT
                                 </button>
                             </Link>

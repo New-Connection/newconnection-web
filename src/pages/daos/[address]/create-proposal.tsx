@@ -3,10 +3,15 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useSigner } from "wagmi";
-import { IVotingNFTs } from "types/forms";
+import { IMultiNFTVoting } from "types/forms";
 import Layout from "components/Layout/Layout";
-import { handleTextChange, handleCheckboxChange, handleChangeBasic } from "utils/handlers";
-import { CheckboxGroup, InputText, Button, InputTextArea } from "components/Form";
+import {
+    handleTextChange,
+    handleCheckboxChange,
+    handleChangeBasic,
+    handleTextChangeAddNewMember,
+} from "utils/handlers";
+import { CheckboxGroup, InputText, Button, InputTextArea, RadioSelector } from "components/Form";
 import { ICreateProposal } from "types/forms";
 import BackButton from "components/Button/backButton";
 import { useDialogState } from "ariakit";
@@ -45,10 +50,8 @@ const CreateProposal: NextPage = () => {
         enabledBlockchains: [],
     });
     const router = useRouter();
-    const [votingNFTs, setVotingNFTs] = useState<IVotingNFTs>();
+    const [votingNFTs, setVotingNFTs] = useState<IMultiNFTVoting>();
     const { data: signer_data } = useSigner();
-    //const [governorAddress, setGovernorAddress] = useState(null);
-    //console.log("1", governorAddress);
     const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
@@ -72,16 +75,12 @@ const CreateProposal: NextPage = () => {
             await fetch({
                 onSuccess: async (results) => {
                     const votingTokens = results[0];
-                    const newVotingTokens: IVotingNFTs = {
-                        daoAddress: votingTokens.get("governorAddress"),
-                        daoTokenAddresess: votingTokens.get("tokenAddress"),
+                    const newVotingTokens: IMultiNFTVoting = {
+                        daoAddress: await votingTokens.get("governorAddress"),
+                        tokenAddress: await votingTokens.get("tokenAddress"),
                     };
                     setVotingNFTs(() => newVotingTokens);
-                    handleChangeBasic(
-                        newVotingTokens.daoTokenAddresess[0],
-                        setFormData,
-                        "tokenAddress"
-                    );
+                    handleChangeBasic(newVotingTokens.tokenAddress[0], setFormData, "tokenAddress");
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
@@ -132,7 +131,7 @@ const CreateProposal: NextPage = () => {
                 formData.governorAddress,
                 signer_data as Signer,
                 formData.name,
-                votingNFTs.daoTokenAddresess[0]
+                votingNFTs.tokenAddress[0]
             );
             handleNext(setActiveStep);
             handleNext(setActiveStep);
@@ -194,7 +193,6 @@ const CreateProposal: NextPage = () => {
                             isRequired
                         />
                         {/* <FileAndLinkForm /> */}
-
                         <CheckboxGroup
                             label="Proposal Blockchain"
                             description="You can choose one or more blockchains"
@@ -204,6 +202,18 @@ const CreateProposal: NextPage = () => {
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
                         />
+                        <p>Choose voting token</p>
+                        {votingNFTs ? (
+                            <RadioSelector
+                                name="tokenAddress"
+                                labels={[...votingNFTs.tokenAddress]}
+                                handleChange={(event) =>
+                                    handleTextChangeAddNewMember(event, setFormData)
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
                         <Button className="mt-5">Create Proposal</Button>
                     </form>
                 </section>
