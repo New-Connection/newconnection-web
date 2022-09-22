@@ -6,6 +6,7 @@ import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
 import { ParsedUrlQuery } from "querystring";
 import Image from "next/image";
+import { Dialog } from "ariakit/dialog";
 import basicAvatar from "assets/basic-dao-logo.png";
 import basicCover from "assets/basic-dao-cover.png";
 import discordLogo from "assets/social/discord.png";
@@ -15,7 +16,7 @@ import { CHAINS_IMG, networkDetails } from "utils/blockchains";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
 import { useEffect, useState } from "react";
-import { IDAOPageForm, IProposalPageForm } from "types/forms";
+import { IDAOPageForm, IProposalPageForm, INFTVoting } from "types/forms";
 import { getChainScanner } from "utils/network";
 import { ClipboardCopyIcon, ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
@@ -36,7 +37,11 @@ import {
 } from "contract-interactions/";
 import toast from "react-hot-toast";
 import ProposalCard from "components/Cards/ProposalCard";
-import { getNumberOfMintedTokens, getTokenURI } from "contract-interactions/viewNftContract";
+import {
+    getNftName,
+    getNumberOfMintedTokens,
+    getTokenURI,
+} from "contract-interactions/viewNftContract";
 import defaultImage from "assets/empty-token.webp";
 import {
     getTotalProposals,
@@ -93,6 +98,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
+    const [NFTs, setNFTs] = useState<INFTVoting[]>();
+    const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
 
     // DB queries
     const { fetch: DAOsQuery } = useMoralisQuery(
@@ -126,7 +133,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     // nft section
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
-    const [nftImage, setNftImage] = useState("");
     const detailNFTDialog = useDialogState();
 
     // treasury section
@@ -137,7 +143,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [sending, setSending] = useState(false);
     const createTreasuryDialog = useDialogState();
     const contributeTreasuryDialog = useDialogState();
-
+    console.log(DAO);
     //
     // FUNCTIONS
     // ----------------------------------------------------------------------
@@ -233,10 +239,26 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         });
     };
 
-    const fetchNftImage = async () => {
-        const image = await loadImage(await getTokenURI(DAO.tokenAddress[0], DAO.chainId));
-        setNftImage(() => image);
-    };
+    async function fetchNFTImage(tokenAddress) {
+        const image = await loadImage(await getTokenURI(tokenAddress, DAO.chainId));
+        //setNftImage(() => image);
+        return image;
+    }
+
+    async function fetchNFTData() {
+        const nftsArray: INFTVoting[] = await Promise.all(
+            DAO!.tokenAddress!.map(async (tokenAddress) => {
+                const nft: INFTVoting = {
+                    title: await getNftName(tokenAddress, DAO.chainId),
+                    type: await getNftName(tokenAddress, DAO.chainId),
+                    image: await fetchNFTImage(tokenAddress),
+                    tokenAddress: tokenAddress,
+                };
+                return nft;
+            })
+        );
+        setNFTs(nftsArray);
+    }
 
     const fetchTreasuryBalance = async () => {
         const balance = DAO.treasuryAddress
@@ -381,13 +403,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     useEffect(() => {
         fetchDAO();
     }, [isInitialized]);
-
     useIsomorphicLayoutEffect(() => {
         if (DAO && firstUpdate.current) {
             fetchProposal();
             fetchWhitelist();
             fetchLargeData();
-            fetchNftImage();
+            fetchNFTData();
             fetchTreasuryBalance();
             firstUpdate.current = false;
         }
@@ -617,12 +638,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         index?: number;
     }
 
-    const NFTImage = ({ className, index }: INFTImage) => {
+    const NFTImage = ({ className, image }: INFTImage) => {
         return (
             <div className="flex justify-center">
                 {
                     <Image
-                        src={true ? basicAvatar : basicAvatar}
+                        src={image ? image : basicAvatar}
                         width={"200"}
                         height={"200"}
                         className={classNames("rounded-t-md", className)}
@@ -632,15 +653,23 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
-    const NFTCard = ({ tokenAddress, chainId, daoTitle }) => {
+    const NFTCard = ({ nftObject }) => {
         return (
-            <button className="nft-card" onClick={() => detailNFTDialog.toggle()}>
+            <button
+                className="nft-card"
+                onClick={() => {
+                    setCurrentNFT(nftObject);
+                    detailNFTDialog.toggle();
+                }}
+            >
                 {/* //Wrap to div for center elements */}
-                <NFTImage index={chainId} />
+                <NFTImage image={nftObject.image} />
                 <div className="p-4 gap-y-6">
-                    <p className="text-start">{daoTitle}</p>
+                    <p className="text-start">{nftObject.title}</p>
                     <div className="flex pt-4 justify-between">
-                        <p className="font-light text-sm text-[#AAAAAA]">Type: Unknown</p>
+                        <p className="font-light text-sm text-[#AAAAAA]">
+                            {nftObject.tokenAddress}
+                        </p>
                         <BlockchainImage />
                     </div>
                 </div>
@@ -735,7 +764,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
                     <div
                         className={
-                            "treasury flex flex-col justify-between justify-center border-2 text-center border-lightGray rounded-lg h-40 p-3"
+                            "treasury flex flex-col justify-between border-2 text-center border-lightGray rounded-lg h-40 p-3"
                         }
                     >
                         {DAO.treasuryAddress ? (
@@ -824,13 +853,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         </div>
                         {DAO.tokenAddress ? (
                             <div className="flex justify-between">
-                                {DAO.tokenAddress.map((nftToken, index) => (
-                                    <NFTCard
-                                        chainId={index}
-                                        tokenAddress={nftToken}
-                                        daoTitle={DAO.name}
-                                    />
-                                ))}
+                                {NFTs ? (
+                                    NFTs.map((nft, index) => (
+                                        <NFTCard nftObject={nft} key={index} />
+                                    ))
+                                ) : (
+                                    <></>
+                                )}
                             </div>
                         ) : (
                             <MockupTextCard
@@ -844,33 +873,39 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     </>
                 </section>
                 <CustomDialog dialog={detailNFTDialog} className="h-full items-center text-center">
-                    <NFTImage className="rounded-lg h-14 w-14" />
-                    <p className="mt-4 text-black">{`${DAO.name}`}</p>
-                    {
-                        <button
-                            className={`secondary-button w-full h-12 mt-4 mb-6 
+                    {currentNFT ? (
+                        <>
+                            <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image} />
+                            <p className="mt-4 text-black">{`${currentNFT.title}`}</p>
+                            {
+                                <button
+                                    className={`secondary-button w-full h-12 mt-4 mb-6 
                             ${buttonState === "Success" ? "bg-green" : ""} 
                             ${buttonState === "Error" ? "bg-red" : ""}`}
-                            onClick={mint}
-                        >
-                            {buttonState}
-                        </button>
-                    }
-                    {/* <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
+                                    onClick={mint}
+                                >
+                                    {buttonState}
+                                </button>
+                            }
+                            {/* <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
                         Transfer
                     </button>
                     <p className="text-gray2 font-light text-sm">
                         Try to transfer your NFT to another network
                     </p> */}
-                    <p className="w-full mt-12 text-start text-black">Details</p>
-                    <ul className="py-6 divide-y divide-slate-200">
-                        {DetailsInfo.map((element) => (
-                            <li key={element} className="flex py-4 justify-between">
-                                <p className="font-light text-gray2">{element}</p>
-                                <p className="font-normal text-black">{DAO.name}</p>
-                            </li>
-                        ))}
-                    </ul>
+                            <p className="w-full mt-12 text-start text-black">Details</p>
+                            <ul className="py-6 divide-y divide-slate-200">
+                                {DetailsInfo.map((element) => (
+                                    <li key={element} className="flex py-4 justify-between">
+                                        <p className="font-light text-gray2">{element}</p>
+                                        <p className="font-normal text-black">{currentNFT.title}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </CustomDialog>
                 <CustomDialog
                     dialog={contributeTreasuryDialog}
