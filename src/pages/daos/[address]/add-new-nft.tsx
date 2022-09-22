@@ -27,15 +27,14 @@ import {
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { ParsedUrlQuery } from "querystring";
-
-import { StepperDialog } from "components/Dialog";
+import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { createNFTSteps } from "components/Dialog/Stepper";
 import { setURI } from "contract-interactions/writeNFTContract";
-import { addToken, deployNFTContract, getSupplyNumber } from "contract-interactions";
+import { addToken, deployNFTContract } from "contract-interactions";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     url: string;
@@ -68,16 +67,6 @@ const AddNewNFT: NextPage = () => {
     const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
-
-    const ADD_NFT_CONTRACT = "0x7AC8ab6094Fc7f816420a7FfAc942A554831627c";
-
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
 
     const calculateSupply = () => {
         return formData[
@@ -138,7 +127,7 @@ const AddNewNFT: NextPage = () => {
 
         switchNetwork(TEST_CHAINS[formData.blockchain].id);
 
-        handleReset();
+        handleReset(setActiveStep);
         confirmDialog.toggle();
 
         let fullPath: string;
@@ -150,7 +139,7 @@ const AddNewNFT: NextPage = () => {
             handleChangeBasic(fullPath, setFormData, "ipfsAddress");
         } catch (error) {
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Couldn't save your NFT on IPFS. Please try again");
             return;
         }
@@ -172,26 +161,26 @@ const AddNewNFT: NextPage = () => {
             });
             //console.log("formData contract address", formData.contractAddress);
             //console.log("MORALIS SAVE\n\n");
-            handleNext();
+            handleNext(setActiveStep);
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
             // const supplyNFT = await getSupplyNumber(contract.address, chainId);
-            handleNext();
+            handleNext(setActiveStep);
             const setTx = await setURI(contract.address, signer_data, fullPath);
-            handleNext();
+            handleNext(setActiveStep);
             await setTx.wait();
-            handleNext();
+            handleNext(setActiveStep);
             await addToken(formData.governorAddress, signer_data, contract.address);
             console.log("token added");
             handleChangeBasic(contract.address, setFormData, "contractAddress");
             console.log("Moralis saving");
             await saveNewNFTContractAddress(contract.address);
             console.log("Moralis saving");
-            handleNext();
+            handleNext(setActiveStep);
         } catch (error) {
             console.log(error);
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Please approve transaction to create DAO");
             return;
         }
@@ -199,7 +188,7 @@ const AddNewNFT: NextPage = () => {
         } catch (error) {
             console.log(error);
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Can't save token into backend");
             return;
         }

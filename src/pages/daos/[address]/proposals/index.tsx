@@ -20,8 +20,6 @@ import BackButton from "components/Button/backButton";
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 interface QueryUrlParams extends ParsedUrlQuery {
-    //todo remove?
-    // address: string;
     name: string;
     governorAddress: string;
     chainId: string;

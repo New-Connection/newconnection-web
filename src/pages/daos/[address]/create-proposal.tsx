@@ -22,7 +22,7 @@ import {
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
-import { StepperDialog } from "components/Dialog";
+import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 
 interface QueryUrlParams extends ParsedUrlQuery {
@@ -54,14 +54,6 @@ const CreateProposal: NextPage = () => {
     const [activeStep, setActiveStep] = useState(0);
     const firstUpdate = useRef(true);
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
-
     const { fetch } = useMoralisQuery(
         "DAO",
         (query) => {
@@ -85,7 +77,6 @@ const CreateProposal: NextPage = () => {
                         daoTokenAddresess: votingTokens.get("tokenAddress"),
                     };
                     setVotingNFTs(() => newVotingTokens);
-                    // TODO: DELETE
                     handleChangeBasic(
                         newVotingTokens.daoTokenAddresess[0],
                         setFormData,
@@ -132,7 +123,7 @@ const CreateProposal: NextPage = () => {
         if (!validateForm(formData, ["options"])) {
             return;
         }
-        handleReset();
+        handleReset(setActiveStep);
         confirmDialog.toggle();
 
         let proposalId;
@@ -143,10 +134,10 @@ const CreateProposal: NextPage = () => {
                 formData.name,
                 votingNFTs.daoTokenAddresess[0]
             );
-            handleNext();
-            handleNext();
+            handleNext(setActiveStep);
+            handleNext(setActiveStep);
             handleChangeBasic(proposalId, setFormData, "proposalId");
-            handleNext();
+            handleNext(setActiveStep);
         } catch (error) {
             console.log(error);
             confirmDialog.toggle();
@@ -213,7 +204,6 @@ const CreateProposal: NextPage = () => {
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
                         />
-                        {votingNFTs ? <h1>{votingNFTs.daoTokenAddresess}</h1> : <></>}
                         <Button className="mt-5">Create Proposal</Button>
                     </form>
                 </section>

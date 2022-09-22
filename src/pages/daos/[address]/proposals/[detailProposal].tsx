@@ -6,14 +6,13 @@ import toast from "react-hot-toast";
 import { ParsedUrlQuery } from "querystring";
 import type { GetServerSideProps, NextPage } from "next";
 import { useMoralis, useMoralisQuery } from "react-moralis";
-
 import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
 import { Button, RadioSelector } from "components/Form";
 import { formatAddress } from "utils/address";
 import { validateForm } from "utils/validate";
 import ProgressBar from "components/ProgressBar/ProgressBar";
-import { StepperDialog } from "components/Dialog";
+import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";
@@ -74,7 +73,6 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
                         description: proposal.get("description"),
                         shortDescription: proposal.get("shortDescription"),
                         governorAddress: proposal.get("governorAddress"),
-                        // TODO: Parse values from IProposalDetail
                     };
                     setProposal(() => newProposal);
                 },
@@ -88,14 +86,6 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
     useEffect(() => {
         fetchData();
     }, [isInitialized]);
-
-    const handleNext = (defaultStep = 1) => {
-        setActiveStep((prevActiveStep) => prevActiveStep + defaultStep);
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
 
     interface ICardProposal {
         title: string;
@@ -190,7 +180,7 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
         if (!validateForm(formData, ["name", "txConfirm"])) {
             return;
         }
-        handleReset();
+        handleReset(setActiveStep);
         confirmDialog.toggle();
         try {
             const tx = await castVote(
@@ -217,7 +207,7 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
                 return;
             }
         }
-        handleNext(3);
+        handleNext(setActiveStep, 3);
     }
 
     return proposalData ? (
