@@ -5,13 +5,13 @@ import classNames from "classnames";
 
 import { DialogHeader } from "./Header";
 
-interface NFTDetailDialogProps {
+interface CustomDialogProps {
     dialog: DisclosureState;
     children?: React.ReactNode;
     className?: string;
 }
 
-export const CustomDialog = ({ dialog, className, children }: NFTDetailDialogProps) => {
+export const CustomDialog = ({ dialog, className, children }: CustomDialogProps) => {
     return (
         <Dialog state={dialog} className={classNames("dialog", className)}>
             <DialogHeader title="" dialog={dialog}></DialogHeader>
