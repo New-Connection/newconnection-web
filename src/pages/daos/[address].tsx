@@ -24,7 +24,6 @@ import { useDialogState } from "ariakit";
 import { handleNext, handleReset, CustomDialog, StepperDialog } from "components/Dialog";
 import classNames from "classnames";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import { useLocalStorage } from "hooks";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
 import {
