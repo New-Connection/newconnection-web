@@ -20,6 +20,8 @@ import {
     handleSelectorChangeNewMember,
     handleChangeBasicArray,
     handleChangeBasic,
+    handleChangeBasicSimple,
+    handleAddArray,
 } from "utils/handlers";
 import {
     getMoralisInstance,
@@ -33,6 +35,7 @@ interface QueryUrlParams extends ParsedUrlQuery {
     nftAddress: string;
     governorAddress: string;
     blockchains: string[];
+    tokenAddress: string[];
 }
 
 const AddNewMember: NextPage = () => {
@@ -50,9 +53,12 @@ const AddNewMember: NextPage = () => {
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
+        console.log(query.tokenAddress);
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainEnabled");
+        handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
+        console.log(formData.tokenAddress);
     }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
@@ -107,7 +113,7 @@ const AddNewMember: NextPage = () => {
                         {formData ? (
                             <RadioSelector
                                 name="tokenAddress"
-                                labels={[...formData.tokenAddress]}
+                                labels={formData.tokenAddress}
                                 handleChange={(event) =>
                                     handleTextChangeAddNewMember(event, setFormData)
                                 }
@@ -115,24 +121,6 @@ const AddNewMember: NextPage = () => {
                         ) : (
                             <></>
                         )}
-                        {/* <NFTCardMockup className="border-purple border-4 rounded-xl" /> */}
-
-                        {/* {formData.blockchainEnabled.length > 0 ? (
-                            <BlockchainSelector
-                                name="blockchainSelected"
-                                label="Choose your priority blockchain"
-                                enabledValues={formData.blockchainEnabled}
-                                handleChange={(event) => {
-                                    return handleSelectorChangeNewMember(
-                                        event,
-                                        setFormData,
-                                        "blockchainSelected"
-                                    );
-                                }}
-                            />
-                        ) : (
-                            <></>
-                        )} */}
                         <InputTextArea
                             name="note"
                             label="Note (optional)"
