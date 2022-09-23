@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
+import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import toast from "react-hot-toast";
@@ -38,6 +38,8 @@ import { StepperDialog, handleReset, handleNext } from "components/Dialog";
 import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
 import { useMoralisQuery } from "react-moralis";
+import { ClipboardCopyIcon } from "@heroicons/react/solid";
+import { formatAddress } from "../utils/address";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 
@@ -93,10 +95,8 @@ const CreateDAO: NextPage = () => {
         return available;
     };
 
-    const handleDaoNameUrlChange = <
-        T extends ICreate,
-        E extends HTMLInputElement | HTMLTextAreaElement
-    >(
+    const handleDaoNameUrlChange = <T extends ICreate,
+        E extends HTMLInputElement | HTMLTextAreaElement>(
         event: ChangeEvent<E>,
         set: Dispatch<SetStateAction<T>>,
         field: string
@@ -107,13 +107,8 @@ const CreateDAO: NextPage = () => {
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
-
         handleChangeBasicSimple(query.tokenAddress, setFormData, "tokenAddress");
         handleChangeBasic(query.enabledBlockchains, setFormData, "enabledBlockchains");
-
-        // console.log(`tokenAddress from query: ${query.tokenAddress}`);
-        // console.log(`tokenAddress from formData: ${formData.tokenAddress}`);
-        // console.log(formData.tokenAddress);
     }, []);
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -346,7 +341,19 @@ const CreateDAO: NextPage = () => {
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
                     <p className="ml-7">Deployment successful!</p>
-                    <p className="ml-7 mb-10">Contract Address: {formData.governorAddress}</p>
+                    <div className="flex ml-7 mb-10">Contract Address:
+                        <div
+                            className={
+                                "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
+                            }
+                            onClick={() =>
+                                navigator.clipboard.writeText(formData.governorAddress)
+                            }
+                        >
+                            {formatAddress(formData.governorAddress)}
+                            <ClipboardCopyIcon className="h-6 w-5"/>
+                        </div>
+                    </div>
                     <Link href={`/daos/${formData.url}`}>
                         <button
                             className="form-submit-button"

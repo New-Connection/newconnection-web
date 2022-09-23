@@ -46,15 +46,15 @@ const CreateProposal: NextPage = () => {
     });
     const router = useRouter();
     const [votingNFTs, setVotingNFTs] = useState<IVotingNFTs>();
-    const { data: signer_data } = useSigner();
+    const {data: signer_data} = useSigner();
     //const [governorAddress, setGovernorAddress] = useState(null);
     //console.log("1", governorAddress);
-    const { isInitialized } = useMoralis();
+    const {isInitialized} = useMoralis();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
     const firstUpdate = useRef(true);
 
-    const { fetch } = useMoralisQuery(
+    const {fetch} = useMoralisQuery(
         "DAO",
         (query) => {
             return query.equalTo("governorAddress", formData.governorAddress);
@@ -164,7 +164,7 @@ const CreateProposal: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton />
+                    <BackButton/>
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={createProposalContract}

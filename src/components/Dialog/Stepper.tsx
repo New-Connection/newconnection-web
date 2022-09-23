@@ -69,14 +69,6 @@ export const createNFTSteps = [
         description: "",
     },
     {
-        label: "Waiting for the confirmation in your wallet to set IPFS URI",
-        description: "",
-    },
-    {
-        label: "Waiting for the confirmation from blockchain",
-        description: "",
-    },
-    {
         label: "Done",
         description: "",
     },
@@ -114,13 +106,13 @@ const ColorlibConnector = styled(StepConnector)(({}) => ({
 }));
 
 export const StepperDialog = ({
-    dialog,
-    className,
-    activeStep,
-    children,
-    steps,
-    isClose = false,
-}: StepperDialogProps) => {
+                                  dialog,
+                                  className,
+                                  activeStep,
+                                  children,
+                                  steps,
+                                  isClose = false,
+                              }: StepperDialogProps) => {
     if (!steps) {
         steps = defaultSteps;
     }
@@ -135,7 +127,7 @@ export const StepperDialog = ({
                 <Stepper
                     activeStep={activeStep}
                     orientation="vertical"
-                    connector={<ColorlibConnector />}
+                    connector={<ColorlibConnector/>}
                 >
                     {steps.map((step, index) => (
                         <Step key={index}>
@@ -144,7 +136,7 @@ export const StepperDialog = ({
                                     //step for rn active message
                                     <>
                                         <div className={"w-7"}>
-                                            <SpinnerLoading />
+                                            <SpinnerLoading/>
                                         </div>
                                         <div className="text-xl text-black">{step.label}</div>
                                     </>
@@ -152,7 +144,7 @@ export const StepperDialog = ({
                                     //steps for next messages
                                     <>
                                         <div className={"w-7"}>
-                                            <CheckCircleIcon className="h-7 w-7 fill-gray3" />
+                                            <CheckCircleIcon className="h-7 w-7 fill-gray3"/>
                                         </div>
                                         <div className="text-xl text-gray3">{step.label}</div>
                                     </>
@@ -160,7 +152,7 @@ export const StepperDialog = ({
                                     //steps for previous messages
                                     <>
                                         <div className={"w-7"}>
-                                            <CheckCircleIcon className="h-7 w-7 stroke-1 fill-purple" />
+                                            <CheckCircleIcon className="h-7 w-7 stroke-1 fill-purple"/>
                                         </div>
                                         <div className="text-xl text-black2">{step.label}</div>
                                     </>

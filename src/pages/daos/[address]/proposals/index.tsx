@@ -109,7 +109,7 @@ const ProposalsPage: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    <BackButton />
+                    <BackButton/>
                     <div className={"flex justify-between items-center"}>
                         <h1 className={"text-highlighter cap"}>{DAO.name} Proposals</h1>
                     </div>

@@ -35,30 +35,24 @@ export const promisedHandleChangeBasic = <T extends ICreate>(
     });
 };
 
-export const handleDatePicker = <
-    T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement
->(
+export const handleDatePicker = <T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>
 ) => {
     set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 };
 
-export const handleTextChange = <
-    T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement
->(
+export const handleTextChange = <T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>
 ) => {
     set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 };
 
-export const handleNftSupplyChange = <
-    T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement
->(
+export const handleNftSupplyChange = <T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>,
     value: string | boolean | number,

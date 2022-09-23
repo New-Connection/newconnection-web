@@ -44,6 +44,7 @@ export interface IConstructorNFT {
     name: string;
     symbol: string;
     layerzeroEndpoint: string;
+    baseURI:string;
     price: string;
     startMintId: number;
     endMintId: number;
@@ -58,6 +59,7 @@ export async function deployNFTContract(
     const contract = await factory.deploy(
         constructor.name,
         constructor.symbol,
+        constructor.baseURI,
         utils.parseEther(constructor.price),
         constructor.layerzeroEndpoint,
         constructor.startMintId,

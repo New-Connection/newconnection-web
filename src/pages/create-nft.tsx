@@ -30,8 +30,9 @@ import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
-import { setURI } from "contract-interactions/writeNFTContract";
 import { createNFTSteps } from "components/Dialog/Stepper";
+import { ClipboardCopyIcon } from "@heroicons/react/solid";
+import { formatAddress } from "../utils/address";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -58,7 +59,7 @@ const CreateNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-        ];
+            ];
     };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -99,6 +100,7 @@ const CreateNFT: NextPage = () => {
             contract = await deployNFTContract(signer_data as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
+                baseURI: fullPath,
                 price: formData.price ? formData.price.toString() : "0",
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
@@ -108,10 +110,6 @@ const CreateNFT: NextPage = () => {
             handleNext(setActiveStep);
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            handleNext(setActiveStep);
-            const setTx = await setURI(contract.address, signer_data, fullPath);
-            handleNext(setActiveStep);
-            await setTx.wait();
             handleNext(setActiveStep);
             handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "contractAddress");
@@ -127,7 +125,7 @@ const CreateNFT: NextPage = () => {
     return (
         <div>
             <Layout className="layout-base">
-                <BackButton />
+                <BackButton/>
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <h1 className="text-highlighter">Add NFT</h1>
@@ -239,7 +237,36 @@ const CreateNFT: NextPage = () => {
                     steps={createNFTSteps}
                 >
                     <p className="ml-7">Deployment successful!</p>
-                    <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
+                    <div className="flex ml-7 mb-10">Contract Address:
+                        <div
+                            className={
+                                "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
+                            }
+                            onClick={() =>
+                                navigator.clipboard.writeText(formData.contractAddress)
+                            }
+                        >
+                            {formatAddress(formData.contractAddress)}
+                            <ClipboardCopyIcon className="h-6 w-5"/>
+                        </div>
+                    </div>
+                    {/*{formData.contractAddress ? (*/}
+                    {/*    <div*/}
+                    {/*        className={*/}
+                    {/*            "flex text-lightGray hover:text-gray5 hover:cursor-pointer"*/}
+                    {/*        }*/}
+                    {/*        onClick={() =>*/}
+                    {/*            navigator.clipboard.writeText(formData.contractAddress)*/}
+                    {/*        }*/}
+                    {/*    >*/}
+                    {/*        {formData.contractAddress.slice(0, 6) +*/}
+                    {/*            "..." +*/}
+                    {/*            formData.contractAddress.slice(-4)}*/}
+                    {/*        <ClipboardCopyIcon className="h-6 w-5"/>*/}
+                    {/*    </div>*/}
+                    {/*) : (*/}
+                    {/*    <></>*/}
+                    {/*)}*/}
                     <Link
                         href={{
                             pathname: "create-dao",
