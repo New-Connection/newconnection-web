@@ -24,6 +24,7 @@ import { useDialogState } from "ariakit";
 import { handleNext, handleReset, CustomDialog, StepperDialog } from "components/Dialog";
 import classNames from "classnames";
 import { useSigner, useSwitchNetwork } from "wagmi";
+import { useLocalStorage } from "hooks";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
 import {
@@ -93,6 +94,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const { isInitialized } = useMoralis();
     const firstUpdate = useRef(true);
     const [DAOMoralisInstance, setDAOMoralisInstance] = useState(null);
+    //const [localNFTs, setLocalNFT] = useLocalStorage([], "localNFT");
 
     // DB states
     const [DAO, setDAO] = useState<IDAOPageForm>();
@@ -180,7 +182,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         totalProposals: 0,
                         activeProposals: 0,
                     };
-                    // console.log(newDao);
+                    console.log(newDao);
                     setDAOMoralisInstance(() => moralisInstance);
                     setDAO(() => newDao);
                 },
@@ -257,6 +259,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 return nft;
             })
         );
+        //setLocalNFT(nftsArray);
         setNFTs(nftsArray);
     }
 
@@ -677,19 +680,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
-    // TODO: Create maping for array of blockchains
     const BlockchainImage = () => {
-        return DAO ? (
+        return (
             <Image
-                src={CHAINS_IMG[DAO.blockchain[0]]["src"]}
-                height={22}
-                width={22}
-                objectFit={"contain"}
-                className="mb-4"
-            />
-        ) : (
-            <Image
-                src={defaultImage}
+                src={DAO ? CHAINS_IMG[DAO.blockchain[0]]["src"] : defaultImage}
                 height={22}
                 width={22}
                 objectFit={"contain"}
@@ -733,6 +727,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     governorAddress: DAO.governorAddress,
                                     daoName: DAO.name,
                                     blockchains: DAO.blockchain,
+                                    tokenAddress: DAO.tokenAddress,
                                 },
                             }}
                         >
