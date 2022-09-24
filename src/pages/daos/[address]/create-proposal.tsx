@@ -10,8 +10,16 @@ import {
     handleCheckboxChange,
     handleChangeBasic,
     handleTextChangeAddNewMember,
+    handleAddArray,
 } from "utils/handlers";
-import { CheckboxGroup, InputText, Button, InputTextArea, RadioSelector } from "components/Form";
+import {
+    CheckboxGroup,
+    InputText,
+    Button,
+    InputTextArea,
+    RadioSelector,
+    RadioSelectorMulti,
+} from "components/Form";
 import { ICreateProposal } from "types/forms";
 import BackButton from "components/Button/backButton";
 import { useDialogState } from "ariakit";
@@ -56,6 +64,7 @@ const CreateProposal: NextPage = () => {
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
     const firstUpdate = useRef(true);
+    let tokensNames = [];
 
     const { fetch } = useMoralisQuery(
         "DAO",
@@ -78,9 +87,16 @@ const CreateProposal: NextPage = () => {
                     const newVotingTokens: IMultiNFTVoting = {
                         daoAddress: await votingTokens.get("governorAddress"),
                         tokenAddress: await votingTokens.get("tokenAddress"),
+                        daoName: await votingTokens.get("name"),
                     };
+                    const saved = localStorage.getItem(newVotingTokens.daoName + " NFTs");
+                    const initialValue = JSON.parse(saved);
+                    console.log("saved", initialValue);
+                    initialValue.map((object) => {
+                        tokensNames.push(object.title);
+                    });
                     setVotingNFTs(() => newVotingTokens);
-                    handleChangeBasic(newVotingTokens.tokenAddress[0], setFormData, "tokenAddress");
+                    handleAddArray(tokensNames, setVotingNFTs, "tokenNames");
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
@@ -126,12 +142,13 @@ const CreateProposal: NextPage = () => {
         confirmDialog.toggle();
 
         let proposalId;
+        console.log("0", formData.tokenAddress);
         try {
             proposalId = await createProposal(
                 formData.governorAddress,
                 signer_data as Signer,
                 formData.name,
-                votingNFTs.tokenAddress[0]
+                formData.tokenAddress
             );
             handleNext(setActiveStep);
             handleNext(setActiveStep);
@@ -204,12 +221,13 @@ const CreateProposal: NextPage = () => {
                         />
                         <p>Choose voting token</p>
                         {votingNFTs ? (
-                            <RadioSelector
+                            <RadioSelectorMulti
                                 name="tokenAddress"
-                                labels={[...votingNFTs.tokenAddress]}
+                                labels={[...votingNFTs.tokenNames]}
                                 handleChange={(event) =>
                                     handleTextChangeAddNewMember(event, setFormData)
                                 }
+                                values={votingNFTs.tokenAddress}
                             />
                         ) : (
                             <></>
