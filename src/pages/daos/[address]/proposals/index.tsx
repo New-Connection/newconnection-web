@@ -136,6 +136,7 @@ const ProposalsPage: NextPage = () => {
                                                 description={description}
                                                 shortDescription={shortDescription}
                                                 daoName={DAO?.name}
+                                                chainId={DAO?.chainId}
                                                 isActive={isActive}
                                                 forVotes={forVotes}
                                                 againstVotes={againstVotes}

@@ -1,11 +1,11 @@
-import ProgressBar from "components/ProgressBar/ProgressBar";
 import Image from "next/image";
-import Polygon from "assets/chains/Polygon.png";
 import { timestampToDate } from "utils/basic";
+import { getLogoURI } from "../../utils/blockchains";
 
 interface IProposalCard {
     title: string;
     shortDescription: string;
+    chainId?: number;
     description?: string;
     daoName?: string;
     blockchain?: string[];
@@ -16,18 +16,17 @@ interface IProposalCard {
 }
 
 const ProposalCard = ({
-    title,
-    shortDescription,
-    daoName,
-    isActive,
-    forVotes,
-    againstVotes,
-    deadline,
-}: IProposalCard) => {
+                          title,
+                          shortDescription,
+                          daoName,
+                          isActive,
+                          chainId,
+                          forVotes,
+                          againstVotes,
+                          deadline,
+                      }: IProposalCard) => {
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
-    const sumV = againstV + forV || 1;
-
     return (
         <div className="h-52 py-5">
             <div className="flex justify-between pb-6">
@@ -53,7 +52,7 @@ const ProposalCard = ({
                             <p className="text-gray3">For</p>
                             <p className="font-medium">{daoName}</p>
                         </div>
-                        <Image src={Polygon} height={12} width={23} />
+                        <Image src={getLogoURI(chainId)} height={12} width={23}/>
                     </div>
                 </div>
 

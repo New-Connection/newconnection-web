@@ -24,6 +24,8 @@ import {
 import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 import { getChainNames } from "utils/blockchains";
+import { formatAddress } from "../../../utils/address";
+import { ClipboardCopyIcon } from "@heroicons/react/solid";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -214,7 +216,19 @@ const CreateProposal: NextPage = () => {
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
                     <p>Proposal created successful!</p>
-                    <p>Proposal Id: {formData.proposalId}</p>
+                    <div className="flex ml-7 mb-10">Proposal Id:
+                        <div
+                            className={
+                                "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
+                            }
+                            onClick={() =>
+                                navigator.clipboard.writeText(formData.proposalId)
+                            }
+                        >
+                            {formatAddress(formData.proposalId)}
+                            <ClipboardCopyIcon className="h-6 w-5"/>
+                        </div>
+                    </div>
                     <Link href={`/daos/${formData.address}`}>
                         <button
                             className="form-submit-button"

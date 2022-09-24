@@ -8,9 +8,6 @@ import basicAvatar from "assets/basic-dao-logo.png";
 import { useDialogState } from "ariakit";
 import Tabs from "components/Tabs/Tabs";
 import DAOCard from "components/Cards/DAOCard";
-import { NFTCardMockup } from "components/Cards/NFTCard";
-import ProposalCard from "components/Cards/ProposalCard";
-import { StepperDialog } from "components/Dialog";
 import { useIsMounted } from "hooks";
 import DAOsPage from "./daos/index";
 
@@ -19,9 +16,9 @@ import { TabsType } from "types/tabs";
 const TabOne: FC<{}> = () => {
     return (
         <div>
-            <DAOCard />
-            <DAOCard />
-            <DAOCard />
+            <DAOCard/>
+            <DAOCard/>
+            <DAOCard/>
         </div>
     );
 };
@@ -30,9 +27,9 @@ const TabTwo: FC<{}> = () => {
     return (
         <div>
             <p>Administration</p>
-            <DAOCard />
-            <DAOCard />
-            <DAOCard />
+            <DAOCard/>
+            <DAOCard/>
+            <DAOCard/>
         </div>
     );
 };
@@ -63,7 +60,7 @@ const Home: NextPage = () => {
     const AccountInfo = () => {
         return (
             <div className="flex p-4 gap-5 content-center">
-                <Image src={basicAvatar} width={"100"} height={"100"} />
+                <Image src={basicAvatar} width={"100"} height={"100"}/>
                 <div>
                     <p>Hello,</p>
                     <p className="text-2xl font-bold">{address}</p>
@@ -100,11 +97,11 @@ const Home: NextPage = () => {
     const ReccomendationSection = () => {
         return (
             <>
-                <ReccomendationHeader title="Reccomendation DAO" isFirstTime={true} />
-                <DAOCard />
-                <DAOCard />
-                <DAOCard />
-                <ViewAll />
+                <ReccomendationHeader title="Reccomendation DAO" isFirstTime={true}/>
+                <DAOCard/>
+                <DAOCard/>
+                <DAOCard/>
+                <ViewAll/>
             </>
         );
     };
@@ -129,9 +126,9 @@ const Home: NextPage = () => {
     const TabsSection = () => {
         return (
             <>
-                <ReccomendationHeader title="My DAOs" />
-                <Tabs selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs} />
-                <ViewAll />
+                <ReccomendationHeader title="My DAOs"/>
+                <Tabs selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs}/>
+                <ViewAll/>
             </>
         );
     };
@@ -155,7 +152,7 @@ const Home: NextPage = () => {
 
     return (
         <div>
-            <DAOsPage />
+            <DAOsPage/>
             {/* <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     {isMounted && isConnected ? (

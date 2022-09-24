@@ -438,6 +438,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         title={name}
                                         description={description}
                                         shortDescription={shortDescription}
+                                        chainId={DAO?.chainId}
                                         daoName={DAO?.name}
                                         isActive={isActive}
                                         forVotes={forVotes}
