@@ -90,7 +90,7 @@ export interface CheckboxProps {
     label: string;
     description?: string;
     values: string[];
-    images?: object;
+    images?: boolean;
     enabledValues?: string[];
     handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }

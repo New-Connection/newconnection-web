@@ -10,7 +10,23 @@ import Skale from "assets/chains/Skale.png";
 import { Chain } from "wagmi";
 import { StaticImageData } from "next/image";
 
-export const CHAINS = [
+type chainType = [
+    //
+    // TEST CHAINS
+    // ----------------------------------------------------------------------
+    "Ethereum Rinkeby",
+    "Polygon Mumbai",
+    "Arbitrum Testnet",
+    "Binance Testnet",
+    "Avalanche Testnet",
+    "Fantom Testnet",
+    "Optimism Testnet",
+    "Aurora Testnet",
+    "Skale Testnet",
+
+    //
+    // MAIN CHAINS
+    // ----------------------------------------------------------------------
     "Ethereum",
     "Polygon",
     "Arbitrum",
@@ -20,11 +36,14 @@ export const CHAINS = [
     "Optimism",
     "Aurora",
     "Skale",
-] as const;
+];
 
-export const CHAINS_IMG: {
-    [key in typeof CHAINS[number]]?: StaticImageData;
+const CHAINS_IMG: {
+    [key in chainType[number]]?: StaticImageData;
 } = {
+    //
+    // MAIN CHAINS
+    // ----------------------------------------------------------------------
     Ethereum: Ethereum,
     Polygon: Polygon,
     Arbitrum: Arbitrum,
@@ -34,12 +53,31 @@ export const CHAINS_IMG: {
     Optimism: Optimism,
     Aurora: Aurora,
     Skale: Skale,
+
+
+    //
+    // TEST CHAINS
+    // ----------------------------------------------------------------------
+    "Ethereum Rinkeby": Ethereum,
+    "Polygon Mumbai": Polygon,
+    "Arbitrum Testnet": Arbitrum,
+    "Binance Testnet": Binance,
+    "Avalanche Testnet": Avalanche,
+    "Fantom Testnet": Fantom,
+    "Optimism Testnet": Optimism,
+    "Aurora Testnet": Aurora,
+    "Skale Testnet": Skale,
 };
 
-const TEST_CHAINS: {
-    [key in typeof CHAINS[number]]?: Chain;
+export const CHAINS: {
+    [key in chainType[number]]?: Chain;
 } = {
-    Ethereum: {
+
+    //
+    // TEST CHAINS
+    // ----------------------------------------------------------------------
+
+    "Ethereum Rinkeby": {
         id: 4,
         name: "Ethereum Rinkeby",
         network: "Ethereum",
@@ -57,7 +95,7 @@ const TEST_CHAINS: {
         testnet: true,
     },
 
-    Polygon: {
+    "Polygon Mumbai": {
         id: 80001,
         name: "Polygon Mumbai",
         network: "Polygon",
@@ -75,9 +113,9 @@ const TEST_CHAINS: {
         testnet: true,
     },
 
-    Avalanche: {
+    "Avalanche Testnet": {
         id: 43113,
-        name: "Avalanche FUJI",
+        name: "Avalanche Testnet",
         network: "Avalanche",
         nativeCurrency: {
             decimals: 18,
@@ -93,9 +131,9 @@ const TEST_CHAINS: {
         testnet: true,
     },
 
-    Binance: {
+    "Binance Testnet": {
         id: 97,
-        name: "BSC Testnet",
+        name: "Binance Testnet",
         network: "Binance",
         nativeCurrency: {
             decimals: 18,
@@ -111,9 +149,9 @@ const TEST_CHAINS: {
         testnet: true,
     },
 
-    // Arbitrum: {
+    // "Arbitrum Testnet": {
     //     id: 421611,
-    //     name: "Arbitrum Rinkeby",
+    //     name: "Arbitrum Testnet",
     //     network: "Arbitrum",
     //     nativeCurrency: {
     //         decimals: 18,
@@ -129,9 +167,9 @@ const TEST_CHAINS: {
     //     testnet: true,
     // },
 
-    Optimism: {
+    "Optimism Testnet": {
         id: 69,
-        name: "Optimism Kovan",
+        name: "Optimism Testnet",
         network: "Optimism",
         nativeCurrency: {
             decimals: 18,
@@ -147,7 +185,7 @@ const TEST_CHAINS: {
         testnet: true,
     },
 
-    Fantom: {
+    "Fantom Testnet": {
         id: 4002,
         name: "Fantom Testnet",
         network: "Fantom",
@@ -165,7 +203,7 @@ const TEST_CHAINS: {
         testnet: true,
     },
 
-    Aurora: {
+    "Aurora Testnet": {
         id: 1313161555,
         name: "Aurora Testnet",
         network: "Aurora",
@@ -183,7 +221,7 @@ const TEST_CHAINS: {
         testnet: true,
     },
 
-    Skale: {
+    "Skale Testnet": {
         id: 0x2696efe5,
         name: "Skale Testnet",
         network: "Skale",
@@ -203,11 +241,11 @@ const TEST_CHAINS: {
         },
         testnet: true,
     },
-};
 
-const MAIN_CHAINS: {
-    [key in typeof CHAINS[number]]?: Chain;
-} = {
+    //
+    // MAIN CHAINS
+    // ----------------------------------------------------------------------
+
     Aurora: {
         id: 1313161554,
         name: "Aurora",
@@ -225,36 +263,27 @@ const MAIN_CHAINS: {
         },
         testnet: false,
     },
+
 };
 
-// TODO Change to MAIN
-export const CURRENT_CHAINS = TEST_CHAINS
-
-export const getChains = (chains: {
-    [key in typeof CHAINS[number]]?: Chain;
-}): Chain[] => {
-    return Object.values(chains);
+export const getChains = (): Chain[] => {
+    return Object.values(CHAINS);
 };
 
-export const getChainIds = (chains: {
-    [key in typeof CHAINS[number]]?: Chain;
-}) => {
-    return getChains(chains)
+export const getChainIds = () => {
+    return getChains()
         .map((chain) => chain.id)
 };
 
-export const getChainNames = (chains: {
-    [key in typeof CHAINS[number]]?: Chain;
-}) => {
-    return getChains(chains)
+export const getChainNames = () => {
+    return getChains()
         .map((chain) => chain.name)
 };
 
 export const getChain = (
     chainId: number
 ): Chain => {
-    return Object.values(TEST_CHAINS)
-        .concat(Object.values(MAIN_CHAINS))
+    return getChains()
         .find((chain) => chain.id === chainId);
 };
 
@@ -273,10 +302,13 @@ export const isBlockchainSupported = (chain: { id }) => {
     if (!chain) {
         return false;
     }
-    return getChainIds(TEST_CHAINS).concat(getChainIds(MAIN_CHAINS)).includes(chain.id);
+    return getChainIds().includes(chain.id);
 };
 
-
-export const getLogoURI = (chainId: number) => {
-    return CHAINS_IMG[getChain(chainId).network]?.src || CHAINS_IMG["Ethereum"].src
+export const getLogoURI = (chain: number | string) => {
+    if (typeof chain === 'number') {
+        return CHAINS_IMG[getChain(chain).network]?.src || CHAINS_IMG["Ethereum"];
+    } else {
+        return CHAINS_IMG[chain] || CHAINS_IMG["Ethereum"];
+    }
 }

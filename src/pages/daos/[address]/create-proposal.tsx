@@ -5,13 +5,12 @@ import toast from "react-hot-toast";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { IVotingNFTs } from "types/forms";
 import Layout from "components/Layout/Layout";
-import { handleTextChange, handleCheckboxChange, handleChangeBasic } from "utils/handlers";
+import { handleTextChange, handleCheckboxChange, handleChangeBasic, handleChangeBasicArray } from "utils/handlers";
 import { CheckboxGroup, InputText, Button, InputTextArea } from "components/Form";
 import { ICreateProposal } from "types/forms";
 import BackButton from "components/Button/backButton";
 import { useDialogState } from "ariakit";
 import { validateForm } from "utils/validate";
-import { CHAINS } from "utils/blockchains";
 import { createProposal } from "contract-interactions/writeGovernorContract";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
@@ -24,10 +23,12 @@ import {
 } from "database/interactions";
 import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import { useMoralisQuery, useMoralis } from "react-moralis";
+import { getChainNames } from "utils/blockchains";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
     governorAddress: string;
+    blockchains: string[];
     chainId: string;
 }
 
@@ -89,14 +90,14 @@ const CreateProposal: NextPage = () => {
             });
         }
     };
-
+    console.log(formData)
     const setupData = async () => {
         const query = router.query as QueryUrlParams;
-
+        // console.log(query)
         handleChangeBasic(query.address, setFormData, "address");
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
+        handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
         handleChangeBasic(query.chainId, setFormData, "chainId");
-        //setGovernorAddress(query.governorAddress);
     };
 
     useEffect(() => {
@@ -201,7 +202,8 @@ const CreateProposal: NextPage = () => {
                         <CheckboxGroup
                             label="Proposal Blockchain"
                             description="You can choose one or more blockchains"
-                            values={[...CHAINS]}
+                            images={true}
+                            values={[...getChainNames()]}
                             enabledValues={formData.enabledBlockchains}
                             handleChange={(event) =>
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")

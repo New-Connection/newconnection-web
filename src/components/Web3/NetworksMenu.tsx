@@ -6,14 +6,13 @@ import {
     SelectPopover,
     useSelectState,
     SelectGroup,
-    SelectGroupLabel,
+    SelectGroupLabel, SelectSeparator,
 } from "ariakit/select";
 import { SelectorIcon } from "@heroicons/react/solid";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import defaultImage from "assets/empty-token.webp";
 import {
-    CURRENT_CHAINS,
     getChainIds,
     getChainNames, getLogoURI,
 } from "utils/blockchains";
@@ -30,9 +29,9 @@ export const NetworksMenu = () => {
 
     if (!chain || !switchNetwork) return null;
 
-    const currentChains = chains.filter((chain) => getChainIds(CURRENT_CHAINS).includes(chain.id));
+    const currentChains = chains.filter((chain) => getChainIds().includes(chain.id));
 
-    const nameChain = getChainNames(CURRENT_CHAINS)
+    const nameChain = getChainNames()
         .find((name) => name === chain.name);
 
     return (
@@ -64,11 +63,38 @@ export const NetworksMenu = () => {
                     state={select}
                     className="shadow-2 z-10 max-h-[280px] w-fit min-w-[13rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
+
+                    <SelectGroup>
+                        <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">
+                            Mainnets
+                        </SelectGroupLabel>
+                        {currentChains.filter(chain => !chain.testnet).map((chain) => {
+                            return (
+                                <SelectItem
+                                    key={chain.id}
+                                    value={chain.id?.toString()}
+                                    className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
+                                    onClick={() => switchNetwork?.(chain.id)}
+                                >
+                                    <Image
+                                        src={getLogoURI(chain.id) ?? defaultImage}
+                                        alt={chain.name}
+                                        objectFit="contain"
+                                        width="20px"
+                                        height="20px"
+                                        priority
+                                    />
+                                    <span>{chain.name}</span>
+                                </SelectItem>
+                            );
+                        })}
+                    </SelectGroup>
+                    <SelectSeparator className="my-2"/>
                     <SelectGroup>
                         <SelectGroupLabel className="p-2 text-sm font-normal text-graySupport">
-                            Chains
+                            Test Chains
                         </SelectGroupLabel>
-                        {currentChains.map((chain) => {
+                        {currentChains.filter(chain => chain.testnet).map((chain) => {
                             return (
                                 <SelectItem
                                     key={chain.id}

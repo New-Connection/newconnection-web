@@ -11,7 +11,7 @@ import basicCover from "assets/basic-dao-cover.png";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import Moralis from "moralis";
-import { CHAINS_IMG, getChainScanner, getTokenSymbol } from "utils/blockchains";
+import { getChainScanner, getLogoURI, getTokenSymbol } from "utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
 import { IDAOPageForm, INFTVoting, IProposalPageForm } from "types/forms";
@@ -61,7 +61,7 @@ interface DAOPageProps {
 }
 
 const renderValue = (chain: string) => {
-    const image = CHAINS_IMG[chain];
+    const image = getLogoURI(chain);
     return <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full"/>;
 };
 
@@ -671,7 +671,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const BlockchainImage = () => {
         return DAO ? (
             <Image
-                src={CHAINS_IMG[DAO.blockchain[0]]["src"]}
+                src={getLogoURI(DAO.blockchain[0])}
                 height={22}
                 width={22}
                 objectFit={"contain"}
@@ -830,7 +830,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 query: {
                                     address: DAO.url,
                                     governorAddress: DAO.governorAddress,
-                                    blockchain: DAO.blockchain[0]
+                                    blockchains: [DAO.blockchain[0]],
+                                    chainId: DAO.chainId,
                                 }
                             }}
                         />

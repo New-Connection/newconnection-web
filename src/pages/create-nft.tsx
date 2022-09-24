@@ -28,11 +28,11 @@ import { StepperDialog, handleReset, handleNext } from "components/Dialog";
 import { deployNFTContract } from "contract-interactions/";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
-import { CHAINS, CHAINS_IMG, CURRENT_CHAINS } from "utils/blockchains";
+import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { createNFTSteps } from "components/Dialog/Stepper";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
-import { formatAddress } from "../utils/address";
+import { formatAddress } from "utils/address";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -54,7 +54,7 @@ const CreateNFT: NextPage = () => {
 
     const calculateSupply = () => {
         return formData[
-            CHAINS.find((chain) => {
+            getChainNames().find((chain) => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
@@ -72,7 +72,7 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        switchNetwork?.(CURRENT_CHAINS[formData.blockchain].id);
+        switchNetwork?.(CHAINS[formData.blockchain].id);
 
         handleReset(setActiveStep);
         confirmDialog.toggle();
@@ -178,14 +178,14 @@ const CreateNFT: NextPage = () => {
                                     <div className="input-label"> NFT Supply</div>
                                 </label>
                                 <div className="grid w-full grid-cols-4 gap-4">
-                                    {CHAINS.map(
+                                    {getChainNames().map(
                                         (chain) => (
                                             // chain === "Polygon" ? (
                                             <InputSupplyOfNFT
                                                 key={chain}
                                                 label={chain}
                                                 name={chain}
-                                                image={CHAINS_IMG[chain]}
+                                                image={getLogoURI(chain)}
                                                 handleChange={(event) => {
                                                     handleNftSupplyChange(
                                                         event,
@@ -272,7 +272,7 @@ const CreateNFT: NextPage = () => {
                             pathname: "create-dao",
                             query: {
                                 tokenAddress: formData.contractAddress,
-                                enabledBlockchains: CHAINS.filter((chain) => formData[chain]),
+                                enabledBlockchains: getChainNames().filter((chain) => formData[chain]),
                             },
                         }}
                     >

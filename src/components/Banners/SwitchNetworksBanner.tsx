@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { CURRENT_CHAINS, getChainIds } from "utils/blockchains";
+import { getChainIds } from "utils/blockchains";
 
 const SwitchNetworkBanner = () => {
-    const chainIDs: number[] = getChainIds(CURRENT_CHAINS); // Goerli, Mumbai, FUJI
+    const chainIDs: number[] = getChainIds(); // Goerli, Mumbai, FUJI
     const { isConnected } = useAccount();
     const { chain } = useNetwork();
     const { switchNetwork } = useSwitchNetwork();
@@ -11,7 +11,6 @@ const SwitchNetworkBanner = () => {
     const isIncludeNumber = (id: number) => chainIDs.some((val) => val === id); // return true if we have this chainID in chainIDs
 
     if (!chain || !switchNetwork) return null;
-    //{/* //notification for switch network, because it's wrong network */}
     return (
         <div>
             {isConnected && !isIncludeNumber(Number(chain?.id)) ? (
