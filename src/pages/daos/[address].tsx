@@ -639,8 +639,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
-    const DetailsInfo = ["Blockchain", "Type", "Token Address"];
-
     interface INFTImage {
         image?: string;
         className?: string;
@@ -778,6 +776,21 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 </a>
                             ) : null}
                         </div>
+                        <Link
+                            href={{
+                                pathname: `chats`,
+                                query: {
+                                    governorAddress: DAO.governorAddress,
+                                    blockchains: DAO.blockchain,
+                                    tokenAddress: DAO.tokenAddress,
+                                    daoName: DAO.name,
+                                },
+                            }}
+                        >
+                            <button className="secondary-button mt-4 mb-2 gradient-btn-color">
+                                DAO Chats
+                            </button>
+                        </Link>
                     </div>
 
                     <div
