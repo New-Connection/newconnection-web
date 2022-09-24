@@ -1,12 +1,11 @@
 import * as React from "react";
 import { formatAddress } from "utils/address";
-import { FC, useLayoutEffect, useRef } from "react";
+import { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
 import { ParsedUrlQuery } from "querystring";
 import Image from "next/image";
-import { Dialog } from "ariakit/dialog";
 import basicAvatar from "assets/basic-dao-logo.png";
 import basicCover from "assets/basic-dao-cover.png";
 import discordLogo from "assets/social/discord.png";
@@ -68,7 +67,7 @@ interface DAOPageProps {
 }
 
 const renderValue = (chain: string) => {
-    const image = CHAINS_IMG[chain];
+    const image = getLogoURI(chain);
     return <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full"/>;
 };
 
@@ -893,7 +892,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 <CustomDialog dialog={detailNFTDialog} className="h-full items-center text-center">
                     {currentNFT ? (
                         <div className="w-full">
-                            <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image} />
+                            <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image}/>
                             <p className="mt-4 text-black">{`${currentNFT.title}`}</p>
                             <a
                                 href={getChainScanner(DAO.chainId, currentNFT.tokenAddress)}
@@ -938,7 +937,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 <li className="flex py-4 justify-between">
                                     <p className="font-light text-gray2">{"Blockchain"}</p>
                                     <p className="font-normal text-black">
-                                        <BlockchainImage />
+                                        <BlockchainImage/>
                                     </p>
                                 </li>
                             </ul>

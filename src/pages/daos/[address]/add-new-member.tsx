@@ -7,21 +7,16 @@ import Layout from "components/Layout/Layout";
 import {
     Button,
     InputText,
-    BlockchainSelector,
     InputTextArea,
-    RadioSelector,
     RadioSelectorMulti,
 } from "components/Form";
 import BackButton from "components/Button/backButton";
-import { NFTCardMockup } from "components/Cards/NFTCard";
 import { validateForm } from "utils/validate";
 import { IAddNewMember } from "types/forms";
 import {
     handleTextChangeAddNewMember,
-    handleSelectorChangeNewMember,
     handleChangeBasicArray,
     handleChangeBasic,
-    handleChangeBasicSimple,
     handleAddArray,
 } from "utils/handlers";
 import {
@@ -47,28 +42,30 @@ const AddNewMember: NextPage = () => {
         tokenAddress: [],
         tokenNames: [],
         votingToken: "",
-        blockchainSelected: "",
+        blockchainSelected: [],
         note: "",
     });
     const router = useRouter();
     const [names, setNames] = useState();
-    let temp = [];
+    let tokenNames = [];
 
+    console.log("FORM"+formData.tokenAddress)
     useEffect(() => {
         const query = router.query as QueryUrlParams;
         console.log(query.tokenAddress);
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
-        handleChangeBasic(query.blockchains, setFormData, "blockchainSelected");
+        console.log("TOKK" + query.tokenAddress)
+        handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
         handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
         const saved = localStorage.getItem(query.daoName + " NFTs");
         const initialValue = JSON.parse(saved);
         console.log("saved", saved);
         initialValue.map((object) => {
-            temp.push(object.title);
+            tokenNames.push(object.title);
         });
-        handleAddArray(temp, setFormData, "tokenNames");
-        console.log("token address", temp);
+        handleAddArray(tokenNames, setFormData, "tokenNames");
+        console.log("token address", tokenNames);
     }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
@@ -98,7 +95,7 @@ const AddNewMember: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton />
+                    <BackButton/>
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={sendSignatureRequest}
@@ -121,7 +118,7 @@ const AddNewMember: NextPage = () => {
                         {formData.tokenAddress ? (
                             <RadioSelectorMulti
                                 name="votingToken"
-                                labels={[...formData.tokenNames]}
+                                labels={[...tokenNames]}
                                 handleChange={(event) =>
                                     handleTextChangeAddNewMember(event, setFormData)
                                 }

@@ -2,23 +2,21 @@ import React, { useEffect, useState, useLayoutEffect, useRef } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { useSigner } from "wagmi";
 import { IMultiNFTVoting } from "types/forms";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import { IVotingNFTs } from "types/forms";
 import Layout from "components/Layout/Layout";
 import {
     handleTextChange,
     handleCheckboxChange,
     handleChangeBasic,
-    handleTextChangeAddNewMember,
+    handleTextChangeAddNewMember, handleAddArray, handleChangeBasicArray,
 } from "utils/handlers";
 import {
     CheckboxGroup,
     InputText,
     Button,
     InputTextArea,
-    RadioSelector,
+    RadioSelectorMulti,
 } from "components/Form";
 import { ICreateProposal } from "types/forms";
 import BackButton from "components/Button/backButton";
@@ -36,6 +34,9 @@ import {
 } from "database/interactions";
 import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import { useMoralisQuery, useMoralis } from "react-moralis";
+import { getChainNames } from "../../../utils/blockchains";
+import { formatAddress } from "../../../utils/address";
+import { ClipboardCopyIcon } from "@heroicons/react/solid";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -185,7 +186,7 @@ const CreateProposal: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton />
+                    <BackButton/>
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={createProposalContract}

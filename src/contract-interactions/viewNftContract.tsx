@@ -5,8 +5,8 @@ import { provider } from "components/Web3";
 
 export async function getNftName(contractAddress: string, chainId: number) {
     try {
-        let provider = networkDetails[chainId].chainProviders as BaseProvider;
-        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        let baseProvider = provider({ chainId }) as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         return await nft.name();
     } catch (e) {
         console.log("Error while parsing NFT.name");
@@ -15,8 +15,8 @@ export async function getNftName(contractAddress: string, chainId: number) {
 
 export async function getPrice(contractAddress: string, chainId: number) {
     try {
-        let provider = networkDetails[chainId].chainProviders as BaseProvider;
-        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        let baseProvider = provider({ chainId }) as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         return ethers.utils.formatEther(await nft.pricePerToken());
     } catch (e) {
         console.log("Error while parsing NFT price per token");
@@ -25,8 +25,8 @@ export async function getPrice(contractAddress: string, chainId: number) {
 
 export async function getSymbol(contractAddress: string, chainId: number) {
     try {
-        let provider = networkDetails[chainId].chainProviders as BaseProvider;
-        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        let baseProvider = provider({ chainId }) as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         return await nft.symbol();
     } catch (e) {
         console.log("Error while parsing NFT symbol");

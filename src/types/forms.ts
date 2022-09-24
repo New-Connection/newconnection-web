@@ -107,7 +107,7 @@ export interface IAddNewMember {
     tokenAddress: string[];
     tokenNames: string[];
     votingToken: string;
-    blockchainSelected: string;
+    blockchainSelected: string[];
     note?: string;
 }
 
