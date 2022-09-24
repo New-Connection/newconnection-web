@@ -68,7 +68,7 @@ interface DAOPageProps {
 
 const renderValue = (chain: string) => {
     const image = getLogoURI(chain);
-    return <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full"/>;
+    return <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full" />;
 };
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams> = async (
@@ -142,7 +142,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [sending, setSending] = useState(false);
     const createTreasuryDialog = useDialogState();
     const contributeTreasuryDialog = useDialogState();
-    console.log("DAO Object", DAO);
+    //console.log("DAO Object", DAO);
     //
     // FUNCTIONS
     // ----------------------------------------------------------------------
@@ -474,8 +474,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 query: {
                                     name: DAO.name,
                                     governorAddress: DAO.governorAddress,
-                                    chainId: DAO.chainId
-                                }
+                                    chainId: DAO.chainId,
+                                },
                             }}
                         >
                             <button className="secondary-button mt-4">View all proposals</button>
@@ -550,8 +550,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         status
                                             ? toast.success("Wallet added to Whitelist")
                                             : toast.error(
-                                                "Only owner of DAO can add a new members"
-                                            );
+                                                  "Only owner of DAO can add a new members"
+                                              );
                                         // TODO: DELETE ROW FROM MORALIS
                                         // removeItem(walletAddress);
                                         // console.log("WL DELETE");
@@ -610,8 +610,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const StatisticCard = ({ label, counter }) => {
         return (
-            <div
-                className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
+            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
                 <div className={"text-gray-400 group-hover:text-white"}>{label}</div>
                 <div className={"flex justify-end text-black text-5xl group-hover:text-white"}>
                     {counter || 0}
@@ -632,7 +631,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const ImageLink = ({ url, image }) => {
         return (
             <a href={url} target={"_blank"}>
-                <Image height={"25"} width={"25"} src={image}/>
+                <Image height={"25"} width={"25"} src={image} />
             </a>
         );
     };
@@ -670,7 +669,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 }}
             >
                 {/* //Wrap to div for center elements */}
-                <NFTImage image={nftObject.image}/>
+                <NFTImage image={nftObject.image} />
                 <div className="p-4 gap-y-6">
                     <div className="flex justify-between">
                         <p className="text-start">{nftObject.title}</p>
@@ -680,7 +679,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         <p className="font-light text-sm text-[#AAAAAA]">
                             {formatAddress(nftObject.tokenAddress)}
                         </p>
-                        <BlockchainImage/>
+                        <BlockchainImage />
                     </div>
                 </div>
             </button>
@@ -697,7 +696,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 objectFit={"contain"}
                 className="mb-4"
             />
-        )
+        );
     };
 
     return DAO ? (
@@ -750,11 +749,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 className="hover:text-purple flex"
                             >
                                 Smart Contract
-                                <ExternalLinkIcon className="h-6 w-5"/>
+                                <ExternalLinkIcon className="h-6 w-5" />
                             </a>
                             <div className="hover:text-purple gap-4 flex">
                                 <p>DAO Blockchains</p>
-                                <BlockchainImage/>
+                                <BlockchainImage />
                             </div>
 
                             {DAO.discordURL ? (
@@ -772,7 +771,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
                             {DAO.websiteURL ? (
                                 <a href={isValidHttpUrl(DAO.websiteURL)} target="_blank">
-                                    <GlobeAltIcon className="h-6 w-6"/>
+                                    <GlobeAltIcon className="h-6 w-6" />
                                 </a>
                             ) : null}
                         </div>
@@ -791,7 +790,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     className="hover:text-purple flex gap-3"
                                 >
                                     Treasury
-                                    <ExternalLinkIcon className="h-6 w-5"/>
+                                    <ExternalLinkIcon className="h-6 w-5" />
                                 </a>
                             </div>
                         ) : (
@@ -845,7 +844,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     governorAddress: DAO.governorAddress,
                                     blockchains: [DAO.blockchain[0]],
                                     chainId: DAO.chainId,
-                                }
+                                },
                             }}
                         />
                     </div>
@@ -872,7 +871,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <div className="flex justify-between">
                                 {NFTs ? (
                                     NFTs.map((nft, index) => (
-                                        <NFTCard nftObject={nft} key={index}/>
+                                        <NFTCard nftObject={nft} key={index} />
                                     ))
                                 ) : (
                                     <></>
@@ -892,7 +891,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 <CustomDialog dialog={detailNFTDialog} className="h-full items-center text-center">
                     {currentNFT ? (
                         <div className="w-full">
-                            <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image}/>
+                            <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image} />
                             <p className="mt-4 text-black">{`${currentNFT.title}`}</p>
                             <a
                                 href={getChainScanner(DAO.chainId, currentNFT.tokenAddress)}
@@ -900,7 +899,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 className="hover:text-purple flex justify-center"
                             >
                                 Smart Contract
-                                <ExternalLinkIcon className="h-6 w-5"/>
+                                <ExternalLinkIcon className="h-6 w-5" />
                             </a>
                             {
                                 <button
@@ -937,7 +936,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 <li className="flex py-4 justify-between">
                                     <p className="font-light text-gray2">{"Blockchain"}</p>
                                     <p className="font-normal text-black">
-                                        <BlockchainImage/>
+                                        <BlockchainImage />
                                     </p>
                                 </li>
                             </ul>
@@ -971,7 +970,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     }
                                 >
                                     {formatAddress(DAO.treasuryAddress)}
-                                    <ClipboardCopyIcon className="h-6 w-5"/>
+                                    <ClipboardCopyIcon className="h-6 w-5" />
                                 </div>
                             ) : (
                                 <></>
@@ -1003,7 +1002,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         ) : (
                             <div className={"flex mt-4 gap-2"}>
                                 <div className={"w-7"}>
-                                    <SpinnerLoading/>
+                                    <SpinnerLoading />
                                 </div>
                                 <div className="text-xl text-black">
                                     Waiting confirmation from blockchain
