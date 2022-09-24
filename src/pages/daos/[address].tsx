@@ -11,11 +11,10 @@ import basicCover from "assets/basic-dao-cover.png";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
 import Moralis from "moralis";
-import { CHAINS_IMG, networkDetails } from "utils/blockchains";
+import { CHAINS_IMG, getChainScanner, getTokenSymbol } from "utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
 import { IDAOPageForm, INFTVoting, IProposalPageForm } from "types/forms";
-import { getChainScanner } from "utils/network";
 import { ClipboardCopyIcon, ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
@@ -316,6 +315,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
         handleReset(setCreateTreasuryStep);
         createTreasuryDialog.toggle();
+
+        const tx = switchNetwork(DAO.chainId);
 
         let treasuryContract;
         try {
@@ -950,7 +951,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         }}
                     >
                         <InputAmount
-                            placeholder={"Amount in " + networkDetails[DAO.chainId].tokenListId}
+                            placeholder={"Amount in " + getTokenSymbol(DAO.chainId)}
                             name="price"
                             handleChange={(event) => setContributeAmount(() => event.target.value)}
                             className="w-full"

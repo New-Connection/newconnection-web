@@ -30,7 +30,7 @@ import { ParsedUrlQuery } from "querystring";
 import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
-import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
+import { CHAINS, CHAINS_IMG, CURRENT_CHAINS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { createNFTSteps } from "components/Dialog/Stepper";
 import { setURI } from "contract-interactions/writeNFTContract";
@@ -74,7 +74,7 @@ const AddNewNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-        ];
+            ];
     };
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
@@ -125,7 +125,7 @@ const AddNewNFT: NextPage = () => {
             return;
         }
 
-        switchNetwork(TEST_CHAINS[formData.blockchain].id);
+        switchNetwork(CURRENT_CHAINS[formData.blockchain].id);
 
         handleReset(setActiveStep);
         confirmDialog.toggle();
@@ -154,6 +154,7 @@ const AddNewNFT: NextPage = () => {
                 name: formData.name,
                 symbol: formData.symbol,
                 price: formData.price.toString(),
+                baseURI: fullPath,
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
@@ -197,7 +198,7 @@ const AddNewNFT: NextPage = () => {
     return (
         <div>
             <Layout className="layout-base">
-                <BackButton />
+                <BackButton/>
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <h1 className="text-highlighter">Add NFT</h1>

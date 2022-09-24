@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { getChainIds, MAIN_CHAINS, TEST_CHAINS } from "utils/blockchains";
+import { CURRENT_CHAINS, getChainIds } from "utils/blockchains";
 
 const SwitchNetworkBanner = () => {
-    const chainIDs: number[] = getChainIds(MAIN_CHAINS).concat(getChainIds(TEST_CHAINS)); // Goerli, Mumbai, FUJI
+    const chainIDs: number[] = getChainIds(CURRENT_CHAINS); // Goerli, Mumbai, FUJI
     const { isConnected } = useAccount();
     const { chain } = useNetwork();
     const { switchNetwork } = useSwitchNetwork();
@@ -29,7 +29,8 @@ const SwitchNetworkBanner = () => {
                         onClick={() => switchNetwork(chainIDs[2])}
                     >
                         Avalanche Fuji
-                    </button>{" "}
+                    </button>
+                    {" "}
                     or{" "}
                     <button
                         className="hover:text-gray hover:underline"

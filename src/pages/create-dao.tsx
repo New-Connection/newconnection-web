@@ -35,7 +35,7 @@ import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { StepperDialog, handleReset, handleNext } from "components/Dialog";
 
-import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
+import { CHAINS, CHAINS_IMG, CURRENT_CHAINS } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
 import { useMoralisQuery } from "react-moralis";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
@@ -130,7 +130,7 @@ const CreateDAO: NextPage = () => {
         }
         console.log(formData.url);
 
-        switchNetwork(TEST_CHAINS[formData.blockchain[0]].id);
+        switchNetwork(CURRENT_CHAINS[formData.blockchain[0]].id);
 
         handleReset(setActiveStep);
         confirmDialog.toggle();

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useLayoutEffect, useRef } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { useSigner } from "wagmi";
+import { useSigner, useSwitchNetwork } from "wagmi";
 import { IVotingNFTs } from "types/forms";
 import Layout from "components/Layout/Layout";
 import { handleTextChange, handleCheckboxChange, handleChangeBasic } from "utils/handlers";
@@ -28,6 +28,7 @@ import { useMoralisQuery, useMoralis } from "react-moralis";
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
     governorAddress: string;
+    chainId: string;
 }
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -46,15 +47,14 @@ const CreateProposal: NextPage = () => {
     });
     const router = useRouter();
     const [votingNFTs, setVotingNFTs] = useState<IVotingNFTs>();
-    const {data: signer_data} = useSigner();
-    //const [governorAddress, setGovernorAddress] = useState(null);
-    //console.log("1", governorAddress);
-    const {isInitialized} = useMoralis();
+    const { data: signer_data } = useSigner();
+    const { switchNetwork } = useSwitchNetwork();
+    const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
     const firstUpdate = useRef(true);
 
-    const {fetch} = useMoralisQuery(
+    const { fetch } = useMoralisQuery(
         "DAO",
         (query) => {
             return query.equalTo("governorAddress", formData.governorAddress);
@@ -95,7 +95,7 @@ const CreateProposal: NextPage = () => {
 
         handleChangeBasic(query.address, setFormData, "address");
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        handleChangeBasic(query.blockchain, setFormData, "enabledBlockchains");
+        handleChangeBasic(query.chainId, setFormData, "chainId");
         //setGovernorAddress(query.governorAddress);
     };
 
@@ -123,6 +123,9 @@ const CreateProposal: NextPage = () => {
         if (!validateForm(formData, ["options"])) {
             return;
         }
+
+        switchNetwork(formData.chainId);
+
         handleReset(setActiveStep);
         confirmDialog.toggle();
 

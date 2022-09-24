@@ -12,34 +12,29 @@ import { SelectorIcon } from "@heroicons/react/solid";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import defaultImage from "assets/empty-token.webp";
-import { chainDetails } from "utils/network"; // this file to add more networks
-import { getChainIds, getChainNames, MAIN_CHAINS, TEST_CHAINS } from "utils/blockchains";
+import {
+    CURRENT_CHAINS,
+    getChainIds,
+    getChainNames, getLogoURI,
+} from "utils/blockchains";
+import { chains } from "./WalletConfig";
 
 export const NetworksMenu = () => {
     const { chain } = useNetwork();
-    const { chains, switchNetwork } = useSwitchNetwork();
+    const { switchNetwork } = useSwitchNetwork();
     const select = useSelectState({
         defaultValue: chain?.id?.toString() ?? "0",
         sameWidth: true,
         gutter: 8,
     });
 
-    const { network } = chainDetails(chain?.id?.toString());
-    // How to know what chain is it
-    // console.log("Chain", chain?.id?.toString());
-    // console.log("Error", error);
     if (!chain || !switchNetwork) return null;
 
-    // ONLY GOERLI. For using all testnets (=> chain.testnet)
-    // console.log(supportedTestChainIds);
-    const testnets = chains.filter((chain) => getChainIds(TEST_CHAINS).includes(chain.id));
-    // console.log("name:     " + chain.name);
+    const currentChains = chains.filter((chain) => getChainIds(CURRENT_CHAINS).includes(chain.id));
 
-    // To find name what we need
-    const nameChain = getChainNames(TEST_CHAINS)
-        .concat(getChainNames(MAIN_CHAINS))
+    const nameChain = getChainNames(CURRENT_CHAINS)
         .find((name) => name === chain.name);
-    // console.log(nameChain);
+
     return (
         <>
             <SelectLabel state={select} className="hidden sm:sr-only">
@@ -52,8 +47,7 @@ export const NetworksMenu = () => {
                 <>
                     <div className="flex h-5 w-5 items-center rounded-full">
                         <Image
-                            src={network?.logoURI ?? defaultImage}
-                            alt={network?.prefix}
+                            src={getLogoURI(chain.id) ?? defaultImage}
                             objectFit="contain"
                             layout="fixed"
                             width="20px"
@@ -62,7 +56,7 @@ export const NetworksMenu = () => {
                         />
                     </div>
                     <span>{nameChain ?? "Unsupported"}</span>
-                    <SelectorIcon className="relative right-[-4px] h-4 w-4" aria-hidden="true" />
+                    <SelectorIcon className="relative right-[-4px] h-4 w-4" aria-hidden="true"/>
                 </>
             </Select>
             {select.mounted && (
@@ -70,59 +64,27 @@ export const NetworksMenu = () => {
                     state={select}
                     className="shadow-2 z-10 max-h-[280px] w-fit min-w-[13rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
-                    {/*{*/}
-                    {/*    <SelectGroup>*/}
-                    {/*        <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">*/}
-                    {/*            Mainnets*/}
-                    {/*        </SelectGroupLabel>*/}
-                    {/*        {mainnets.map((value) => {*/}
-                    {/*            const { network } = chainDetails(value?.id?.toString());*/}
-                    {/*            return (*/}
-                    {/*                <SelectItem*/}
-                    {/*                    key={value.id}*/}
-                    {/*                    value={value.id?.toString()}*/}
-                    {/*                    className="flex rounded-md cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 hover:bg-[#6858CB] hover:text-white"*/}
-                    {/*                    onClick={() => switchNetwork(value.id)}*/}
-                    {/*                >*/}
-                    {/*                    <div className="flex h-5 w-5 items-center rounded-full">*/}
-                    {/*                        <Image*/}
-                    {/*                            src={network?.logoURI ?? defaultImage}*/}
-                    {/*                            alt={value.name}*/}
-                    {/*                            objectFit="contain"*/}
-                    {/*                            width="20px"*/}
-                    {/*                            height="20px"*/}
-                    {/*                            priority*/}
-                    {/*                        />*/}
-                    {/*                    </div>*/}
-                    {/*                    <span>{value.name}</span>*/}
-                    {/*                </SelectItem>*/}
-                    {/*            );*/}
-                    {/*        })}*/}
-                    {/*    </SelectGroup>*/}
-                    {/*}*/}
-                    {/* <SelectSeparator className="my-2" /> */}
                     <SelectGroup>
                         <SelectGroupLabel className="p-2 text-sm font-normal text-graySupport">
-                            Testnets
+                            Chains
                         </SelectGroupLabel>
-                        {testnets.map((value) => {
-                            const { network } = chainDetails(value?.id?.toString());
+                        {currentChains.map((chain) => {
                             return (
                                 <SelectItem
-                                    key={value.id}
-                                    value={value.id?.toString()}
+                                    key={chain.id}
+                                    value={chain.id?.toString()}
                                     className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
-                                    onClick={() => switchNetwork?.(value.id)}
+                                    onClick={() => switchNetwork?.(chain.id)}
                                 >
                                     <Image
-                                        src={network?.logoURI ?? defaultImage}
-                                        alt={value.name}
+                                        src={getLogoURI(chain.id) ?? defaultImage}
+                                        alt={chain.name}
                                         objectFit="contain"
                                         width="20px"
                                         height="20px"
                                         priority
                                     />
-                                    <span>{value.name}</span>
+                                    <span>{chain.name}</span>
                                 </SelectItem>
                             );
                         })}

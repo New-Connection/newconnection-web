@@ -1,18 +1,18 @@
 import { ethers } from "ethers";
 import { GOVERNANCE_NFT_ABI } from "abis";
-import { networkDetails } from "utils/blockchains";
 import { BaseProvider } from "@ethersproject/providers/src.ts/base-provider";
+import { provider } from "components/Web3";
 
 export async function getNftName(contractAddress: string, chainId: number) {
-    let provider = networkDetails[chainId].chainProviders as BaseProvider;
-    const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+    let baseProvider = provider({ chainId }) as BaseProvider;
+    const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
     return await nft.name();
 }
 
 export async function getTokenURI(contractAddress: string, chainId: number) {
     try {
-        let provider = networkDetails[chainId].chainProviders as BaseProvider;
-        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        let baseProvider = provider({ chainId }) as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         return await nft.baseURI();
     } catch (e) {
         console.log("Error while parsing token URI");
@@ -21,8 +21,8 @@ export async function getTokenURI(contractAddress: string, chainId: number) {
 
 export async function getSupplyNumber(contractAddress: string, chainId: number) {
     try {
-        let provider = networkDetails[chainId].chainProviders as BaseProvider;
-        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        let baseProvider = provider({ chainId }) as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         return await nft.maxMintId();
     } catch (e) {
         console.log("Error to get max mint id of NFT");
@@ -31,8 +31,8 @@ export async function getSupplyNumber(contractAddress: string, chainId: number) 
 
 export async function getNumberOfMintedTokens(contractAddress: string, chainId: number) {
     try {
-        let provider = networkDetails[chainId].chainProviders as BaseProvider;
-        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        let baseProvider = provider({ chainId }) as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         const nextMintId = await nft.nextMintId();
         return nextMintId.toString();
     } catch (e) {
@@ -47,8 +47,8 @@ export async function getNumAvailableToMint(
     chainId: number
 ) {
     try {
-        let provider = networkDetails[chainId].chainProviders as BaseProvider;
-        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        let baseProvider = provider({ chainId }) as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         return await nft.numAvailableToMint(userAddress);
     } catch (e) {
         console.log("Error in getNumAvailableToMint()");

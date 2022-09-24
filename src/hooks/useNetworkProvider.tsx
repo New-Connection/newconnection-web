@@ -1,5 +1,5 @@
-import { ethers } from "ethers";
-import { networkDetails } from "utils/blockchains";
+import { ethers, providers } from "ethers";
+import { getChain, getTokenSymbol } from "utils/blockchains";
 import { useNetwork } from "wagmi";
 
 export type Provider = ethers.providers.BaseProvider;
@@ -9,14 +9,14 @@ export const useNetworkProvider = () => {
 
     let chainId = chain?.id ?? null;
     let name: string | null = chain?.name ?? null;
-    const chainDetails = chainId && networkDetails[chainId];
+    const chainDetails = getChain(chainId)
 
     return {
-        provider: chainDetails ? chainDetails.chainProviders : null,
+        provider: chainDetails ? providers.getDefaultProvider() : null,
         network: name,
         chainId,
         nativeCurrency: chain?.nativeCurrency,
         unsupported: chain?.unsupported,
-        tokenListId: networkDetails[chainId ?? 0]?.tokenListId,
+        tokenListId: getTokenSymbol(chainId ?? 0),
     };
 };

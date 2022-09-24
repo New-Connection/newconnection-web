@@ -28,7 +28,7 @@ import { StepperDialog, handleReset, handleNext } from "components/Dialog";
 import { deployNFTContract } from "contract-interactions/";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
-import { CHAINS, CHAINS_IMG, TEST_CHAINS } from "utils/blockchains";
+import { CHAINS, CHAINS_IMG, CURRENT_CHAINS } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { createNFTSteps } from "components/Dialog/Stepper";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
@@ -46,7 +46,6 @@ const CreateNFT: NextPage = () => {
         ipfsAddress: "",
         blockchain: "",
     });
-
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
@@ -64,6 +63,7 @@ const CreateNFT: NextPage = () => {
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
         if (!signer_data) {
             toast.error("Please connect wallet");
             return;
@@ -72,7 +72,7 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        switchNetwork(TEST_CHAINS[formData.blockchain].id);
+        switchNetwork?.(CURRENT_CHAINS[formData.blockchain].id);
 
         handleReset(setActiveStep);
         confirmDialog.toggle();
