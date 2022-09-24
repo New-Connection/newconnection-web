@@ -89,6 +89,7 @@ export interface INFTVoting {
     type?: string;
     image?: string;
     tokenAddress: string;
+    price?: string;
     
 }
 

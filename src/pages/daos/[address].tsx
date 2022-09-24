@@ -41,6 +41,8 @@ import {
     getNftName,
     getNumberOfMintedTokens,
     getTokenURI,
+    getSymbol,
+    getPrice,
 } from "contract-interactions/viewNftContract";
 import defaultImage from "assets/empty-token.webp";
 import {
@@ -251,11 +253,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             DAO!.tokenAddress!.map(async (tokenAddress, index) => {
                 const nft: INFTVoting = {
                     title: await getNftName(tokenAddress, DAO.chainId),
-                    type: await getNftName(tokenAddress, DAO.chainId),
+                    type: await getSymbol(tokenAddress, DAO.chainId),
                     image: await fetchNFTImage(tokenAddress),
+                    price: await getPrice(tokenAddress, DAO.chainId),
                     tokenAddress: tokenAddress,
                 };
-
                 return nft;
             })
         );
@@ -670,11 +672,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 {/* //Wrap to div for center elements */}
                 <NFTImage image={nftObject.image} />
                 <div className="p-4 gap-y-6">
-                    <p className="text-start">{nftObject.title}</p>
+                    <div className="flex justify-between">
+                        <p className="text-start">{nftObject.title}</p>
+                        <p className="font-light text-sm text-purple">{nftObject.price}</p>
+                    </div>
                     <div className="flex pt-4 justify-between">
-                        <p className="font-light text-sm text-[#AAAAAA]">
-                            {nftObject.tokenAddress}
-                        </p>
+                        <p className="font-light text-sm text-[#AAAAAA]">{nftObject.type}</p>
                         <BlockchainImage />
                     </div>
                 </div>

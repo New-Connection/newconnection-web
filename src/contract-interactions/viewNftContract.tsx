@@ -17,7 +17,7 @@ export async function getPrice(contractAddress: string, chainId: number) {
     try {
         let provider = networkDetails[chainId].chainProviders as BaseProvider;
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
-        return await nft.pricePerToken();
+        return ethers.utils.formatEther(await nft.pricePerToken());
     } catch (e) {
         console.log("Error while parsing NFT price per token");
     }
