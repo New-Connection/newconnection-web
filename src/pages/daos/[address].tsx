@@ -144,7 +144,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [sending, setSending] = useState(false);
     const createTreasuryDialog = useDialogState();
     const contributeTreasuryDialog = useDialogState();
-    console.log(DAO);
+    console.log("DAO Object", DAO);
     //
     // FUNCTIONS
     // ----------------------------------------------------------------------
@@ -248,17 +248,18 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     async function fetchNFTData() {
         const nftsArray: INFTVoting[] = await Promise.all(
-            DAO!.tokenAddress!.map(async (tokenAddress) => {
+            DAO!.tokenAddress!.map(async (tokenAddress, index) => {
                 const nft: INFTVoting = {
                     title: await getNftName(tokenAddress, DAO.chainId),
                     type: await getNftName(tokenAddress, DAO.chainId),
                     image: await fetchNFTImage(tokenAddress),
                     tokenAddress: tokenAddress,
                 };
+
                 return nft;
             })
         );
-        //setLocalNFT(nftsArray);
+        localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
         setNFTs(nftsArray);
     }
 
@@ -407,6 +408,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     }, [isInitialized]);
     useIsomorphicLayoutEffect(() => {
         if (DAO && firstUpdate.current) {
+            localStorage.setItem(DAO.name, JSON.stringify(DAO));
+            console.log("save");
             fetchProposal();
             fetchWhitelist();
             fetchLargeData();
