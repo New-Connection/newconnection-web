@@ -28,7 +28,8 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-black">
                         {labels[0]}
-                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                        <span
+                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                     </div>
                 </label>
             </div>
@@ -50,7 +51,8 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-black">
                         {labels[1]}
-                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                        <span
+                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                     </div>
                 </label>
             </div>
@@ -60,7 +62,8 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
 
 export const RadioSelectorMulti = (radioSelector: IRadioSelector) => {
     const [clickedValue, setClickValue] = useState(null);
-    console.log(radioSelector.values);
+    // console.log(radioSelector.values);
+
     return (
         <>
             {radioSelector.values ? (
@@ -72,11 +75,10 @@ export const RadioSelectorMulti = (radioSelector: IRadioSelector) => {
                             value={value}
                             name={radioSelector.name}
                             className="hidden peer"
-                            onChange={(value) => {
-                                // console.log("click", index);
+                            onChange={(event) => {
+                                // console.log(event)
                                 setClickValue(index);
-
-                                return radioSelector.handleChange(value);
+                                return radioSelector.handleChange(event);
                             }}
                         />
                         <label

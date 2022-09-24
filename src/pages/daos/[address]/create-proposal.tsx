@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from "react";
 import type { NextPage } from "next";
-import Link from "next/link";
 import toast from "react-hot-toast";
 import { IMultiNFTVoting } from "types/forms";
 import { useSigner, useSwitchNetwork } from "wagmi";
@@ -41,7 +40,6 @@ import { formatAddress } from "../../../utils/address";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
 
 interface QueryUrlParams extends ParsedUrlQuery {
-    address: string;
     governorAddress: string;
     blockchains: string[];
     chainId: string;
@@ -51,11 +49,11 @@ const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffec
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
-        address: "",
         governorAddress: "",
         name: "",
         shortDescription: "",
         tokenAddress: "",
+        tokenName: "",
         description: "",
         options: [],
         blockchain: [],
@@ -69,7 +67,6 @@ const CreateProposal: NextPage = () => {
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
     const firstUpdate = useRef(true);
-    let tokensNames = [];
 
     const { fetch } = useMoralisQuery(
         "DAO",
@@ -93,13 +90,15 @@ const CreateProposal: NextPage = () => {
                         tokenAddress: await votingTokens.get("tokenAddress"),
                         daoName: await votingTokens.get("name"),
                     };
+                    setVotingNFTs(() => newVotingTokens);
+
                     const saved = localStorage.getItem(newVotingTokens.daoName + " NFTs");
                     const initialValue = JSON.parse(saved);
-                    console.log("saved", initialValue);
+                    // console.log("saved", initialValue);
+                    let tokensNames = [];
                     initialValue.map((object) => {
                         tokensNames.push(object.title);
                     });
-                    setVotingNFTs(() => newVotingTokens);
                     handleAddArray(tokensNames, setVotingNFTs, "tokenNames");
                 },
                 onError: (error) => {
@@ -112,7 +111,6 @@ const CreateProposal: NextPage = () => {
     const setupData = async () => {
         const query = router.query as QueryUrlParams;
         // console.log(query)
-        handleChangeBasic(query.address, setFormData, "address");
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
         handleChangeBasic(query.chainId, setFormData, "chainId");
@@ -182,11 +180,13 @@ const CreateProposal: NextPage = () => {
         }
     }
 
+    //todo
+    console.log(formData)
     return (
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton />
+                    <BackButton/>
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={createProposalContract}
@@ -230,9 +230,14 @@ const CreateProposal: NextPage = () => {
                             <RadioSelectorMulti
                                 name="tokenAddress"
                                 labels={[...votingNFTs.tokenNames]}
-                                handleChange={(event) =>
+                                handleChange={(event) => {
+                                    // setting tokenName
+                                    const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);
+                                    handleChangeBasic(currentTokenName, setFormData, "tokenName")
+
+                                    // setting tokenAddress
                                     handleTextChangeAddNewMember(event, setFormData)
-                                }
+                                }}
                                 values={votingNFTs.tokenAddress}
                             />
                         ) : (
@@ -252,19 +257,18 @@ const CreateProposal: NextPage = () => {
                             onClick={() => navigator.clipboard.writeText(formData.proposalId)}
                         >
                             {formatAddress(formData.proposalId)}
-                            <ClipboardCopyIcon className="h-6 w-5" />
+                            <ClipboardCopyIcon className="h-6 w-5"/>
                         </div>
                     </div>
-                    <Link href={`/daos/${formData.address}`}>
-                        <button
-                            className="form-submit-button"
-                            onClick={() => {
-                                confirmDialog.toggle();
-                            }}
-                        >
-                            Back to DAO
-                        </button>
-                    </Link>
+                    <button
+                        className="form-submit-button"
+                        onClick={() => {
+                            confirmDialog.toggle();
+                            router.back()
+                        }}
+                    >
+                        Back to DAO
+                    </button>
                 </StepperDialog>
             </Layout>
         </div>

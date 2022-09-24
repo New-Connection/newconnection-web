@@ -41,12 +41,17 @@ export interface ISelectorProps {
     handleChange?: (event: BaseSyntheticEvent) => boolean;
 }
 
+export interface IRadioSelectorClickOption {
+    tokenName: string,
+    tokenAddress: string,
+}
+
 export interface IRadioSelector {
     name: string;
     labels: string[];
     className?: string;
     values?: string[];
-    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, option?: IRadioSelectorClickOption) => void;
 }
 
 export interface IDragAndDropProps {

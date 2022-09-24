@@ -250,23 +250,6 @@ const CreateNFT: NextPage = () => {
                             <ClipboardCopyIcon className="h-6 w-5"/>
                         </div>
                     </div>
-                    {/*{formData.contractAddress ? (*/}
-                    {/*    <div*/}
-                    {/*        className={*/}
-                    {/*            "flex text-lightGray hover:text-gray5 hover:cursor-pointer"*/}
-                    {/*        }*/}
-                    {/*        onClick={() =>*/}
-                    {/*            navigator.clipboard.writeText(formData.contractAddress)*/}
-                    {/*        }*/}
-                    {/*    >*/}
-                    {/*        {formData.contractAddress.slice(0, 6) +*/}
-                    {/*            "..." +*/}
-                    {/*            formData.contractAddress.slice(-4)}*/}
-                    {/*        <ClipboardCopyIcon className="h-6 w-5"/>*/}
-                    {/*    </div>*/}
-                    {/*) : (*/}
-                    {/*    <></>*/}
-                    {/*)}*/}
                     <Link
                         href={{
                             pathname: "create-dao",

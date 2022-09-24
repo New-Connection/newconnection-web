@@ -8,7 +8,6 @@ import {
     InputTextArea,
     InputSupplyOfNFT,
 } from "components/Form";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { Signer } from "ethers";
@@ -32,12 +31,12 @@ import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
-import { createNFTSteps } from "components/Dialog/Stepper";
-import { setURI } from "contract-interactions/writeNFTContract";
+import { addNFTSteps } from "components/Dialog/Stepper";
 import { addToken, deployNFTContract } from "contract-interactions";
+import { formatAddress } from "utils/address";
+import { ClipboardCopyIcon } from "@heroicons/react/solid";
 
 interface QueryUrlParams extends ParsedUrlQuery {
-    url: string;
     governorAddress: string;
     blockchain: string;
 }
@@ -109,7 +108,6 @@ const AddNewNFT: NextPage = () => {
 
     const fetchQuery = () => {
         const query = router.query as QueryUrlParams;
-        handleChangeBasic(query.url, setFormData, "governorUrl");
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasic(query.blockchain, setFormData, "blockchain");
     };
@@ -160,23 +158,20 @@ const AddNewNFT: NextPage = () => {
                 startMintId: 0,
                 endMintId: calculateSupply(),
             });
-            //console.log("formData contract address", formData.contractAddress);
-            //console.log("MORALIS SAVE\n\n");
             handleNext(setActiveStep);
+
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            // const supplyNFT = await getSupplyNumber(contract.address, chainId);
             handleNext(setActiveStep);
-            const setTx = await setURI(contract.address, signer_data, fullPath);
+
+            const addTx = await addToken(formData.governorAddress, signer_data, contract.address);
             handleNext(setActiveStep);
-            await setTx.wait();
+
+            await addTx.wait();
             handleNext(setActiveStep);
-            await addToken(formData.governorAddress, signer_data, contract.address);
-            console.log("token added");
+
             handleChangeBasic(contract.address, setFormData, "contractAddress");
-            console.log("Moralis saving");
             await saveNewNFTContractAddress(contract.address);
-            console.log("Moralis saving");
             handleNext(setActiveStep);
         } catch (error) {
             console.log(error);
@@ -290,20 +285,31 @@ const AddNewNFT: NextPage = () => {
                     dialog={confirmDialog}
                     className="dialog"
                     activeStep={activeStep}
-                    steps={createNFTSteps}
+                    steps={addNFTSteps}
                 >
                     <p className="ml-7">Deployment successful!</p>
-                    <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
-                    <Link href={`/daos/${formData.governorUrl}`}>
-                        <button
-                            className="form-submit-button"
-                            onClick={() => {
-                                confirmDialog.toggle();
-                            }}
+                    <div className="flex ml-7 mb-10">Contract Address:
+                        <div
+                            className={
+                                "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
+                            }
+                            onClick={() =>
+                                navigator.clipboard.writeText(formData.contractAddress)
+                            }
                         >
-                            Back to DAO
-                        </button>
-                    </Link>
+                            {formatAddress(formData.contractAddress)}
+                            <ClipboardCopyIcon className="h-6 w-5"/>
+                        </div>
+                    </div>
+                    <button
+                        className="form-submit-button"
+                        onClick={() => {
+                            confirmDialog.toggle();
+                            router.back()
+                        }}
+                    >
+                        Back to DAO
+                    </button>
                 </StepperDialog>
             </Layout>
         </div>

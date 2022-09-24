@@ -74,6 +74,29 @@ export const createNFTSteps = [
     },
 ];
 
+export const addNFTSteps = [
+    {
+        label: "Waiting for the confirmation in your wallet to create contract",
+        description: "",
+    },
+    {
+        label: "Waiting for the confirmation from blockchain",
+        description: "",
+    },
+    {
+        label: "Waiting for the confirmation in your wallet to add NFT to Governor",
+        description: "",
+    },
+    {
+        label: "Waiting for the confirmation from blockchain",
+        description: "",
+    },
+    {
+        label: "Done",
+        description: "",
+    },
+];
+
 export const createTreasurySteps = [
     {
         label: "Waiting for the confirmation in your wallet to create Treasury contract",
@@ -105,71 +128,72 @@ const ColorlibConnector = styled(StepConnector)(({}) => ({
     },
 }));
 
-export const StepperDialog = ({
-                                  dialog,
-                                  className,
-                                  activeStep,
-                                  children,
-                                  steps,
-                                  isClose = false,
-                              }: StepperDialogProps) => {
-    if (!steps) {
-        steps = defaultSteps;
-    }
-    return (
-        <Dialog
-            state={dialog}
-            className={classNames("dialog", className)}
-            hideOnInteractOutside={isClose}
-            hideOnEscape={isClose}
-        >
-            <div className="h-full m-10">
-                <Stepper
-                    activeStep={activeStep}
-                    orientation="vertical"
-                    connector={<ColorlibConnector/>}
-                >
-                    {steps.map((step, index) => (
-                        <Step key={index}>
-                            <div className="flex gap-2">
-                                {index === activeStep ? (
-                                    //step for rn active message
-                                    <>
-                                        <div className={"w-7"}>
-                                            <SpinnerLoading/>
-                                        </div>
-                                        <div className="text-xl text-black">{step.label}</div>
-                                    </>
-                                ) : index > activeStep - 1 ? (
-                                    //steps for next messages
-                                    <>
-                                        <div className={"w-7"}>
-                                            <CheckCircleIcon className="h-7 w-7 fill-gray3"/>
-                                        </div>
-                                        <div className="text-xl text-gray3">{step.label}</div>
-                                    </>
-                                ) : (
-                                    //steps for previous messages
-                                    <>
-                                        <div className={"w-7"}>
-                                            <CheckCircleIcon className="h-7 w-7 stroke-1 fill-purple"/>
-                                        </div>
-                                        <div className="text-xl text-black2">{step.label}</div>
-                                    </>
-                                )}
-                            </div>
-                            <StepContent>
-                                <Typography>{step.description}</Typography>
-                            </StepContent>
-                        </Step>
-                    ))}
-                </Stepper>
+export const StepperDialog =
+    ({
+         dialog,
+         className,
+         activeStep,
+         children,
+         steps,
+         isClose = false,
+     }: StepperDialogProps) => {
+        if (!steps) {
+            steps = defaultSteps;
+        }
+        return (
+            <Dialog
+                state={dialog}
+                className={classNames("dialog", className)}
+                hideOnInteractOutside={isClose}
+                hideOnEscape={isClose}
+            >
+                <div className="h-full m-10">
+                    <Stepper
+                        activeStep={activeStep}
+                        orientation="vertical"
+                        connector={<ColorlibConnector/>}
+                    >
+                        {steps.map((step, index) => (
+                            <Step key={index}>
+                                <div className="flex gap-2">
+                                    {index === activeStep ? (
+                                        //step for rn active message
+                                        <>
+                                            <div className={"w-7"}>
+                                                <SpinnerLoading/>
+                                            </div>
+                                            <div className="text-xl text-black">{step.label}</div>
+                                        </>
+                                    ) : index > activeStep - 1 ? (
+                                        //steps for next messages
+                                        <>
+                                            <div className={"w-7"}>
+                                                <CheckCircleIcon className="h-7 w-7 fill-gray3"/>
+                                            </div>
+                                            <div className="text-xl text-gray3">{step.label}</div>
+                                        </>
+                                    ) : (
+                                        //steps for previous messages
+                                        <>
+                                            <div className={"w-7"}>
+                                                <CheckCircleIcon className="h-7 w-7 stroke-1 fill-purple"/>
+                                            </div>
+                                            <div className="text-xl text-black2">{step.label}</div>
+                                        </>
+                                    )}
+                                </div>
+                                <StepContent>
+                                    <Typography>{step.description}</Typography>
+                                </StepContent>
+                            </Step>
+                        ))}
+                    </Stepper>
 
-                {
-                    //final step and children
-                    activeStep === steps.length && <div className="p-3">{children}</div>
-                }
-            </div>
-        </Dialog>
-    );
-};
+                    {
+                        //final step and children
+                        activeStep === steps.length && <div className="p-3">{children}</div>
+                    }
+                </div>
+            </Dialog>
+        );
+    };

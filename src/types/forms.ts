@@ -33,7 +33,6 @@ export interface IDAOPageForm extends ICreateDAO {
 }
 
 
-
 export interface IMembershipForm {
     walletAddress?: string;
     note?: string;
@@ -52,7 +51,6 @@ export interface IBlockchains {
 
 export interface ICreateNFT extends ICreate, IBlockchains {
     file: object;
-    governorUrl?: string;
     NFTtype: string;
     symbol: string;
     price: number;
@@ -64,10 +62,10 @@ export interface ICreateNFT extends ICreate, IBlockchains {
 }
 
 export interface ICreateProposal extends ICreate {
-    address?: string;
     proposalId?: string;
     governorAddress: string;
     tokenAddress?: string;
+    tokenName?: string;
     chainId?: number;
     shortDescription: string;
     file?: object;
@@ -90,7 +88,7 @@ export interface INFTVoting {
     image?: string;
     tokenAddress: string;
     price?: string;
-    
+
 }
 
 export interface IMultiNFTVoting {
@@ -98,7 +96,7 @@ export interface IMultiNFTVoting {
     tokenAddress: string[];
     tokenNames?: string[];
     daoName: string;
-} 
+}
 
 export interface IAddNewMember {
     daoName: string;
@@ -106,7 +104,8 @@ export interface IAddNewMember {
     daoAddress: string;
     tokenAddress: string[];
     tokenNames: string[];
-    votingToken: string;
+    votingTokenAddress: string;
+    votingTokenName: string;
     blockchainSelected: string[];
     note?: string;
 }

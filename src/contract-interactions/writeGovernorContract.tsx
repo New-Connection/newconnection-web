@@ -47,6 +47,5 @@ export async function addToken(
     tokenAddress: string
 ) {
     const governorContract = new ethers.Contract(governorContractAddress, GOVERNOR_ABI, signer);
-    const addTokenTx = await governorContract.addToken(tokenAddress);
-    await addTokenTx.wait();
+    return await governorContract.addToken(tokenAddress);
 }

@@ -41,16 +41,18 @@ const AddNewMember: NextPage = () => {
         daoAddress: "",
         tokenAddress: [],
         tokenNames: [],
-        votingToken: "",
+        votingTokenAddress: "",
+        votingTokenName: "",
         blockchainSelected: [],
         note: "",
     });
     const router = useRouter();
-    // const [names, setNames] = useState();
-    console.log("FORM" + formData.tokenAddress)
+
+    // console.log(formData)
+
     useEffect(() => {
         const query = router.query as QueryUrlParams;
-        console.log(query.tokenAddress);
+        // console.log(query.tokenAddress);
 
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
@@ -64,7 +66,7 @@ const AddNewMember: NextPage = () => {
             tokenNames.push(object.title);
         });
         handleAddArray(tokenNames, setFormData, "tokenNames");
-        console.log("token address", formData.tokenNames);
+        // console.log("token address", formData.tokenNames);
     }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
@@ -116,11 +118,16 @@ const AddNewMember: NextPage = () => {
                         </label>
                         {formData.tokenAddress ? (
                             <RadioSelectorMulti
-                                name="votingToken"
+                                name="votingTokenAddress"
                                 labels={[...formData.tokenNames]}
-                                handleChange={(event) =>
+                                handleChange={(event) => {
+                                    // setting tokenName
+                                    const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);
+                                    handleChangeBasic(currentTokenName, setFormData, "votingTokenName")
+
+                                    // setting tokenAddress
                                     handleTextChangeAddNewMember(event, setFormData)
-                                }
+                                }}
                                 values={formData.tokenAddress}
                             />
                         ) : (

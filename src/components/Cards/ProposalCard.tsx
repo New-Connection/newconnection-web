@@ -6,6 +6,7 @@ interface IProposalCard {
     title: string;
     shortDescription: string;
     chainId?: number;
+    tokenName?: string;
     description?: string;
     daoName?: string;
     blockchain?: string[];
@@ -15,16 +16,18 @@ interface IProposalCard {
     deadline?: number;
 }
 
-const ProposalCard = ({
-    title,
-    shortDescription,
-    daoName,
-    isActive,
-    chainId,
-    forVotes,
-    againstVotes,
-    deadline,
-}: IProposalCard) => {
+const ProposalCard = (
+    {
+        title,
+        shortDescription,
+        tokenName,
+        isActive,
+        chainId,
+        forVotes,
+        againstVotes,
+        deadline,
+
+    }: IProposalCard) => {
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
     return (
@@ -50,9 +53,9 @@ const ProposalCard = ({
                     <div className="flex gap-5 pb-2">
                         <div className="flex gap-5">
                             <p className="text-gray3">For</p>
-                            <p className="font-medium">{daoName}</p>
+                            <p className="font-medium">{tokenName}</p>
                         </div>
-                        <Image src={getLogoURI(chainId)} height={12} width={23} />
+                        <Image src={getLogoURI(chainId)} height={12} width={23}/>
                     </div>
                 </div>
 
@@ -60,14 +63,16 @@ const ProposalCard = ({
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{forV}</p>
-                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                            <span
+                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"In favor"}</p>
                     </div>
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{againstV}</p>
-                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                            <span
+                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"Against"}</p>
                     </div>
