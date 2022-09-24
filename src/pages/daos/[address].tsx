@@ -764,7 +764,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
                     <div
                         className={
-                            "treasury flex flex-col justify-between border-2 text-center border-lightGray rounded-lg h-40 p-3"
+                            "treasury flex flex-col justify-between border text-center border-lightGray rounded-lg p-3 h-52"
                         }
                     >
                         {DAO.treasuryAddress ? (
@@ -782,7 +782,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             <div className={"flex justify-center text-xl text-gray5"}>Treasury</div>
                         )}
 
-                        <div className={"text-3xl font-semibold"}>$ {treasuryBalance}</div>
+                        <div className={"text-4xl"}>$ {treasuryBalance}</div>
                         <div>
                             {!DAO.treasuryAddress && isOwner ? (
                                 <button className="secondary-button" onClick={addTreasury}>
@@ -794,7 +794,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 </button>
                             ) : (
                                 <button
-                                    className="secondary-button"
+                                    className="form-submit-button w-1/5"
                                     onClick={() => {
                                         if (!signer_data) {
                                             toast.error("Please connect wallet");
@@ -872,9 +872,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         )}
                     </>
                 </section>
-                <CustomDialog dialog={detailNFTDialog} className="h-full items-center text-center">
+                <CustomDialog
+                    dialog={detailNFTDialog}
+                    className="h-full w-full items-center text-center"
+                >
                     {currentNFT ? (
-                        <>
+                        <div className="w-full">
                             <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image} />
                             <p className="mt-4 text-black">{`${currentNFT.title}`}</p>
                             {
@@ -887,22 +890,30 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     {buttonState}
                                 </button>
                             }
-                            {/* <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
-                        Transfer
-                    </button>
-                    <p className="text-gray2 font-light text-sm">
-                        Try to transfer your NFT to another network
-                    </p> */}
                             <p className="w-full mt-12 text-start text-black">Details</p>
-                            <ul className="py-6 divide-y divide-slate-200">
-                                {DetailsInfo.map((element) => (
-                                    <li key={element} className="flex py-4 justify-between">
-                                        <p className="font-light text-gray2">{element}</p>
-                                        <p className="font-normal text-black">{currentNFT.title}</p>
-                                    </li>
-                                ))}
+                            <ul className="py-6 w-full divide-y divide-slate-200">
+                                <li className="flex py-4 justify-between">
+                                    <p className="font-light text-gray2">{"Type"}</p>
+                                    <p className="font-normal text-black">{currentNFT.type}</p>
+                                </li>
+                                <li className="flex py-4 justify-between">
+                                    <p className="font-light text-gray2">{"Price"}</p>
+                                    <p className="font-normal text-black">{currentNFT.price}</p>
+                                </li>
+                                <li className="flex py-4 justify-between">
+                                    <p className="font-light text-gray2">{"Token Address"}</p>
+                                    <p className="font-normal text-black">
+                                        {formatAddress(currentNFT.tokenAddress)}
+                                    </p>
+                                </li>
+                                <li className="flex py-4 justify-between">
+                                    <p className="font-light text-gray2">{"Blockchain"}</p>
+                                    <p className="font-normal text-black">
+                                        <BlockchainImage />
+                                    </p>
+                                </li>
                             </ul>
-                        </>
+                        </div>
                     ) : (
                         <></>
                     )}
