@@ -46,26 +46,25 @@ const AddNewMember: NextPage = () => {
         note: "",
     });
     const router = useRouter();
-    const [names, setNames] = useState();
-    let tokenNames = [];
-
-    console.log("FORM"+formData.tokenAddress)
+    // const [names, setNames] = useState();
+    console.log("FORM" + formData.tokenAddress)
     useEffect(() => {
         const query = router.query as QueryUrlParams;
         console.log(query.tokenAddress);
+
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
-        console.log("TOKK" + query.tokenAddress)
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
         handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
         const saved = localStorage.getItem(query.daoName + " NFTs");
         const initialValue = JSON.parse(saved);
+        const tokenNames = []
         console.log("saved", saved);
         initialValue.map((object) => {
             tokenNames.push(object.title);
         });
         handleAddArray(tokenNames, setFormData, "tokenNames");
-        console.log("token address", tokenNames);
+        console.log("token address", formData.tokenNames);
     }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
@@ -118,7 +117,7 @@ const AddNewMember: NextPage = () => {
                         {formData.tokenAddress ? (
                             <RadioSelectorMulti
                                 name="votingToken"
-                                labels={[...tokenNames]}
+                                labels={[...formData.tokenNames]}
                                 handleChange={(event) =>
                                     handleTextChangeAddNewMember(event, setFormData)
                                 }
