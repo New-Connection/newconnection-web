@@ -284,7 +284,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         setDAO(() => newDAO);
     };
 
-    const mint = async () => {
+    const mint = async (tokenAddress: string) => {
         if (!DAO) return null;
         // const chainID = await getChainId(signer_data as Signer);
         // const availableNFT = await getSupplyNumber(DAO.tokenAddress, chainID);
@@ -293,7 +293,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         setButtonState("Loading");
         // 1. try to reserve for owner dao, if not it will try to normal mint function
         try {
-            const tx = await mintReserveAndDelegation(DAO.tokenAddress[0], signer_data as Signer);
+            const tx = await mintReserveAndDelegation(tokenAddress, signer_data as Signer);
             if (tx) {
                 if (tx.blockNumber) {
                     toast.success(`DONE ✅ successful mint!`);
@@ -307,7 +307,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         }
         try {
             console.log("Call MINT NFT function");
-            await mintNFT(DAO.tokenAddress[0], signer_data as Signer);
+            await mintNFT(tokenAddress, signer_data as Signer);
             setButtonState("Success");
         } catch (e) {
             setButtonState("Error");
@@ -885,7 +885,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     className={`secondary-button w-full h-12 mt-4 mb-6 
                             ${buttonState === "Success" ? "bg-green" : ""} 
                             ${buttonState === "Error" ? "bg-red" : ""}`}
-                                    onClick={mint}
+                                    onClick={() => mint(currentNFT.tokenAddress)}
                                 >
                                     {buttonState}
                                 </button>
