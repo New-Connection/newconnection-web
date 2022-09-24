@@ -2,11 +2,24 @@ import React, { useEffect, useState, useLayoutEffect, useRef } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { useSigner } from "wagmi";
+import { IMultiNFTVoting } from "types/forms";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { IVotingNFTs } from "types/forms";
 import Layout from "components/Layout/Layout";
-import { handleTextChange, handleCheckboxChange, handleChangeBasic, handleChangeBasicArray } from "utils/handlers";
-import { CheckboxGroup, InputText, Button, InputTextArea } from "components/Form";
+import {
+    handleTextChange,
+    handleCheckboxChange,
+    handleChangeBasic,
+    handleTextChangeAddNewMember,
+} from "utils/handlers";
+import {
+    CheckboxGroup,
+    InputText,
+    Button,
+    InputTextArea,
+    RadioSelector,
+} from "components/Form";
 import { ICreateProposal } from "types/forms";
 import BackButton from "components/Button/backButton";
 import { useDialogState } from "ariakit";
@@ -23,9 +36,6 @@ import {
 } from "database/interactions";
 import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import { useMoralisQuery, useMoralis } from "react-moralis";
-import { getChainNames } from "utils/blockchains";
-import { formatAddress } from "../../../utils/address";
-import { ClipboardCopyIcon } from "@heroicons/react/solid";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     address: string;
@@ -49,13 +59,14 @@ const CreateProposal: NextPage = () => {
         enabledBlockchains: [],
     });
     const router = useRouter();
-    const [votingNFTs, setVotingNFTs] = useState<IVotingNFTs>();
+    const [votingNFTs, setVotingNFTs] = useState<IMultiNFTVoting>();
     const { data: signer_data } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
     const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
     const firstUpdate = useRef(true);
+    let tokensNames = [];
 
     const { fetch } = useMoralisQuery(
         "DAO",
@@ -75,16 +86,19 @@ const CreateProposal: NextPage = () => {
             await fetch({
                 onSuccess: async (results) => {
                     const votingTokens = results[0];
-                    const newVotingTokens: IVotingNFTs = {
-                        daoAddress: votingTokens.get("governorAddress"),
-                        daoTokenAddresess: votingTokens.get("tokenAddress"),
+                    const newVotingTokens: IMultiNFTVoting = {
+                        daoAddress: await votingTokens.get("governorAddress"),
+                        tokenAddress: await votingTokens.get("tokenAddress"),
+                        daoName: await votingTokens.get("name"),
                     };
+                    const saved = localStorage.getItem(newVotingTokens.daoName + " NFTs");
+                    const initialValue = JSON.parse(saved);
+                    console.log("saved", initialValue);
+                    initialValue.map((object) => {
+                        tokensNames.push(object.title);
+                    });
                     setVotingNFTs(() => newVotingTokens);
-                    handleChangeBasic(
-                        newVotingTokens.daoTokenAddresess[0],
-                        setFormData,
-                        "tokenAddress"
-                    );
+                    handleAddArray(tokensNames, setVotingNFTs, "tokenNames");
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);
@@ -92,7 +106,7 @@ const CreateProposal: NextPage = () => {
             });
         }
     };
-    console.log(formData)
+
     const setupData = async () => {
         const query = router.query as QueryUrlParams;
         // console.log(query)
@@ -133,12 +147,13 @@ const CreateProposal: NextPage = () => {
         confirmDialog.toggle();
 
         let proposalId;
+        console.log("0", formData.tokenAddress);
         try {
             proposalId = await createProposal(
                 formData.governorAddress,
                 signer_data as Signer,
                 formData.name,
-                votingNFTs.daoTokenAddresess[0]
+                formData.tokenAddress
             );
             handleNext(setActiveStep);
             handleNext(setActiveStep);
@@ -170,7 +185,7 @@ const CreateProposal: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton/>
+                    <BackButton />
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={createProposalContract}
@@ -211,6 +226,19 @@ const CreateProposal: NextPage = () => {
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
                             }
                         />
+                        <p>Choose voting token</p>
+                        {votingNFTs ? (
+                            <RadioSelectorMulti
+                                name="tokenAddress"
+                                labels={[...votingNFTs.tokenNames]}
+                                handleChange={(event) =>
+                                    handleTextChangeAddNewMember(event, setFormData)
+                                }
+                                values={votingNFTs.tokenAddress}
+                            />
+                        ) : (
+                            <></>
+                        )}
                         <Button className="mt-5">Create Proposal</Button>
                     </form>
                 </section>

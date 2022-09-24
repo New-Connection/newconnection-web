@@ -75,6 +75,7 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
                         governorAddress: proposal.get("governorAddress"),
                     };
                     setProposal(() => newProposal);
+                    //console.log(newProposal);
                 },
                 onError: (error) => {
                     console.log("Error fetching db query" + error);

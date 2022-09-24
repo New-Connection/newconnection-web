@@ -4,7 +4,14 @@ import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
-import { Button, InputText, BlockchainSelector, InputTextArea } from "components/Form";
+import {
+    Button,
+    InputText,
+    BlockchainSelector,
+    InputTextArea,
+    RadioSelector,
+    RadioSelectorMulti,
+} from "components/Form";
 import BackButton from "components/Button/backButton";
 import { NFTCardMockup } from "components/Cards/NFTCard";
 import { validateForm } from "utils/validate";
@@ -14,6 +21,8 @@ import {
     handleSelectorChangeNewMember,
     handleChangeBasicArray,
     handleChangeBasic,
+    handleChangeBasicSimple,
+    handleAddArray,
 } from "utils/handlers";
 import {
     getMoralisInstance,
@@ -27,6 +36,7 @@ interface QueryUrlParams extends ParsedUrlQuery {
     nftAddress: string;
     governorAddress: string;
     blockchains: string[];
+    tokenAddress: string[];
 }
 
 const AddNewMember: NextPage = () => {
@@ -34,39 +44,44 @@ const AddNewMember: NextPage = () => {
         daoName: "",
         walletAddress: "",
         daoAddress: "",
-        nftID: [0],
+        tokenAddress: [],
+        tokenNames: [],
+        votingToken: "",
         blockchainSelected: "",
-        blockchainEnabled: [],
         note: "",
     });
     const router = useRouter();
+    const [names, setNames] = useState();
+    let temp = [];
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
+        console.log(query.tokenAddress);
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
-        handleChangeBasicArray(query.blockchains, setFormData, "blockchainEnabled");
+        handleChangeBasic(query.blockchains, setFormData, "blockchainSelected");
+        handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
+        const saved = localStorage.getItem(query.daoName + " NFTs");
+        const initialValue = JSON.parse(saved);
+        console.log("saved", saved);
+        initialValue.map((object) => {
+            temp.push(object.title);
+        });
+        handleAddArray(temp, setFormData, "tokenNames");
+        console.log("token address", temp);
     }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
-        // TODO: Need to create Signature Request
-        // https://wagmi.sh/examples/sign-in-with-ethereum
-        // if (!signer_data) {
-        //     toast.error("Please connect wallet");
-        //     return;
-        // }
         if (!validateForm(formData, ["note"])) {
             return;
         }
-        console.log(formData);
+
         try {
-            //const toastID = toast.loading("Please wait...", { position: "bottom-center" });
             const moralisProposal = getMoralisInstance(MoralisClassEnum.WHITELIST);
             setFieldsIntoMoralisInstance(moralisProposal, formData);
             await saveMoralisInstance(moralisProposal);
-            //toast.dismiss(toastID);
             toast.success("Wallet was saved", {
                 duration: 4000,
                 className: "bg-red",
@@ -101,22 +116,16 @@ const AddNewMember: NextPage = () => {
                             }
                         />
                         <label>
-                            <div className="input-label">Membership NFT</div>
+                            <div className="input-label">Choose voting token</div>
                         </label>
-                        <NFTCardMockup className="border-purple border-4 rounded-xl" />
-
-                        {formData.blockchainEnabled.length > 0 ? (
-                            <BlockchainSelector
-                                name="blockchainSelected"
-                                label="Choose your priority blockchain"
-                                enabledValues={formData.blockchainEnabled}
-                                handleChange={(event) => {
-                                    return handleSelectorChangeNewMember(
-                                        event,
-                                        setFormData,
-                                        "blockchainSelected"
-                                    );
-                                }}
+                        {formData.tokenAddress ? (
+                            <RadioSelectorMulti
+                                name="votingToken"
+                                labels={[...formData.tokenNames]}
+                                handleChange={(event) =>
+                                    handleTextChangeAddNewMember(event, setFormData)
+                                }
+                                values={formData.tokenAddress}
                             />
                         ) : (
                             <></>

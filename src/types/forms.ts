@@ -32,10 +32,7 @@ export interface IDAOPageForm extends ICreateDAO {
     treasuryAddress?: string;
 }
 
-export interface IVotingNFTs {
-    daoTokenAddresess: string[];
-    daoAddress: string;
-}
+
 
 export interface IMembershipForm {
     walletAddress?: string;
@@ -88,19 +85,29 @@ export interface IProposalPageForm extends ICreateProposal {
 }
 
 export interface INFTVoting {
-    title: string;
-    type: string;
-    image: string;
+    title?: string;
+    type?: string;
+    image?: string;
     tokenAddress: string;
+    price?: string;
+    
 }
+
+export interface IMultiNFTVoting {
+    daoAddress?: string;
+    tokenAddress: string[];
+    tokenNames?: string[];
+    daoName: string;
+} 
 
 export interface IAddNewMember {
     daoName: string;
     walletAddress: string;
     daoAddress: string;
-    nftID: number[];
+    tokenAddress: string[];
+    tokenNames: string[];
+    votingToken: string;
     blockchainSelected: string;
-    blockchainEnabled: string[];
     note?: string;
 }
 

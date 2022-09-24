@@ -45,6 +45,7 @@ export interface IRadioSelector {
     name: string;
     labels: string[];
     className?: string;
+    values?: string[];
     handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
