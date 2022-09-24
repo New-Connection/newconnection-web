@@ -4,9 +4,33 @@ import { networkDetails } from "utils/blockchains";
 import { BaseProvider } from "@ethersproject/providers/src.ts/base-provider";
 
 export async function getNftName(contractAddress: string, chainId: number) {
-    let provider = networkDetails[chainId].chainProviders as BaseProvider;
-    const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
-    return await nft.name();
+    try {
+        let provider = networkDetails[chainId].chainProviders as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        return await nft.name();
+    } catch (e) {
+        console.log("Error while parsing NFT.name");
+    }
+}
+
+export async function getPrice(contractAddress: string, chainId: number) {
+    try {
+        let provider = networkDetails[chainId].chainProviders as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        return await nft.pricePerToken();
+    } catch (e) {
+        console.log("Error while parsing NFT price per token");
+    }
+}
+
+export async function getSymbol(contractAddress: string, chainId: number) {
+    try {
+        let provider = networkDetails[chainId].chainProviders as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
+        return await nft.symbol();
+    } catch (e) {
+        console.log("Error while parsing NFT symbol");
+    }
 }
 
 export async function getTokenURI(contractAddress: string, chainId: number) {
@@ -15,7 +39,7 @@ export async function getTokenURI(contractAddress: string, chainId: number) {
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, provider);
         return await nft.baseURI();
     } catch (e) {
-        console.log("Error while parsing token URI");
+        console.log("Error while parsing NFT URL");
     }
 }
 
