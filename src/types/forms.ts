@@ -95,16 +95,18 @@ export interface INFTVoting {
 export interface IMultiNFTVoting {
     daoAddress?: string;
     tokenAddress: string[];
+    tokenNames?: string[];
+    daoName: string;
 } 
 
 export interface IAddNewMember {
     daoName: string;
     walletAddress: string;
     daoAddress: string;
-    nftID: number[];
     tokenAddress: string[];
+    tokenNames: string[];
+    votingToken: string;
     blockchainSelected: string;
-    blockchainEnabled: string[];
     note?: string;
 }
 
