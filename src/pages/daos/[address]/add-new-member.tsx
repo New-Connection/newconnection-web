@@ -10,6 +10,7 @@ import {
     BlockchainSelector,
     InputTextArea,
     RadioSelector,
+    RadioSelectorMulti,
 } from "components/Form";
 import BackButton from "components/Button/backButton";
 import { NFTCardMockup } from "components/Cards/NFTCard";
@@ -44,21 +45,30 @@ const AddNewMember: NextPage = () => {
         walletAddress: "",
         daoAddress: "",
         tokenAddress: [],
-        nftID: [0],
+        tokenNames: [],
+        votingToken: "",
         blockchainSelected: "",
-        blockchainEnabled: [],
         note: "",
     });
     const router = useRouter();
+    const [names, setNames] = useState();
+    let temp = [];
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
         console.log(query.tokenAddress);
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
-        handleChangeBasicArray(query.blockchains, setFormData, "blockchainEnabled");
+        handleChangeBasic(query.blockchains, setFormData, "blockchainSelected");
         handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
-        console.log(formData.tokenAddress);
+        const saved = localStorage.getItem(query.daoName + " NFTs");
+        const initialValue = JSON.parse(saved);
+        console.log("saved", saved);
+        initialValue.map((object) => {
+            temp.push(object.title);
+        });
+        handleAddArray(temp, setFormData, "tokenNames");
+        console.log("token address", temp);
     }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
@@ -69,11 +79,9 @@ const AddNewMember: NextPage = () => {
         }
 
         try {
-            //const toastID = toast.loading("Please wait...", { position: "bottom-center" });
             const moralisProposal = getMoralisInstance(MoralisClassEnum.WHITELIST);
             setFieldsIntoMoralisInstance(moralisProposal, formData);
             await saveMoralisInstance(moralisProposal);
-            //toast.dismiss(toastID);
             toast.success("Wallet was saved", {
                 duration: 4000,
                 className: "bg-red",
@@ -108,15 +116,16 @@ const AddNewMember: NextPage = () => {
                             }
                         />
                         <label>
-                            <div className="input-label">Choose voting tokens</div>
+                            <div className="input-label">Choose voting token</div>
                         </label>
-                        {formData ? (
-                            <RadioSelector
-                                name="tokenAddress"
-                                labels={formData.tokenAddress}
+                        {formData.tokenAddress ? (
+                            <RadioSelectorMulti
+                                name="votingToken"
+                                labels={[...formData.tokenNames]}
                                 handleChange={(event) =>
                                     handleTextChangeAddNewMember(event, setFormData)
                                 }
+                                values={formData.tokenAddress}
                             />
                         ) : (
                             <></>
