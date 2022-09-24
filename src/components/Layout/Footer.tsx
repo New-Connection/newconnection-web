@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Separator } from "ariakit/separator";
 
-import { TwitterIcon } from "components/Icons/TwitterIcon";
-import { DiscordIcon } from "components/Icons/DiscordIcon";
+import { DiscordIcon, TwitterIcon } from "components/Icons/";
 
 const Footer = () => {
     return (
