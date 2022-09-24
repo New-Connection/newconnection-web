@@ -9,7 +9,9 @@ import {
     handleTextChange,
     handleCheckboxChange,
     handleChangeBasic,
-    handleTextChangeAddNewMember, handleAddArray, handleChangeBasicArray,
+    handleTextChangeAddNewMember,
+    handleAddArray,
+    handleChangeBasicArray,
 } from "utils/handlers";
 import {
     CheckboxGroup,
@@ -83,7 +85,6 @@ const CreateProposal: NextPage = () => {
     const fetchData = async () => {
         console.log("isInitialized: ", isInitialized);
         if (isInitialized) {
-            console.log("After Fetch Data");
             await fetch({
                 onSuccess: async (results) => {
                     const votingTokens = results[0];
@@ -132,7 +133,6 @@ const CreateProposal: NextPage = () => {
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        // await mintClick("0x6DF6474553A8B1cDe0Cc6Bc4c72d814CC2565B8F", signer_data as Signer);
         if (!signer_data) {
             toast.error("Please connect wallet");
             return;
@@ -186,7 +186,7 @@ const CreateProposal: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton/>
+                    <BackButton />
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={createProposalContract}
@@ -215,8 +215,6 @@ const CreateProposal: NextPage = () => {
                             handleChange={(event) => handleTextChange(event, setFormData)}
                             isRequired
                         />
-                        {/* <FileAndLinkForm /> */}
-
                         <CheckboxGroup
                             label="Proposal Blockchain"
                             description="You can choose one or more blockchains"
@@ -245,17 +243,16 @@ const CreateProposal: NextPage = () => {
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
                     <p>Proposal created successful!</p>
-                    <div className="flex ml-7 mb-10">Proposal Id:
+                    <div className="flex ml-7 mb-10">
+                        Proposal Id:
                         <div
                             className={
                                 "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
                             }
-                            onClick={() =>
-                                navigator.clipboard.writeText(formData.proposalId)
-                            }
+                            onClick={() => navigator.clipboard.writeText(formData.proposalId)}
                         >
                             {formatAddress(formData.proposalId)}
-                            <ClipboardCopyIcon className="h-6 w-5"/>
+                            <ClipboardCopyIcon className="h-6 w-5" />
                         </div>
                     </div>
                     <Link href={`/daos/${formData.address}`}>
