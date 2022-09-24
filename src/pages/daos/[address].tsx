@@ -111,9 +111,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     );
     const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
-        (query) =>
-            query.equalTo("daoAddress", DAO?.governorAddress) &&
-            query.equalTo("chainId", DAO?.chainId),
+        (query) => query.equalTo("daoAddress", DAO?.governorAddress),
         [DAO],
         {
             autoFetch: false,
