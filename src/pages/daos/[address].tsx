@@ -471,7 +471,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         key={proposalId}
                                         className="border-b-2 border-gray cursor-pointer active:bg-gray"
                                     >
-                                        <ProposalCard
+                                                <ProposalCard
                                             title={name}
                                             description={description}
                                             shortDescription={shortDescription}
