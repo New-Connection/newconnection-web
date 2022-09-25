@@ -8,6 +8,7 @@ export interface ICreateDAO extends ICreate {
     goals: string;
     profileImage: any;
     coverImage: any;
+    isActive?:boolean;
     tokenAddress: string[];
     votingPeriod: string;
     quorumPercentage: string;
