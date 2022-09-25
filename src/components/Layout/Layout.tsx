@@ -28,7 +28,7 @@ export default function Layout({
             <HeadInfo />
             <div
                 className={
-                    isMinHeightTurnOff ? "relative h-[calc(100vh-240px)]" : "relative min-h-screen"
+                    isMinHeightTurnOff ? "relative h-[calc(100vh-135px)]" : "relative min-h-screen"
                 }
             >
                 <Header />
