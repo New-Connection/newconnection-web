@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { ParsedUrlQuery } from "querystring";
-import { useAccount, useBalance } from "wagmi";
+import { useAccount } from "wagmi";
 
 import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
@@ -63,7 +63,7 @@ const ChatsPage: NextPage = () => {
                 chainId
             ));
             console.log("Number of tokens", numberOfTokens);
-            if (numberOfTokens != 0) {
+            if (numberOfTokens > 0) {
                 setIndexOpenChat([...indexOfOpenChatsForUser, 0]);
             }
         } else {
@@ -75,14 +75,14 @@ const ChatsPage: NextPage = () => {
                     chainId
                 ));
                 console.log("Number of tokens", numberOfTokens);
-                if (numberOfTokens != 0) {
+                if (numberOfTokens > 0) {
                     setIndexOpenChat(() => [...indexOfOpenChatsForUser, index]);
                 }
             });
         }
-
-        console.log("Index of Open chats for user", indexOfOpenChatsForUser);
     }
+
+    console.log("Index of Open chats for user", indexOfOpenChatsForUser);
 
     return (
         <div>
@@ -97,38 +97,46 @@ const ChatsPage: NextPage = () => {
                             <div className="container mx-auto rounded-lg border-t border-[#ccc]">
                                 <div className="flex flex-row justify-between bg-white">
                                     {/* User chat*/}
-                                    <div className="flex flex-col w-2/5 overflow-y-auto border-r border-[#ccc] pb-4">
-                                        <ul>
-                                            {formData ? (
-                                                formData.tokenNames.map((chatName, index) => (
-                                                    <li
-                                                        className={
-                                                            chatActiveIndex === index
-                                                                ? "flex flex-row py-4 px-2 justify-center items-center border-l-4 border-purple"
-                                                                : "flex flex-row py-4 px-2 justify-center items-center cursor-pointer"
-                                                        }
-                                                        key={index}
-                                                        onClick={() => {
-                                                            setChatActive(index);
-                                                            setChatOpen(true);
-                                                            console.log("Index", index);
-                                                        }}
-                                                    >
-                                                        <div className="w-full">
-                                                            <div className="text-lg font-semibold">
-                                                                {chatName}
-                                                            </div>
-                                                            <span className="text-gray-500">
-                                                                DAO members
-                                                            </span>
+                                    <div className="flex flex-col w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
+                                        {formData ? (
+                                            formData.tokenNames.map((chatName, index) => (
+                                                <button
+                                                    className={
+                                                        chatActiveIndex === index
+                                                            ? "flex flex-row py-4 px-2 justify-center items-center border-l-4 border-purple"
+                                                            : "flex flex-row py-4 px-2 justify-center items-center cursor-pointer disabled:cursor-not-allowed"
+                                                    }
+                                                    key={index}
+                                                    type={"button"}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setChatActive(index);
+                                                        setChatOpen(true);
+                                                        console.log("Index", index);
+                                                    }}
+                                                    //TODO change condition
+                                                    disabled={
+                                                        !indexOfOpenChatsForUser.includes(index)
+                                                    }
+                                                >
+                                                    <div className="w-full">
+                                                        <div className="text-lg font-semibold">
+                                                            {chatName}
                                                         </div>
+                                                        <span className="text-gray-500">
+                                                            DAO members
+                                                        </span>
+                                                    </div>
+                                                    {indexOfOpenChatsForUser.includes(index) ? (
+                                                        <></>
+                                                    ) : (
                                                         <LockIcon />
-                                                    </li>
-                                                ))
-                                            ) : (
-                                                <></>
-                                            )}
-                                        </ul>
+                                                    )}
+                                                </button>
+                                            ))
+                                        ) : (
+                                            <></>
+                                        )}
                                     </div>
                                     {/* Messanger IFRAME */}
                                     {isChatOpen && formData ? (
