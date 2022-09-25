@@ -78,3 +78,17 @@ export async function getNumAvailableToMint(
         console.log("Error in getNumAvailableToMint()");
     }
 }
+
+export async function getNumberOfTokenInOwnerAddress(
+    userAddress: string,
+    contractAddress: string,
+    chainId: number
+) {
+    try {
+        let baseProvider = provider({ chainId }) as BaseProvider;
+        const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
+        return await nft.balanceOf(userAddress); // 0 if you don't have tokens
+    } catch (e) {
+        console.log("Error in getNumAvailableToMint()");
+    }
+}

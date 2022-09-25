@@ -3,13 +3,15 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { ParsedUrlQuery } from "querystring";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 
 import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
 import { handleAddArray, handleChangeBasic, handleChangeBasicArray } from "utils/handlers";
 import { IAddNewMember } from "types/forms";
 import { formatAddress } from "utils/address";
+import { LockIcon } from "components/Icons";
+import { getNumberOfTokenInOwnerAddress } from "contract-interactions/viewNftContract";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     daoName: string;
@@ -17,20 +19,24 @@ interface QueryUrlParams extends ParsedUrlQuery {
     governorAddress: string;
     blockchains: string[];
     tokenAddress: string[];
+    chainId: string;
 }
 
 const ChatsPage: NextPage = () => {
-    const chats = ["Chat 01", "Chat 02", "Chat 03"];
     const [chatActiveIndex, setChatActive] = useState(null);
     const { address, isConnecting, isDisconnected } = useAccount();
+
     const [isChatOpen, setChatOpen] = useState(false);
     const router = useRouter();
     const [formData, setFormData] = useState<IAddNewMember>();
+
+    const [indexOfOpenChatsForUser, setIndexOpenChat] = useState([]);
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
+        handleChangeBasic(query.chainId, setFormData, "chainId");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
         handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
         const saved = localStorage.getItem(query.daoName + " NFTs");
@@ -39,8 +45,44 @@ const ChatsPage: NextPage = () => {
         initialValue.map((object) => {
             tokenNames.push(object.title);
         });
+        console.log("query token address", query.tokenAddress);
         handleAddArray(tokenNames, setFormData, "tokenNames");
+        query.tokenAddress
+            ? checkNFTs(query.tokenAddress, address, query?.chainId as unknown as number)
+            : console.log("don't have token");
     }, [router]);
+
+    async function checkNFTs(tokenAddresses: string[], walletAddress: string, chainId: number) {
+        console.log("Start check NFTs process");
+        console.log(tokenAddresses);
+        // Only one token
+        if (typeof tokenAddresses === "string") {
+            const numberOfTokens = await getNumberOfTokenInOwnerAddress(
+                walletAddress,
+                tokenAddresses,
+                chainId
+            );
+            console.log("Number of tokens", numberOfTokens);
+            if (numberOfTokens != 0) {
+                setIndexOpenChat([...indexOfOpenChatsForUser, 0]);
+            }
+        } else {
+            tokenAddresses.map(async (token, index) => {
+                console.log(index);
+                const numberOfTokens = await getNumberOfTokenInOwnerAddress(
+                    walletAddress,
+                    token,
+                    chainId
+                );
+                console.log("Number of tokens", numberOfTokens);
+                if (numberOfTokens != 0) {
+                    setIndexOpenChat([...indexOfOpenChatsForUser, index]);
+                }
+            });
+        }
+
+        console.log("Index of Open chats for user", indexOfOpenChatsForUser);
+    }
 
     return (
         <div>
@@ -80,6 +122,7 @@ const ChatsPage: NextPage = () => {
                                                                 DAO members
                                                             </span>
                                                         </div>
+                                                        <LockIcon />
                                                     </li>
                                                 ))
                                             ) : (
