@@ -140,7 +140,8 @@ const ChatsPage: NextPage = () => {
                                     </div>
                                     {/* Messanger IFRAME */}
                                     {isChatOpen && formData ? (
-                                        <div className="w-full flex flex-col justify-between h-[calc(100vh-190px-165px)]">
+                                        <div
+                                            className="w-full flex flex-col justify-between h-[calc(100vh-190px-165px)]">
                                             <iframe
                                                 src={`https://newconnection.click/${
                                                     formData.tokenAddress[chatActiveIndex]
