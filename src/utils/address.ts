@@ -1,1 +1,2 @@
-export const formatAddress = (address: string | undefined) => (address ? `${address.slice(0, 6)}…${address.slice(38, 42)}` : '');
+export const formatAddress = (address: string | undefined) =>
+    (address ? `${address.slice(0, 6)}…${address.slice(-4)}` : '');

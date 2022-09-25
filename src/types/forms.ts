@@ -4,15 +4,17 @@ export interface ICreate {
 }
 
 export interface ICreateDAO extends ICreate {
+    url: string;
     goals: string;
     profileImage: any;
     coverImage: any;
-    tokenAddress: string;
+    isActive?:boolean;
+    tokenAddress: string[];
     votingPeriod: string;
     quorumPercentage: string;
     type: string[];
     blockchain: string[];
-    contractAddress?: string;
+    governorAddress?: string;
     chainId?: number;
     discordURL?: string;
     twitterURL?: string;
@@ -28,7 +30,9 @@ export interface IDAOPageForm extends ICreateDAO {
     activeProposals?: number;
     nftImage?: any;
     isActive?: boolean;
+    treasuryAddress?: string;
 }
+
 
 export interface IMembershipForm {
     walletAddress?: string;
@@ -37,22 +41,22 @@ export interface IMembershipForm {
 }
 
 export interface IBlockchains {
-    Polygon?: string;
-    Ethereum?: string;
-    Arbitrum?: string;
-    Binance?: string;
-    Avalanche?: string;
-    Fantom?: string;
-    Optimism?: string;
+    Polygon?: number;
+    Ethereum?: number;
+    Arbitrum?: number;
+    Binance?: number;
+    Avalanche?: number;
+    Fantom?: number;
+    Optimism?: number;
 }
 
 export interface ICreateNFT extends ICreate, IBlockchains {
     file: object;
     NFTtype: string;
-    collectionName: string;
-    royalties: number;
     symbol: string;
     price: number;
+    blockchain: string;
+    governorAddress?: string;
     // numberOfNFT: { [blockchainName: string]: number };
     contractAddress?: string;
     ipfsAddress?: string;
@@ -61,6 +65,8 @@ export interface ICreateNFT extends ICreate, IBlockchains {
 export interface ICreateProposal extends ICreate {
     proposalId?: string;
     governorAddress: string;
+    tokenAddress?: string;
+    tokenName?: string;
     chainId?: number;
     shortDescription: string;
     file?: object;
@@ -77,13 +83,32 @@ export interface IProposalPageForm extends ICreateProposal {
     deadline?: number;
 }
 
+export interface INFTVoting {
+    title?: string;
+    type?: string;
+    image?: string;
+    tokenAddress: string;
+    price?: string;
+
+}
+
+export interface IMultiNFTVoting {
+    daoAddress?: string;
+    tokenAddress: string[];
+    tokenNames?: string[];
+    daoName: string;
+}
+
 export interface IAddNewMember {
     daoName: string;
     walletAddress: string;
+    chainId?: string;
     daoAddress: string;
-    nftID: number[];
-    blockchainSelected: string;
-    blockchainEnabled: string[];
+    tokenAddress: string[];
+    tokenNames: string[];
+    votingTokenAddress: string;
+    votingTokenName: string;
+    blockchainSelected: string[];
     note?: string;
 }
 

@@ -1,11 +1,11 @@
-import { FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import { NextPage } from "next";
-import { useSigner } from "wagmi";
+import { useSigner, useSwitchNetwork } from "wagmi";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
 import Link from "next/link";
-import { ICreateDAO } from "types/forms";
+import { ICreate, ICreateDAO } from "types/forms";
 import { validateForm } from "utils/validate";
 import Layout from "components/Layout";
 import {
@@ -21,8 +21,9 @@ import {
     handleCheckboxChange,
     handleImageChange,
     handleTextChange,
+    handleChangeBasicSimple,
 } from "utils/handlers";
-import { deployGovernorContract } from "contract-interactions/useDeployGovernorContract";
+import { deployGovernorContract } from "contract-interactions/";
 import { BLOCKS_IN_DAY } from "utils/constants";
 import {
     getMoralisInstance,
@@ -32,10 +33,12 @@ import {
 } from "database/interactions";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { StepperDialog } from "../components/Dialog";
-
-import { CHAINS, CHAINS_IMG } from "utils/blockchains";
+import { StepperDialog, handleReset, handleNext } from "components/Dialog";
+import { CHAINS, getChainNames } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
+import { useMoralisQuery } from "react-moralis";
+import { ClipboardCopyIcon } from "@heroicons/react/solid";
+import { formatAddress } from "utils/address";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 
@@ -44,45 +47,73 @@ interface QueryUrlParams extends ParsedUrlQuery {
     enabledBlockchains: string[];
 }
 
+const createUrl = (name: string): string => {
+    // console.log("url: ", name);
+    return name.replace(/ /g, "-");
+};
+
 const CreateDAO: NextPage = () => {
     const router = useRouter();
 
     const [formData, setFormData] = useState<ICreateDAO>({
+        url: "",
         name: "",
         goals: "",
         profileImage: {},
         coverImage: {},
-        tokenAddress: "",
+        tokenAddress: [],
         votingPeriod: "",
         quorumPercentage: "",
         type: [],
         blockchain: [],
         description: "",
+        isActive: false,
     });
+
     const { data: signer_data } = useSigner();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    const { switchNetwork } = useSwitchNetwork();
+
+    const { fetch: urlFetch } = useMoralisQuery(
+        "DAO",
+        (query) => query.equalTo("url", formData.url),
+        [formData.url],
+        {
+            autoFetch: false,
+        }
+    );
+
+    const checkUrlAvailability = async () => {
+        let available = false;
+        await urlFetch({
+            onSuccess: (results) => {
+                available = results.length === 0;
+            },
+        });
+        return available;
     };
 
-    const handleReset = () => {
-        setActiveStep(0);
+    const handleDaoNameUrlChange = <T extends ICreate,
+        E extends HTMLInputElement | HTMLTextAreaElement>(
+        event: ChangeEvent<E>,
+        set: Dispatch<SetStateAction<T>>,
+        field: string
+    ) => {
+        set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+        handleChangeBasic(createUrl(event.target.value), set, field);
     };
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
-
-        handleChangeBasic(query.tokenAddress, setFormData, "tokenAddress");
+        handleChangeBasicSimple(query.tokenAddress, setFormData, "tokenAddress");
         handleChangeBasic(query.enabledBlockchains, setFormData, "enabledBlockchains");
-
-        console.log(`tokenAddress from query: ${query.tokenAddress}`);
     }, []);
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        console.log(formData);
         if (!signer_data) {
             toast.error("Please connect wallet");
             return;
@@ -91,7 +122,17 @@ const CreateDAO: NextPage = () => {
         if (!validateForm(formData)) {
             return;
         }
-        handleReset();
+
+        const isUrlAvailable = await checkUrlAvailability();
+        if (!isUrlAvailable) {
+            toast.error("Name unavailable");
+            return;
+        }
+        console.log(formData.url);
+
+        switchNetwork(CHAINS[formData.blockchain[0]].id);
+
+        handleReset(setActiveStep);
         confirmDialog.toggle();
 
         let profileImagePath;
@@ -116,28 +157,27 @@ const CreateDAO: NextPage = () => {
             handleChangeBasic(coverImagePath, setFormData, "coverImage");
         } catch (error) {
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Couldn't save your NFT on IPFS. Please try again");
             return;
         }
 
         let contract;
         try {
-            console.log(formData);
             contract = await deployGovernorContract(signer_data as Signer, {
                 name: formData.name,
-                tokenAddress: formData.tokenAddress,
+                tokenAddress: formData.tokenAddress[0],
                 votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
                 quorumPercentage: +formData.quorumPercentage,
             });
-            handleNext();
+            handleNext(setActiveStep);
             await contract.deployed();
-            handleNext();
-            handleNext();
-            handleChangeBasic(contract.address, setFormData, "contractAddress");
+            handleNext(setActiveStep);
+            handleNext(setActiveStep);
+            handleChangeBasic(contract.address, setFormData, "governorAddress");
         } catch (error) {
             confirmDialog.toggle();
-            handleReset();
+            handleReset(setActiveStep);
             toast.error("Please approve transaction to create DAO");
             return;
         }
@@ -150,7 +190,7 @@ const CreateDAO: NextPage = () => {
             setFieldsIntoMoralisInstance(moralisDao, formData);
             console.log("Contract Address for Moralis", contract.address);
             // use state not update immediately
-            moralisDao.set("contractAddress", contract.address);
+            moralisDao.set("governorAddress", contract.address);
             moralisDao.set("chainId", chainId);
             moralisDao.set("profileImage", profileImagePath);
             moralisDao.set("coverImage", coverImagePath);
@@ -177,7 +217,9 @@ const CreateDAO: NextPage = () => {
                             placeholder="Unique DAO name"
                             labelTitle="Unique DAO name"
                             maxLength={30}
-                            handleChange={(event) => handleTextChange(event, setFormData)}
+                            handleChange={(event) =>
+                                handleDaoNameUrlChange(event, setFormData, "url")
+                            }
                         />
                         <InputText
                             label="NFT Address"
@@ -185,7 +227,7 @@ const CreateDAO: NextPage = () => {
                             placeholder="NFT which will be used in DAO (Ox...)"
                             labelTitle="NFT Address"
                             pattern={"^0x[a-fA-F0-9]{40}$"}
-                            value={formData.tokenAddress}
+                            value={formData.tokenAddress[0]}
                             disabled={true}
                             // handleChange={(event) => handleTextChange(event, setFormData)}
                         />
@@ -255,9 +297,9 @@ const CreateDAO: NextPage = () => {
                         </div>
                         <CheckboxGroup
                             label={"DAO Blockchain"}
+                            images={true}
                             description={"You can choose one or more blockchains"}
-                            values={CHAINS}
-                            images={CHAINS_IMG}
+                            values={[...getChainNames()]}
                             enabledValues={formData.enabledBlockchains}
                             handleChange={(event) =>
                                 handleCheckboxChange(event, formData, setFormData, "blockchain")
@@ -299,8 +341,20 @@ const CreateDAO: NextPage = () => {
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
                     <p className="ml-7">Deployment successful!</p>
-                    <p className="ml-7 mb-10">Contract Address: {formData.contractAddress}</p>
-                    <Link href={`/daos/${formData.contractAddress}`}>
+                    <div className="flex ml-7 mb-10">Contract Address:
+                        <div
+                            className={
+                                "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
+                            }
+                            onClick={() =>
+                                navigator.clipboard.writeText(formData.governorAddress)
+                            }
+                        >
+                            {formatAddress(formData.governorAddress)}
+                            <ClipboardCopyIcon className="h-6 w-5" />
+                        </div>
+                    </div>
+                    <Link href={`/daos/${formData.url}`}>
                         <button
                             className="form-submit-button"
                             onClick={() => {

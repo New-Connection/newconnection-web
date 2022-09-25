@@ -1,18 +1,19 @@
 import { Checkbox } from "ariakit/checkbox";
 import { Group, GroupLabel } from "ariakit/group";
-
 import styles from "styles/components/Form/Checkmox.module.css";
 import { CheckboxProps } from "./types";
 import Image, { StaticImageData } from "next/image";
+import { getLogoURI } from "utils/blockchains";
+import classNames from "classnames";
 
 export function CheckboxGroup({
-    label,
-    description,
-    values,
-    images,
-    enabledValues,
-    handleChange,
-}: CheckboxProps) {
+                                  label,
+                                  description,
+                                  values,
+                                  enabledValues,
+                                  images = false,
+                                  handleChange,
+                              }: CheckboxProps) {
     let isDisabled;
 
     return (
@@ -28,28 +29,28 @@ export function CheckboxGroup({
                     return (
                         <label
                             key={value.toUpperCase()}
-                            className={
-                                isDisabled ? "input-label cursor-not-allowed" : "input-label"
-                            }
+                            className={classNames(
+                                isDisabled ? "input-label cursor-not-allowed" : "input-label",
+                            )}
                         >
                             <Checkbox
                                 as="div"
                                 value={value}
-                                className={styles.checkbox}
+                                className={classNames(styles.checkbox)}
                                 onChange={handleChange}
                                 disabled={isDisabled}
                             >
                                 {value}
                                 {images ? (
-                                    <Image
-                                        src={images[value] as StaticImageData}
-                                        height="25"
-                                        width="25"
-                                        layout="fixed"
-                                    />
-                                ) : (
-                                    <></>
-                                )}
+                                        <Image
+                                            src={getLogoURI(value) as StaticImageData}
+                                            height="25"
+                                            width="25"
+                                            layout="fixed"
+                                        />)
+                                    : (
+                                        <></>
+                                    )}
                             </Checkbox>
                         </label>
                     );
