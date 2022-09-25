@@ -6,7 +6,6 @@
         "allowJs": true,
         "skipLibCheck": true,
         "outDir": "./build",
-        "strict": true,
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
         "esModuleInterop": true,
@@ -16,8 +15,9 @@
         "isolatedModules": true,
         "jsx": "preserve",
         "incremental": true,
-        "noImplicitAny": false
-        //"strict": false
+        "noImplicitAny": false,
+        "strict": false
+        //"strict": true,
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src"],
     "exclude": ["node_modules"]
