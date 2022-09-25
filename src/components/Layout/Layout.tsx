@@ -34,7 +34,7 @@ export default function Layout({
                 <Header />
                 {/* <NewFeaturesBanner /> */}
                 <SwitchNetworkBanner />
-                <main className={classNames("flex-1 pb-20 mt-[6.5em]", className)} {...props}>
+                <main className={classNames("flex-1 pb-36 mt-[6.5em]", className)} {...props}>
                     {children}
                 </main>
                 <Footer />
