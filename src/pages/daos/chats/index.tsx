@@ -86,18 +86,18 @@ const ChatsPage: NextPage = () => {
 
     return (
         <div>
-            <Layout className="layout-base max-w-full">
+            <Layout className="layout-base max-w-full" isMinHeightTurnOff={true}>
                 <section className="relative w-full">
-                    <BackButton/>
+                    <BackButton />
                     <form className="mx-auto flex max-w-4xl flex-col gap-4">
                         <div className="flex justify-between items-center">
                             <h1 className="text-highlighter">Membership chats</h1>
                         </div>
                         <>
-                            <div className="container mx-auto rounded-lg border-t-2 border-gray">
+                            <div className="container mx-auto rounded-lg border-t border-[#ccc]">
                                 <div className="flex flex-row justify-between bg-white">
                                     {/* User chat*/}
-                                    <div className="flex flex-col w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
+                                    <div className="flex flex-col w-2/5 overflow-y-auto border-r border-[#ccc] pb-4">
                                         <ul>
                                             {formData ? (
                                                 formData.tokenNames.map((chatName, index) => (
@@ -122,7 +122,7 @@ const ChatsPage: NextPage = () => {
                                                                 DAO members
                                                             </span>
                                                         </div>
-                                                        <LockIcon/>
+                                                        <LockIcon />
                                                     </li>
                                                 ))
                                             ) : (
@@ -132,8 +132,7 @@ const ChatsPage: NextPage = () => {
                                     </div>
                                     {/* Messanger IFRAME */}
                                     {isChatOpen && formData ? (
-                                        <div className="w-full px-5 flex flex-col justify-between">
-                                            <div className="flex flex-col mt-5"></div>
+                                        <div className="w-full flex flex-col justify-between h-[calc(100vh-190px-165px)]">
                                             <iframe
                                                 src={`https://newconnection.click/${
                                                     formData.tokenAddress[chatActiveIndex]

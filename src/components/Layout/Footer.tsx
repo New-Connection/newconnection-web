@@ -5,11 +5,7 @@ import { DiscordIcon, TwitterIcon } from "components/Icons/";
 
 const Footer = () => {
     return (
-        <footer className="absolute bottom-0 w-full h-16 sm:h-24">
-            <Separator
-                orientation="horizontal"
-                className="mt-16 mb-4 h-0 w-full border-t-2 border-purple"
-            />
+        <footer className="absolute bottom-0 w-full h-16 sm:h-24 border-t-2 border-purple pt-6">
             <div className="max-w-screen-xl pb-8 px-4 mx-auto sm:px-6 lg:px-8">
                 <div className="sm:flex sm:items-center sm:justify-between sm:space-y-2">
                     <div className="flex justify-center sm:justify-start ">
