@@ -100,7 +100,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
 
-    const [isAlreadyLoading, setAlreadyLoading] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     // DB queries
     const { fetch: DAOsQuery } = useMoralisQuery(
@@ -129,9 +129,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
-    useEffect(() => {
-        console.log("Is Already Loading", isAlreadyLoading);
-    }, [isAlreadyLoading]);
+    console.log(isLoaded)
 
     // nft section
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
@@ -154,7 +152,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         if (isInitialized) {
             DAOsQuery({
                 onSuccess: (results) => {
-                    setAlreadyLoading(false);
+                    setIsLoaded(false);
                     const moralisInstance = results[0];
                     const chainId = moralisInstance.get("chainId");
                     const governorAddress = moralisInstance.get("governorAddress");
@@ -425,7 +423,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     useIsomorphicLayoutEffect(() => {
         if (DAO && signer_data) {
             fetchIsOwner();
-            setAlreadyLoading(true);
+        }
+    });
+
+    useIsomorphicLayoutEffect(() => {
+        if (DAO && proposals && NFTs && signer_data) {
+            setIsLoaded(true);
         }
     });
 
@@ -582,8 +585,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         status
                                             ? toast.success("Wallet added to Whitelist")
                                             : toast.error(
-                                                  "Only owner of DAO can add a new members"
-                                              );
+                                                "Only owner of DAO can add a new members"
+                                            );
                                         // TODO: DELETE ROW FROM MORALIS
                                         // removeItem(walletAddress);
                                         // console.log("WL DELETE");
@@ -642,7 +645,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const StatisticCard = ({ label, counter }) => {
         return (
-            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
+            <div
+                className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
                 <div className={"text-gray-400 group-hover:text-white"}>{label}</div>
                 <div className={"flex justify-end text-black text-5xl group-hover:text-white"}>
                     {counter || 0}
@@ -810,11 +814,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         >
                             <button
                                 className={
-                                    isAlreadyLoading
+                                    isLoaded
                                         ? "secondary-button"
-                                        : "secondary-button bg-gray"
+                                        : "secondary-button bg-gray hover:bg-gray"
                                 }
-                                disabled={!isAlreadyLoading}
+                                disabled={!isLoaded}
                             >
                                 Become a member
                             </button>
@@ -830,7 +834,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div
+                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchain</p>
                                 <BlockchainImage />
                             </div>
@@ -866,7 +871,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 },
                             }}
                         >
-                            <button className="secondary-button mt-4 mb-2 gradient-btn-color">
+                            <button
+                                className={
+                                    isLoaded
+                                        ? "secondary-button gradient-btn-color"
+                                        : "secondary-button bg-gray hover:bg-gray"
+                                }
+                                disabled={!isLoaded}>
                                 DAO Chats
                             </button>
                         </Link>
@@ -932,6 +943,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             selectedTab={selectedTab}
                             onClick={setSelectedTab}
                             tabs={tabs}
+                            isLoaded={isLoaded}
                             url={{
                                 pathname: `${address}/create-proposal`,
                                 query: {
