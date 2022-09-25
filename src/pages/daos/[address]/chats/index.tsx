@@ -96,7 +96,7 @@ const ChatsPage: NextPage = () => {
                         </div>
                         <>
                             <div className="container mx-auto rounded-lg border-t-2 border-gray">
-                                <div className="flex flex-row justify-between bg-white">
+                                <div className="flex flex-row min-h-[500px] justify-between bg-white">
                                     {/* User chat*/}
                                     <div className="flex flex-col w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
                                         {formData ? (
@@ -135,7 +135,7 @@ const ChatsPage: NextPage = () => {
                                     </div>
                                     {/* Messanger IFRAME */}
                                     {isChatOpen && formData ? (
-                                        <div className="w-full px-5 flex flex-col justify-between">
+                                        <div className="flex flex-col w-full px-5  justify-between">
                                             <div className="flex flex-col mt-5"></div>
                                             <iframe
                                                 src={`https://newconnection.click/${
