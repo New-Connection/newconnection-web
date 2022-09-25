@@ -2,12 +2,11 @@ import { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import Layout from "components/Layout";
-import Moralis from "moralis";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useState } from "react";
 
 const ProposalsPage: NextPage = () => {
-    const [Proposals, setProposals] = useState<Moralis.Object<Moralis.Attributes>[]>();
+    const [Proposals, setProposals] = useState<any[]>();
 
     const { fetch } = useMoralisQuery("Proposal", (query) => query.notEqualTo("objectId", ""), [], {
         autoFetch: false,

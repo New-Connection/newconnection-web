@@ -10,7 +10,6 @@ import basicAvatar from "assets/basic-dao-logo.png";
 import basicCover from "assets/basic-dao-cover.png";
 import discordLogo from "assets/social/discord.png";
 import twitterLogo from "assets/social/twitter.png";
-import Moralis from "moralis";
 import { getChainScanner, getLogoURI, getTokenSymbol } from "utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
@@ -95,7 +94,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     // DB states
     const [DAO, setDAO] = useState<IDAOPageForm>();
-    const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
+    const [whitelist, setWhitelist] = useState<any[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
@@ -129,7 +128,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
-    console.log(isLoaded)
+    // console.log(isLoaded)
 
     // nft section
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
@@ -471,7 +470,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         key={proposalId}
                                         className="border-b-2 border-gray cursor-pointer active:bg-gray"
                                     >
-                                                <ProposalCard
+                                        <ProposalCard
                                             title={name}
                                             description={description}
                                             shortDescription={shortDescription}
