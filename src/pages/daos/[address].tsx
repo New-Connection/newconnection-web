@@ -545,7 +545,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 onClick={async () => {
                                     setClick(true);
                                     try {
-                                        console.log(votingTokenAddress)
+                                        console.log(votingTokenAddress);
                                         const status = await AddToWhitelist({
                                             addressNFT: votingTokenAddress,
                                             walletAddress: walletAddress,
@@ -686,6 +686,25 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     </div>
                 </div>
             </button>
+        );
+    };
+
+    const MockupLoadingNFT = () => {
+        return (
+            <div className="nft-card animate-pulse ">
+                {/* //Wrap to div for center elements */}
+                <div className="mt-4 mx-4 h-36 w-full-8 bg-gray2 rounded"></div>
+                <div className="p-4 gap-y-6">
+                    <div className="flex justify-between">
+                        <div className="h-2.5 w-20 bg-gray2 rounded"></div>
+                        <div className="h-2.5 w-8 bg-gray2 rounded"></div>
+                    </div>
+                    <div className="flex pt-4 justify-between">
+                        <div className="h-2.5 w-14 bg-gray2 rounded"></div>
+                        <BlockchainImage />
+                    </div>
+                </div>
+            </div>
         );
     };
 
@@ -891,7 +910,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         <NFTCard nftObject={nft} key={index} />
                                     ))
                                 ) : (
-                                    <></>
+                                    <MockupLoadingNFT />
                                 )}
                             </div>
                         ) : (
