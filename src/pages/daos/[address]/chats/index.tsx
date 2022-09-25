@@ -99,37 +99,39 @@ const ChatsPage: NextPage = () => {
                                 <div className="flex flex-row justify-between bg-white">
                                     {/* User chat*/}
                                     <div className="flex flex-col w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
-                                        <ul>
-                                            {formData ? (
-                                                formData.tokenNames.map((chatName, index) => (
-                                                    <li
-                                                        className={
-                                                            chatActiveIndex === index
-                                                                ? "flex flex-row py-4 px-2 justify-center items-center border-l-4 border-purple"
-                                                                : "flex flex-row py-4 px-2 justify-center items-center cursor-pointer"
-                                                        }
-                                                        key={index}
-                                                        onClick={() => {
-                                                            setChatActive(index);
-                                                            setChatOpen(true);
-                                                            console.log("Index", index);
-                                                        }}
-                                                    >
-                                                        <div className="w-full">
-                                                            <div className="text-lg font-semibold">
-                                                                {chatName}
-                                                            </div>
-                                                            <span className="text-gray-500">
+                                        {formData ? (
+                                            formData.tokenNames.map((chatName, index) => (
+                                                <button
+                                                    className={
+                                                        chatActiveIndex === index
+                                                            ? "flex flex-row py-4 px-2 justify-center items-center border-l-4 border-purple"
+                                                            : "flex flex-row py-4 px-2 justify-center items-center cursor-pointer disabled:cursor-not-allowed"
+                                                    }
+                                                    key={index}
+                                                    type={"button"}
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        setChatActive(index);
+                                                        setChatOpen(true);
+                                                        console.log("Index", index);
+                                                    }}
+                                                    //TODO change condition
+                                                    disabled={!indexOfOpenChatsForUser.includes(index)}
+                                                >
+                                                    <div className="w-full">
+                                                        <div className="text-lg font-semibold">
+                                                            {chatName}
+                                                        </div>
+                                                        <span className="text-gray-500">
                                                                 DAO members
                                                             </span>
-                                                        </div>
-                                                        <LockIcon/>
-                                                    </li>
-                                                ))
-                                            ) : (
-                                                <></>
-                                            )}
-                                        </ul>
+                                                    </div>
+                                                    {indexOfOpenChatsForUser.includes(index) ? <></> : <LockIcon/>}
+                                                </button>
+                                            ))
+                                        ) : (
+                                            <></>
+                                        )}
                                     </div>
                                     {/* Messanger IFRAME */}
                                     {isChatOpen && formData ? (

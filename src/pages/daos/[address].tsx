@@ -779,7 +779,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                         </div>
                         <Link
                             href={{
-                                pathname: `chats`,
+                                pathname: `${address}/chats`,
                                 query: {
                                     governorAddress: DAO.governorAddress,
                                     blockchains: DAO.blockchain,
