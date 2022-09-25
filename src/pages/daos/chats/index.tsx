@@ -57,11 +57,11 @@ const ChatsPage: NextPage = () => {
         console.log(tokenAddresses);
         // Only one token
         if (typeof tokenAddresses === "string") {
-            const numberOfTokens = await getNumberOfTokenInOwnerAddress(
+            const numberOfTokens = +(await getNumberOfTokenInOwnerAddress(
                 walletAddress,
                 tokenAddresses,
                 chainId
-            );
+            ));
             console.log("Number of tokens", numberOfTokens);
             if (numberOfTokens != 0) {
                 setIndexOpenChat([...indexOfOpenChatsForUser, 0]);
@@ -69,11 +69,11 @@ const ChatsPage: NextPage = () => {
         } else {
             tokenAddresses.map(async (token, index) => {
                 console.log(index);
-                const numberOfTokens = await getNumberOfTokenInOwnerAddress(
+                const numberOfTokens = +(await getNumberOfTokenInOwnerAddress(
                     walletAddress,
                     token,
                     chainId
-                );
+                ));
                 console.log("Number of tokens", numberOfTokens);
                 if (numberOfTokens != 0) {
                     setIndexOpenChat(() => [...indexOfOpenChatsForUser, index]);
