@@ -181,12 +181,12 @@ const CreateProposal: NextPage = () => {
     }
 
     //todo
-    console.log(formData)
+    console.log(formData);
     return (
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton/>
+                    <BackButton />
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={createProposalContract}
@@ -232,11 +232,12 @@ const CreateProposal: NextPage = () => {
                                 labels={[...votingNFTs.tokenNames]}
                                 handleChange={(event) => {
                                     // setting tokenName
-                                    const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);
-                                    handleChangeBasic(currentTokenName, setFormData, "tokenName")
+                                    const currentTokenName =
+                                        event.currentTarget.nextSibling.textContent.slice(1);
+                                    handleChangeBasic(currentTokenName, setFormData, "tokenName");
 
                                     // setting tokenAddress
-                                    handleTextChangeAddNewMember(event, setFormData)
+                                    handleTextChangeAddNewMember(event, setFormData);
                                 }}
                                 values={votingNFTs.tokenAddress}
                             />
@@ -248,7 +249,7 @@ const CreateProposal: NextPage = () => {
                 </section>
                 <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
                     <p>Proposal created successful!</p>
-                    <div className="flex ml-7 mb-10">
+                    <div className="flex mb-10">
                         Proposal Id:
                         <div
                             className={
@@ -257,14 +258,14 @@ const CreateProposal: NextPage = () => {
                             onClick={() => navigator.clipboard.writeText(formData.proposalId)}
                         >
                             {formatAddress(formData.proposalId)}
-                            <ClipboardCopyIcon className="h-6 w-5"/>
+                            <ClipboardCopyIcon className="h-6 w-5" />
                         </div>
                     </div>
                     <button
                         className="form-submit-button"
                         onClick={() => {
                             confirmDialog.toggle();
-                            router.back()
+                            router.back();
                         }}
                     >
                         Back to DAO
