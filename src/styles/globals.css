@@ -72,7 +72,7 @@
     }
 
     .form-submit-button {
-        @apply w-full rounded-full border-purple border-2 py-2 px-3 font-normal text-purple disabled:cursor-not-allowed hover:border-btnHover hover:text-btnHover active:bg-btnActive active:text-white;
+        @apply rounded-full border-purple border-2 py-2 px-3 font-normal text-purple disabled:cursor-not-allowed hover:border-btnHover hover:text-btnHover active:bg-btnActive active:text-white;
     }
 
     .text-highlighter {

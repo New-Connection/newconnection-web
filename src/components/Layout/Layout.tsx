@@ -11,20 +11,30 @@ import SwitchNetworkBanner from "components/Banners/SwitchNetworksBanner";
 interface ILayoutProps {
     children: React.ReactNode;
     className?: string;
+    isMinHeightTurnOff?: boolean;
 }
 
-export default function Layout({ children, className, ...props }: ILayoutProps) {
+export default function Layout({
+    children,
+    className,
+    isMinHeightTurnOff = false,
+    ...props
+}: ILayoutProps) {
     {
         /* pb-20 should be same as a footer height */
     }
     return (
         <>
             <HeadInfo />
-            <div className="relative min-h-screen">
+            <div
+                className={
+                    isMinHeightTurnOff ? "relative h-[calc(100vh-135px)]" : "relative min-h-screen"
+                }
+            >
                 <Header />
                 {/* <NewFeaturesBanner /> */}
                 <SwitchNetworkBanner />
-                <main className={classNames("flex-1 pb-20 mt-[6.5em]", className)} {...props}>
+                <main className={classNames("flex-1 pb-36 mt-[6.5em]", className)} {...props}>
                     {children}
                 </main>
                 <Footer />

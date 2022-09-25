@@ -8,6 +8,7 @@ export interface ICreateDAO extends ICreate {
     goals: string;
     profileImage: any;
     coverImage: any;
+    isActive?:boolean;
     tokenAddress: string[];
     votingPeriod: string;
     quorumPercentage: string;
@@ -101,6 +102,7 @@ export interface IMultiNFTVoting {
 export interface IAddNewMember {
     daoName: string;
     walletAddress: string;
+    chainId?: string;
     daoAddress: string;
     tokenAddress: string[];
     tokenNames: string[];

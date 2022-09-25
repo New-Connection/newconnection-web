@@ -45,7 +45,7 @@ const DAOsPage: NextPage = () => {
                         const description = dao.get("description");
                         const chainId = dao.get("chainId");
                         let profileImage = dao.get("profileImage");
-                        const isActive = true;
+                        const isActive = dao.get("isActive");
                         const totalProposals = 0;
                         const totalVotes = 0;
 
