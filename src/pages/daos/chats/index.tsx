@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { ParsedUrlQuery } from "querystring";
-import { useAccount, useBalance } from "wagmi";
+import { useAccount } from "wagmi";
 
 import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
@@ -63,7 +63,7 @@ const ChatsPage: NextPage = () => {
                 chainId
             ));
             console.log("Number of tokens", numberOfTokens);
-            if (numberOfTokens != 0) {
+            if (numberOfTokens > 0) {
                 setIndexOpenChat([...indexOfOpenChatsForUser, 0]);
             }
         } else {
@@ -75,14 +75,15 @@ const ChatsPage: NextPage = () => {
                     chainId
                 ));
                 console.log("Number of tokens", numberOfTokens);
-                if (numberOfTokens != 0) {
+                if (numberOfTokens > 0) {
                     setIndexOpenChat(() => [...indexOfOpenChatsForUser, index]);
                 }
             });
         }
 
-        console.log("Index of Open chats for user", indexOfOpenChatsForUser);
     }
+
+    console.log("Index of Open chats for user", indexOfOpenChatsForUser);
 
     return (
         <div>
