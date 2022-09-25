@@ -525,7 +525,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 </div>
                 {whitelist.map((wl, index) => {
                     const walletAddress = wl.get("walletAddress");
-                    const tokenName = wl.get("votingTokenName");
+                    const votingTokenName = wl.get("votingTokenName");
+                    const votingTokenAddress = wl.get("votingTokenAddress");
                     const note = wl.get("note");
                     const blockchainSelected = wl.get("blockchainSelected");
                     return (
@@ -535,7 +536,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 <div className="flex pl-5 w-1/3">
                                     {renderValue(blockchainSelected)}
                                 </div>
-                                <div className="flex w-1/3">{tokenName}</div>
+                                <div className="flex w-1/3">{votingTokenName}</div>
                             </div>
                             <p className="w-1/4 text-sm line-clamp-3 text-center">{note}</p>
 
@@ -544,8 +545,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 onClick={async () => {
                                     setClick(true);
                                     try {
+                                        console.log(votingTokenAddress)
                                         const status = await AddToWhitelist({
-                                            addressNFT: DAO!.tokenAddress[0],
+                                            addressNFT: votingTokenAddress,
                                             walletAddress: walletAddress,
                                             signer: signer_data as Signer,
                                         });
