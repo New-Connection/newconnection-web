@@ -100,6 +100,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
 
+    const [isAlreadyLoading, setAlreadyLoading] = useState(false);
+
     // DB queries
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
@@ -127,6 +129,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
+    useEffect(() => {
+        console.log("Is Already Loading", isAlreadyLoading);
+    }, [isAlreadyLoading]);
 
     // nft section
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
@@ -149,6 +154,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         if (isInitialized) {
             DAOsQuery({
                 onSuccess: (results) => {
+                    setAlreadyLoading(false);
                     const moralisInstance = results[0];
                     const chainId = moralisInstance.get("chainId");
                     const governorAddress = moralisInstance.get("governorAddress");
@@ -412,6 +418,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             fetchLargeData();
             fetchNFTData();
             fetchTreasuryBalance();
+
             firstUpdate.current = false;
         }
     });
@@ -419,6 +426,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     useIsomorphicLayoutEffect(() => {
         if (DAO && signer_data) {
             fetchIsOwner();
+            setAlreadyLoading(true);
         }
     });
 
@@ -759,10 +767,19 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 },
                             }}
                         >
-                            <button className="secondary-button">Become a member</button>
+                            <button
+                                className={
+                                    isAlreadyLoading
+                                        ? "secondary-button"
+                                        : "secondary-button bg-gray"
+                                }
+                                disabled={!isAlreadyLoading}
+                            >
+                                Become a member
+                            </button>
                         </Link>
                     </div>
-                    <div className="lg:flex md:flex lg:justify-between gap-10 w-full">
+                    <div className="lg:flex md:flex lg:justify-between gap-10 justify-between w-full">
                         <div className="flex lg:w-1/3 gap-10 items-center">
                             <a
                                 href={DAO.scanURL}
@@ -773,7 +790,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
                             <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
-                                <p className="text-xs">Blockchains</p>
+                                <p className="text-xs">Blockchain</p>
                                 <BlockchainImage />
                             </div>
 
