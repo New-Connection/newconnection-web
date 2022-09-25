@@ -67,6 +67,7 @@ const CreateDAO: NextPage = () => {
         type: [],
         blockchain: [],
         description: "",
+        isActive: false,
     });
 
     const { data: signer_data } = useSigner();
@@ -350,7 +351,7 @@ const CreateDAO: NextPage = () => {
                             }
                         >
                             {formatAddress(formData.governorAddress)}
-                            <ClipboardCopyIcon className="h-6 w-5"/>
+                            <ClipboardCopyIcon className="h-6 w-5" />
                         </div>
                     </div>
                     <Link href={`/daos/${formData.url}`}>

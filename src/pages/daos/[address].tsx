@@ -359,7 +359,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
         try {
             if (DAOMoralisInstance) {
-                DAO.treasuryAddress;
                 DAOMoralisInstance.set("treasuryAddress", treasuryContract.address);
                 await saveMoralisInstance(DAOMoralisInstance);
             }
@@ -429,71 +428,86 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [click, setClick] = useState(false);
 
     const TabOne: FC<{}> = () => {
-        return proposals && proposals.length !== 0 ? (
-            <>
-                <ul>
-                    {proposals.slice(0, 3).map((proposal) => {
-                        const proposalId = proposal.proposalId;
-                        const name = proposal.name;
-                        const description = proposal.description;
-                        const tokenName = proposal.tokenName;
-                        const shortDescription = proposal.shortDescription;
-                        const isActive = proposal.isActive;
-                        const forVotes = proposal.forVotes;
-                        const againstVotes = proposal.againstVotes;
-                        const deadline = proposal.deadline;
-                        return (
-                            <Link href={`${address}/proposals/${proposalId}`} key={proposalId}>
-                                <li
-                                    key={proposalId}
-                                    className="border-b-2 border-gray cursor-pointer active:bg-gray"
+        const visibleProposalsLength: number = 3
+        let activeProposals: IProposalPageForm[]
+
+        if (proposals && proposals.length !== 0 && DAOMoralisInstance) {
+            activeProposals = proposals.filter(proposals => proposals.isActive);
+            const isActive = DAOMoralisInstance.get("isActive")
+            if ((activeProposals.length > 0 && !isActive) || (activeProposals.length === 0 && isActive)) {
+                DAOMoralisInstance.set("isActive", !isActive);
+                saveMoralisInstance(DAOMoralisInstance);
+            }
+            return (
+                <>
+                    <ul>
+                        {activeProposals.slice(0, visibleProposalsLength).map((proposal) => {
+                            const proposalId = proposal.proposalId;
+                            const name = proposal.name;
+                            const description = proposal.description;
+                            const tokenName = proposal.tokenName;
+                            const shortDescription = proposal.shortDescription;
+                            const isActive = proposal.isActive;
+                            const forVotes = proposal.forVotes;
+                            const againstVotes = proposal.againstVotes;
+                            const deadline = proposal.deadline;
+                            return (
+                                <Link href={`${address}/proposals/${proposalId}`} key={proposalId}>
+                                    <li
+                                        key={proposalId}
+                                        className="border-b-2 border-gray cursor-pointer active:bg-gray"
+                                    >
+                                        <ProposalCard
+                                            title={name}
+                                            description={description}
+                                            shortDescription={shortDescription}
+                                            tokenName={tokenName}
+                                            chainId={DAO?.chainId}
+                                            isActive={isActive}
+                                            forVotes={forVotes}
+                                            againstVotes={againstVotes}
+                                            deadline={deadline}
+                                        />
+                                    </li>
+                                </Link>
+                            );
+                        })}
+                    </ul>
+                    {proposals.length > visibleProposalsLength || activeProposals.length < visibleProposalsLength ? (
+                        <div className={"flex flex-col "}>
+                            {
+                                activeProposals.length === 0 ?
+                                    <MockupTextCard
+                                        label={"No active proposals"}
+                                        text={
+                                            "You can view previous proposals"
+                                        } /> :
+                                    <></>
+                            }
+
+                            <div className={"flex justify-center"}>
+                                <Link
+                                    href={{
+                                        pathname: `${address}/proposals/`,
+                                        query: {
+                                            name: DAO.name,
+                                            governorAddress: DAO.governorAddress,
+                                            chainId: DAO.chainId,
+                                        },
+                                    }}
                                 >
-                                    <ProposalCard
-                                        title={name}
-                                        description={description}
-                                        shortDescription={shortDescription}
-                                        tokenName={tokenName}
-                                        chainId={DAO?.chainId}
-                                        isActive={isActive}
-                                        forVotes={forVotes}
-                                        againstVotes={againstVotes}
-                                        deadline={deadline}
-                                    />
-                                </li>
-                            </Link>
-                        );
-                    })}
-                </ul>
-                {proposals.length > 3 ? (
-                    <div className={"flex justify-center"}>
-                        <Link
-                            href={{
-                                pathname: `${address}/proposals/`,
-                                query: {
-                                    name: DAO.name,
-                                    governorAddress: DAO.governorAddress,
-                                    chainId: DAO.chainId,
-                                },
-                            }}
-                        >
-                            <button className="secondary-button mt-4">View all proposals</button>
-                        </Link>
-                    </div>
-                ) : (
-                    <></>
-                )}
-            </>
-        ) : (
-            <div>
-                <MockupTextCard
-                    label={"No proposals here yet"}
-                    text={
-                        "You should first add NFTs so that members can vote " +
-                        "then click the button “Add new proposals” and initiate a proposals"
-                    }
-                />
-            </div>
-        );
+                                    <button className="secondary-button mt-4">View all proposals</button>
+                                </Link>
+                            </div>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                </>
+            );
+        } else {
+            return <MockupLoadingProposals />
+        }
     };
 
     const TabTwo: FC<{}> = () => {
@@ -555,8 +569,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         status
                                             ? toast.success("Wallet added to Whitelist")
                                             : toast.error(
-                                                  "Only owner of DAO can add a new members"
-                                              );
+                                                "Only owner of DAO can add a new members"
+                                            );
                                         // TODO: DELETE ROW FROM MORALIS
                                         // removeItem(walletAddress);
                                         // console.log("WL DELETE");
@@ -615,7 +629,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const StatisticCard = ({ label, counter }) => {
         return (
-            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
+            <div
+                className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
                 <div className={"text-gray-400 group-hover:text-white"}>{label}</div>
                 <div className={"flex justify-end text-black text-5xl group-hover:text-white"}>
                     {counter || 0}
@@ -708,7 +723,29 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
-    const BlockchainImage = (className) => {
+    const MockupLoadingProposals = () => {
+        return (
+            <div className="nft-card w-full animate-pulse">
+                {/* //Wrap to div for center elements */}
+                <div className="mt-4 mx-4 h-2.5 w-full-8 bg-gray2 rounded"></div>
+                <div className="mt-4 mx-4 h-2.5 w-full-8 bg-gray2 rounded"></div>
+                <div className="mt-4 mx-4 h-2.5 w-full-8 bg-gray2 rounded"></div>
+                <div className="mt-4 mx-4 h-2.5 w-full-8 bg-gray2 rounded"></div>
+                <div className="p-4 gap-y-6">
+                    <div className="flex justify-between">
+                        <div className="h-2.5 w-20 bg-gray2 rounded"></div>
+                        <div className="h-2.5 w-8 bg-gray2 rounded"></div>
+                    </div>
+                    <div className="flex pt-4 justify-between">
+                        <div className="h-2.5 w-14 bg-gray2 rounded"></div>
+                        <BlockchainImage />
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const BlockchainImage = () => {
         return (
             <Image
                 src={DAO ? getLogoURI(DAO.blockchain[0]) : defaultImage}
@@ -772,7 +809,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div
+                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchains</p>
                                 <BlockchainImage />
                             </div>
