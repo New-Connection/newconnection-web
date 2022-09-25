@@ -4,12 +4,7 @@ import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
-import {
-    Button,
-    InputText,
-    InputTextArea,
-    RadioSelectorMulti,
-} from "components/Form";
+import { Button, InputText, InputTextArea, RadioSelectorMulti } from "components/Form";
 import BackButton from "components/Button/backButton";
 import { validateForm } from "utils/validate";
 import { IAddNewMember } from "types/forms";
@@ -60,7 +55,7 @@ const AddNewMember: NextPage = () => {
         handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
         const saved = localStorage.getItem(query.daoName + " NFTs");
         const initialValue = JSON.parse(saved);
-        const tokenNames = []
+        const tokenNames = [];
         console.log("saved", saved);
         initialValue.map((object) => {
             tokenNames.push(object.title);
@@ -96,7 +91,7 @@ const AddNewMember: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton/>
+                    <BackButton />
                     <form
                         className="mx-auto flex max-w-4xl flex-col gap-4"
                         onSubmit={sendSignatureRequest}
@@ -122,11 +117,16 @@ const AddNewMember: NextPage = () => {
                                 labels={[...formData.tokenNames]}
                                 handleChange={(event) => {
                                     // setting tokenName
-                                    const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);
-                                    handleChangeBasic(currentTokenName, setFormData, "votingTokenName")
+                                    const currentTokenName =
+                                        event.currentTarget.nextSibling.textContent.slice(1);
+                                    handleChangeBasic(
+                                        currentTokenName,
+                                        setFormData,
+                                        "votingTokenName"
+                                    );
 
                                     // setting tokenAddress
-                                    handleTextChangeAddNewMember(event, setFormData)
+                                    handleTextChangeAddNewMember(event, setFormData);
                                 }}
                                 values={formData.tokenAddress}
                             />
