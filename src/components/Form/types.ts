@@ -17,7 +17,7 @@ export interface InputTextProps {
 
 export interface InputAmountProps {
     name: string;
-    label: string;
+    label?: string;
     labelTitle?: string;
     isRequired?: boolean;
     className?: string;
@@ -35,18 +35,23 @@ export interface InputAmountProps {
 export interface ISelectorProps {
     name: string;
     label: string;
+    enabledValues?: string[];
     className?: string;
     defaultValue?: string;
-    disablesValues?: string[];
     handleChange?: (event: BaseSyntheticEvent) => boolean;
+}
+
+export interface IRadioSelectorClickOption {
+    tokenName: string,
+    tokenAddress: string,
 }
 
 export interface IRadioSelector {
     name: string;
     labels: string[];
     className?: string;
-    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-
+    values?: string[];
+    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, option?: IRadioSelectorClickOption) => void;
 }
 
 export interface IDragAndDropProps {
@@ -91,7 +96,7 @@ export interface CheckboxProps {
     label: string;
     description?: string;
     values: string[];
-    images?: object;
+    images?: boolean;
     enabledValues?: string[];
     handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }

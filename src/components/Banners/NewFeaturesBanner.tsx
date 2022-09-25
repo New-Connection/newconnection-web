@@ -17,8 +17,9 @@ const NewFeaturesBanner = () => {
 
     return (
         <>
-            <div className="mt-[6.5em] reverse-gradient-btn-color text-center py-3 h-12 text-white">
-                New Connection v0.1 is a live!{" "}
+            <div className="mt-[6.5em] mx-0 reverse-gradient-btn-color text-center py-3 lg:h-12 h-17 text-white">
+                {/* <div className="w-full reverse-gradient-btn-color text-white h-17"> */}
+                New Connection v0.1 is live!{" "}
                 <button
                     className="hover:underline"
                     onClick={() => {

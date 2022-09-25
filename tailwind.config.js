@@ -1,5 +1,3 @@
-const plugin = require('tailwindcss/plugin');
-
 module.exports = {
     content: ["./src/pages/**/*.{js,ts,jsx,tsx}", "./src/components/**/*.{js,ts,jsx,tsx}"],
     darkMode: "class",
@@ -28,22 +26,20 @@ module.exports = {
                 pink: "#EF5390",
                 lilac: "#E3D9F9",
                 darkBlue: "#1E1E30", //70% transparent
-                gray5: "#AAAAAB",    // 50% transparent
+                gray5: "#AAAAAB", // 50% transparent
+                lightGray: "#CECECE",
                 // button
                 btnHover: "#5E37B5",
                 btnActive: "#885CEB",
                 btnDisabled: "#E0E0E0",
                 // Alert
                 green: "#54A547",
-                red: "#EB4747"
-                
+                red: "#EB4747",
             },
             fontFamily: {
-                "sans": ["", ]
-            }
+                sans: [""],
+            },
         },
     },
-    plugins: [
-        require('@tailwindcss/line-clamp'),
-    ],
+    plugins: [require("@tailwindcss/line-clamp")],
 };

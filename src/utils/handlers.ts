@@ -1,16 +1,8 @@
 import { BaseSyntheticEvent, ChangeEvent, Dispatch, SetStateAction } from "react";
 import { ICreate } from "types/forms";
 
-export const handleChangeBasic = <T extends ICreate>(
+export const handleChangeBasic = <T>(
     value: string | boolean | number | object,
-    set: Dispatch<SetStateAction<T>>,
-    field: string
-) => {
-    set((prev) => ({ ...prev, [field]: value }));
-};
-
-export const handleChangeBasicNewMember = <T>(
-    value: string | boolean | number,
     set: Dispatch<SetStateAction<T>>,
     field: string
 ) => {
@@ -23,6 +15,22 @@ export const handleChangeBasicArray = <T>(
     field: string
 ) => {
     set((prev) => ({ ...prev, [field]: [value] }));
+};
+
+export const handleChangeBasicSimple = <T>(
+    value: string[] | string,
+    set: Dispatch<SetStateAction<T>>,
+    field: string
+) => {
+    set((prev) => ({ ...prev, [field]: [value] }));
+};
+
+export const handleAddArray = <T>(
+    value: string[] | string,
+    set: Dispatch<SetStateAction<T>>,
+    field: string
+) => {
+    set((prev) => ({ ...prev, [field]: [...value] }));
 };
 
 export const promisedHandleChangeBasic = <T extends ICreate>(
@@ -49,6 +57,22 @@ export const handleTextChange = <T extends ICreate,
     set: Dispatch<SetStateAction<T>>
 ) => {
     set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+};
+
+export const handleNftSupplyChange = <T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement>(
+    event: ChangeEvent<E>,
+    set: Dispatch<SetStateAction<T>>,
+    value: string | boolean | number,
+    field: string
+) => {
+    set((prev) => ({ ...prev, [event.target.name]: +event.target.value }));
+    if (event.target.value === "") {
+        handleChangeBasic("", set, field);
+        console.log("reset");
+    } else {
+        handleChangeBasic(value, set, field);
+    }
 };
 
 export const handleTextChangeAddNewMember = <T, E extends HTMLInputElement | HTMLTextAreaElement>(

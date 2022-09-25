@@ -11,6 +11,7 @@ type TabsProps = {
     onClick: (index: number) => void;
     className?: string;
     url?: any;
+    isLoaded?: boolean;
 };
 
 /**
@@ -19,11 +20,11 @@ type TabsProps = {
  * @param selectedTab number
  * @param onClick Function to set the active tab
  */
-const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url }) => {
+const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, isLoaded }) => {
     const Panel = tabs && tabs.find((tab) => tab.index === selectedTab);
     return (
         <div>
-            <div className="flex justify-between">
+            <div className="lg:flex md:flex xl:flex justify-between">
                 <div className="flex-wrap relatives">
                     {tabs.map((tab) => (
                         <button
@@ -45,7 +46,15 @@ const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url }) => {
                     ))}
                 </div>
                 <Link href={url}>
-                    <button className="secondary-button mt-2">Add new proposal</button>
+                    <button
+                        className={
+                            isLoaded
+                                ? "secondary-button"
+                                : "secondary-button bg-gray hover:bg-gray"
+                        }
+                        disabled={!isLoaded}>
+                        Add new proposal
+                    </button>
                 </Link>
             </div>
             <div id={`tabpanel-${selectedTab}`} className="w-full py-2 px-2">

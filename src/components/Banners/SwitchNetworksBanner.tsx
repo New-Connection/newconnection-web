@@ -1,18 +1,16 @@
 import * as React from "react";
-import { useIsMounted } from "hooks";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { getChainIds } from "utils/blockchains";
 
 const SwitchNetworkBanner = () => {
-    const chainIDs: number[] = [5, 80001, 43113]; // Goerli, Mumbai, FUJI
-    const isMounted = useIsMounted();
+    const chainIDs: number[] = getChainIds(); // Goerli, Mumbai, FUJI
     const { isConnected } = useAccount();
     const { chain } = useNetwork();
-    const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
+    const { switchNetwork } = useSwitchNetwork();
 
     const isIncludeNumber = (id: number) => chainIDs.some((val) => val === id); // return true if we have this chainID in chainIDs
 
     if (!chain || !switchNetwork) return null;
-    //{/* //notification for switch network, because it's wrong network */}
     return (
         <div>
             {isConnected && !isIncludeNumber(Number(chain?.id)) ? (
@@ -22,7 +20,7 @@ const SwitchNetworkBanner = () => {
                         className="hover:text-gray hover:underline"
                         onClick={() => switchNetwork(chainIDs[0])}
                     >
-                        Etherium Goerli
+                        Ethereum Rinkeby
                     </button>
                     ,{" "}
                     <button
@@ -30,7 +28,8 @@ const SwitchNetworkBanner = () => {
                         onClick={() => switchNetwork(chainIDs[2])}
                     >
                         Avalanche Fuji
-                    </button>{" "}
+                    </button>
+                    {" "}
                     or{" "}
                     <button
                         className="hover:text-gray hover:underline"

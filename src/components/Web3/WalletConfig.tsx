@@ -1,30 +1,24 @@
-import { createClient, defaultChains, configureChains } from "wagmi";
-//Example: https://wagmi.sh/examples/connect-wallet
+import { createClient, configureChains } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { infuraProvider } from "wagmi/providers/infura";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
-
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-
-import { polygonTestnet, avalancheTestnet } from "utils/constants";
+import { getChains } from "utils/blockchains";
 import { alchemyId, infuraId } from "utils/constants";
 
-// Configure chains & providers with the Alchemy provider.
-// Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
 export const { chains, provider, webSocketProvider } = configureChains(
-    [...defaultChains, polygonTestnet, avalancheTestnet],
+    (getChains()),
     [
-        alchemyProvider({ apiKey: alchemyId }),
-        publicProvider(),
-        infuraProvider({ apiKey:infuraId }),
+        infuraProvider({ priority: 0, apiKey: infuraId }),
+        alchemyProvider({ priority: 1, apiKey: alchemyId }),
         jsonRpcProvider({
+            priority: 2,
             rpc: (chain) => {
-                if (chain.id !== polygonTestnet.id) return null;
                 return { http: chain.rpcUrls.default };
             },
-        }),
+        }), publicProvider({ priority: 3 }),
     ]
 );
 

@@ -1,38 +1,35 @@
 import * as React from "react";
-import Image from "next/image";
 import { Separator } from "ariakit/separator";
 
-import Discord from "assets/social/Discord-Icon.png";
-import Twitter from "assets/social/Twitter-Icon.png";
+import { DiscordIcon, TwitterIcon } from "components/Icons/";
 
 const Footer = () => {
-    const SpaceBetweenButtons = () => {
-        return <div className="w-4 h-auto inline-block"></div>;
-    };
-
     return (
-        <footer className="absolute bottom-0 w-full h-16">
-            <Separator
-                orientation="horizontal"
-                className="mt-16 mb-6 h-0 w-full border-t-2 border-purple"
-            />
-            <div className="flex justify-between">
-                <p className="align-middle pt-4 pl-2">contact@newconnection.xyz</p>
-                <div className="pt-4">
-                    <button className="cursor-not-allowed">Terms</button>
-                    <SpaceBetweenButtons />
-                    <button className="cursor-not-allowed">Privacy</button>
-                </div>
-                <div className="pr-4 pb-2">
-                    <button className="cursor-not-allowed h-16 w-16 bg-gray rounded-md">
-                        <Image src={Discord} />
-                    </button>
-                    <SpaceBetweenButtons />
-                    <a href="https://twitter.com/NewConnectionX" target="_blank" rel="noreferrer">
-                        <button className="h-16 w-16 bg-gray rounded-md">
-                            <Image src={Twitter} />
+        <footer className="absolute bottom-0  w-full h-16 sm:h-24 border-t-2 border-purple pt-4">
+            <div className="max-w-screen-xl pb-6 px-4 mx-auto sm:px-6 lg:px-8">
+                <div className="sm:flex sm:items-center sm:justify-between sm:space-y-2">
+                    <div className="flex justify-center sm:justify-start ">
+                        <p className="text-sm">contact@newconnection.xyz</p>
+                    </div>
+
+                    <div className="mt-4 text-sm text-center items-center text-gray-400 lg:text-center lg:mt-0 space-x-4">
+                        <button className="cursor-not-allowed hover:text-gray2">Terms</button>
+                        <button className="cursor-not-allowed hover:text-gray2">Privacy</button>
+                    </div>
+                    <div className="flex justify-center sm:justify-start space-x-2 mt-4">
+                        <button className="flex pl-[0.6em] items-center cursor-not-allowed w-[60px] h-[60px] bg-gray rounded-md fill-purple hover:fill-gray2">
+                            <DiscordIcon />
                         </button>
-                    </a>
+                        <a
+                            href="https://twitter.com/NewConnectionX"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <button className="w-[60px] h-[60px] pl-[0.6em] bg-gray rounded-md fill-[#1DA1F2] hover:bg-purple hover:fill-white">
+                                <TwitterIcon />
+                            </button>
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>

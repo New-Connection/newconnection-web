@@ -5,8 +5,6 @@ import Layout from "components/Layout";
 import Moralis from "moralis";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import basicAvatar from "../../assets/basic_avatar.jpg";
 
 const ProposalsPage: NextPage = () => {
     const [Proposals, setProposals] = useState<Moralis.Object<Moralis.Attributes>[]>();
@@ -91,7 +89,6 @@ const ProposalsPage: NextPage = () => {
                                 const name = proposal.get("name");
                                 const description = proposal.get("description");
 
-                                //TODO: write to db
                                 const isActive = true;
                                 const votesFor = 0;
                                 const votesAgainst = 0;

@@ -1,4 +1,3 @@
-import { ICreate } from "types/forms";
 import { arrayIsEmpty, objectIsEmpty, stringIsEmpty } from "./basic";
 import toast from "react-hot-toast";
 
@@ -12,7 +11,8 @@ export const validateForm = (formData, ignoreFields?: string[]): boolean => {
         if (
             (typeof value === "string" && stringIsEmpty(value)) ||
             (typeof value === "object" && (value === null || objectIsEmpty(value))) ||
-            (Array.isArray(value) && arrayIsEmpty(value)) || (value === undefined)
+            (Array.isArray(value) && arrayIsEmpty(value)) ||
+            value === undefined
         ) {
             fields.push(key);
         }
