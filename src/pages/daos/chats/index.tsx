@@ -48,7 +48,7 @@ const ChatsPage: NextPage = () => {
         console.log("query token address", query.tokenAddress);
         handleAddArray(tokenNames, setFormData, "tokenNames");
         query.tokenAddress
-            ? checkNFTs(query.tokenAddress, address, query?.chainId as unknown as number)
+            ? checkNFTs(query.tokenAddress, address, +query.chainId)
             : console.log("don't have token");
     }, [router]);
 
@@ -76,7 +76,7 @@ const ChatsPage: NextPage = () => {
                 );
                 console.log("Number of tokens", numberOfTokens);
                 if (numberOfTokens != 0) {
-                    setIndexOpenChat([...indexOfOpenChatsForUser, index]);
+                    setIndexOpenChat(() => [...indexOfOpenChatsForUser, index]);
                 }
             });
         }
@@ -88,7 +88,7 @@ const ChatsPage: NextPage = () => {
         <div>
             <Layout className="layout-base max-w-full">
                 <section className="relative w-full">
-                    <BackButton />
+                    <BackButton/>
                     <form className="mx-auto flex max-w-4xl flex-col gap-4">
                         <div className="flex justify-between items-center">
                             <h1 className="text-highlighter">Membership chats</h1>
@@ -122,7 +122,7 @@ const ChatsPage: NextPage = () => {
                                                                 DAO members
                                                             </span>
                                                         </div>
-                                                        <LockIcon />
+                                                        <LockIcon/>
                                                     </li>
                                                 ))
                                             ) : (

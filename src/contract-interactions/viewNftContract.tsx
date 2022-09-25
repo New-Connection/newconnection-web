@@ -89,6 +89,7 @@ export async function getNumberOfTokenInOwnerAddress(
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         return await nft.balanceOf(userAddress); // 0 if you don't have tokens
     } catch (e) {
+        console.log(e)
         console.log("Error in getNumberOfTokenInOwnerAddress()");
     }
 }

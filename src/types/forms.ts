@@ -101,6 +101,7 @@ export interface IMultiNFTVoting {
 export interface IAddNewMember {
     daoName: string;
     walletAddress: string;
+    chainId?: string;
     daoAddress: string;
     tokenAddress: string[];
     tokenNames: string[];

@@ -15,8 +15,8 @@ export const SECONDS_IN_BLOCK = 13.2;
 export const moralisAppId = process.env.NEXT_PUBLIC_MORALIS_APP_ID_M;
 export const moralisServerUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID_URL_M;
 
-// export const moralisAppId = process.env.NEXT_PUBLIC_MORALIS_APP_ID_DEV_M;
-// export const moralisServerUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID_URL_DEV_M;
+// export const moralisAppId = process..env.NEXT_PUBLIC_MORALIS_APP_ID_DEV_M;
+// export const moralisServerUrl = process..env.NEXT_PUBLIC_MORALIS_SERVER_ID_URL_DEV_M;
 
 
 interface ISecondsByDuration {
