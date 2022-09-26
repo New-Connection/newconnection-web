@@ -6,8 +6,8 @@ export const infuraIPFS = "";
 export const NFT_STORAGE_KEY = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
 
 // EVM MODULE
-export const infuraId = process.env.REACT_APP_INFURA_ID;
-export const alchemyId = process.env.REACT_APP_ALCHEMY_ID;
+export const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
+export const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 export const BLOCKS_IN_DAY = 6545;
 export const SECONDS_IN_BLOCK = 13.2;
 
