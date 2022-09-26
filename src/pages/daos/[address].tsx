@@ -759,7 +759,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             </div>
         );
     };
-
+    
     const BlockchainImage = () => {
         return (
             <Image
