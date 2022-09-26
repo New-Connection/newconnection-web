@@ -84,7 +84,7 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Ethereum",
-            symbol: "Rinkeby",
+            symbol: "ETH",
         },
         rpcUrls: {
             default: "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
@@ -168,7 +168,7 @@ export const CHAINS: {
     // },
 
     "Optimism Testnet": {
-        id: 69,
+        id: 420,
         name: "Optimism Testnet",
         network: "Optimism",
         nativeCurrency: {
@@ -177,10 +177,10 @@ export const CHAINS: {
             symbol: "ETH",
         },
         rpcUrls: {
-            default: "https://kovan.optimism.io/",
+            default: "https://goerli.optimism.io/",
         },
         blockExplorers: {
-            default: { name: "optiscan", url: "https://kovan-optimistic.etherscan.io" },
+            default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" },
         },
         testnet: true,
     },
@@ -306,7 +306,7 @@ export const isBlockchainSupported = (chain: { id }) => {
 };
 
 export const getLogoURI = (chain: number | string) => {
-    if (typeof chain === 'number') {
+    if (typeof chain === "number") {
         return CHAINS_IMG[getChain(chain).network]?.src || CHAINS_IMG["Ethereum"];
     } else {
         return CHAINS_IMG[chain] || CHAINS_IMG["Ethereum"];

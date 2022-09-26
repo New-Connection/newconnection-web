@@ -279,7 +279,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         console.log("DAO", DAO!.governorAddress!);
         setDAO(() => newDAO);
     };
-
+    // console.log(DAO)
     const mint = async (tokenAddress: string) => {
         if (!DAO) return null;
         // const chainID = await getChainId(signer_data as Signer);
@@ -405,6 +405,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     useEffect(() => {
         fetchDAO();
     }, [isInitialized]);
+
     useIsomorphicLayoutEffect(() => {
         if (DAO && firstUpdate.current) {
             localStorage.setItem(DAO.name, JSON.stringify(DAO));
@@ -759,7 +760,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             </div>
         );
     };
-    
+
     const BlockchainImage = () => {
         return (
             <Image
