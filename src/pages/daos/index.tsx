@@ -74,6 +74,7 @@ const DAOsPage: NextPage = () => {
                     setDAOs(() => daos);
                 },
                 onError: (error) => {
+                    console.log(error)
                     console.log("Error fetching db query" + error);
                 },
             });

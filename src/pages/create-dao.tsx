@@ -91,6 +91,9 @@ const CreateDAO: NextPage = () => {
             onSuccess: (results) => {
                 available = results.length === 0;
             },
+            onError: (e) => {
+                console.log("error" + e)
+            }
         });
         return available;
     };

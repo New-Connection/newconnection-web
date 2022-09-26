@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import Moralis from "moralis";
+import { Moralis } from "moralis-v1";
 import { useMoralisQuery } from "react-moralis";
 
 export enum MoralisClassEnum {

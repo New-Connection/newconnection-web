@@ -44,6 +44,8 @@ const AddNewMember: NextPage = () => {
     const router = useRouter();
 
     // console.log(formData)
+    // console.log(formData.tokenNames)
+    // console.log(formData.tokenAddress)
 
     useEffect(() => {
         const query = router.query as QueryUrlParams;
@@ -52,7 +54,8 @@ const AddNewMember: NextPage = () => {
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
-        handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
+        console.log("query" + query.tokenAddress)
+        handleChangeBasicArray(query.tokenAddress, setFormData, "tokenAddress");
         const saved = localStorage.getItem(query.daoName + " NFTs");
         const initialValue = JSON.parse(saved);
         const tokenNames = [];
