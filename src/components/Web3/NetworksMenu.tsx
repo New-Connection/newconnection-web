@@ -14,7 +14,7 @@ import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import ASSETS from "assets/index";
 import { getChainIds, getChainNames, getLogoURI } from "utils/blockchains";
-import { chains } from "./WalletConfig";
+import { chains } from "./WagmiClient";
 
 export const NetworksMenu = () => {
     const { chain } = useNetwork();

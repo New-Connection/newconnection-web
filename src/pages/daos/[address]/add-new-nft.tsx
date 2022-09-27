@@ -41,11 +41,6 @@ interface QueryUrlParams extends ParsedUrlQuery {
     blockchain: string;
 }
 
-// export const getServerSideProps = async (context: NextPageContext) => {
-//     const { query } = context;
-//     return { props: { query } };
-// };
-
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
         name: "",
@@ -75,6 +70,7 @@ const AddNewNFT: NextPage = () => {
             })
             ];
     };
+
     const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
         (query) => query.equalTo("governorAddress", formData.governorAddress),
@@ -193,7 +189,7 @@ const AddNewNFT: NextPage = () => {
     return (
         <div>
             <Layout className="layout-base">
-                <BackButton/>
+                <BackButton />
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <h1 className="text-highlighter">Add NFT</h1>
@@ -298,7 +294,7 @@ const AddNewNFT: NextPage = () => {
                             }
                         >
                             {formatAddress(formData.contractAddress)}
-                            <ClipboardCopyIcon className="h-6 w-5"/>
+                            <ClipboardCopyIcon className="h-6 w-5" />
                         </div>
                     </div>
                     <button

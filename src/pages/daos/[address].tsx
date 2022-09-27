@@ -37,7 +37,6 @@ import {
     getSymbol,
     getTokenURI,
 } from "contract-interactions/viewNftContract";
-
 import {
     getTotalProposals,
     isProposalActive,
@@ -51,7 +50,6 @@ import { saveMoralisInstance } from "database/interactions";
 import { createTreasurySteps, SpinnerLoading } from "components/Dialog/Stepper";
 import { InputAmount } from "components/Form";
 import { sendEthToAddress } from "contract-interactions/utils";
-
 import { fetchDAO } from "network/fetchDAO";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;

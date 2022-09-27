@@ -1,21 +1,9 @@
 import ASSETS from "assets/index";
-import { Chain } from "wagmi";
+import { chain, Chain } from "wagmi";
 import { StaticImageData } from "next/image";
+import { infuraId } from "./constants";
 
 type chainType = [
-    //
-    // TEST CHAINS
-    // ----------------------------------------------------------------------
-    "Ethereum Rinkeby",
-    "Polygon Mumbai",
-    "Arbitrum Testnet",
-    "Binance Testnet",
-    "Avalanche Testnet",
-    "Fantom Testnet",
-    "Optimism Testnet",
-    "Aurora Testnet",
-    "Skale Testnet",
-
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
@@ -28,6 +16,19 @@ type chainType = [
     "Optimism",
     "Aurora",
     "Skale",
+
+    //
+    // TEST CHAINS
+    // ----------------------------------------------------------------------
+    "Ethereum Rinkeby",
+    "Polygon Mumbai",
+    "Arbitrum Goerli",
+    "Binance Testnet",
+    "Avalanche Testnet",
+    "Fantom Testnet",
+    "Optimism Goerli",
+    "Aurora Testnet",
+    "Skale Testnet",
 ];
 
 const CHAINS_IMG: {
@@ -52,11 +53,11 @@ const CHAINS_IMG: {
     // ----------------------------------------------------------------------
     "Ethereum Rinkeby": ASSETS.Ethereum,
     "Polygon Mumbai": ASSETS.Polygon,
-    "Arbitrum Testnet": ASSETS.Arbitrum,
+    "Arbitrum Goerli": ASSETS.Arbitrum,
     "Binance Testnet": ASSETS.Binance,
     "Avalanche Testnet": ASSETS.Avalanche,
     "Fantom Testnet": ASSETS.Fantom,
-    "Optimism Testnet": ASSETS.Optimism,
+    "Optimism Goerli": ASSETS.Optimism,
     "Aurora Testnet": ASSETS.Aurora,
     "Skale Testnet": ASSETS.Skale,
 };
@@ -68,42 +69,9 @@ export const CHAINS: {
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
+    "Ethereum Rinkeby": chain.rinkeby,
 
-    "Ethereum Rinkeby": {
-        id: 4,
-        name: "Ethereum Rinkeby",
-        network: "Ethereum",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Ethereum",
-            symbol: "ETH",
-        },
-        rpcUrls: {
-            default: "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-        },
-        blockExplorers: {
-            default: { name: "Etherscan", url: "https://rinkeby.etherscan.io" },
-        },
-        testnet: true,
-    },
-
-    "Polygon Mumbai": {
-        id: 80001,
-        name: "Polygon Mumbai",
-        network: "Polygon",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Polygon",
-            symbol: "MATIC",
-        },
-        rpcUrls: {
-            default: "https://rpc-mumbai.maticvigil.com",
-        },
-        blockExplorers: {
-            default: { name: "Polygonscan", url: "https://mumbai.polygonscan.com" },
-        },
-        testnet: true,
-    },
+    "Polygon Mumbai": chain.polygonMumbai,
 
     "Avalanche Testnet": {
         id: 43113,
@@ -141,27 +109,11 @@ export const CHAINS: {
         testnet: true,
     },
 
-    // "Arbitrum Testnet": {
-    //     id: 421611,
-    //     name: "Arbitrum Testnet",
-    //     network: "Arbitrum",
-    //     nativeCurrency: {
-    //         decimals: 18,
-    //         name: "Ethereum",
-    //         symbol: "ETH",
-    //     },
-    //     rpcUrls: {
-    //         default: "https://rinkeby.arbitrum.io/rpc",
-    //     },
-    //     blockExplorers: {
-    //         default: { name: "arbiscan", url: "https://testnet.arbiscan.io" },
-    //     },
-    //     testnet: true,
-    // },
+    // "Arbitrum Testnet": chain.arbitrumGoerli,
 
-    "Optimism Testnet": {
+    "Optimism Goerli": {
         id: 420,
-        name: "Optimism Testnet",
+        name: "Optimism Goerli",
         network: "Optimism",
         nativeCurrency: {
             decimals: 18,
@@ -169,7 +121,7 @@ export const CHAINS: {
             symbol: "ETH",
         },
         rpcUrls: {
-            default: "https://goerli.optimism.io/",
+            default: `https://optimism-goerli.infura.io/v3/${infuraId}`,
         },
         blockExplorers: {
             default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" },
@@ -205,7 +157,7 @@ export const CHAINS: {
             symbol: "ETH",
         },
         rpcUrls: {
-            default: "https://testnet.aurora.dev",
+            default: `https://aurora-testnet.infura.io/v3/${infuraId}`,
         },
         blockExplorers: {
             default: { name: "aurorascan", url: "https://testnet.aurorascan.dev" },
@@ -248,14 +200,13 @@ export const CHAINS: {
             symbol: "ETH",
         },
         rpcUrls: {
-            default: "https://mainnet.aurora.dev",
+            default: `https://aurora-mainnet.infura.io/v3/${infuraId}`,
         },
         blockExplorers: {
             default: { name: "aurorascan", url: "https://aurorascan.dev" },
         },
         testnet: false,
     },
-
 };
 
 export const getChains = (): Chain[] => {
@@ -299,7 +250,7 @@ export const isBlockchainSupported = (chain: { id }) => {
 
 export const getLogoURI = (chain: number | string) => {
     if (typeof chain === "number") {
-        return CHAINS_IMG[getChain(chain).network]?.src || CHAINS_IMG["Ethereum"];
+        return CHAINS_IMG[getChain(chain)?.name]?.src || CHAINS_IMG["Ethereum"];
     } else {
         return CHAINS_IMG[chain] || CHAINS_IMG["Ethereum"];
     }

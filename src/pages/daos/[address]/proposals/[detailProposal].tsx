@@ -9,9 +9,7 @@ import { useMoralis, useMoralisQuery } from "react-moralis";
 import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
 import { Button, RadioSelector } from "components/Form";
-import { formatAddress } from "utils/address";
 import { validateForm } from "utils/validate";
-import ProgressBar from "components/ProgressBar/ProgressBar";
 import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
@@ -136,40 +134,6 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
         );
     };
 
-    const InfoCard = () => {
-        return (
-            <CardProposal title="Info" className="w-1/3">
-                <ul className="space-y-6 text-graySupport">
-                    <li className="flex justify-between text-sm">
-                        <p>Start Date:</p>
-                        <p className="text-black">June 21 2022, 19:33</p>
-                    </li>
-                    <li className="flex justify-between text-sm">
-                        <p>End Date:</p>
-                        <p className="text-black">June 21 2022, 19:33</p>
-                    </li>
-                    <li className="flex justify-between text-sm">
-                        <p>Creator:</p>
-                        <p className="text-black">
-                            {formatAddress("0x533336d35cA55DC1e0d7cB3CB44187E138664280")}
-                        </p>
-                    </li>
-                </ul>
-            </CardProposal>
-        );
-    };
-
-    const VotingResultsCard = () => {
-        return (
-            <CardProposal title="Voting Results" className="w-1/3">
-                <div className="w-full gap-10">
-                    <ProgressBar bgColor={1} percentage={55} title="In favor" />
-                    <ProgressBar bgColor={3} percentage={45} title="Against" />
-                </div>
-            </CardProposal>
-        );
-    };
-
     // send voted
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -224,8 +188,6 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
                         <p className="pb-4">{proposalData.shortDescription}</p>
                         <div className="flex gap-6 pb-10">
                             <AboutCard description={proposalData.description} />
-                            {/* <InfoCard />
-                            <VotingResultsCard /> */}
                         </div>
                         <RadioSelector
                             name="voteResult"
