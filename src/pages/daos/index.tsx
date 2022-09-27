@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
-import basicAvatar from "assets/basic-dao-logo.png";
+import ASSETS from "assets/index";
 import { useMoralis } from "react-moralis";
 import { IDAOPageForm } from "types/forms";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
@@ -74,7 +74,7 @@ const DAOsPage: NextPage = () => {
                     setDAOs(() => daos);
                 },
                 onError: (error) => {
-                    console.log(error)
+                    console.log(error);
                     console.log("Error fetching db query" + error);
                 },
             });
@@ -129,7 +129,9 @@ const DAOsPage: NextPage = () => {
                                 height={"150"}
                                 layout={"responsive"}
                                 priority={true}
-                                src={!isIpfsAddress(profileImage) ? profileImage : basicAvatar}
+                                src={
+                                    !isIpfsAddress(profileImage) ? profileImage : ASSETS.daoLogoMock
+                                }
                                 className="rounded-2xl"
                             />
                         </div>

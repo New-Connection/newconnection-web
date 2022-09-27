@@ -1,11 +1,11 @@
 import * as React from "react";
-import BasicAvatar from "assets/basic-dao-logo.png";
 import Image from "next/image";
+import ASSETS from "assets/index";
 
 const DAOCard = (props) => {
     return (
         <div className="flex my-4 gap-16">
-            <Image src={BasicAvatar} width="125" height="125" layout="fixed" />
+            <Image src={ASSETS.daoLogoMock} width="125" height="125" layout="fixed" />
             <div className="w-3/5 justify-between">
                 <p className="text-lg font-bold">DAO Name</p>
                 {/* About style for paragraph https://codepen.io/ShanShahOfficial/pen/wvBYwaB */}

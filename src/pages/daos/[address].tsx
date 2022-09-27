@@ -6,10 +6,7 @@ import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
 import { ParsedUrlQuery } from "querystring";
 import Image from "next/image";
-import basicAvatar from "assets/basic-dao-logo.png";
-import basicCover from "assets/basic-dao-cover.png";
-import discordLogo from "assets/social/discord.png";
-import twitterLogo from "assets/social/twitter.png";
+import ASSETS from "assets/index";
 import { getChainScanner, getLogoURI, getTokenSymbol } from "utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
@@ -40,7 +37,7 @@ import {
     getSymbol,
     getTokenURI,
 } from "contract-interactions/viewNftContract";
-import defaultImage from "assets/empty-token.webp";
+
 import {
     getTotalProposals,
     isProposalActive,
@@ -54,6 +51,8 @@ import { saveMoralisInstance } from "database/interactions";
 import { createTreasurySteps, SpinnerLoading } from "components/Dialog/Stepper";
 import { InputAmount } from "components/Form";
 import { sendEthToAddress } from "contract-interactions/utils";
+
+import { fetchDAO } from "network/fetchDAO";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -404,6 +403,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     useEffect(() => {
         fetchDAO();
+        // console.log("newDAO", newDao);
+        // setDAOMoralisInstance(() => moralisInstance);
+        // setDAO(() => newDao);
     }, [isInitialized]);
 
     useIsomorphicLayoutEffect(() => {
@@ -585,8 +587,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         status
                                             ? toast.success("Wallet added to Whitelist")
                                             : toast.error(
-                                                "Only owner of DAO can add a new members"
-                                            );
+                                                  "Only owner of DAO can add a new members"
+                                              );
                                         // TODO: DELETE ROW FROM MORALIS
                                         // removeItem(walletAddress);
                                         // console.log("WL DELETE");
@@ -645,8 +647,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const StatisticCard = ({ label, counter }) => {
         return (
-            <div
-                className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
+            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
                 <div className={"text-gray-400 group-hover:text-white"}>{label}</div>
                 <div className={"flex justify-end text-black text-5xl group-hover:text-white"}>
                     {counter || 0}
@@ -683,7 +684,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             <div className="flex justify-center">
                 {
                     <Image
-                        src={image ? image : basicAvatar}
+                        src={image ? image : ASSETS.daoNFTMock}
                         width={"200"}
                         height={"200"}
                         className={classNames("rounded-t-md", className)}
@@ -764,7 +765,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const BlockchainImage = () => {
         return (
             <Image
-                src={DAO ? getLogoURI(DAO.blockchain[0]) : defaultImage}
+                src={DAO ? getLogoURI(DAO.blockchain[0]) : ASSETS.defaultToken}
                 height={22}
                 width={22}
                 layout={"fixed"}
@@ -779,7 +780,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 <div className="cover h-36 w-full relative justify-center">
                     <Image
                         priority={true}
-                        src={!isIpfsAddress(DAO.coverImage) ? DAO.coverImage : basicCover}
+                        src={!isIpfsAddress(DAO.coverImage) ? DAO.coverImage : ASSETS.daoCoverMock}
                         layout={"fill"}
                     />
                 </div>
@@ -792,7 +793,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     src={
                                         !isIpfsAddress(DAO.profileImage)
                                             ? DAO.profileImage
-                                            : basicAvatar
+                                            : ASSETS.daoLogoMock
                                     }
                                     height={"150px"}
                                     width={"150px"}
@@ -834,8 +835,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div
-                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchain</p>
                                 <BlockchainImage />
                             </div>
@@ -843,13 +843,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                             {DAO.discordURL ? (
                                 <ImageLink
                                     url={isValidHttpUrl(DAO.discordURL)}
-                                    image={discordLogo}
+                                    image={ASSETS.discord}
                                 />
                             ) : null}
                             {DAO.twitterURL ? (
                                 <ImageLink
                                     url={isValidHttpUrl(DAO.twitterURL)}
-                                    image={twitterLogo}
+                                    image={ASSETS.twitter}
                                 />
                             ) : null}
 
@@ -877,7 +877,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         ? "secondary-button gradient-btn-color"
                                         : "secondary-button bg-gray hover:bg-gray"
                                 }
-                                disabled={!isLoaded}>
+                                disabled={!isLoaded}
+                            >
                                 DAO Chats
                             </button>
                         </Link>
@@ -1057,7 +1058,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 >
                     <div className={"flex items-center gap-2"}>
                         <Image
-                            src={!isIpfsAddress(DAO.profileImage) ? DAO.profileImage : basicAvatar}
+                            src={
+                                !isIpfsAddress(DAO.profileImage)
+                                    ? DAO.profileImage
+                                    : ASSETS.daoLogoMock
+                            }
                             height={"50px"}
                             width={"50px"}
                             className="rounded-xl"

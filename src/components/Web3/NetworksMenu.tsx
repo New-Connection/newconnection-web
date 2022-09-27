@@ -6,16 +6,14 @@ import {
     SelectPopover,
     useSelectState,
     SelectGroup,
-    SelectGroupLabel, SelectSeparator,
+    SelectGroupLabel,
+    SelectSeparator,
 } from "ariakit/select";
 import { SelectorIcon } from "@heroicons/react/solid";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
-import defaultImage from "assets/empty-token.webp";
-import {
-    getChainIds,
-    getChainNames, getLogoURI,
-} from "utils/blockchains";
+import ASSETS from "assets/index";
+import { getChainIds, getChainNames, getLogoURI } from "utils/blockchains";
 import { chains } from "./WalletConfig";
 
 export const NetworksMenu = () => {
@@ -31,8 +29,7 @@ export const NetworksMenu = () => {
 
     const currentChains = chains.filter((chain) => getChainIds().includes(chain.id));
 
-    const nameChain = getChainNames()
-        .find((name) => name === chain.name);
+    const nameChain = getChainNames().find((name) => name === chain.name);
 
     return (
         <>
@@ -46,7 +43,7 @@ export const NetworksMenu = () => {
                 <>
                     <div className="flex h-5 w-5 items-center rounded-full">
                         <Image
-                            src={getLogoURI(chain.id) ?? defaultImage}
+                            src={getLogoURI(chain.id) ?? ASSETS.defaultToken}
                             objectFit="contain"
                             layout="fixed"
                             width="20px"
@@ -55,7 +52,7 @@ export const NetworksMenu = () => {
                         />
                     </div>
                     <span>{nameChain ?? "Unsupported"}</span>
-                    <SelectorIcon className="relative right-[-4px] h-4 w-4" aria-hidden="true"/>
+                    <SelectorIcon className="relative right-[-4px] h-4 w-4" aria-hidden="true" />
                 </>
             </Select>
             {select.mounted && (
@@ -63,57 +60,60 @@ export const NetworksMenu = () => {
                     state={select}
                     className="shadow-2 z-10 max-h-[280px] w-fit min-w-[13rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
-
                     <SelectGroup>
                         <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">
                             Mainnets
                         </SelectGroupLabel>
-                        {currentChains.filter(chain => !chain.testnet).map((chain) => {
-                            return (
-                                <SelectItem
-                                    key={chain.id}
-                                    value={chain.id?.toString()}
-                                    className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
-                                    onClick={() => switchNetwork?.(chain.id)}
-                                >
-                                    <Image
-                                        src={getLogoURI(chain.id) ?? defaultImage}
-                                        alt={chain.name}
-                                        objectFit="contain"
-                                        width="20px"
-                                        height="20px"
-                                        priority
-                                    />
-                                    <span>{chain.name}</span>
-                                </SelectItem>
-                            );
-                        })}
+                        {currentChains
+                            .filter((chain) => !chain.testnet)
+                            .map((chain) => {
+                                return (
+                                    <SelectItem
+                                        key={chain.id}
+                                        value={chain.id?.toString()}
+                                        className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
+                                        onClick={() => switchNetwork?.(chain.id)}
+                                    >
+                                        <Image
+                                            src={getLogoURI(chain.id) ?? ASSETS.defaultToken}
+                                            alt={chain.name}
+                                            objectFit="contain"
+                                            width="20px"
+                                            height="20px"
+                                            priority
+                                        />
+                                        <span>{chain.name}</span>
+                                    </SelectItem>
+                                );
+                            })}
                     </SelectGroup>
-                    <SelectSeparator className="my-2"/>
+                    <SelectSeparator className="my-2" />
                     <SelectGroup>
                         <SelectGroupLabel className="p-2 text-sm font-normal text-graySupport">
                             Test Chains
                         </SelectGroupLabel>
-                        {currentChains.filter(chain => chain.testnet).map((chain) => {
-                            return (
-                                <SelectItem
-                                    key={chain.id}
-                                    value={chain.id?.toString()}
-                                    className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
-                                    onClick={() => switchNetwork?.(chain.id)}
-                                >
-                                    <Image
-                                        src={getLogoURI(chain.id) ?? defaultImage}
-                                        alt={chain.name}
-                                        objectFit="contain"
-                                        width="20px"
-                                        height="20px"
-                                        priority
-                                    />
-                                    <span>{chain.name}</span>
-                                </SelectItem>
-                            );
-                        })}
+                        {currentChains
+                            .filter((chain) => chain.testnet)
+                            .map((chain) => {
+                                return (
+                                    <SelectItem
+                                        key={chain.id}
+                                        value={chain.id?.toString()}
+                                        className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
+                                        onClick={() => switchNetwork?.(chain.id)}
+                                    >
+                                        <Image
+                                            src={getLogoURI(chain.id) ?? ASSETS.defaultToken}
+                                            alt={chain.name}
+                                            objectFit="contain"
+                                            width="20px"
+                                            height="20px"
+                                            priority
+                                        />
+                                        <span>{chain.name}</span>
+                                    </SelectItem>
+                                );
+                            })}
                     </SelectGroup>
                 </SelectPopover>
             )}

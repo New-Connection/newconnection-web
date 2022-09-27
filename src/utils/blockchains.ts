@@ -1,12 +1,4 @@
-import Ethereum from "assets/chains/Ethereum.png";
-import Polygon from "assets/chains/Polygon.png";
-import Arbitrum from "assets/chains/Arbitrum.png";
-import Binance from "assets/chains/Binance.png";
-import Avalanche from "assets/chains/Avalanche.png";
-import Fantom from "assets/chains/Fantom.png";
-import Optimism from "assets/chains/Optimism.png";
-import Aurora from "assets/chains/Aurora.png";
-import Skale from "assets/chains/Skale.png";
+import ASSETS from "assets/index";
 import { Chain } from "wagmi";
 import { StaticImageData } from "next/image";
 
@@ -44,29 +36,29 @@ const CHAINS_IMG: {
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
-    Ethereum: Ethereum,
-    Polygon: Polygon,
-    Arbitrum: Arbitrum,
-    Binance: Binance,
-    Avalanche: Avalanche,
-    Fantom: Fantom,
-    Optimism: Optimism,
-    Aurora: Aurora,
-    Skale: Skale,
+    Ethereum: ASSETS.Ethereum,
+    Polygon: ASSETS.Polygon,
+    Arbitrum: ASSETS.Arbitrum,
+    Binance: ASSETS.Binance,
+    Avalanche: ASSETS.Avalanche,
+    Fantom: ASSETS.Fantom,
+    Optimism: ASSETS.Optimism,
+    Aurora: ASSETS.Aurora,
+    Skale: ASSETS.Skale,
 
 
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    "Ethereum Rinkeby": Ethereum,
-    "Polygon Mumbai": Polygon,
-    "Arbitrum Testnet": Arbitrum,
-    "Binance Testnet": Binance,
-    "Avalanche Testnet": Avalanche,
-    "Fantom Testnet": Fantom,
-    "Optimism Testnet": Optimism,
-    "Aurora Testnet": Aurora,
-    "Skale Testnet": Skale,
+    "Ethereum Rinkeby": ASSETS.Ethereum,
+    "Polygon Mumbai": ASSETS.Polygon,
+    "Arbitrum Testnet": ASSETS.Arbitrum,
+    "Binance Testnet": ASSETS.Binance,
+    "Avalanche Testnet": ASSETS.Avalanche,
+    "Fantom Testnet": ASSETS.Fantom,
+    "Optimism Testnet": ASSETS.Optimism,
+    "Aurora Testnet": ASSETS.Aurora,
+    "Skale Testnet": ASSETS.Skale,
 };
 
 export const CHAINS: {

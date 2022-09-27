@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import { useAccount } from "wagmi";
 import Link from "next/link";
-import basicAvatar from "assets/basic-dao-logo.png";
+import ASSETS from "assets/index";
 import { useDialogState } from "ariakit";
 import Tabs from "components/Tabs/Tabs";
 import DAOCard from "components/Cards/DAOCard";
@@ -60,7 +60,7 @@ const Home: NextPage = () => {
     const AccountInfo = () => {
         return (
             <div className="flex p-4 gap-5 content-center">
-                <Image src={basicAvatar} width={"100"} height={"100"} />
+                <Image src={ASSETS.daoLogoMock} width={"100"} height={"100"} />
                 <div>
                     <p>Hello,</p>
                     <p className="text-2xl font-bold">{address}</p>

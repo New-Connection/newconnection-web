@@ -7,9 +7,7 @@ import { useIsMounted } from "hooks";
 import { formatAddress } from "utils/address";
 import { DialogHeader } from "components/Dialog";
 
-// Wallet icon
-import MetamaskIcon from "assets/wallets/mm.png";
-import WalletConnectIcon from "assets/wallets/wc.png";
+import ASSETS from "assets/index";
 
 interface Props {
     dialog: DisclosureState;
@@ -26,8 +24,8 @@ export const WalletSelector = ({ dialog }: Props) => {
     const isMounted = useIsMounted();
 
     const imageID = {
-        MetaMask: MetamaskIcon.src,
-        WalletConnect: WalletConnectIcon.src,
+        MetaMask: ASSETS.metamask,
+        WalletConnect: ASSETS.walletConnect,
     };
 
     const handleConnect = React.useCallback(
@@ -88,7 +86,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                                 }}
                                 className="flex gap-4 btn-connect-wallets text-purple justify-center pr-12 rounded-full"
                             >
-                                <img src={imageID[x.name]} className="w-8 h-8" />
+                                <img src={imageID[x.name]["src"]} className="w-8 h-8" />
                                 {x?.name}
                                 {isLoading && x.id === pendingConnector?.id && " (connecting)"}
                             </button>
