@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
-import { Button, InputText, InputTextArea, RadioSelectorMulti } from "components/Form";
+import { Button, InputTextArea, RadioSelectorMulti } from "components/Form";
 import BackButton from "components/Button/backButton";
 import { validateForm } from "utils/validate";
 import { IAddNewMember } from "types/forms";
@@ -20,6 +20,8 @@ import {
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
+import { useSigner } from "wagmi";
+import { useMoralisQuery } from "react-moralis";
 
 interface QueryUrlParams extends ParsedUrlQuery {
     daoName: string;
@@ -32,7 +34,6 @@ interface QueryUrlParams extends ParsedUrlQuery {
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IAddNewMember>({
         daoName: "",
-        walletAddress: "",
         daoAddress: "",
         tokenAddress: [],
         tokenNames: [],
@@ -41,53 +42,94 @@ const AddNewMember: NextPage = () => {
         blockchainSelected: [],
         note: "",
     });
+    const { data: signer_data } = useSigner();
     const router = useRouter();
 
-    // console.log(formData)
-    console.log(formData.tokenNames)
-    console.log(formData.tokenAddress)
-
-    useEffect(() => {
-        const query = router.query as QueryUrlParams;
-        // console.log(query.tokenAddress);
-
-        handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
-        handleChangeBasic(query.daoName, setFormData, "daoName");
-        handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
-        handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
-        const saved = localStorage.getItem(query.daoName + " NFTs");
-        const initialValue = JSON.parse(saved);
-        const tokenNames = [];
-        console.log("saved", saved);
-        initialValue.map((object) => {
-            tokenNames.push(object.title);
-        });
-        handleAddArray(tokenNames, setFormData, "tokenNames");
-        // console.log("token address", formData.tokenNames);
-    }, [router]);
+    const { fetch: whitelistFetch } = useMoralisQuery(
+        "Whitelist",
+        (query) => query.equalTo("daoAddress", formData.daoAddress)
+            && query.equalTo("votingTokenAddress", formData.votingTokenAddress),
+        [formData.daoAddress, formData.votingTokenAddress, signer_data],
+        {
+            autoFetch: false,
+        }
+    );
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
+
+        if (!signer_data) {
+            toast.error("Please connect wallet");
+            return;
+        }
+
         if (!validateForm(formData, ["note"])) {
             return;
         }
 
+        const signerAddress = await signer_data.getAddress()
+
+        if (!(await checkRequestAvailability(signerAddress))) {
+            toast.error(`You already send request for token: ${formData.votingTokenName}`);
+            return;
+        }
+
         try {
-            const moralisProposal = getMoralisInstance(MoralisClassEnum.WHITELIST);
-            setFieldsIntoMoralisInstance(moralisProposal, formData);
-            await saveMoralisInstance(moralisProposal);
-            toast.success("Wallet was saved", {
+            const moralisInstance = getMoralisInstance(MoralisClassEnum.WHITELIST);
+            setFieldsIntoMoralisInstance(moralisInstance, formData);
+            moralisInstance.set("walletAddress", signerAddress)
+
+            await saveMoralisInstance(moralisInstance);
+            toast.success("Your request was saved", {
                 duration: 4000,
                 className: "bg-red",
-                position: "bottom-center",
+                position: "top-center",
             });
             form.reset();
         } catch (error) {
             toast.error("Couldn't save your . Please try again");
             return;
         }
+
+        router.back()
     }
+
+    const checkRequestAvailability = async (walletAddress: string) => {
+        let available = false
+        await whitelistFetch({
+            onSuccess: (results) => {
+                if (results.filter(result => result.get("walletAddress") === walletAddress).length === 0) {
+                    console.log("available=true")
+                    available = true
+                }
+            },
+            onError: (e) => {
+                console.log("error" + e)
+            }
+        });
+        return available
+    };
+
+
+    useEffect(() => {
+        console.log("fetch query")
+        const query = router.query as QueryUrlParams;
+
+        handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
+        handleChangeBasic(query.daoName, setFormData, "daoName");
+        handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
+        handleAddArray(query.tokenAddress, setFormData, "tokenAddress")
+
+        const saved = localStorage.getItem(query.daoName + " NFTs");
+        const initialValue = JSON.parse(saved);
+        const tokenNames = [];
+        console.log("fetch localStorage");
+        initialValue.map((object) => {
+            tokenNames.push(object.title);
+        });
+        handleAddArray(tokenNames, setFormData, "tokenNames");
+    }, [router]);
 
     return (
         <div>
@@ -100,20 +142,10 @@ const AddNewMember: NextPage = () => {
                     >
                         <h1 className="text-highlighter">Become a member of</h1>
                         <h1 className="text-highlighter mt-0 text-purple">{formData.daoName}</h1>
-                        <InputText
-                            label="Wallet"
-                            name="walletAddress"
-                            placeholder="Your wallet address"
-                            labelTitle="Your wallet address"
-                            maxLength={42}
-                            handleChange={(event) =>
-                                handleTextChangeAddNewMember(event, setFormData)
-                            }
-                        />
                         <label>
                             <div className="input-label">Choose voting token</div>
                         </label>
-                        {formData.tokenAddress ? (
+                        {Array.isArray(formData.tokenAddress) ? (
                             <RadioSelectorMulti
                                 name="votingTokenAddress"
                                 labels={[...formData.tokenNames]}

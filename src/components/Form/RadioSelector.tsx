@@ -62,7 +62,6 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
 
 export const RadioSelectorMulti = (radioSelector: IRadioSelector) => {
     const [clickedValue, setClickValue] = useState(null);
-    // console.log(radioSelector.values);
 
     return (
         <>

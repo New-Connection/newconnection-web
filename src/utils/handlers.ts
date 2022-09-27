@@ -30,7 +30,9 @@ export const handleAddArray = <T>(
     set: Dispatch<SetStateAction<T>>,
     field: string
 ) => {
-    set((prev) => ({ ...prev, [field]: [...value] }));
+    typeof value === "string" ?
+        set((prev) => ({ ...prev, [field]: [value] })) :
+        set((prev) => ({ ...prev, [field]: [...value] }));
 };
 
 export const handleTextChange = <T extends ICreate,
