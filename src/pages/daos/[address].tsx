@@ -360,11 +360,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     useEffect(() => {
         const loadingDAO = async () => {
             const data = await fetchDAO(isInitialized, DAOsQuery);
-            setDAO(() => data.newDao);
-            setDAOMoralisInstance(() => data.moralisInstance);
-            console.log("after useEffect newDAO", data.newDao);
+
+            if (data) {
+                setDAO(() => data.newDao);
+                setDAOMoralisInstance(() => data.moralisInstance);
+                console.log("after useEffect newDAO", data.newDao);
+            }
         };
-        // call function and catch errors
+
         loadingDAO().catch((e) => console.log("Error when Loading DAO", e));
     }, [isInitialized]);
 
@@ -547,8 +550,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         status
                                             ? toast.success("Wallet added to Whitelist")
                                             : toast.error(
-                                                  "Only owner of DAO can add a new members"
-                                              );
+                                                "Only owner of DAO can add a new members"
+                                            );
                                         // TODO: DELETE ROW FROM MORALIS
                                         // removeItem(walletAddress);
                                         // console.log("WL DELETE");
@@ -588,11 +591,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             index: 1,
             Component: TabOne,
         },
-        // {
-        //     label: "MEMBERS",
-        //     index: 2,
-        //     Component: TabTwo,
-        // },
         {
             label: "WHITELIST",
             index: 2,
@@ -607,7 +605,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const StatisticCard = ({ label, counter }) => {
         return (
-            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
+            <div
+                className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
                 <div className={"text-gray-400 group-hover:text-white"}>{label}</div>
                 <div className={"flex justify-end text-black text-5xl group-hover:text-white"}>
                     {counter || 0}
@@ -795,7 +794,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div
+                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchain</p>
                                 <BlockchainImage />
                             </div>
