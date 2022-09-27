@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Connector, useAccount, useConnect, useDisconnect, useEnsName } from "wagmi";
+import { Connector, useAccount, useConnect, useDisconnect } from "wagmi";
 import { Dialog, DisclosureState } from "ariakit";
 
 // OWN
@@ -88,7 +88,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                                 }}
                                 className="flex gap-4 btn-connect-wallets text-purple justify-center pr-12 rounded-full"
                             >
-                                <img src={imageID[x.name]} className="w-8 h-8" />
+                                <img alt={"wallet"} src={imageID[x.name]} className="w-8 h-8" />
                                 {x?.name}
                                 {isLoading && x.id === pendingConnector?.id && " (connecting)"}
                             </button>

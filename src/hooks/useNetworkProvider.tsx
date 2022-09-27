@@ -1,8 +1,6 @@
-import { ethers, providers } from "ethers";
+import { providers } from "ethers";
 import { getChain, getTokenSymbol } from "utils/blockchains";
 import { useNetwork } from "wagmi";
-
-export type Provider = ethers.providers.BaseProvider;
 
 export const useNetworkProvider = () => {
     const { chain } = useNetwork();

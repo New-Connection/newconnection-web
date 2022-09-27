@@ -1,7 +1,7 @@
 <h1 align="center"> NewConnection.xyz </h1>
 <h3 align="center"> A multichain DAO solution based on NFT-membership </h3>  
 
-</br>
+<br/>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
@@ -16,7 +16,7 @@
 
 <h3>Frontend:</h3>
 
-* **React**          
+* **React**
 * **Tailwindcss**    *#CSS framework for Classnames*
 * **PostCSS**        *#Add js into CSS*
 * **Ariakit**        *#Templates for componets(dialogs, selectors)*

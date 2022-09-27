@@ -8,7 +8,7 @@ export interface ICreateDAO extends ICreate {
     goals: string;
     profileImage: any;
     coverImage: any;
-    isActive?:boolean;
+    isActive?: boolean;
     tokenAddress: string[];
     votingPeriod: string;
     quorumPercentage: string;
@@ -31,13 +31,6 @@ export interface IDAOPageForm extends ICreateDAO {
     nftImage?: any;
     isActive?: boolean;
     treasuryAddress?: string;
-}
-
-
-export interface IMembershipForm {
-    walletAddress?: string;
-    note?: string;
-    blockchainSelected?: string;
 }
 
 export interface IBlockchains {

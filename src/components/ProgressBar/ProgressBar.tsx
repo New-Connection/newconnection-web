@@ -33,7 +33,7 @@ const numbersWeight = {
 
 const ProgressBar = ({ bgColor, percentage, title }: ProgressBarInterface) => {
     function getClosestNumber(dict, value: number) {
-        var key, found, found_value;
+        let key, found, found_value;
         for (key in dict) {
             if (value - key >= 0) {
                 found = key;

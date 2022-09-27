@@ -1,7 +1,4 @@
 import {
-    HomeIcon,
-    UserGroupIcon,
-    ScaleIcon,
     QuestionMarkCircleIcon,
 } from "@heroicons/react/outline";
 import { DisclosureState } from "ariakit";
@@ -10,7 +7,6 @@ import { useIsMounted, useWindowSize } from "hooks";
 import { formatAddress } from "utils/address";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useTheme } from "next-themes";
-import Link from "next/link";
 
 export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureState }) {
     const { address: accountData, isConnected } = useAccount();
