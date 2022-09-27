@@ -404,8 +404,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const TabOne: FC = () => {
         const visibleProposalsLength: number = 3;
         let activeProposals: IProposalPageForm[];
-
-        if (proposals && proposals.length !== 0 && DAOMoralisInstance) {
+        if (proposals && proposals.length > 0 && DAOMoralisInstance) {
             activeProposals = proposals.filter((proposals) => proposals.isActive);
             const isActive = DAOMoralisInstance.get("isActive");
             if (
@@ -484,6 +483,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                     )}
                 </>
             );
+        } else if (proposals && proposals.length === 0) {
+            return <MockupTextCard
+                label={"No proposals here yet"}
+                text={
+                    "You should first add NFTs so that members can vote " +
+                    "then click the button “Add new proposal” and initiate a proposal"
+                }
+            />
         } else {
             return <MockupLoadingProposals />;
         }
