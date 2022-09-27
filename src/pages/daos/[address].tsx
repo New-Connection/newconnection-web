@@ -109,6 +109,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
+
     const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
         (query) => query.equalTo("daoAddress", DAO?.governorAddress),
@@ -117,6 +118,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
+
     const { fetch: ProposalQuery } = useMoralisQuery(
         "Proposal",
         (query) =>
@@ -127,7 +129,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             autoFetch: false,
         }
     );
-    // console.log(isLoaded)
 
     // nft section
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
@@ -141,54 +142,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     const [sending, setSending] = useState(false);
     const createTreasuryDialog = useDialogState();
     const contributeTreasuryDialog = useDialogState();
-    //console.log("DAO Object", DAO);
-    //
+
     // FUNCTIONS
     // ----------------------------------------------------------------------
-
-    const fetchDAO = () => {
-        if (isInitialized) {
-            DAOsQuery({
-                onSuccess: (results) => {
-                    setIsLoaded(false);
-                    const moralisInstance = results[0];
-                    const chainId = moralisInstance.get("chainId");
-                    const governorAddress = moralisInstance.get("governorAddress");
-                    const newDao: IDAOPageForm = {
-                        url: moralisInstance.get("url"),
-                        name: moralisInstance.get("name"),
-                        description: moralisInstance.get("description"),
-                        goals: moralisInstance.get("goals"),
-                        profileImage: moralisInstance.get("profileImage"),
-                        coverImage: moralisInstance.get("coverImage"),
-                        tokenAddress: moralisInstance.get("tokenAddress"),
-                        votingPeriod: moralisInstance.get("votingPeriod"),
-                        quorumPercentage: moralisInstance.get("quorumPercentage"),
-                        type: moralisInstance.get("type"),
-                        blockchain: moralisInstance.get("blockchain"),
-                        governorAddress: governorAddress,
-                        chainId: chainId,
-                        //todo: parse below values
-                        discordURL: moralisInstance.get("discordURL"),
-                        twitterURL: moralisInstance.get("twitterURL"),
-                        websiteURL: moralisInstance.get("websiteURL"),
-                        treasuryAddress: moralisInstance.get("treasuryAddress"),
-                        scanURL: getChainScanner(chainId, governorAddress),
-                        totalVotes: 0,
-                        totalMembers: 0,
-                        totalProposals: 0,
-                        activeProposals: 0,
-                    };
-                    // console.log(newDao);
-                    setDAOMoralisInstance(() => moralisInstance);
-                    setDAO(() => newDao);
-                },
-                onError: (error) => {
-                    console.log("Error fetching db query" + error);
-                },
-            });
-        }
-    };
 
     const fetchWhitelist = async () => {
         await WhitelistQuery({
@@ -402,10 +358,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     // ----------------------------------------------------------------------
 
     useEffect(() => {
-        fetchDAO();
-        // console.log("newDAO", newDao);
-        // setDAOMoralisInstance(() => moralisInstance);
-        // setDAO(() => newDao);
+        const loadingDAO = async () => {
+            const data = await fetchDAO(isInitialized, DAOsQuery);
+            setDAO(() => data.newDao);
+            setDAOMoralisInstance(() => data.moralisInstance);
+            console.log("after useEffect newDAO", data.newDao);
+        };
+        // call function and catch errors
+        loadingDAO().catch((e) => console.log("Error when Loading DAO", e));
     }, [isInitialized]);
 
     useIsomorphicLayoutEffect(() => {
@@ -1018,12 +978,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                     {buttonState}
                                 </button>
                             }
-                            {/* <button className="secondary-button w-full h-12 mt-4 mb-2 gradient-btn-color cursor-not-allowed transition delay-150 hover:reverse-gradient-btn-color ">
-                        Transfer
-                    </button>
-                    <p className="text-gray2 font-light text-sm">
-                        Try to transfer your NFT to another network
-                    </p> */}
                             <p className="w-full mt-12 text-start text-black">Details</p>
                             <ul className="py-6 w-full divide-y divide-slate-200">
                                 <li className="flex py-4 justify-between">
