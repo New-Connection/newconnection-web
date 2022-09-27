@@ -13,7 +13,7 @@ import DAOsPage from "./daos/index";
 
 import { TabsType } from "types/tabs";
 
-const TabOne: FC<{}> = () => {
+const TabOne: FC = () => {
     return (
         <div>
             <DAOCard />
@@ -23,7 +23,7 @@ const TabOne: FC<{}> = () => {
     );
 };
 
-const TabTwo: FC<{}> = () => {
+const TabTwo: FC = () => {
     return (
         <div>
             <p>Administration</p>

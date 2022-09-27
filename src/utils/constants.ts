@@ -17,14 +17,3 @@ export const SECONDS_IN_BLOCK = 13.2;
 //
 export const moralisAppId = process.env.NEXT_PUBLIC_MORALIS_APP_ID_E;
 export const moralisServerUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID_URL_E;
-
-
-interface ISecondsByDuration {
-    [key: string]: number;
-}
-
-export const secondsByDuration: ISecondsByDuration = {
-    week: 7 * 24 * 60 * 60,
-    month: 30 * 24 * 60 * 60,
-    year: 365 * 24 * 60 * 60,
-};

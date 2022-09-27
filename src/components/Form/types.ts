@@ -63,27 +63,6 @@ export interface IDragAndDropProps {
     multipleFiles?: boolean;
 }
 
-export interface InputWithTokenElement extends InputTextProps {
-    handleTokenChange: (token: string) => void;
-    tokens: string[];
-}
-
-export interface InputWithTokenSelectProps extends InputTextProps {
-    handleTokenChange: (token: string) => void;
-    handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    tokenOptions: string[];
-}
-
-export interface InputAmountWithDaysProps {
-    name: string;
-    selectInputName: string;
-    label: string;
-    isRequired: boolean;
-    className?: string;
-    handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleSelectChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}
-
 export interface ButtonProps {
     disabled?: boolean;
     type?: "submit" | "button";
@@ -99,10 +78,4 @@ export interface CheckboxProps {
     images?: boolean;
     enabledValues?: string[];
     handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-}
-
-export interface IDatePicker {
-    label: string;
-    value: Date | null;
-    handleChange: () => void;
 }

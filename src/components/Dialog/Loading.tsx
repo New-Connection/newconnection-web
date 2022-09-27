@@ -1,7 +1,6 @@
 import * as React from "react";
-import { XIcon } from "@heroicons/react/solid";
 import { DisclosureState } from "ariakit";
-import { Dialog, DialogDismiss, DialogHeading } from "ariakit/dialog";
+import { Dialog, DialogHeading } from "ariakit/dialog";
 import classNames from "classnames";
 
 interface LoadingDialogProps {

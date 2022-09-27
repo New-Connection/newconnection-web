@@ -6,7 +6,6 @@ import Footer from "./Footer";
 import CustomToast from "components/Toast/CustomToast";
 import HeadInfo from "./HeadInfo";
 import SwitchNetworkBanner from "components/Banners/SwitchNetworksBanner";
-// import NewFeaturesBanner from "components/Banners/NewFeaturesBanner";
 
 interface ILayoutProps {
     children: React.ReactNode;

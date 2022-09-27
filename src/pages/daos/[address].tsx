@@ -440,7 +440,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const [click, setClick] = useState(false);
 
-    const TabOne: FC<{}> = () => {
+    const TabOne: FC = () => {
         const visibleProposalsLength: number = 3;
         let activeProposals: IProposalPageForm[];
 
@@ -528,7 +528,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         }
     };
 
-    const TabTwo: FC<{}> = () => {
+    const TabTwo: FC = () => {
         return (
             <div className="text-center">
                 {/* <AddToWhitelist /> */}
@@ -543,7 +543,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         );
     };
 
-    const TabThree: FC<{}> = () => {
+    const TabThree: FC = () => {
         return whitelist && whitelist.length !== 0 ? (
             <div className="w-full justify-between space-y-5 gap-5">
                 <div className="flex text-gray2 justify-between text-center pb-4 pt-0">
