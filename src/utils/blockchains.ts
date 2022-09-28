@@ -307,7 +307,7 @@ export const isBlockchainSupported = (chain: { id }) => {
 
 export const getLogoURI = (chain: number | string) => {
     if (typeof chain === "number") {
-        return CHAINS_IMG[getChain(chain).network]?.src || CHAINS_IMG["Ethereum"];
+        return CHAINS_IMG[getChain(chain)?.network]?.src || CHAINS_IMG["Ethereum"];
     } else {
         return CHAINS_IMG[chain] || CHAINS_IMG["Ethereum"];
     }
