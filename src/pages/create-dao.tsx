@@ -32,20 +32,15 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
 import { StepperDialog, handleReset, handleNext } from "components/Dialog";
 import { CHAINS, getChainNames } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
 import { useMoralisQuery } from "react-moralis";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
 import { formatAddress } from "utils/address";
+import { ICreateDaoQuery } from "types/queryInterfaces";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
-
-interface QueryUrlParams extends ParsedUrlQuery {
-    tokenAddress: string;
-    enabledBlockchains: string[];
-}
 
 const createUrl = (name: string): string => {
     // console.log("url: ", name);
@@ -109,7 +104,7 @@ const CreateDAO: NextPage = () => {
     };
 
     useEffect(() => {
-        const query = router.query as QueryUrlParams;
+        const query = router.query as ICreateDaoQuery;
         handleChangeBasicSimple(query.tokenAddress, setFormData, "tokenAddress");
         handleChangeBasic(query.enabledBlockchains, setFormData, "enabledBlockchains");
     }, []);

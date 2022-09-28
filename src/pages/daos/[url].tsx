@@ -25,9 +25,8 @@ import {
     mintReserveAndDelegation,
     transferTreasuryOwnership,
 } from "contract-interactions/";
-import { QueryUrlParams } from "types/queryInterfaces";
+import { IDaoQuery } from "types/queryInterfaces";
 import toast from "react-hot-toast";
-
 import {
     getNftName,
     getNumberOfMintedTokens,
@@ -43,7 +42,6 @@ import { createTreasurySteps, SpinnerLoading } from "components/Dialog/Stepper";
 import { InputAmount } from "components/Form";
 import { sendEthToAddress } from "contract-interactions/utils";
 import { fetchDAO, fetchProposal } from "network/index";
-import { INFTImage } from "types/daoIntefaces";
 import { BlockchainImage } from "components/Icons/BlockchainImage";
 import { MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
@@ -51,17 +49,14 @@ import { NFTCard, NFTImage } from "components/Cards/NFTCard";
 import { Moralis } from "moralis-v1";
 import { ProposalsListTab } from "components/Tabs/ProposalsListTab";
 import { WhitelistTab } from "components/Tabs/WhitelistTab";
+import { DAOPageProps } from "types/pagePropsInterfaces";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-interface DAOPageProps {
-    url: string;
-}
-
-export const getServerSideProps: GetServerSideProps<DAOPageProps, QueryUrlParams> = async (
+export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (
     context
 ) => {
-    const { url } = context.params as QueryUrlParams;
+    const { url } = context.params as IDaoQuery;
 
     const result: DAOPageProps = {
         url: url.toString(),
@@ -470,7 +465,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div
+                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchain</p>
                                 <BlockchainImage chain={DAO.blockchain[0]} />
                             </div>

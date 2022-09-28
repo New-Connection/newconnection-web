@@ -25,7 +25,6 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { ParsedUrlQuery } from "querystring";
 import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
@@ -35,11 +34,7 @@ import { addNFTSteps } from "components/Dialog/Stepper";
 import { addToken, deployNFTContract } from "contract-interactions";
 import { formatAddress } from "utils/address";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
-
-interface QueryUrlParams extends ParsedUrlQuery {
-    governorAddress: string;
-    blockchain: string;
-}
+import { IAddNftQuery } from "types/queryInterfaces";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -103,7 +98,7 @@ const AddNewNFT: NextPage = () => {
     }, [router]);
 
     const fetchQuery = () => {
-        const query = router.query as QueryUrlParams;
+        const query = router.query as IAddNftQuery;
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasic(query.blockchain, setFormData, "blockchain");
     };

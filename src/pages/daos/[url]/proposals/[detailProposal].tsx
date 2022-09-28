@@ -15,20 +15,14 @@ import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";
 import { castVote, VotingType } from "contract-interactions/writeGovernorContract";
+import { IDetailProposalQuery } from "types/queryInterfaces";
+import { IDetailProposalProps } from "types/pagePropsInterfaces";
 
-interface QueryUrlParams extends ParsedUrlQuery {
-    detailProposal: string;
-}
-
-interface DetailProposalProps {
-    detailProposal: string;
-}
-
-export const getServerSideProps: GetServerSideProps<DetailProposalProps, QueryUrlParams> = async (
+export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetailProposalQuery> = async (
     context
 ) => {
-    const { detailProposal } = context.params as QueryUrlParams;
-    const result: DetailProposalProps = {
+    const { detailProposal } = context.params as IDetailProposalQuery;
+    const result: IDetailProposalProps = {
         detailProposal: detailProposal,
     };
     return {
@@ -41,7 +35,7 @@ interface IProposal {
     txConfirm?: string;
 }
 
-const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
+const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
     const [formData, setFormData] = useState<IProposal>({
         voteResult: undefined,
         txConfirm: "",

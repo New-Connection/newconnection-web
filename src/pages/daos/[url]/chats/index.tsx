@@ -12,15 +12,7 @@ import { IAddNewMember } from "types/forms";
 import { formatAddress } from "utils/address";
 import { LockIcon } from "components/Icons";
 import { getNumberOfTokenInOwnerAddress } from "contract-interactions/viewNftContract";
-
-interface QueryUrlParams extends ParsedUrlQuery {
-    daoName: string;
-    nftAddress: string;
-    governorAddress: string;
-    blockchains: string[];
-    tokenAddress: string[];
-    chainId: string;
-}
+import { IChatsQuery } from "types/queryInterfaces";
 
 const ChatsPage: NextPage = () => {
     const [chatActiveIndex, setChatActive] = useState(null);
@@ -33,7 +25,7 @@ const ChatsPage: NextPage = () => {
     const [indexOfOpenChatsForUser, setIndexOpenChat] = useState([]);
 
     useEffect(() => {
-        const query = router.query as QueryUrlParams;
+        const query = router.query as IChatsQuery;
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
         handleChangeBasic(query.chainId, setFormData, "chainId");

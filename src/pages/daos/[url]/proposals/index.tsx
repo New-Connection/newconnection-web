@@ -3,7 +3,6 @@ import Link from "next/link";
 import Layout from "components/Layout";
 import { useMoralisQuery } from "react-moralis";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ParsedUrlQuery } from "querystring";
 import { IDAOPageForm, IProposalPageForm } from "types/forms";
 import {
     isProposalActive,
@@ -16,14 +15,9 @@ import * as React from "react";
 import { MockupTextCard } from "components/Mockup";
 import { useRouter } from "next/router";
 import BackButton from "components/Button/backButton";
+import { IProposals } from "types/queryInterfaces";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
-
-interface QueryUrlParams extends ParsedUrlQuery {
-    name: string;
-    governorAddress: string;
-    chainId: string;
-}
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const { query } = context;
@@ -85,7 +79,7 @@ const ProposalsPage: NextPage = () => {
     };
 
     useEffect(() => {
-        const query = router.query as QueryUrlParams;
+        const query = router.query as IProposals;
         console.log("query:" + router.query.daoAddress);
 
         const newDao = {} as IDAOPageForm;
@@ -109,7 +103,7 @@ const ProposalsPage: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    <BackButton/>
+                    <BackButton />
                     <div className={"flex justify-between items-center"}>
                         <h1 className={"text-highlighter cap"}>{DAO.name} Proposals</h1>
                     </div>

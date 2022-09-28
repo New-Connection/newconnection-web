@@ -25,7 +25,6 @@ import { useDialogState } from "ariakit";
 import { validateForm } from "utils/validate";
 import { createProposal } from "contract-interactions/writeGovernorContract";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
 import { Signer } from "ethers";
 import {
     getMoralisInstance,
@@ -38,12 +37,7 @@ import { useMoralisQuery, useMoralis } from "react-moralis";
 import { getChainNames } from "utils/blockchains";
 import { formatAddress } from "utils/address";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
-
-interface QueryUrlParams extends ParsedUrlQuery {
-    governorAddress: string;
-    blockchains: string[];
-    chainId: string;
-}
+import { ICreateProposalQuery } from "types/queryInterfaces";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -109,7 +103,7 @@ const CreateProposal: NextPage = () => {
     };
 
     const setupData = async () => {
-        const query = router.query as QueryUrlParams;
+        const query = router.query as ICreateProposalQuery;
         // console.log(query)
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");

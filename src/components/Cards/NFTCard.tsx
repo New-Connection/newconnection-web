@@ -14,7 +14,6 @@ interface INFTImage {
     index?: number;
 }
 
-
 export const NFTImage = ({ className, image }: INFTImage) => {
     return (
         <div className="flex justify-center">

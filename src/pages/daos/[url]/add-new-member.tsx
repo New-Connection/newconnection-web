@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
 import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
 import { Button, InputTextArea, RadioSelectorMulti } from "components/Form";
@@ -22,14 +21,7 @@ import {
 } from "database/interactions";
 import { useSigner } from "wagmi";
 import { useMoralisQuery } from "react-moralis";
-
-interface QueryUrlParams extends ParsedUrlQuery {
-    daoName: string;
-    nftAddress: string;
-    governorAddress: string;
-    blockchains: string[];
-    tokenAddress: string[];
-}
+import { IAddMemberQuery } from "types/queryInterfaces";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IAddNewMember>({
@@ -114,7 +106,7 @@ const AddNewMember: NextPage = () => {
 
     useEffect(() => {
         console.log("fetch query")
-        const query = router.query as QueryUrlParams;
+        const query = router.query as IAddMemberQuery;
 
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
