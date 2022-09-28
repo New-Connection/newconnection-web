@@ -11,7 +11,7 @@ import {
     proposalDeadline,
     proposalForVotes,
 } from "contract-interactions";
-import ProposalCard from "components/Cards/ProposalCard";
+import { ProposalCard } from "components/Cards/ProposalCard";
 import * as React from "react";
 import { MockupTextCard } from "components/Mockup";
 import { useRouter } from "next/router";

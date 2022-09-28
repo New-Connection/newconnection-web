@@ -24,7 +24,7 @@ interface QueryUrlParams extends ParsedUrlQuery {
 
 const ChatsPage: NextPage = () => {
     const [chatActiveIndex, setChatActive] = useState(null);
-    const { address, isConnecting, isDisconnected } = useAccount();
+    const { address } = useAccount();
 
     const [isChatOpen, setChatOpen] = useState(false);
     const router = useRouter();

@@ -92,26 +92,6 @@ const DetailProposal: NextPage<DetailProposalProps> = ({ detailProposal }) => {
         className?: string;
     }
 
-    interface IBadge {
-        isActive: boolean;
-    }
-
-    const BadgeIsActive = ({ isActive }: IBadge) => {
-        return (
-            <div className="w-1/6 text-center pl-4 pt-5">
-                {isActive ? (
-                    <div className="bg-gray grid place-items-center rounded-2xl w-20 h-8 text-green">
-                        Active
-                    </div>
-                ) : (
-                    <div className="bg-gray grid place-items-center rounded-2xl w-20 h-8 text-red">
-                        Closed
-                    </div>
-                )}
-            </div>
-        );
-    };
-
     const CardProposal = ({ title, children, className }: ICardProposal) => {
         return (
             <div

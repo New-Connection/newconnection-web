@@ -2,51 +2,64 @@ import * as React from "react";
 import ASSETS from "assets";
 import Image from "next/image";
 import classNames from "classnames";
+import { formatAddress } from "utils/address";
+import { BlockchainImage } from "../Icons/BlockchainImage";
+import { INFTVoting } from "types/forms";
+import { DisclosureState } from "ariakit";
+
+
+interface INFTImage {
+    image?: string;
+    className?: string;
+    index?: number;
+}
+
+
+export const NFTImage = ({ className, image }: INFTImage) => {
+    return (
+        <div className="flex justify-center">
+            {
+                <Image
+                    src={image ? image : ASSETS.daoNFTMock}
+                    width={"200"}
+                    height={"200"}
+                    className={classNames("rounded-t-md", className)}
+                />
+            }
+        </div>
+    );
+};
 
 interface INFTCard {
-    tokenAddress: string;
-    chainId: number;
+    nftObject: INFTVoting;
+    setCurrentNFT: React.Dispatch<React.SetStateAction<INFTVoting>>;
+    detailNFTDialog: DisclosureState;
+    chain: number | string;
 }
 
-interface INFTCardMockup {
-    className?: string;
-}
-
-const NFTCard = ({ tokenAddress, chainId, daoTitle, dialog }) => {
+export const NFTCard = ({ nftObject, setCurrentNFT, detailNFTDialog, chain }: INFTCard) => {
     return (
-        <button className="nft-card" onClick={() => dialog.toggle()}>
+        <button
+            className="nft-card"
+            onClick={() => {
+                setCurrentNFT(nftObject);
+                detailNFTDialog.toggle();
+            }}
+        >
             {/* //Wrap to div for center elements */}
-            <div className="flex justify-center">
-                <Image src={ASSETS.daoNFTMock} className="rounded-t-md" objectFit="contain" />
-            </div>
+            <NFTImage image={nftObject.image} />
             <div className="p-4 gap-y-6">
-                <p className="text-start">{daoTitle}</p>
+                <div className="flex justify-between">
+                    <p className="text-start">{nftObject.title}</p>
+                    <p className="font-light text-sm text-purple">{nftObject.price}</p>
+                </div>
                 <div className="flex pt-4 justify-between">
-                    <p className="font-light text-sm text-[#AAAAAA]">Type: Unknown</p>
-                    <Image src={ASSETS.Polygon} height="24" width="24" />
+                    <p className="font-light text-sm text-[#AAAAAA]">
+                        {formatAddress(nftObject.tokenAddress)}
+                    </p>
+                    <BlockchainImage chain={chain} />
                 </div>
             </div>
         </button>
     );
 };
-
-const NFTCardMockup = ({ className }: INFTCardMockup) => {
-    return (
-        <div className={classNames("nft-card", className)}>
-            {/* //Wrap to div for center elements */}
-            <div className="flex justify-center">
-                <Image src={ASSETS.daoNFTMock} className="rounded-t-md" objectFit="contain" />
-            </div>
-
-            <div className="p-4 gap-y-6">
-                <p>NFT Membership title</p>
-                <div className="flex pt-4 justify-between">
-                    <p className="font-light text-sm text-gray2">Art</p>
-                    <Image src={ASSETS.Polygon} height="24" width="24" />
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export { NFTCardMockup, NFTCard };
