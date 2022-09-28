@@ -27,7 +27,12 @@ import {
 } from "contract-interactions/";
 import { IDaoQuery } from "types/queryInterfaces";
 import toast from "react-hot-toast";
-import { getNftName, getPrice, getSymbol, getTokenURI, } from "contract-interactions/viewNftContract";
+import {
+    getNftName,
+    getPrice,
+    getSymbol,
+    getTokenURI,
+} from "contract-interactions/viewNftContract";
 import { isValidHttpUrl } from "utils/transformURL";
 import { handleChangeBasic } from "utils/handlers";
 import { saveMoralisInstance } from "database/interactions";
@@ -56,7 +61,6 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = a
         props: result,
     };
 };
-
 
 const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const { data: signerData } = useSigner();
@@ -114,19 +118,32 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     // FUNCTIONS
     // ----------------------------------------------------------------------
 
+    const checkCorrectNetwork = async (): Promise<boolean> => {
+        if (!signerData) {
+            toast.error("Please connect wallet");
+            return false;
+        }
+        if ((await signerData.getChainId()) !== DAO.chainId) {
+            toast.error("Please switch network");
+            switchNetwork(DAO.chainId);
+            return false;
+        }
+        return true;
+    };
+
     const mint = async (tokenAddress: string) => {
-        if (!DAO) return null;
+        if (!DAO) return;
 
         if (!(await checkCorrectNetwork())) {
-            return
+            return;
         }
 
         setButtonState("Loading");
         try {
-            const tx = isOwner ?
-                await mintReserveAndDelegation(tokenAddress, signerData) :
-                await mintNFT(tokenAddress, signerData);
-            await tx.wait()
+            const tx = isOwner
+                ? await mintReserveAndDelegation(tokenAddress, signerData)
+                : await mintNFT(tokenAddress, signerData);
+            await tx.wait();
             if (tx.blockNumber) {
                 toast.success(`DONE ✅ successful mint!`);
                 console.log(tx);
@@ -138,22 +155,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         }
     };
 
-    const checkCorrectNetwork = async (): Promise<boolean> => {
-        if (!signerData) {
-            toast.error("Please connect wallet");
-            return false;
-        }
-        if ((await signerData.getChainId()) !== DAO.chainId) {
-            toast.error("Please switch network");
-            switchNetwork(DAO.chainId);
-            return false;
-        }
-        return true
-    }
-
     const addTreasury = async () => {
         if (!(await checkCorrectNetwork())) {
-            return
+            return;
         }
 
         handleReset(setCreateTreasuryStep);
@@ -203,7 +207,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         e.preventDefault();
 
         if (!(await checkCorrectNetwork())) {
-            return
+            return;
         }
 
         try {
@@ -278,13 +282,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 );
                 localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
                 setNFTs(nftsArray);
-            }
+            };
             const fetchTreasuryBalance = async () => {
-                const balance = DAO.treasuryAddress ?
-                    await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId) : 0;
+                const balance = DAO.treasuryAddress
+                    ? await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId)
+                    : 0;
                 setTreasuryBalance(() => balance.toString().slice(0, 7));
             };
-
 
             loadingWhitelist().catch(console.error);
             loadindProposal().catch(console.error);
@@ -311,7 +315,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             DAO &&
             signerData &&
             (await signerData.getAddress()) ===
-            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+                (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
                 ? setIsOwner(true)
                 : setIsOwner(false);
         };
@@ -319,39 +323,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     }, [DAO, signerData]);
 
     //
-    // TABS COMPONENTS & STATES
+    // CUSTOM COMPONENTS
     // ----------------------------------------------------------------------
-
-
-    const tabs: TabsType = [
-        {
-            label: "PROPOSALS",
-            index: 0,
-            Component: () => {
-                return (
-                    <ProposalsListTab
-                        DAOMoralisInstance={DAOMoralisInstance}
-                        DAO={DAO}
-                        proposals={proposals}
-                        daoUrl={url}
-                    />
-                );
-            },
-
-        },
-        {
-            label: "WHITELIST",
-            index: 1,
-            Component: () => {
-                return <WhitelistTab whitelist={whitelist} signer={signerData} chainId={DAO.chainId} />;
-            },
-        },
-    ];
-
-    //
-    // OTHER CUSTOM COMPONENTS
-    // ----------------------------------------------------------------------
-
     const ImageLink = ({ url, image }) => {
         return (
             <a href={url} target={"_blank"}>
@@ -421,8 +394,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div
-                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchain</p>
                                 <BlockchainImage chain={DAO.blockchain[0]} />
                             </div>
@@ -509,7 +481,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     className="form-submit-button w-1/5"
                                     onClick={async () => {
                                         if (!(await checkCorrectNetwork())) {
-                                            return
+                                            return;
                                         }
                                         contributeTreasuryDialog.toggle();
                                     }}
@@ -524,7 +496,35 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         <Tabs
                             selectedTab={selectedTab}
                             onClick={setSelectedTab}
-                            tabs={tabs}
+                            tabs={[
+                                {
+                                    label: "PROPOSALS",
+                                    index: 0,
+                                    Component: () => {
+                                        return (
+                                            <ProposalsListTab
+                                                DAOMoralisInstance={DAOMoralisInstance}
+                                                DAO={DAO}
+                                                proposals={proposals}
+                                                daoUrl={url}
+                                            />
+                                        );
+                                    },
+                                },
+                                {
+                                    label: "WHITELIST",
+                                    index: 1,
+                                    Component: () => {
+                                        return (
+                                            <WhitelistTab
+                                                whitelist={whitelist}
+                                                signer={signerData}
+                                                chainId={DAO.chainId}
+                                            />
+                                        );
+                                    },
+                                },
+                            ]}
                             isLoaded={isLoaded}
                             url={{
                                 pathname: `${url}/create-proposal`,
@@ -537,58 +537,56 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         />
                     </div>
 
-                    <>
-                        <div className="flex flex-row justify-between mb-4 ">
-                            <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
-                            <Link
-                                href={{
-                                    pathname: `${url}/add-new-nft`,
-                                    query: {
-                                        url: url,
-                                        governorAddress: DAO.governorAddress,
-                                        blockchain: DAO.blockchain,
-                                    },
-                                }}
-                            >
-                                <button
-                                    className={
-                                        isOwner
-                                            ? "secondary-button bg-purple text-white"
-                                            : "secondary-button bg-gray hover:bg-gray"
-                                    }
-                                    disabled={!isOwner}
-                                >
-                                    Add NFT
-                                </button>
-                            </Link>
-                        </div>
-                        {DAO.tokenAddress ? (
-                            <div className="flex justify-between">
-                                {NFTs ? (
-                                    NFTs.map((nft, index) => (
-                                        <NFTCard
-                                            nftObject={nft}
-                                            setButtonState={setButtonState}
-                                            setCurrentNFT={setCurrentNFT}
-                                            detailNFTDialog={detailNFTDialog}
-                                            chain={DAO.blockchain[0]}
-                                            key={index}
-                                        />
-                                    ))
-                                ) : (
-                                    <MockupLoadingNFT chain={DAO.blockchain[0]} />
-                                )}
-                            </div>
-                        ) : (
-                            <MockupTextCard
-                                label={"No NFT membership"}
-                                text={
-                                    "You should first add NFTs so that members can vote " +
-                                    "then click the button “Add new proposals” and initiate a proposals"
+                    <div className="flex flex-row justify-between mb-4 ">
+                        <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
+                        <Link
+                            href={{
+                                pathname: `${url}/add-new-nft`,
+                                query: {
+                                    url: url,
+                                    governorAddress: DAO.governorAddress,
+                                    blockchain: DAO.blockchain,
+                                },
+                            }}
+                        >
+                            <button
+                                className={
+                                    isOwner
+                                        ? "secondary-button bg-purple text-white"
+                                        : "secondary-button bg-gray hover:bg-gray"
                                 }
-                            />
-                        )}
-                    </>
+                                disabled={!isOwner}
+                            >
+                                Add NFT
+                            </button>
+                        </Link>
+                    </div>
+                    {DAO.tokenAddress ? (
+                        <div className="flex justify-between">
+                            {NFTs ? (
+                                NFTs.map((nft, index) => (
+                                    <NFTCard
+                                        nftObject={nft}
+                                        setButtonState={setButtonState}
+                                        setCurrentNFT={setCurrentNFT}
+                                        detailNFTDialog={detailNFTDialog}
+                                        chain={DAO.blockchain[0]}
+                                        key={index}
+                                    />
+                                ))
+                            ) : (
+                                <MockupLoadingNFT chain={DAO.blockchain[0]} />
+                            )}
+                        </div>
+                    ) : (
+                        <MockupTextCard
+                            label={"No NFT membership"}
+                            text={
+                                "You should first add NFTs so that members can vote " +
+                                "then click the button “Add new proposals” and initiate a proposals"
+                            }
+                        />
+                    )}
                 </section>
                 <CustomDialog dialog={detailNFTDialog} className="h-full items-center text-center">
                     {currentNFT ? (
