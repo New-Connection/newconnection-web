@@ -1,0 +1,113 @@
+import { useState } from "react";
+import { formatAddress } from "utils/address";
+import { AddToWhitelist } from "contract-interactions";
+import { Signer } from "ethers";
+import toast from "react-hot-toast";
+import { MockupTextCard } from "../Mockup";
+import * as React from "react";
+import { getLogoURI } from "utils/blockchains";
+import { Moralis } from "moralis-v1";
+import { useSwitchNetwork } from "wagmi";
+
+const renderValue = (chain: string) => {
+    const image = getLogoURI(chain);
+    return <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full" />;
+};
+
+interface IWhitelistTab {
+    whitelist: Moralis.Object<Moralis.Attributes>[],
+    signer: Signer,
+    chainId: number
+}
+
+export const WhitelistTab = ({ whitelist, signer, chainId }: IWhitelistTab) => {
+    const [click, setClick] = useState(false);
+    const { switchNetwork } = useSwitchNetwork();
+
+    return whitelist && whitelist.length !== 0 ? (
+        <div className="w-full justify-between space-y-5 gap-5">
+            <div className="flex text-gray2 justify-between text-center pb-4 pt-0">
+                <div className="flex w-2/4 pr-3">
+                    <div className="flex w-1/3">Wallet Address</div>
+                    <div className="flex w-1/3">Blockchain</div>
+                    <div className="flex w-1/3">NFT</div>
+                </div>
+                <p className="w-1/4">Notes</p>
+                <p className="w-1/4">Action</p>
+            </div>
+            {whitelist.map((wl, index) => {
+                const walletAddress = wl.get("walletAddress");
+                const votingTokenName = wl.get("votingTokenName");
+                const votingTokenAddress = wl.get("votingTokenAddress");
+                const note = wl.get("note");
+                const blockchainSelected = wl.get("blockchainSelected");
+                return (
+                    <div className="w-full flex gap-5" key={index}>
+                        <div className="flex w-2/4">
+                            <div className=" flex w-1/3">{formatAddress(walletAddress)}</div>
+                            <div className="flex pl-5 w-1/3">
+                                {renderValue(blockchainSelected)}
+                            </div>
+                            <div className="flex w-1/3">{votingTokenName}</div>
+                        </div>
+                        <p className="w-1/4 text-sm line-clamp-3 text-center">{note}</p>
+
+                        <button
+                            className="w-1/4 settings-button py-2 px-4 bg-white border-gray2 border-2 btn-state"
+                            onClick={async () => {
+                                if (!signer) {
+                                    toast.error("Please connect wallet");
+                                    return;
+                                }
+
+                                if ((await signer.getChainId()) !== chainId) {
+                                    switchNetwork(chainId);
+                                    return
+                                }
+
+                                setClick(true);
+                                try {
+                                    console.log(votingTokenAddress);
+                                    const status = await AddToWhitelist({
+                                        addressNFT: votingTokenAddress,
+                                        walletAddress: walletAddress,
+                                        signer: signer,
+                                    });
+
+                                    status
+                                        ? toast.success("Wallet added to Whitelist")
+                                        : toast.error(
+                                            "Only owner of DAO can add a new members"
+                                        );
+                                    // TODO: DELETE ROW FROM MORALIS
+                                    // removeItem(walletAddress);
+                                    // console.log("WL DELETE");
+                                    // toast.success("Wallet added to Whitelist");
+                                    // toast.success("Wallet added to Whitelist");
+                                    setClick(false);
+                                } catch (error) {
+                                    toast.error("Please approve transaction to create DAO");
+                                    return;
+                                }
+                                setClick(false);
+                            }}
+                            disabled={click}
+                        >
+                            {click ? <p className="text-gray2">Loading...</p> : <p>Add</p>}
+                        </button>
+                    </div>
+                );
+            })}
+        </div>
+    ) : (
+        <div className="text-center">
+            <MockupTextCard
+                label={"No members here yet"}
+                text={
+                    "You can join DAO click to become member" +
+                    "then click the button “Add new proposals” and initiate a proposals"
+                }
+            />
+        </div>
+    );
+};

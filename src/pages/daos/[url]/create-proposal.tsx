@@ -35,8 +35,8 @@ import {
 } from "database/interactions";
 import { handleNext, handleReset, StepperDialog } from "components/Dialog";
 import { useMoralisQuery, useMoralis } from "react-moralis";
-import { getChainNames } from "../../../utils/blockchains";
-import { formatAddress } from "../../../utils/address";
+import { getChainNames } from "utils/blockchains";
+import { formatAddress } from "utils/address";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
 
 interface QueryUrlParams extends ParsedUrlQuery {

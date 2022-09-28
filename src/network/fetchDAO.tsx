@@ -1,10 +1,11 @@
 import { IDAOPageForm } from "types/forms";
 import { getChainScanner } from "utils/blockchains";
+import { Moralis } from "moralis-v1";
 
 export async function fetchDAO(isInitialized: any, daoQuery: any) {
     if (isInitialized) {
         try {
-            const results = await daoQuery();
+            const results: Moralis.Object<Moralis.Attributes>[] = await daoQuery();
             //setIsLoaded(false);
             const moralisInstance = results[0];
             const chainId = moralisInstance.get("chainId");

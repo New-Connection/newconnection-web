@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { timestampToDate } from "utils/basic";
-import { getLogoURI } from "../../utils/blockchains";
+import { getLogoURI } from "utils/blockchains";
 
 interface IProposalCard {
     title: string;
@@ -16,7 +16,7 @@ interface IProposalCard {
     deadline?: number;
 }
 
-const ProposalCard = (
+export const ProposalCard = (
     {
         title,
         shortDescription,
@@ -55,7 +55,7 @@ const ProposalCard = (
                             <p className="text-gray3">For</p>
                             <p className="font-medium">{tokenName}</p>
                         </div>
-                        <Image src={getLogoURI(chainId)} height={12} width={23}/>
+                        <Image src={getLogoURI(chainId)} height={12} width={23} />
                     </div>
                 </div>
 
@@ -82,4 +82,3 @@ const ProposalCard = (
     );
 };
 
-export default ProposalCard;

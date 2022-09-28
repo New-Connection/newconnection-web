@@ -114,9 +114,9 @@ const DAOsPage: NextPage = () => {
     // CUSTOM COMPONENTS
     // ----------------------------------------------------------------------
 
-    const DAOCard = ({ name, description, profileImage, address, isActive, proposals }) => {
+    const DAOCard = ({ name, description, profileImage, url, isActive, proposals }) => {
         return (
-            <Link href={`/daos/${address}`}>
+            <Link href={`/daos/${url}`}>
                 <div
                     className={
                         "flex justify-between w-full lg:h-40 h-50 p-3 border-b-2 border-gray cursor-pointer active:bg-gray"
@@ -200,7 +200,7 @@ const DAOsPage: NextPage = () => {
                                             key={index}
                                             name={dao.name}
                                             description={dao.description}
-                                            address={dao.url}
+                                            url={dao.url}
                                             profileImage={dao.profileImage}
                                             isActive={dao.isActive}
                                             proposals={dao.totalProposals}
