@@ -4,7 +4,6 @@ import { formatAddress } from "utils/address";
 import type { GetServerSideProps, NextPage } from "next";
 import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
-import { ParsedUrlQuery } from "querystring";
 import Image from "next/image";
 import ASSETS from "assets/index";
 import { getChainScanner, getLogoURI, getTokenSymbol } from "utils/blockchains";
@@ -28,6 +27,7 @@ import {
     mintReserveAndDelegation,
     transferTreasuryOwnership,
 } from "contract-interactions/";
+import { QueryUrlParams } from "types/queryInterfaces";
 import toast from "react-hot-toast";
 import ProposalCard from "components/Cards/ProposalCard";
 import {
@@ -37,26 +37,17 @@ import {
     getSymbol,
     getTokenURI,
 } from "contract-interactions/viewNftContract";
-import {
-    getTotalProposals,
-    isProposalActive,
-    proposalAgainstVotes,
-    proposalDeadline,
-    proposalForVotes,
-} from "contract-interactions/viewGovernorContract";
+import { getTotalProposals } from "contract-interactions/viewGovernorContract";
 import { isValidHttpUrl } from "utils/transformURL";
 import { handleChangeBasic } from "utils/handlers";
 import { saveMoralisInstance } from "database/interactions";
 import { createTreasurySteps, SpinnerLoading } from "components/Dialog/Stepper";
 import { InputAmount } from "components/Form";
 import { sendEthToAddress } from "contract-interactions/utils";
-import { fetchDAO } from "network/fetchDAO";
+import { fetchDAO, fetchProposal } from "network/index";
+import { INFTImage } from "types/daoIntefaces";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
-
-interface QueryUrlParams extends ParsedUrlQuery {
-    address: string;
-}
 
 interface DAOPageProps {
     address: string;
@@ -148,44 +139,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
         await WhitelistQuery({
             onSuccess: (results) => {
                 setWhitelist(() => results);
-            },
-            onError: (error) => {
-                console.log("Error fetching db query" + error);
-            },
-        });
-    };
-
-    const fetchProposal = async () => {
-        await ProposalQuery({
-            onSuccess: async (results) => {
-                const proposals: IProposalPageForm[] = await Promise.all(
-                    results.map(async (proposalMoralis) => {
-                        const governorAddress = proposalMoralis.get("governorAddress");
-                        const chainId = proposalMoralis.get("chainId");
-                        const proposalId = proposalMoralis.get("proposalId");
-                        const proposal: IProposalPageForm = {
-                            name: proposalMoralis.get("name"),
-                            governorAddress: governorAddress,
-                            chainId: chainId,
-                            proposalId: proposalId,
-                            tokenName: proposalMoralis.get("tokenName"),
-                            description: proposalMoralis.get("description"),
-                            shortDescription: proposalMoralis.get("shortDescription"),
-                            isActive: await isProposalActive(governorAddress, chainId, proposalId),
-                            forVotes: await proposalForVotes(governorAddress, chainId, proposalId),
-                            againstVotes: await proposalAgainstVotes(
-                                governorAddress,
-                                chainId,
-                                proposalId
-                            ),
-                            deadline: await proposalDeadline(governorAddress, chainId, proposalId),
-                            options: [],
-                            blockchain: [],
-                        };
-                        return proposal;
-                    })
-                );
-                setProposals(() => proposals);
             },
             onError: (error) => {
                 console.log("Error fetching db query" + error);
@@ -355,25 +308,34 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
     // EFFECTS
     // ----------------------------------------------------------------------
 
+    // Fetching DAO in general
+    const loadingDAO = async () => {
+        const data = await fetchDAO(isInitialized, DAOsQuery);
+        if (data) {
+            setDAO(() => data.newDao);
+            setDAOMoralisInstance(() => data.moralisInstance);
+            console.log("after useEffect newDAO", data.newDao);
+        }
+    };
+
+    // Fetching
+
     useEffect(() => {
-        const loadingDAO = async () => {
-            const data = await fetchDAO(isInitialized, DAOsQuery);
-
-            if (data) {
-                setDAO(() => data.newDao);
-                setDAOMoralisInstance(() => data.moralisInstance);
-                console.log("after useEffect newDAO", data.newDao);
-            }
-        };
-
         loadingDAO().catch((e) => console.log("Error when Loading DAO", e));
     }, [isInitialized]);
 
     useIsomorphicLayoutEffect(() => {
         if (DAO && firstUpdate.current) {
             localStorage.setItem(DAO.name, JSON.stringify(DAO));
-            console.log("save");
-            fetchProposal();
+            const loadindProposal = async () => {
+                const proposals = await fetchProposal(ProposalQuery);
+                if (proposals) {
+                    setProposals(() => proposals);
+                    console.log("Set Proposals", proposals);
+                }
+            };
+
+            loadindProposal();
             fetchWhitelist();
             fetchLargeData();
             fetchNFTData();
@@ -484,13 +446,15 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                 </>
             );
         } else if (proposals && proposals.length === 0) {
-            return <MockupTextCard
-                label={"No proposals here yet"}
-                text={
-                    "You should first add NFTs so that members can vote " +
-                    "then click the button “Add new proposal” and initiate a proposal"
-                }
-            />
+            return (
+                <MockupTextCard
+                    label={"No proposals here yet"}
+                    text={
+                        "You should first add NFTs so that members can vote " +
+                        "then click the button “Add new proposal” and initiate a proposal"
+                    }
+                />
+            );
         } else {
             return <MockupLoadingProposals />;
         }
@@ -555,8 +519,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                         status
                                             ? toast.success("Wallet added to Whitelist")
                                             : toast.error(
-                                                "Only owner of DAO can add a new members"
-                                            );
+                                                  "Only owner of DAO can add a new members"
+                                              );
                                         // TODO: DELETE ROW FROM MORALIS
                                         // removeItem(walletAddress);
                                         // console.log("WL DELETE");
@@ -610,8 +574,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
 
     const StatisticCard = ({ label, counter }) => {
         return (
-            <div
-                className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
+            <div className="group flex flex-col justify-between border-2 border-[#CECECE] rounded-lg lg:w-1/4 w-2/5 h-36 pt-2 pl-4 pr-4 pb-3 hover:bg-[#7343DF] hover:border-purple cursor-pointer">
                 <div className={"text-gray-400 group-hover:text-white"}>{label}</div>
                 <div className={"flex justify-end text-black text-5xl group-hover:text-white"}>
                     {counter || 0}
@@ -636,12 +599,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
             </a>
         );
     };
-
-    interface INFTImage {
-        image?: string;
-        className?: string;
-        index?: number;
-    }
 
     const NFTImage = ({ className, image }: INFTImage) => {
         return (
@@ -799,8 +756,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ address }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div
-                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchain</p>
                                 <BlockchainImage />
                             </div>
