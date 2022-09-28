@@ -6,6 +6,7 @@ import { formatAddress } from "utils/address";
 import { BlockchainImage } from "../Icons/BlockchainImage";
 import { INFTVoting } from "types/forms";
 import { DisclosureState } from "ariakit";
+import { ButtonState } from "types/daoIntefaces";
 
 
 interface INFTImage {
@@ -32,15 +33,17 @@ export const NFTImage = ({ className, image }: INFTImage) => {
 interface INFTCard {
     nftObject: INFTVoting;
     setCurrentNFT: React.Dispatch<React.SetStateAction<INFTVoting>>;
+    setButtonState: React.Dispatch<React.SetStateAction<ButtonState>>
     detailNFTDialog: DisclosureState;
     chain: number | string;
 }
 
-export const NFTCard = ({ nftObject, setCurrentNFT, detailNFTDialog, chain }: INFTCard) => {
+export const NFTCard = ({ nftObject, setCurrentNFT, setButtonState, detailNFTDialog, chain }: INFTCard) => {
     return (
         <button
             className="nft-card"
             onClick={() => {
+                setButtonState("Mint");
                 setCurrentNFT(nftObject);
                 detailNFTDialog.toggle();
             }}

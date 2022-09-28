@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import { MockupTextCard } from "../Mockup";
 import * as React from "react";
 import { getLogoURI } from "utils/blockchains";
-import { Moralis } from "moralis-v1";
 import { useSwitchNetwork } from "wagmi";
+import { IWhitelistPageForm } from "types/forms";
 
 const renderValue = (chain: string) => {
     const image = getLogoURI(chain);
@@ -15,7 +15,7 @@ const renderValue = (chain: string) => {
 };
 
 interface IWhitelistTab {
-    whitelist: Moralis.Object<Moralis.Attributes>[],
+    whitelist: IWhitelistPageForm[],
     signer: Signer,
     chainId: number
 }
@@ -36,11 +36,11 @@ export const WhitelistTab = ({ whitelist, signer, chainId }: IWhitelistTab) => {
                 <p className="w-1/4">Action</p>
             </div>
             {whitelist.map((wl, index) => {
-                const walletAddress = wl.get("walletAddress");
-                const votingTokenName = wl.get("votingTokenName");
-                const votingTokenAddress = wl.get("votingTokenAddress");
-                const note = wl.get("note");
-                const blockchainSelected = wl.get("blockchainSelected");
+                const walletAddress = wl.walletAddress;
+                const votingTokenName = wl.votingTokenName;
+                const votingTokenAddress = wl.votingTokenAddress;
+                const note = wl.note;
+                const blockchainSelected = wl.blockchainSelected;
                 return (
                     <div className="w-full flex gap-5" key={index}>
                         <div className="flex w-2/4">

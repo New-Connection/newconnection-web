@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatAddress } from "utils/address";
 import type { GetServerSideProps, NextPage } from "next";
 import { Signer } from "ethers";
@@ -9,7 +9,7 @@ import ASSETS from "assets/index";
 import { getChainScanner, getTokenSymbol } from "utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import Tabs from "components/Tabs/Tabs";
-import { IDAOPageForm, INFTVoting, IProposalPageForm } from "types/forms";
+import { IDAOPageForm, INFTVoting, IProposalPageForm, IWhitelistPageForm } from "types/forms";
 import { ClipboardCopyIcon, ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
@@ -27,14 +27,7 @@ import {
 } from "contract-interactions/";
 import { IDaoQuery } from "types/queryInterfaces";
 import toast from "react-hot-toast";
-import {
-    getNftName,
-    getNumberOfMintedTokens,
-    getPrice,
-    getSymbol,
-    getTokenURI,
-} from "contract-interactions/viewNftContract";
-import { getTotalProposals } from "contract-interactions/viewGovernorContract";
+import { getNftName, getPrice, getSymbol, getTokenURI, } from "contract-interactions/viewNftContract";
 import { isValidHttpUrl } from "utils/transformURL";
 import { handleChangeBasic } from "utils/handlers";
 import { saveMoralisInstance } from "database/interactions";
@@ -50,12 +43,10 @@ import { Moralis } from "moralis-v1";
 import { ProposalsListTab } from "components/Tabs/ProposalsListTab";
 import { WhitelistTab } from "components/Tabs/WhitelistTab";
 import { DAOPageProps } from "types/pagePropsInterfaces";
+import { fetchWhitelist } from "network/fetchWhitelist";
+import { ButtonState } from "types/daoIntefaces";
 
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
-
-export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (
-    context
-) => {
+export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
 
     const result: DAOPageProps = {
@@ -66,39 +57,36 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = a
     };
 };
 
-type ButtonState = "Mint" | "Loading" | "Success" | "Error";
 
 const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
-    const { isInitialized } = useMoralis();
-    const firstUpdate = useRef(true);
+
     const [DAOMoralisInstance, setDAOMoralisInstance] =
         useState<Moralis.Object<Moralis.Attributes>>();
+    const { isInitialized } = useMoralis();
+
+    const [selectedTab, setSelectedTab] = useState<number>(0);
+    const firstUpdate = useRef(true);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     // DB states
     const [DAO, setDAO] = useState<IDAOPageForm>();
-    const [whitelist, setWhitelist] = useState<Moralis.Object<Moralis.Attributes>[]>();
+    const [whitelist, setWhitelist] = useState<IWhitelistPageForm[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
-
-    const [isLoaded, setIsLoaded] = useState(false);
 
     // DB queries
     const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.equalTo("url", url), [], {
         autoFetch: false,
     });
-
     const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
         (query) => query.equalTo("daoAddress", DAO?.governorAddress),
         [DAO],
-        {
-            autoFetch: false,
-        }
+        { autoFetch: false }
     );
-
     const { fetch: ProposalQuery } = useMoralisQuery(
         "Proposal",
         (query) =>
@@ -126,107 +114,46 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     // FUNCTIONS
     // ----------------------------------------------------------------------
 
-    const fetchWhitelist = async () => {
-        await WhitelistQuery({
-            onSuccess: (results) => {
-                setWhitelist(() => results);
-            },
-            onError: (error) => {
-                console.log("Error fetching db query" + error);
-            },
-        });
-    };
-
-    async function fetchNFTImage(tokenAddress) {
-        return await loadImage(await getTokenURI(tokenAddress, DAO.chainId));
-    }
-
-    async function fetchNFTData() {
-        const nftsArray: INFTVoting[] = await Promise.all(
-            DAO!.tokenAddress!.map(async (tokenAddress) => {
-                const nft: INFTVoting = {
-                    title: await getNftName(tokenAddress, DAO.chainId),
-                    type: await getSymbol(tokenAddress, DAO.chainId),
-                    image: await fetchNFTImage(tokenAddress),
-                    price: await getPrice(tokenAddress, DAO.chainId),
-                    tokenAddress: tokenAddress,
-                };
-                return nft;
-            })
-        );
-        localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
-        setNFTs(nftsArray);
-    }
-
-    const fetchTreasuryBalance = async () => {
-        const balance = DAO.treasuryAddress
-            ? await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId)
-            : 0;
-        setTreasuryBalance(() => balance.toString().slice(0, 7));
-    };
-
-    const fetchLargeData = async () => {
-        const newDAO = {
-            ...DAO,
-            totalProposals: await getTotalProposals(DAO!.governorAddress!, DAO!.chainId!),
-            totalMembers: await getNumberOfMintedTokens(DAO!.tokenAddress[0]!, DAO!.chainId!),
-            profileImage: await loadImage(DAO!.profileImage),
-            coverImage: await loadImage(DAO!.coverImage),
-        } as IDAOPageForm;
-        console.log("DAO", DAO!.governorAddress!);
-        setDAO(() => newDAO);
-    };
-    // console.log(DAO)
     const mint = async (tokenAddress: string) => {
         if (!DAO) return null;
-        // const chainID = await getChainId(signerData as Signer);
-        // const availableNFT = await getSupplyNumber(DAO.tokenAddress, chainID);
-        // console.log("Available NFT", availableNFT.toString());
-        // console.log("On chainID:", chainID);
+
+        if (!(await checkCorrectNetwork())) {
+            return
+        }
+
         setButtonState("Loading");
-        // 1. try to reserve for owner dao, if not it will try to normal mint function
         try {
-            const tx = await mintReserveAndDelegation(tokenAddress, signerData as Signer);
-            if (tx) {
-                if (tx.blockNumber) {
-                    toast.success(`DONE ✅ successful mint!`);
-                    console.log(tx);
-                }
+            const tx = isOwner ?
+                await mintReserveAndDelegation(tokenAddress, signerData) :
+                await mintNFT(tokenAddress, signerData);
+            await tx.wait()
+            if (tx.blockNumber) {
+                toast.success(`DONE ✅ successful mint!`);
+                console.log(tx);
             }
             setButtonState("Success");
-            return;
         } catch (e) {
             console.log("Transaction canceled");
-        }
-        try {
-            console.log("Call MINT NFT function");
-            await mintNFT(tokenAddress, signerData as Signer);
-            setButtonState("Success");
-        } catch (e) {
             setButtonState("Error");
-            console.log("Transaction canceled");
-            return;
         }
     };
 
-    const fetchIsOwner = async () => {
-        if (
-            (await signerData.getAddress()) ===
-            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
-        ) {
-            setIsOwner(true);
-        }
-    };
-
-    const addTreasury = async () => {
+    const checkCorrectNetwork = async (): Promise<boolean> => {
         if (!signerData) {
             toast.error("Please connect wallet");
-            return;
+            return false;
         }
-
         if ((await signerData.getChainId()) !== DAO.chainId) {
+            toast.error("Please switch network");
             switchNetwork(DAO.chainId);
-            return;
+            return false;
+        }
+        return true
+    }
+
+    const addTreasury = async () => {
+        if (!(await checkCorrectNetwork())) {
+            return
         }
 
         handleReset(setCreateTreasuryStep);
@@ -275,14 +202,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const contributeToTreasury = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!signerData) {
-            toast.error("Please connect wallet");
-            return;
-        }
-
-        if ((await signerData.getChainId()) !== DAO.chainId) {
-            switchNetwork(DAO.chainId);
-            return;
+        if (!(await checkCorrectNetwork())) {
+            return
         }
 
         try {
@@ -310,23 +231,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     // EFFECTS
     // ----------------------------------------------------------------------
 
-    // Fetching DAO in general
-    const loadingDAO = async () => {
-        const data = await fetchDAO(isInitialized, DAOsQuery);
-        if (data) {
-            setDAO(() => data.newDao);
-            setDAOMoralisInstance(() => data.moralisInstance);
-            console.log("after useEffect newDAO", data.newDao);
-        }
-    };
-
-    // Fetching
-
     useEffect(() => {
+        const loadingDAO = async () => {
+            const data = await fetchDAO(isInitialized, DAOsQuery);
+            if (data) {
+                data.newDao.profileImage = await loadImage(data.newDao.profileImage);
+                data.newDao.coverImage = await loadImage(data.newDao.coverImage);
+                setDAO(() => data.newDao);
+                setDAOMoralisInstance(() => data.moralisInstance);
+                console.log("after useEffect newDAO", data.newDao);
+            }
+        };
+
         loadingDAO().catch((e) => console.log("Error when Loading DAO", e));
     }, [isInitialized]);
 
-    useIsomorphicLayoutEffect(() => {
+    useEffect(() => {
         if (DAO && firstUpdate.current) {
             localStorage.setItem(DAO.name, JSON.stringify(DAO));
             const loadindProposal = async () => {
@@ -336,61 +256,97 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     console.log("Set Proposals", proposals);
                 }
             };
+            const loadingWhitelist = async () => {
+                const whitelist = await fetchWhitelist(WhitelistQuery);
+                if (whitelist) {
+                    setWhitelist(() => whitelist);
+                    console.log("Set Whitelist", whitelist);
+                }
+            };
+            const fetchNFTData = async () => {
+                const nftsArray: INFTVoting[] = await Promise.all(
+                    DAO!.tokenAddress!.map(async (tokenAddress) => {
+                        const nft: INFTVoting = {
+                            title: await getNftName(tokenAddress, DAO.chainId),
+                            type: await getSymbol(tokenAddress, DAO.chainId),
+                            image: await loadImage(await getTokenURI(tokenAddress, DAO.chainId)),
+                            price: await getPrice(tokenAddress, DAO.chainId),
+                            tokenAddress: tokenAddress,
+                        };
+                        return nft;
+                    })
+                );
+                localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
+                setNFTs(nftsArray);
+            }
+            const fetchTreasuryBalance = async () => {
+                const balance = DAO.treasuryAddress ?
+                    await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId) : 0;
+                setTreasuryBalance(() => balance.toString().slice(0, 7));
+            };
 
-            loadindProposal();
-            fetchWhitelist();
-            fetchLargeData();
-            fetchNFTData();
-            fetchTreasuryBalance();
+
+            loadingWhitelist().catch(console.error);
+            loadindProposal().catch(console.error);
+            fetchNFTData().catch(console.error);
+            fetchTreasuryBalance().catch(console.error);
 
             firstUpdate.current = false;
         }
-    });
+    }, [DAO]);
 
-    useIsomorphicLayoutEffect(() => {
-        if (DAO && signerData) {
-            fetchIsOwner();
+    useEffect(() => {
+        if (DAO && proposals && NFTs && signerData && !isLoaded) {
+            const fetchIsLoaded = async () => {
+                console.log("loaded");
+                setIsLoaded(true);
+            };
+
+            fetchIsLoaded().catch(console.error);
         }
     });
 
-    useIsomorphicLayoutEffect(() => {
-        if (DAO && proposals && NFTs && signerData) {
-            setIsLoaded(true);
-        }
-    });
+    useEffect(() => {
+        const fetchIsOwner = async () => {
+            DAO &&
+            signerData &&
+            (await signerData.getAddress()) ===
+            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+                ? setIsOwner(true)
+                : setIsOwner(false);
+        };
+        fetchIsOwner().catch(console.error);
+    }, [DAO, signerData]);
 
     //
     // TABS COMPONENTS & STATES
     // ----------------------------------------------------------------------
 
-    const TabOne: FC = () => {
-        return (
-            <ProposalsListTab
-                DAOMoralisInstance={DAOMoralisInstance}
-                DAO={DAO}
-                proposals={proposals}
-                daoUrl={url}
-            />
-        );
-    };
-
-    const TabThree: FC = () => {
-        return <WhitelistTab whitelist={whitelist} signer={signerData} chainId={DAO.chainId} />;
-    };
 
     const tabs: TabsType = [
         {
             label: "PROPOSALS",
-            index: 1,
-            Component: TabOne,
+            index: 0,
+            Component: () => {
+                return (
+                    <ProposalsListTab
+                        DAOMoralisInstance={DAOMoralisInstance}
+                        DAO={DAO}
+                        proposals={proposals}
+                        daoUrl={url}
+                    />
+                );
+            },
+
         },
         {
             label: "WHITELIST",
-            index: 2,
-            Component: TabThree,
+            index: 1,
+            Component: () => {
+                return <WhitelistTab whitelist={whitelist} signer={signerData} chainId={DAO.chainId} />;
+            },
         },
     ];
-    const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
 
     //
     // OTHER CUSTOM COMPONENTS
@@ -542,16 +498,18 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     Add treasury
                                 </button>
                             ) : !DAO.treasuryAddress ? (
-                                <button className="secondary-button bg-gray2" disabled={true}>
+                                <button
+                                    className="secondary-button bg-gray hover:bg-gray"
+                                    disabled={true}
+                                >
                                     Treasury not added
                                 </button>
                             ) : (
                                 <button
                                     className="form-submit-button w-1/5"
-                                    onClick={() => {
-                                        if (!signerData) {
-                                            toast.error("Please connect wallet");
-                                            return;
+                                    onClick={async () => {
+                                        if (!(await checkCorrectNetwork())) {
+                                            return
                                         }
                                         contributeTreasuryDialog.toggle();
                                     }}
@@ -561,12 +519,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             )}
                         </div>
                     </div>
-
-                    {/*<div className="dao-statistics flex flex-row justify-between">*/}
-                    {/* <StatisticCard label={"Total votes"} counter={DAO.totalVotes} /> */}
-                    {/*<StatisticCard label={"Total proposals"} counter={DAO.totalProposals} />*/}
-                    {/*<StatisticCard label={"Total members"} counter={DAO.totalMembers} />*/}
-                    {/*</div>*/}
 
                     <div className="dao-proposals-members lg:w-full">
                         <Tabs
@@ -598,7 +550,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     },
                                 }}
                             >
-                                <button className="secondary-button bg-purple text-white">
+                                <button
+                                    className={
+                                        isOwner
+                                            ? "secondary-button bg-purple text-white"
+                                            : "secondary-button bg-gray hover:bg-gray"
+                                    }
+                                    disabled={!isOwner}
+                                >
                                     Add NFT
                                 </button>
                             </Link>
@@ -609,6 +568,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     NFTs.map((nft, index) => (
                                         <NFTCard
                                             nftObject={nft}
+                                            setButtonState={setButtonState}
                                             setCurrentNFT={setCurrentNFT}
                                             detailNFTDialog={detailNFTDialog}
                                             chain={DAO.blockchain[0]}

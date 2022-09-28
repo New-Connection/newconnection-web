@@ -5,10 +5,11 @@ import {
     proposalDeadline,
     proposalForVotes,
 } from "contract-interactions/viewGovernorContract";
+import { Moralis } from "moralis-v1";
 
 export async function fetchProposal(proposalQuery: any) {
     try {
-        const results = await proposalQuery();
+        const results: Moralis.Object<Moralis.Attributes>[] = await proposalQuery();
         const proposals: IProposalPageForm[] = await Promise.all(
             results.map(async (proposalMoralis) => {
                 const governorAddress = proposalMoralis.get("governorAddress");
