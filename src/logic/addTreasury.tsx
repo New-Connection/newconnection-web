@@ -6,6 +6,7 @@ import { deployTreasuryContract } from "contract-interactions/deploy";
 import { Signer } from "ethers";
 import { saveMoralisInstance } from "database/interactions";
 import { handleNext, handleReset } from "components/Dialog";
+import { checkCorrectNetwork } from "./utills";
 
 export async function addTreasury(
     DAO: IDAOPageForm,
@@ -14,13 +15,7 @@ export async function addTreasury(
     setCreateTreasuryStep,
     switchNetwork
 ) {
-    if (!signerData) {
-        toast.error("Please connect wallet");
-        return;
-    }
-
-    if ((await signerData.getChainId()) !== DAO.chainId) {
-        switchNetwork(DAO.chainId);
+    if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
         return;
     }
 

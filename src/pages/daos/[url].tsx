@@ -109,19 +109,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     // FUNCTIONS
     // ----------------------------------------------------------------------
 
-    // const checkCorrectNetwork = async (): Promise<boolean> => {
-    //     if (!signerData) {
-    //         toast.error("Please connect wallet");
-    //         return false;
-    //     }
-    //     if ((await signerData.getChainId()) !== DAO.chainId) {
-    //         toast.error("Please switch network");
-    //         switchNetwork(DAO.chainId);
-    //         return false;
-    //     }
-    //     return true;
-    // };
-
     const mint = async (tokenAddress: string) => {
         if (!DAO) return;
 
