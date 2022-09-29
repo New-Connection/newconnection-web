@@ -76,6 +76,14 @@ export interface IProposalPageForm extends ICreateProposal {
     deadline?: number;
 }
 
+export interface IWhitelistPageForm {
+    walletAddress?: string;
+    votingTokenName?: string;
+    votingTokenAddress?: string;
+    note?: string;
+    blockchainSelected?: string;
+}
+
 export interface INFTVoting {
     title?: string;
     type?: string;
