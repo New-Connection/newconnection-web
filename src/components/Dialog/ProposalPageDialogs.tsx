@@ -1,13 +1,6 @@
 import { StepperDialog } from "./base-dialogs";
 import React from "react";
-import { DisclosureState } from "ariakit";
-import { IProposal } from "types/forms";
-
-interface IProposalPageDialogs {
-    dialog: DisclosureState,
-    formData: IProposal,
-    activeStep: number,
-}
+import { IProposalPageDialogs } from "./dialogInterfaces";
 
 export const ProposalVoteDialog = ({ dialog, activeStep, formData }: IProposalPageDialogs) => {
     return (

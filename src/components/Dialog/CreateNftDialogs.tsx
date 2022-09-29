@@ -3,14 +3,7 @@ import { formatAddress } from "utils/address";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
 import React from "react";
 import { useRouter } from "next/router";
-import { DisclosureState } from "ariakit";
-import { ICreateNFT } from "types/forms";
-
-interface IAddNftDialog {
-    dialog: DisclosureState,
-    formData: ICreateNFT,
-    activeStep: number,
-}
+import { IAddNftDialog } from "./dialogInterfaces";
 
 export const AddNftDialog = ({ dialog, activeStep, formData }: IAddNftDialog) => {
     const router = useRouter();

@@ -5,24 +5,24 @@ import { getChainScanner, getTokenSymbol } from "utils/blockchains";
 import { ClipboardCopyIcon, ExternalLinkIcon } from "@heroicons/react/solid";
 import { formatAddress } from "utils/address";
 import { BlockchainImage } from "../Icons/BlockchainImage";
-import { DisclosureState } from "ariakit";
-import { IDAOPageForm, INFTVoting } from "types/forms";
-import { ButtonState } from "types/daoIntefaces";
 import Image from "next/image";
 import { isIpfsAddress } from "utils/ipfsUpload";
 import ASSETS from "assets";
 import { InputAmount } from "../Form";
 import { createTreasurySteps, SpinnerLoading } from "./base-dialogs/Stepper";
+import {
+    IContributeTreasuryDialog,
+    ICreateTreasuryDialog,
+    IDetainNftDialog,
+} from "./dialogInterfaces";
 
-interface IDetainNftDialog {
-    dialog: DisclosureState,
-    DAO: IDAOPageForm,
-    currentNFT: INFTVoting,
-    buttonState: ButtonState,
-    mintButton: () => Promise<void>
-}
-
-export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButton }: IDetainNftDialog) => {
+export const DetailNftDialog = ({
+    dialog,
+    DAO,
+    currentNFT,
+    buttonState,
+    mintButton,
+}: IDetainNftDialog) => {
     return (
         <CustomDialog dialog={dialog} className="h-full items-center text-center">
             {currentNFT ? (
@@ -78,16 +78,6 @@ export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButt
     );
 };
 
-interface IContributeTreasuryDialog {
-    dialog: DisclosureState,
-    DAO: IDAOPageForm,
-    sending: boolean,
-    setSending: React.Dispatch<React.SetStateAction<boolean>>,
-    contributeAmount: string,
-    setContributeAmount: React.Dispatch<React.SetStateAction<string>>,
-    contributeToTreasuryButton: (e: React.FormEvent<HTMLFormElement>) => Promise<void>,
-}
-
 export const ContributeTreasuryDialog = ({
     dialog,
     DAO,
@@ -95,36 +85,23 @@ export const ContributeTreasuryDialog = ({
     setSending,
     contributeAmount,
     setContributeAmount,
-    contributeToTreasuryButton
+    contributeToTreasuryButton,
 }: IContributeTreasuryDialog) => {
     return (
-        <CustomDialog
-            dialog={dialog}
-            className="items-center text-center"
-        >
+        <CustomDialog dialog={dialog} className="items-center text-center">
             <div className={"flex items-center gap-2"}>
                 <Image
-                    src={
-                        !isIpfsAddress(DAO.profileImage)
-                            ? DAO.profileImage
-                            : ASSETS.daoLogoMock
-                    }
+                    src={!isIpfsAddress(DAO.profileImage) ? DAO.profileImage : ASSETS.daoLogoMock}
                     height={"50px"}
                     width={"50px"}
                     className="rounded-xl"
                 />
                 <div>
-                    <div className={"text-xl capitalize font-semibold"}>
-                        {DAO.name} treasury
-                    </div>
+                    <div className={"text-xl capitalize font-semibold"}>{DAO.name} treasury</div>
                     {DAO.treasuryAddress ? (
                         <div
-                            className={
-                                "flex text-lightGray hover:text-gray5 hover:cursor-pointer"
-                            }
-                            onClick={() =>
-                                navigator.clipboard.writeText(DAO.treasuryAddress)
-                            }
+                            className={"flex text-lightGray hover:text-gray5 hover:cursor-pointer"}
+                            onClick={() => navigator.clipboard.writeText(DAO.treasuryAddress)}
                         >
                             {formatAddress(DAO.treasuryAddress)}
                             <ClipboardCopyIcon className="h-6 w-5" />
@@ -168,16 +145,14 @@ export const ContributeTreasuryDialog = ({
                 )}
             </form>
         </CustomDialog>
-    )
-}
+    );
+};
 
-interface ICreateTreasuryDialog {
-    dialog: DisclosureState,
-    DAO: IDAOPageForm,
-    createTreasuryStep: number
-}
-
-export const CreateTreasuryDialog = ({ dialog, DAO, createTreasuryStep }: ICreateTreasuryDialog) => {
+export const CreateTreasuryDialog = ({
+    dialog,
+    DAO,
+    createTreasuryStep,
+}: ICreateTreasuryDialog) => {
     return (
         <StepperDialog
             dialog={dialog}
@@ -186,14 +161,11 @@ export const CreateTreasuryDialog = ({ dialog, DAO, createTreasuryStep }: ICreat
             steps={createTreasurySteps}
         >
             <p className="ml-7">Deployment successful!</p>
-            <div className="flex ml-7 mb-10">Treasury Contract Address:
+            <div className="flex ml-7 mb-10">
+                Treasury Contract Address:
                 <div
-                    className={
-                        "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
-                    }
-                    onClick={() =>
-                        navigator.clipboard.writeText(DAO.treasuryAddress)
-                    }
+                    className={"flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"}
+                    onClick={() => navigator.clipboard.writeText(DAO.treasuryAddress)}
                 >
                     {formatAddress(DAO.treasuryAddress)}
                     <ClipboardCopyIcon className="h-6 w-5" />
@@ -208,5 +180,5 @@ export const CreateTreasuryDialog = ({ dialog, DAO, createTreasuryStep }: ICreat
                 Close
             </button>
         </StepperDialog>
-    )
-}
+    );
+};
