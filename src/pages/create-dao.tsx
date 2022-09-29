@@ -4,7 +4,6 @@ import { useSigner, useSwitchNetwork } from "wagmi";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
-import Link from "next/link";
 import { ICreate, ICreateDAO } from "types/forms";
 import { validateForm } from "utils/validate";
 import Layout from "components/Layout";
@@ -32,13 +31,12 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 import { useRouter } from "next/router";
-import { StepperDialog, handleReset, handleNext } from "components/Dialog/base-dialogs";
+import { handleReset, handleNext } from "components/Dialog/base-dialogs";
 import { CHAINS, getChainNames } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
 import { useMoralisQuery } from "react-moralis";
-import { ClipboardCopyIcon } from "@heroicons/react/solid";
-import { formatAddress } from "utils/address";
 import { ICreateDaoQuery } from "types/queryInterfaces";
+import { CreateDaoDialog } from "components/Dialog/CreateDaoDialogs";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 
@@ -337,32 +335,8 @@ const CreateDAO: NextPage = () => {
                         <Button className="mt-5 nav-button">Create Contract</Button>
                     </form>
                 </section>
-                <StepperDialog dialog={confirmDialog} className="dialog" activeStep={activeStep}>
-                    <p className="ml-7">Deployment successful!</p>
-                    <div className="flex ml-7 mb-10">Contract Address:
-                        <div
-                            className={
-                                "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
-                            }
-                            onClick={() =>
-                                navigator.clipboard.writeText(formData.governorAddress)
-                            }
-                        >
-                            {formatAddress(formData.governorAddress)}
-                            <ClipboardCopyIcon className="h-6 w-5" />
-                        </div>
-                    </div>
-                    <Link href={`/daos/${formData.url}`}>
-                        <button
-                            className="form-submit-button"
-                            onClick={() => {
-                                confirmDialog.toggle();
-                            }}
-                        >
-                            View DAO
-                        </button>
-                    </Link>
-                </StepperDialog>
+
+                <CreateDaoDialog dialog={confirmDialog} formData={formData} activeStep={activeStep} />
             </Layout>
         </div>
     );

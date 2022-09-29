@@ -1,24 +1,32 @@
 import { DisclosureState } from "ariakit";
-import { ICreateNFT, ICreateProposal, IDAOPageForm, INFTVoting, IProposal } from "types/forms";
+import {
+    ICreateDAO,
+    ICreateNFT,
+    ICreateProposal,
+    IDAOPageForm,
+    INFTVoting,
+    IProposal,
+} from "types/forms";
 import { ButtonState } from "types/daoIntefaces";
 import * as React from "react";
 
-export interface IAddNftDialog {
+interface IDialog {
     dialog: DisclosureState;
+}
+
+export interface IAddNftDialog extends IDialog {
     formData: ICreateNFT;
     activeStep: number;
 }
 
-export interface IDetainNftDialog {
-    dialog: DisclosureState;
+export interface IDetainNftDialog extends IDialog {
     DAO: IDAOPageForm;
     currentNFT: INFTVoting;
     buttonState: ButtonState;
     mintButton: () => Promise<void>;
 }
 
-export interface IContributeTreasuryDialog {
-    dialog: DisclosureState;
+export interface IContributeTreasuryDialog extends IDialog {
     DAO: IDAOPageForm;
     sending: boolean;
     setSending: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,20 +35,22 @@ export interface IContributeTreasuryDialog {
     contributeToTreasuryButton: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }
 
-export interface ICreateTreasuryDialog {
-    dialog: DisclosureState;
+export interface ICreateTreasuryDialog extends IDialog {
     DAO: IDAOPageForm;
     createTreasuryStep: number;
 }
 
-export interface IProposalPageDialog {
-    dialog: DisclosureState;
+export interface IProposalPageDialog extends IDialog {
     formData: IProposal;
     activeStep: number;
 }
 
-export interface ICreateProposalDialog {
-    dialog: DisclosureState;
+export interface ICreateProposalDialog extends IDialog {
     formData: ICreateProposal;
+    activeStep: number;
+}
+
+export interface ICreateDaoDialog extends IDialog {
+    formData: ICreateDAO;
     activeStep: number;
 }
