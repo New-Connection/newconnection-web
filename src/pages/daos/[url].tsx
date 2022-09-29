@@ -15,11 +15,7 @@ import { useDialogState } from "ariakit";
 import { CustomDialog, StepperDialog } from "components/Dialog";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
-import {
-    getGovernorOwnerAddress,
-    mintNFT,
-    mintReserveAndDelegation
-} from "contract-interactions/";
+import { getGovernorOwnerAddress, mintNFT, mintReserveAndDelegation } from "contract-interactions/";
 import { IDaoQuery } from "types/queryInterfaces";
 import toast from "react-hot-toast";
 import { isValidHttpUrl } from "utils/transformURL";
@@ -44,6 +40,7 @@ import { WhitelistTab } from "components/Tabs/WhitelistTab";
 import { DAOPageProps } from "types/pagePropsInterfaces";
 import { addTreasury, addTreasureMoralis } from "logic/addTreasury";
 import { ButtonState } from "types/daoIntefaces";
+import { checkCorrectNetwork } from "logic/utills";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
@@ -112,23 +109,23 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     // FUNCTIONS
     // ----------------------------------------------------------------------
 
-    const checkCorrectNetwork = async (): Promise<boolean> => {
-        if (!signerData) {
-            toast.error("Please connect wallet");
-            return false;
-        }
-        if ((await signerData.getChainId()) !== DAO.chainId) {
-            toast.error("Please switch network");
-            switchNetwork(DAO.chainId);
-            return false;
-        }
-        return true;
-    };
+    // const checkCorrectNetwork = async (): Promise<boolean> => {
+    //     if (!signerData) {
+    //         toast.error("Please connect wallet");
+    //         return false;
+    //     }
+    //     if ((await signerData.getChainId()) !== DAO.chainId) {
+    //         toast.error("Please switch network");
+    //         switchNetwork(DAO.chainId);
+    //         return false;
+    //     }
+    //     return true;
+    // };
 
     const mint = async (tokenAddress: string) => {
         if (!DAO) return;
 
-        if (!(await checkCorrectNetwork())) {
+        if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
             return;
         }
 
@@ -155,7 +152,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         DAO &&
         signerData &&
         (await signerData.getAddress()) ===
-        (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
             ? setIsOwner(true)
             : setIsOwner(false);
     };
@@ -163,7 +160,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const contributeToTreasury = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!(await checkCorrectNetwork())) {
+        if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
             return;
         }
 
@@ -285,7 +282,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             switchNetwork
         );
         if (treasuryAddress) {
-            // TODO: Need to check, maybe not work
             handleChangeBasic(treasuryAddress, setDAO, "treasuryAddress");
             console.log("moralis save", treasuryAddress);
             addTreasureMoralis(DAOMoralisInstance, treasuryAddress, createTreasuryDialog);
@@ -353,8 +349,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div
-                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchain</p>
                                 <BlockchainImage chain={DAO.blockchain[0]} />
                             </div>
@@ -440,7 +435,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 <button
                                     className="form-submit-button w-1/5"
                                     onClick={async () => {
-                                        if (!(await checkCorrectNetwork())) {
+                                        if (
+                                            !(await checkCorrectNetwork(
+                                                signerData,
+                                                DAO.chainId,
+                                                switchNetwork
+                                            ))
+                                        ) {
                                             return;
                                         }
                                         contributeTreasuryDialog.toggle();
