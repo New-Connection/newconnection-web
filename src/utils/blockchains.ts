@@ -20,7 +20,7 @@ type chainType = [
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    "Ethereum Rinkeby",
+    "Rinkeby",
     "Polygon Mumbai",
     "Arbitrum Goerli",
     "Binance Testnet",
@@ -51,7 +51,7 @@ const CHAINS_IMG: {
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    "Ethereum Rinkeby": ASSETS.Ethereum,
+    "Rinkeby": ASSETS.Ethereum,
     "Polygon Mumbai": ASSETS.Polygon,
     "Arbitrum Goerli": ASSETS.Arbitrum,
     "Binance Testnet": ASSETS.Binance,
@@ -69,7 +69,7 @@ export const CHAINS: {
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    "Ethereum Rinkeby": chain.rinkeby,
+    "Rinkeby": chain.rinkeby,
 
     "Polygon Mumbai": chain.polygonMumbai,
 

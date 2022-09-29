@@ -25,16 +25,14 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { handleNext, handleReset, StepperDialog } from "components/Dialog/base-dialogs";
+import { handleNext, handleReset } from "components/Dialog/base-dialogs";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
-import { addNFTSteps } from "components/Dialog/base-dialogs/Stepper";
 import { addToken, deployNFTContract } from "contract-interactions";
-import { formatAddress } from "utils/address";
-import { ClipboardCopyIcon } from "@heroicons/react/solid";
 import { IAddNftQuery } from "types/queryInterfaces";
+import { AddNftDialog } from "components/Dialog/CreateNftDialogs";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -272,36 +270,7 @@ const AddNewNFT: NextPage = () => {
                     </form>
                 </section>
 
-                <StepperDialog
-                    dialog={confirmDialog}
-                    className="dialog"
-                    activeStep={activeStep}
-                    steps={addNFTSteps}
-                >
-                    <p className="ml-7">Deployment successful!</p>
-                    <div className="flex ml-7 mb-10">Contract Address:
-                        <div
-                            className={
-                                "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
-                            }
-                            onClick={() =>
-                                navigator.clipboard.writeText(formData.contractAddress)
-                            }
-                        >
-                            {formatAddress(formData.contractAddress)}
-                            <ClipboardCopyIcon className="h-6 w-5" />
-                        </div>
-                    </div>
-                    <button
-                        className="form-submit-button"
-                        onClick={() => {
-                            confirmDialog.toggle();
-                            router.back()
-                        }}
-                    >
-                        Back to DAO
-                    </button>
-                </StepperDialog>
+                <AddNftDialog dialog={confirmDialog} formData={formData} activeStep={activeStep} />
             </Layout>
         </div>
     );
