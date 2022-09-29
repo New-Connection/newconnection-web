@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import classNames from "classnames";
-import { useSigner } from "wagmi";
+import { useSigner, useSwitchNetwork } from "wagmi";
 import { useDialogState } from "ariakit";
 import toast from "react-hot-toast";
 import type { GetServerSideProps, NextPage } from "next";
@@ -9,18 +9,19 @@ import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
 import { Button, RadioSelector } from "components/Form";
 import { validateForm } from "utils/validate";
-import { handleNext, handleReset, StepperDialog } from "components/Dialog/base-dialogs";
-import { IProposalDetail } from "types/forms";
+import { handleNext, handleReset } from "components/Dialog/base-dialogs";
+import { IProposal, IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";
-import { castVote, VotingType } from "contract-interactions/writeGovernorContract";
+import { castVote } from "contract-interactions/writeGovernorContract";
 import { IDetailProposalQuery } from "types/queryInterfaces";
 import { IDetailProposalProps } from "types/pagePropsInterfaces";
 import { errors } from "ethers";
+import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
+import { checkCorrectNetwork } from "logic";
 
-export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetailProposalQuery> = async (
-    context
-) => {
+export const getServerSideProps: GetServerSideProps<IDetailProposalProps,
+    IDetailProposalQuery> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;
     const result: IDetailProposalProps = {
         detailProposal: detailProposal,
@@ -30,21 +31,17 @@ export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetai
     };
 };
 
-interface IProposal {
-    voteResult: VotingType;
-    txConfirm?: string;
-}
-
 const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
     const [formData, setFormData] = useState<IProposal>({
         voteResult: undefined,
         txConfirm: "",
     });
     const [activeStep, setActiveStep] = useState(0);
-    const { data: signer_data } = useSigner();
+    const { data: signerData } = useSigner();
     const confirmDialog = useDialogState();
     const { isInitialized } = useMoralis();
     const [proposalData, setProposal] = useState<IProposalDetail>();
+    const { switchNetwork } = useSwitchNetwork();
 
     const { fetch } = useMoralisQuery(
         "Proposal",
@@ -66,6 +63,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                             description: proposal.get("description"),
                             shortDescription: proposal.get("shortDescription"),
                             governorAddress: proposal.get("governorAddress"),
+                            chainId: proposal.get("chainId")
                         };
                         setProposal(() => newProposal);
                         //console.log(newProposal);
@@ -111,8 +109,8 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
     // send voted
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        if (!signer_data) {
-            toast.error("Please connect wallet");
+
+        if (!(await checkCorrectNetwork(signerData, proposalData.chainId, switchNetwork))) {
             return;
         }
 
@@ -124,12 +122,11 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         try {
             const tx = await castVote(
                 proposalData!.governorAddress,
-                signer_data,
+                signerData,
                 detailProposal,
                 formData!.voteResult
             );
             console.log(tx);
-            confirmDialog.toggle();
             toast.success("Your vote is send");
         } catch (e: any) {
             if (e.code === errors.ACTION_REJECTED) {
@@ -137,13 +134,18 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                 toast.error("User reject transaction");
                 return;
             } else if (e.error) {
-                console.log(e.error)
+                console.log(e.error);
                 confirmDialog.toggle();
-                toast.error(e.error?.message || "Execution reverted");
+                const message = e.error?.message?.includes("GovernorVotingSimple")
+                    ? e.error.message
+                    : e.error.data?.message?.includes("GovernorVotingSimple")
+                        ? e.error.data.message
+                        : "Execution reverted";
+                toast.error(message);
                 return;
             } else {
                 confirmDialog.toggle();
-                console.error(e)
+                console.error(e);
                 toast.error("Something went wrong");
                 return;
             }
@@ -177,24 +179,12 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                         </Button>
                     </form>
                 </section>
-                <StepperDialog
-                    dialog={confirmDialog}
-                    className="dialog"
-                    activeStep={activeStep}
-                    isClose={true}
-                >
-                    <p className="ml-7">Deployment successful!</p>
-                    <p className="ml-7 mb-10">Contract Address: {formData.txConfirm}</p>
 
-                    <button
-                        className="form-submit-button"
-                        onClick={() => {
-                            confirmDialog.toggle();
-                        }}
-                    >
-                        Back to proposal
-                    </button>
-                </StepperDialog>
+                <ProposalVoteDialog
+                    dialog={confirmDialog}
+                    formData={formData}
+                    activeStep={activeStep}
+                />
             </Layout>
         </div>
     ) : (

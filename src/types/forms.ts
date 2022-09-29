@@ -1,3 +1,5 @@
+import { VotingType } from "contract-interactions";
+
 export interface ICreate {
     name: string;
     description?: string;
@@ -76,6 +78,11 @@ export interface IProposalPageForm extends ICreateProposal {
     deadline?: number;
 }
 
+export interface IProposal {
+    voteResult: VotingType;
+    txConfirm?: string;
+}
+
 export interface IWhitelistPageForm {
     walletAddress?: string;
     votingTokenName?: string;
@@ -121,5 +128,6 @@ export interface IProposalDetail {
     startDate?: Date;
     endDate?: Date;
     results?: number;
+    chainId?: number;
     ownerAddress?: string;
 }

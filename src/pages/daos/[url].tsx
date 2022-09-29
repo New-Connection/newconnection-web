@@ -44,7 +44,7 @@ import {
     ContributeTreasuryDialog,
     CreateTreasuryDialog,
     DetailNftDialog,
-} from "components/Dialog/daoPageDialogs";
+} from "components/Dialog/DaoPageDialogs";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
