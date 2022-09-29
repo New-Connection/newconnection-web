@@ -115,7 +115,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         DAO &&
         signerData &&
         (await signerData.getAddress()) ===
-            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+        (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
             ? setIsOwner(true)
             : setIsOwner(false);
     };
@@ -307,7 +307,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div
+                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchain</p>
                                 <BlockchainImage chain={DAO.blockchain[0]} />
                             </div>
@@ -635,7 +636,19 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     steps={createTreasurySteps}
                 >
                     <p className="ml-7">Deployment successful!</p>
-                    <p className="ml-7 mb-10">Treasury Contract Address: {DAO.treasuryAddress}</p>
+                    <div className="flex ml-7 mb-10">Treasury Contract Address:
+                        <div
+                            className={
+                                "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
+                            }
+                            onClick={() =>
+                                navigator.clipboard.writeText(DAO.treasuryAddress)
+                            }
+                        >
+                            {formatAddress(DAO.treasuryAddress)}
+                            <ClipboardCopyIcon className="h-6 w-5" />
+                        </div>
+                    </div>
                     <button
                         className="form-submit-button"
                         onClick={() => {
