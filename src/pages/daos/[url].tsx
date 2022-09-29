@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import Image from "next/image";
@@ -66,7 +66,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const { isInitialized } = useMoralis();
 
     const [selectedTab, setSelectedTab] = useState<number>(0);
-    const firstUpdate = useRef(true);
     const [isLoaded, setIsLoaded] = useState(false);
     const [notFound, setNotFound] = useState(false);
 
@@ -111,6 +110,97 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         }
     );
 
+    // EFFECTS
+    // ----------------------------------------------------------------------
+
+    // Fetching DAO in general
+    useEffect(() => {
+        const loadingDAO = async () => {
+            const data = await fetchDAO(isInitialized, DAOsQuery);
+            if (data) {
+                setDAO(() => data.newDao);
+                // not used
+                // data.newDao.totalProposals= await getTotalProposals(DAO!.governorAddress!, DAO!.chainId!);
+                // data.newDao.totalMembers= await getNumberOfMintedTokens(DAO!.tokenAddress[0]!, DAO!.chainId!);
+                data.newDao.profileImage = await loadImage(data.newDao.profileImage);
+                data.newDao.coverImage = await loadImage(data.newDao.coverImage);
+                setDAOMoralisInstance(() => data.moralisInstance);
+            }
+        };
+
+        loadingDAO().catch((e) => {
+            console.log("Error when Loading DAO", e);
+            setNotFound(true);
+        });
+    }, [isInitialized]);
+
+    // Loading data
+    useEffect(() => {
+        if (DAO) {
+            console.log("start loading");
+            const loadingProposals = async () => {
+                const proposals = await fetchProposal(ProposalQuery);
+                if (proposals) {
+                    setProposals(() => proposals);
+                }
+            };
+
+            const loadingNFT = async () => {
+                const nftsArray = await fetchNFT(DAO);
+                if (nftsArray) {
+                    localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
+                    setNFTs(nftsArray);
+                }
+            };
+
+            const loadingWhitelist = async () => {
+                const whitelist = await fetchWhitelist(WhitelistQuery);
+                if (whitelist) {
+                    setWhitelist(whitelist);
+                }
+            };
+
+            const loadingTreasuryBalance = async () => {
+                const treasuryBalance = await fetchTreasuryBalance(DAO);
+                if (treasuryBalance) {
+                    setTreasuryBalance(treasuryBalance);
+                }
+            };
+
+            localStorage.setItem(DAO.name, JSON.stringify(DAO));
+            loadingProposals().catch(console.error);
+            loadingWhitelist().catch(console.error);
+            loadingNFT().catch(console.error);
+            loadingTreasuryBalance().catch(console.error);
+        }
+    }, [DAO]);
+
+    // Owner check
+    useEffect(() => {
+        const fetchIsOwner = async () => {
+            DAO &&
+            signerData &&
+            (await signerData.getAddress()) ===
+                (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+                ? setIsOwner(true)
+                : setIsOwner(false);
+        };
+
+        fetchIsOwner().catch(console.error);
+    }, [DAO, signerData]);
+
+    // Loaded check
+    useEffect(() => {
+        if (DAO && proposals && NFTs && signerData && !isLoaded) {
+            const fetchIsLoaded = async () => {
+                console.log("loaded");
+                setIsLoaded(true);
+            };
+
+            fetchIsLoaded().catch(console.error);
+        }
+    });
+
     // FUNCTIONS
     // ----------------------------------------------------------------------
 
@@ -151,102 +241,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             contributeAmount
         );
     };
-
-    // EFFECTS
-    // ----------------------------------------------------------------------
-
-    // Fetching DAO in general
-    useEffect(() => {
-        const loadingDAO = async () => {
-            const data = await fetchDAO(isInitialized, DAOsQuery);
-            if (data) {
-                setDAO(() => data.newDao);
-                // not used
-                // data.newDao.totalProposals= await getTotalProposals(DAO!.governorAddress!, DAO!.chainId!);
-                // data.newDao.totalMembers= await getNumberOfMintedTokens(DAO!.tokenAddress[0]!, DAO!.chainId!);
-                data.newDao.profileImage = await loadImage(data.newDao.profileImage);
-                data.newDao.coverImage = await loadImage(data.newDao.coverImage);
-                setDAOMoralisInstance(() => data.moralisInstance);
-            }
-        };
-
-        loadingDAO().catch((e) => {
-            console.log("Error when Loading DAO", e);
-            setNotFound(true);
-        });
-    }, [isInitialized]);
-
-    // Loading data
-    useEffect(() => {
-        if (DAO && firstUpdate.current) {
-            const loadingProposals = async () => {
-                const proposals = await fetchProposal(ProposalQuery);
-                if (proposals) {
-                    setProposals(() => proposals);
-                }
-            };
-
-            const loadingNFT = async () => {
-                const nftsArray = await fetchNFT(DAO);
-                if (nftsArray) {
-                    localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
-                    setNFTs(nftsArray);
-                }
-            };
-
-            const loadingWhitelist = async () => {
-                const whitelist = await fetchWhitelist(WhitelistQuery);
-                if (whitelist) {
-                    setWhitelist(whitelist);
-                }
-            };
-
-            const loadingTreasuryBalance = async () => {
-                const treasuryBalance = await fetchTreasuryBalance(DAO);
-                if (treasuryBalance) {
-                    setTreasuryBalance(treasuryBalance);
-                }
-            };
-
-            localStorage.setItem(DAO.name, JSON.stringify(DAO));
-            loadingProposals().catch(console.error);
-            loadingWhitelist().catch(console.error);
-            loadingNFT().catch(console.error);
-            loadingTreasuryBalance().catch(console.error);
-
-            firstUpdate.current = false;
-        }
-    }, [DAO]);
-
-    // Owner check
-    useEffect(() => {
-        const fetchIsOwner = async () => {
-            DAO &&
-            signerData &&
-            (await signerData.getAddress()) ===
-            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
-                ? setIsOwner(true)
-                : setIsOwner(false);
-        };
-
-        fetchIsOwner().catch(console.error);
-    }, [DAO, signerData]);
-
-    // Loaded check
-    useEffect(() => {
-        if (DAO && proposals && NFTs && signerData && !isLoaded) {
-            const fetchIsLoaded = async () => {
-                console.log("loaded");
-                setIsLoaded(true);
-            };
-
-            fetchIsLoaded().catch(console.error);
-        }
-    });
-
-    //
-    // CUSTOM COMPONENTS
-    // ----------------------------------------------------------------------
 
     return DAO ? (
         <Layout className="layout-base mt-0">
@@ -309,8 +303,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             Contract
                             <ExternalLinkIcon className="h-4 w-3" />
                         </a>
-                        <div
-                            className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                        <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                             <p className="text-xs">Blockchain</p>
                             <BlockchainImage chain={DAO.blockchain[0]} />
                         </div>
