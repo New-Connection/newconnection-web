@@ -14,7 +14,7 @@ interface IDialog {
     dialog: DisclosureState;
 }
 
-export interface IAddNftDialog extends IDialog {
+export interface ICreateNftDialog extends IDialog {
     formData: ICreateNFT;
     activeStep: number;
 }
