@@ -2,7 +2,6 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { formatAddress } from "utils/address";
 import type { GetServerSideProps, NextPage } from "next";
-import { Signer } from "ethers";
 import Layout from "components/Layout/Layout";
 import Image from "next/image";
 import ASSETS from "assets/index";
@@ -13,33 +12,26 @@ import { IDAOPageForm, INFTVoting, IProposalPageForm, IWhitelistPageForm } from 
 import { ClipboardCopyIcon, ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
-import { CustomDialog, handleNext, handleReset, StepperDialog } from "components/Dialog";
+import { CustomDialog, StepperDialog } from "components/Dialog";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
+import { isIpfsAddress } from "utils/ipfsUpload";
 import { TabsType } from "types/tabs";
-import {
-    deployTreasuryContract,
-    getGovernorOwnerAddress,
-    getTreasuryBalance,
-    mintNFT,
-    mintReserveAndDelegation,
-    transferTreasuryOwnership,
-} from "contract-interactions/";
+import { getGovernorOwnerAddress, mintNFT, mintReserveAndDelegation } from "contract-interactions/";
 import { IDaoQuery } from "types/queryInterfaces";
 import toast from "react-hot-toast";
-import {
-    getNftName,
-    getPrice,
-    getSymbol,
-    getTokenURI,
-} from "contract-interactions/viewNftContract";
 import { isValidHttpUrl } from "utils/transformURL";
 import { handleChangeBasic } from "utils/handlers";
-import { saveMoralisInstance } from "database/interactions";
 import { createTreasurySteps, SpinnerLoading } from "components/Dialog/Stepper";
 import { InputAmount } from "components/Form";
 import { sendEthToAddress } from "contract-interactions/utils";
-import { fetchDAO, fetchProposal } from "network/index";
+import {
+    fetchDAO,
+    fetchProposal,
+    fetchLargeData,
+    fetchNFT,
+    fetchTreasuryBalance,
+    fetchWhitelist,
+} from "network/index";
 import { BlockchainImage } from "components/Icons/BlockchainImage";
 import { MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
@@ -48,7 +40,7 @@ import { Moralis } from "moralis-v1";
 import { ProposalsListTab } from "components/Tabs/ProposalsListTab";
 import { WhitelistTab } from "components/Tabs/WhitelistTab";
 import { DAOPageProps } from "types/pagePropsInterfaces";
-import { fetchWhitelist } from "network/fetchWhitelist";
+import { addTreasury, addTreasureMoralis } from "logic/addTreasury";
 import { ButtonState } from "types/daoIntefaces";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
@@ -81,6 +73,19 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
 
+    // NFT section
+    const [buttonState, setButtonState] = useState<ButtonState>("Mint");
+    const detailNFTDialog = useDialogState();
+
+    // Treasury section
+    const [isOwner, setIsOwner] = useState(false);
+    const [treasuryBalance, setTreasuryBalance] = useState("0");
+    const [createTreasuryStep, setCreateTreasuryStep] = useState(0);
+    const [contributeAmount, setContributeAmount] = useState("0");
+    const [sending, setSending] = useState(false);
+    const createTreasuryDialog = useDialogState();
+    const contributeTreasuryDialog = useDialogState();
+
     // DB queries
     const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.equalTo("url", url), [], {
         autoFetch: false,
@@ -101,19 +106,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             autoFetch: false,
         }
     );
-
-    // nft section
-    const [buttonState, setButtonState] = useState<ButtonState>("Mint");
-    const detailNFTDialog = useDialogState();
-
-    // treasury section
-    const [isOwner, setIsOwner] = useState(false);
-    const [treasuryBalance, setTreasuryBalance] = useState("0");
-    const [createTreasuryStep, setCreateTreasuryStep] = useState(0);
-    const [contributeAmount, setContributeAmount] = useState("0");
-    const [sending, setSending] = useState(false);
-    const createTreasuryDialog = useDialogState();
-    const contributeTreasuryDialog = useDialogState();
 
     // FUNCTIONS
     // ----------------------------------------------------------------------
@@ -152,54 +144,17 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         } catch (e) {
             console.log("Transaction canceled");
             setButtonState("Error");
+            console.log("Transaction canceled");
+            return;
         }
     };
 
-    const addTreasury = async () => {
-        if (!(await checkCorrectNetwork())) {
-            return;
-        }
-
-        handleReset(setCreateTreasuryStep);
-        createTreasuryDialog.toggle();
-
-        let treasuryContract;
-        try {
-            treasuryContract = await deployTreasuryContract(signerData as Signer, {});
-            handleNext(setCreateTreasuryStep);
-            await treasuryContract.deployed();
-            console.log(
-                `Deployment successful! Treasury Contract Address: ${treasuryContract.address}`
-            );
-            handleNext(setCreateTreasuryStep);
-            const renounceTx = await transferTreasuryOwnership(
-                treasuryContract.address,
-                DAO.governorAddress,
-                signerData
-            );
-            handleNext(setCreateTreasuryStep);
-            await renounceTx.wait();
-            handleNext(setCreateTreasuryStep);
-            handleNext(setCreateTreasuryStep);
-
-            handleChangeBasic(treasuryContract.address, setDAO, "treasuryAddress");
-        } catch (error) {
-            console.log(error);
-            createTreasuryDialog.toggle();
-            handleReset(setCreateTreasuryStep);
-            toast.error("Please approve transaction to create Treasury");
-            return;
-        }
-
-        try {
-            if (DAOMoralisInstance) {
-                DAOMoralisInstance.set("treasuryAddress", treasuryContract.address);
-                await saveMoralisInstance(DAOMoralisInstance);
-            }
-        } catch (error) {
-            createTreasuryDialog.toggle();
-            toast.error("Couldn't save your DAO on database. Please try again");
-            return;
+    const fetchIsOwner = async () => {
+        if (
+            (await signerData.getAddress()) ===
+            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+        ) {
+            setIsOwner(true);
         }
     };
 
@@ -235,70 +190,70 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     // EFFECTS
     // ----------------------------------------------------------------------
 
-    useEffect(() => {
-        const loadingDAO = async () => {
-            const data = await fetchDAO(isInitialized, DAOsQuery);
-            if (data) {
-                data.newDao.profileImage = await loadImage(data.newDao.profileImage);
-                data.newDao.coverImage = await loadImage(data.newDao.coverImage);
-                setDAO(() => data.newDao);
-                setDAOMoralisInstance(() => data.moralisInstance);
-                console.log("after useEffect newDAO", data.newDao);
-            }
-        };
+    // Fetching DAO in general
+    const loadingDAO = async () => {
+        const data = await fetchDAO(isInitialized, DAOsQuery);
+        if (data) {
+            setDAO(() => data.newDao);
+            setDAOMoralisInstance(() => data.moralisInstance);
+        }
+    };
 
+    const loadindProposal = async () => {
+        const proposals = await fetchProposal(ProposalQuery);
+        if (proposals) {
+            setProposals(() => proposals);
+        }
+    };
+
+    const loadingLargeData = async () => {
+        const data = await fetchLargeData(DAO);
+        if (data) {
+            setDAO(() => data);
+        }
+    };
+
+    const loadingNFT = async () => {
+        const nftsArray = await fetchNFT(DAO);
+        if (nftsArray) {
+            localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
+            setNFTs(nftsArray);
+        }
+    };
+
+    const loadingWhitelist = async () => {
+        const whitelist = await fetchWhitelist(WhitelistQuery);
+        if (whitelist) {
+            setWhitelist(whitelist);
+        }
+    };
+
+    const loadingTreasuryBalance = async () => {
+        const treasuryBalance = await fetchTreasuryBalance(DAO);
+        if (treasuryBalance) {
+            setTreasuryBalance(treasuryBalance);
+        }
+    };
+
+    useEffect(() => {
         loadingDAO().catch((e) => console.log("Error when Loading DAO", e));
     }, [isInitialized]);
 
+    // Loading data
     useEffect(() => {
         if (DAO && firstUpdate.current) {
             localStorage.setItem(DAO.name, JSON.stringify(DAO));
-            const loadindProposal = async () => {
-                const proposals = await fetchProposal(ProposalQuery);
-                if (proposals) {
-                    setProposals(() => proposals);
-                    console.log("Set Proposals", proposals);
-                }
-            };
-            const loadingWhitelist = async () => {
-                const whitelist = await fetchWhitelist(WhitelistQuery);
-                if (whitelist) {
-                    setWhitelist(() => whitelist);
-                    console.log("Set Whitelist", whitelist);
-                }
-            };
-            const fetchNFTData = async () => {
-                const nftsArray: INFTVoting[] = await Promise.all(
-                    DAO!.tokenAddress!.map(async (tokenAddress) => {
-                        const nft: INFTVoting = {
-                            title: await getNftName(tokenAddress, DAO.chainId),
-                            type: await getSymbol(tokenAddress, DAO.chainId),
-                            image: await loadImage(await getTokenURI(tokenAddress, DAO.chainId)),
-                            price: await getPrice(tokenAddress, DAO.chainId),
-                            tokenAddress: tokenAddress,
-                        };
-                        return nft;
-                    })
-                );
-                localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
-                setNFTs(nftsArray);
-            };
-            const fetchTreasuryBalance = async () => {
-                const balance = DAO.treasuryAddress
-                    ? await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId)
-                    : 0;
-                setTreasuryBalance(() => balance.toString().slice(0, 7));
-            };
 
             loadingWhitelist().catch(console.error);
             loadindProposal().catch(console.error);
-            fetchNFTData().catch(console.error);
-            fetchTreasuryBalance().catch(console.error);
+            loadingNFT().catch(console.error);
+            loadingTreasuryBalance().catch(console.error);
 
             firstUpdate.current = false;
         }
     }, [DAO]);
 
+    // Loading...
     useEffect(() => {
         if (DAO && proposals && NFTs && signerData && !isLoaded) {
             const fetchIsLoaded = async () => {
@@ -310,6 +265,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         }
     });
 
+    // Owner check
     useEffect(() => {
         const fetchIsOwner = async () => {
             DAO &&
@@ -331,6 +287,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 <Image height={"25"} width={"25"} src={image} />
             </a>
         );
+    };
+
+    const addTreasuryAndSave = async () => {
+        const treasuryAddress = await addTreasury(
+            DAO,
+            createTreasuryDialog,
+            signerData,
+            setCreateTreasuryStep,
+            switchNetwork
+        );
+        if (treasuryAddress) {
+            // TODO: Need to check, maybe not work
+            handleChangeBasic(treasuryAddress, setDAO, "treasuryAddress");
+            console.log("moralis save", treasuryAddress);
+            addTreasureMoralis(DAOMoralisInstance, treasuryAddress, createTreasuryDialog);
+        }
     };
 
     return DAO ? (
@@ -466,7 +438,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         <div className={"text-4xl"}>$ {treasuryBalance}</div>
                         <div>
                             {!DAO.treasuryAddress && isOwner ? (
-                                <button className="form-submit-button" onClick={addTreasury}>
+                                <button className="form-submit-button" onClick={addTreasuryAndSave}>
                                     Add treasury
                                 </button>
                             ) : !DAO.treasuryAddress ? (
