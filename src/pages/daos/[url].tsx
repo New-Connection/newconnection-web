@@ -14,9 +14,12 @@ import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { CustomDialog, StepperDialog } from "components/Dialog";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import { isIpfsAddress } from "utils/ipfsUpload";
-import { TabsType } from "types/tabs";
-import { getGovernorOwnerAddress, mintNFT, mintReserveAndDelegation } from "contract-interactions/";
+import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
+import {
+    getGovernorOwnerAddress,
+    mintNFT,
+    mintReserveAndDelegation
+} from "contract-interactions/";
 import { IDaoQuery } from "types/queryInterfaces";
 import toast from "react-hot-toast";
 import { isValidHttpUrl } from "utils/transformURL";
@@ -27,7 +30,6 @@ import { sendEthToAddress } from "contract-interactions/utils";
 import {
     fetchDAO,
     fetchProposal,
-    fetchLargeData,
     fetchNFT,
     fetchTreasuryBalance,
     fetchWhitelist,
@@ -153,7 +155,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         DAO &&
         signerData &&
         (await signerData.getAddress()) ===
-            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+        (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
             ? setIsOwner(true)
             : setIsOwner(false);
     };
@@ -191,21 +193,19 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         const data = await fetchDAO(isInitialized, DAOsQuery);
         if (data) {
             setDAO(() => data.newDao);
+            // not used
+            // data.newDao.totalProposals= await getTotalProposals(DAO!.governorAddress!, DAO!.chainId!);
+            // data.newDao.totalMembers= await getNumberOfMintedTokens(DAO!.tokenAddress[0]!, DAO!.chainId!);
+            data.newDao.profileImage = await loadImage(data.newDao.profileImage);
+            data.newDao.coverImage = await loadImage(data.newDao.coverImage);
             setDAOMoralisInstance(() => data.moralisInstance);
         }
     };
 
-    const loadindProposal = async () => {
+    const loadingProposals = async () => {
         const proposals = await fetchProposal(ProposalQuery);
         if (proposals) {
             setProposals(() => proposals);
-        }
-    };
-
-    const loadingLargeData = async () => {
-        const data = await fetchLargeData(DAO);
-        if (data) {
-            setDAO(() => data);
         }
     };
 
@@ -239,8 +239,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     useEffect(() => {
         if (DAO && firstUpdate.current) {
             localStorage.setItem(DAO.name, JSON.stringify(DAO));
-            loadingLargeData().catch(console.error);
-            loadindProposal().catch(console.error);
+            loadingProposals().catch(console.error);
             loadingWhitelist().catch(console.error);
             loadingNFT().catch(console.error);
             loadingTreasuryBalance().catch(console.error);
@@ -354,7 +353,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 Contract
                                 <ExternalLinkIcon className="h-4 w-3" />
                             </a>
-                            <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                            <div
+                                className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                                 <p className="text-xs">Blockchain</p>
                                 <BlockchainImage chain={DAO.blockchain[0]} />
                             </div>
