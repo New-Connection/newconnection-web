@@ -4,6 +4,7 @@ import { formatAddress } from "utils/address";
 import type { GetServerSideProps, NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import Image from "next/image";
+import { Moralis } from "moralis-v1";
 import ASSETS from "assets/index";
 import { getChainScanner, getTokenSymbol } from "utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
@@ -15,14 +16,12 @@ import { useDialogState } from "ariakit";
 import { CustomDialog, StepperDialog } from "components/Dialog";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
-import { getGovernorOwnerAddress, mintNFT, mintReserveAndDelegation } from "contract-interactions/";
+import { getGovernorOwnerAddress } from "contract-interactions/";
 import { IDaoQuery } from "types/queryInterfaces";
-import toast from "react-hot-toast";
 import { isValidHttpUrl } from "utils/transformURL";
 import { handleChangeBasic } from "utils/handlers";
 import { createTreasurySteps, SpinnerLoading } from "components/Dialog/Stepper";
 import { InputAmount } from "components/Form";
-import { sendEthToAddress } from "contract-interactions/utils";
 import {
     fetchDAO,
     fetchProposal,
@@ -34,13 +33,17 @@ import { BlockchainImage } from "components/Icons/BlockchainImage";
 import { MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
 import { NFTCard, NFTImage } from "components/Cards/NFTCard";
-import { Moralis } from "moralis-v1";
 import { ProposalsListTab } from "components/Tabs/ProposalsListTab";
 import { WhitelistTab } from "components/Tabs/WhitelistTab";
 import { DAOPageProps } from "types/pagePropsInterfaces";
-import { addTreasury, addTreasureMoralis } from "logic/addTreasury";
 import { ButtonState } from "types/daoIntefaces";
-import { checkCorrectNetwork } from "logic/utills";
+import {
+    checkCorrectNetwork,
+    mint,
+    contributeToTreasury,
+    addTreasury,
+    addTreasureMoralis,
+} from "logic/index";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
@@ -108,33 +111,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // FUNCTIONS
     // ----------------------------------------------------------------------
-
-    const mint = async (tokenAddress: string) => {
-        if (!DAO) return;
-
-        if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
-            return;
-        }
-
-        setButtonState("Loading");
-        try {
-            const tx = isOwner
-                ? await mintReserveAndDelegation(tokenAddress, signerData)
-                : await mintNFT(tokenAddress, signerData);
-            await tx.wait();
-            if (tx.blockNumber) {
-                toast.success(`DONE ✅ successful mint!`);
-                console.log(tx);
-            }
-            setButtonState("Success");
-        } catch (e) {
-            console.log("Transaction canceled");
-            setButtonState("Error");
-            console.log("Transaction canceled");
-            return;
-        }
-    };
-
     const fetchIsOwner = async () => {
         DAO &&
         signerData &&
@@ -142,34 +118,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
             ? setIsOwner(true)
             : setIsOwner(false);
-    };
-
-    const contributeToTreasury = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
-            return;
-        }
-
-        try {
-            const sendTx = await sendEthToAddress(
-                DAO.treasuryAddress,
-                contributeAmount,
-                signerData
-            );
-            await sendTx.wait(1);
-            setSending(() => false);
-        } catch (error) {
-            console.log(error);
-            contributeTreasuryDialog.hide();
-            setSending(() => false);
-            toast.error("Something went wrong");
-            return;
-        }
-
-        toast.success("Successfully contributed!");
-        contributeTreasuryDialog.hide();
-        setSending(() => false);
     };
 
     // Fetching DAO in general
@@ -273,6 +221,29 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             console.log("moralis save", treasuryAddress);
             addTreasureMoralis(DAOMoralisInstance, treasuryAddress, createTreasuryDialog);
         }
+    };
+
+    const mintButton = async () => {
+        await mint(
+            currentNFT.tokenAddress,
+            DAO,
+            signerData,
+            switchNetwork,
+            setButtonState,
+            isOwner
+        );
+    };
+
+    const contributeToTreasuryButton = async (e: React.FormEvent<HTMLFormElement>) => {
+        await contributeToTreasury(
+            e,
+            signerData,
+            DAO,
+            switchNetwork,
+            setSending,
+            contributeTreasuryDialog,
+            contributeAmount
+        );
     };
 
     return DAO ? (
@@ -554,7 +525,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     className={`secondary-button w-full h-12 mt-4 mb-6 
                             ${buttonState === "Success" ? "bg-green" : ""} 
                             ${buttonState === "Error" ? "bg-red" : ""}`}
-                                    onClick={() => mint(currentNFT.tokenAddress)}
+                                    onClick={mintButton}
                                 >
                                     {buttonState}
                                 </button>
@@ -626,7 +597,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     <form
                         onSubmit={(event) => {
                             setSending(() => true);
-                            contributeToTreasury(event);
+                            contributeToTreasuryButton(event);
                         }}
                     >
                         <InputAmount
