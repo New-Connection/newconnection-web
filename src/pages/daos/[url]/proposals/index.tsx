@@ -12,10 +12,10 @@ import {
 } from "contract-interactions";
 import { ProposalCard } from "components/Cards/ProposalCard";
 import * as React from "react";
-import { MockupTextCard } from "components/Mockup";
 import { useRouter } from "next/router";
 import BackButton from "components/Button/backButton";
-import { IProposals } from "types/queryInterfaces";
+import { IProposalsQuery } from "types/queryInterfaces";
+import { MockupLoadingProposals } from "components/Mockup/Loading";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -79,7 +79,7 @@ const ProposalsPage: NextPage = () => {
     };
 
     useEffect(() => {
-        const query = router.query as IProposals;
+        const query = router.query as IProposalsQuery;
         console.log("query:" + router.query.daoAddress);
 
         const newDao = {} as IDAOPageForm;
@@ -142,15 +142,7 @@ const ProposalsPage: NextPage = () => {
                             })}
                         </ul>
                     ) : (
-                        <div>
-                            <MockupTextCard
-                                label={"No proposals here yet"}
-                                text={
-                                    "You should first add NFTs so that members can vote " +
-                                    "then click the button “Add new proposals” and initiate a proposals"
-                                }
-                            />
-                        </div>
+                        <MockupLoadingProposals chain={DAO.chainId} />
                     )}
                 </section>
             </Layout>

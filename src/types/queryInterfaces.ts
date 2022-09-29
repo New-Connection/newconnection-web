@@ -17,7 +17,7 @@ export interface IDetailProposalQuery extends ParsedUrlQuery {
     detailProposal: string;
 }
 
-export interface IProposals extends ParsedUrlQuery {
+export interface IProposalsQuery extends ParsedUrlQuery {
     name: string;
     governorAddress: string;
     chainId: string;

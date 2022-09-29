@@ -3,7 +3,6 @@ import classNames from "classnames";
 import { useSigner } from "wagmi";
 import { useDialogState } from "ariakit";
 import toast from "react-hot-toast";
-import { ParsedUrlQuery } from "querystring";
 import type { GetServerSideProps, NextPage } from "next";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import Layout from "components/Layout/Layout";
@@ -55,29 +54,29 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         }
     );
 
-    const fetchData = async () => {
-        if (isInitialized) {
-            await fetch({
-                onSuccess: async (results) => {
-                    const proposal = results[0];
-                    const newProposal: IProposalDetail = {
-                        title: proposal.get("name"),
-                        description: proposal.get("description"),
-                        shortDescription: proposal.get("shortDescription"),
-                        governorAddress: proposal.get("governorAddress"),
-                    };
-                    setProposal(() => newProposal);
-                    //console.log(newProposal);
-                },
-                onError: (error) => {
-                    console.log("Error fetching db query" + error);
-                },
-            });
-        }
-    };
-
     useEffect(() => {
-        fetchData();
+        const fetchData = async () => {
+            if (isInitialized) {
+                await fetch({
+                    onSuccess: async (results) => {
+                        const proposal = results[0];
+                        const newProposal: IProposalDetail = {
+                            title: proposal.get("name"),
+                            description: proposal.get("description"),
+                            shortDescription: proposal.get("shortDescription"),
+                            governorAddress: proposal.get("governorAddress"),
+                        };
+                        setProposal(() => newProposal);
+                        //console.log(newProposal);
+                    },
+                    onError: (error) => {
+                        console.log("Error fetching db query" + error);
+                    },
+                });
+            }
+        };
+
+        fetchData().catch(console.error);
     }, [isInitialized]);
 
     interface ICardProposal {

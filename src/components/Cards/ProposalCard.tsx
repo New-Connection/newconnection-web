@@ -1,6 +1,5 @@
-import Image from "next/image";
 import { timestampToDate } from "utils/basic";
-import { getLogoURI } from "utils/blockchains";
+import { BlockchainImage } from "../Icons/BlockchainImage";
 
 interface IProposalCard {
     title: string;
@@ -50,12 +49,12 @@ export const ProposalCard = (
             <div className="flex justify-between">
                 <div className="w-3/4 grid grid-cols-1 content-between">
                     <p className="w-full font-normal line-clamp-3 pr-4">{shortDescription}</p>
-                    <div className="flex gap-5 pb-2">
+                    <div className="flex gap-5 pb-2 items-center">
                         <div className="flex gap-5">
                             <p className="text-gray3">For</p>
                             <p className="font-medium">{tokenName}</p>
                         </div>
-                        <Image src={getLogoURI(chainId)} height={12} width={23} />
+                        <BlockchainImage chain={chainId} />
                     </div>
                 </div>
 
