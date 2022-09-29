@@ -150,12 +150,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     };
 
     const fetchIsOwner = async () => {
-        if (
-            (await signerData.getAddress()) ===
+        DAO &&
+        signerData &&
+        (await signerData.getAddress()) ===
             (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
-        ) {
-            setIsOwner(true);
-        }
+            ? setIsOwner(true)
+            : setIsOwner(false);
     };
 
     const contributeToTreasury = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -185,10 +185,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         contributeTreasuryDialog.hide();
         setSending(() => false);
     };
-
-    //
-    // EFFECTS
-    // ----------------------------------------------------------------------
 
     // Fetching DAO in general
     const loadingDAO = async () => {
@@ -243,15 +239,20 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     useEffect(() => {
         if (DAO && firstUpdate.current) {
             localStorage.setItem(DAO.name, JSON.stringify(DAO));
-
-            loadingWhitelist().catch(console.error);
+            loadingLargeData().catch(console.error);
             loadindProposal().catch(console.error);
+            loadingWhitelist().catch(console.error);
             loadingNFT().catch(console.error);
             loadingTreasuryBalance().catch(console.error);
 
             firstUpdate.current = false;
         }
     }, [DAO]);
+
+    // Owner check
+    useEffect(() => {
+        fetchIsOwner().catch(console.error);
+    }, [DAO, signerData]);
 
     // Loading...
     useEffect(() => {
@@ -264,19 +265,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             fetchIsLoaded().catch(console.error);
         }
     });
-
-    // Owner check
-    useEffect(() => {
-        const fetchIsOwner = async () => {
-            DAO &&
-            signerData &&
-            (await signerData.getAddress()) ===
-                (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
-                ? setIsOwner(true)
-                : setIsOwner(false);
-        };
-        fetchIsOwner().catch(console.error);
-    }, [DAO, signerData]);
 
     //
     // CUSTOM COMPONENTS
