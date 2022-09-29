@@ -243,9 +243,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     useEffect(() => {
         if (DAO && firstUpdate.current) {
             localStorage.setItem(DAO.name, JSON.stringify(DAO));
-
-            loadingWhitelist().catch(console.error);
+            loadingLargeData().catch(console.error);
             loadindProposal().catch(console.error);
+            loadingWhitelist().catch(console.error);
             loadingNFT().catch(console.error);
             loadingTreasuryBalance().catch(console.error);
 
