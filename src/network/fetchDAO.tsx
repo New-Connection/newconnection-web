@@ -35,7 +35,6 @@ export async function fetchDAO(isInitialized: any, daoQuery: any) {
                 totalProposals: 0,
                 activeProposals: 0,
             };
-            console.log("fetchDAO", newDao);
             return { newDao, moralisInstance };
         } catch (e) {
             console.log("Error to fetch DAO", e);
