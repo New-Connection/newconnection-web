@@ -25,12 +25,12 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { handleNext, handleReset, StepperDialog } from "components/Dialog";
+import { handleNext, handleReset, StepperDialog } from "components/Dialog/base-dialogs";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
-import { addNFTSteps } from "components/Dialog/Stepper";
+import { addNFTSteps } from "components/Dialog/base-dialogs/Stepper";
 import { addToken, deployNFTContract } from "contract-interactions";
 import { formatAddress } from "utils/address";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";

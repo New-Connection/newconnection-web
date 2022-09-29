@@ -9,7 +9,7 @@ import Layout from "components/Layout/Layout";
 import BackButton from "components/Button/backButton";
 import { Button, RadioSelector } from "components/Form";
 import { validateForm } from "utils/validate";
-import { handleNext, handleReset, StepperDialog } from "components/Dialog";
+import { handleNext, handleReset, StepperDialog } from "components/Dialog/base-dialogs";
 import { IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";

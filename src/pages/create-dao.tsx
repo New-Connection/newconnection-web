@@ -32,7 +32,7 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 import { useRouter } from "next/router";
-import { StepperDialog, handleReset, handleNext } from "components/Dialog";
+import { StepperDialog, handleReset, handleNext } from "components/Dialog/base-dialogs";
 import { CHAINS, getChainNames } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
 import { useMoralisQuery } from "react-moralis";

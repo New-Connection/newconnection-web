@@ -39,8 +39,9 @@ const AddNewMember: NextPage = () => {
 
     const { fetch: whitelistFetch } = useMoralisQuery(
         "Whitelist",
-        (query) => query.equalTo("daoAddress", formData.daoAddress)
-            && query.equalTo("votingTokenAddress", formData.votingTokenAddress),
+        (query) =>
+            query.equalTo("daoAddress", formData.daoAddress) &&
+            query.equalTo("votingTokenAddress", formData.votingTokenAddress),
         [formData.daoAddress, formData.votingTokenAddress, signer_data],
         {
             autoFetch: false,
@@ -60,7 +61,7 @@ const AddNewMember: NextPage = () => {
             return;
         }
 
-        const signerAddress = await signer_data.getAddress()
+        const signerAddress = await signer_data.getAddress();
 
         if (!(await checkRequestAvailability(signerAddress))) {
             toast.error(`You already send request for token: ${formData.votingTokenName}`);
@@ -70,7 +71,7 @@ const AddNewMember: NextPage = () => {
         try {
             const moralisInstance = getMoralisInstance(MoralisClassEnum.WHITELIST);
             setFieldsIntoMoralisInstance(moralisInstance, formData);
-            moralisInstance.set("walletAddress", signerAddress)
+            moralisInstance.set("walletAddress", signerAddress);
 
             await saveMoralisInstance(moralisInstance);
             toast.success("Your request was saved", {
@@ -84,34 +85,36 @@ const AddNewMember: NextPage = () => {
             return;
         }
 
-        router.back()
+        router.back();
     }
 
     const checkRequestAvailability = async (walletAddress: string) => {
-        let available = false
+        let available = false;
         await whitelistFetch({
             onSuccess: (results) => {
-                if (results.filter(result => result.get("walletAddress") === walletAddress).length === 0) {
-                    console.log("available=true")
-                    available = true
+                if (
+                    results.filter((result) => result.get("walletAddress") === walletAddress)
+                        .length === 0
+                ) {
+                    console.log("available=true");
+                    available = true;
                 }
             },
             onError: (e) => {
-                console.log("error" + e)
-            }
+                console.log("error" + e);
+            },
         });
-        return available
+        return available;
     };
 
-
     useEffect(() => {
-        console.log("fetch query")
+        console.log("fetch query");
         const query = router.query as IAddMemberQuery;
 
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
         handleChangeBasic(query.daoName, setFormData, "daoName");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
-        handleAddArray(query.tokenAddress, setFormData, "tokenAddress")
+        handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
 
         const saved = localStorage.getItem(query.daoName + " NFTs");
         const initialValue = JSON.parse(saved);

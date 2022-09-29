@@ -24,13 +24,13 @@ import {
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { StepperDialog, handleReset, handleNext } from "components/Dialog";
+import { StepperDialog, handleReset, handleNext } from "components/Dialog/base-dialogs";
 import { deployNFTContract } from "contract-interactions/";
 import BackButton from "components/Button/backButton";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
-import { createNFTSteps } from "components/Dialog/Stepper";
+import { createNFTSteps } from "components/Dialog/base-dialogs/Stepper";
 import { ClipboardCopyIcon } from "@heroicons/react/solid";
 import { formatAddress } from "utils/address";
 

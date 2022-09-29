@@ -32,7 +32,7 @@ import {
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
-import { handleNext, handleReset, StepperDialog } from "components/Dialog";
+import { handleNext, handleReset, StepperDialog } from "components/Dialog/base-dialogs";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 import { getChainNames } from "utils/blockchains";
 import { formatAddress } from "utils/address";
