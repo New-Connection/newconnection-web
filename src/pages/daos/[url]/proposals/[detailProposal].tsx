@@ -16,6 +16,7 @@ import { MockupTextCard } from "components/Mockup";
 import { castVote, VotingType } from "contract-interactions/writeGovernorContract";
 import { IDetailProposalQuery } from "types/queryInterfaces";
 import { IDetailProposalProps } from "types/pagePropsInterfaces";
+import { errors } from "ethers";
 
 export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetailProposalQuery> = async (
     context
@@ -131,17 +132,19 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
             confirmDialog.toggle();
             toast.success("Your vote is send");
         } catch (e: any) {
-            if (e.code === 4001) {
+            if (e.code === errors.ACTION_REJECTED) {
                 confirmDialog.toggle();
                 toast.error("User reject transaction");
                 return;
-            } else if (e.error.code === -32603) {
+            } else if (e.error) {
+                console.log(e.error)
                 confirmDialog.toggle();
-                toast.error("User already voted");
+                toast.error(e.error?.message || "Execution reverted");
                 return;
             } else {
                 confirmDialog.toggle();
-                toast.error(e.message);
+                console.error(e)
+                toast.error("Something went wrong");
                 return;
             }
         }
