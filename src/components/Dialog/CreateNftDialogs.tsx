@@ -1,11 +1,10 @@
 import { addNFTSteps, createNFTSteps, StepperDialog } from "./base-dialogs/Stepper";
-import { formatAddress } from "utils/address";
-import { ClipboardCopyIcon } from "@heroicons/react/solid";
 import React from "react";
 import { useRouter } from "next/router";
 import { ICreateNftDialog } from "./dialogInterfaces";
 import Link from "next/link";
 import { getChainNames } from "utils/blockchains";
+import { CopyTextButton } from "../Button/CopyTextButton";
 
 export const AddNftDialog = ({ dialog, activeStep, formData }: ICreateNftDialog) => {
     const router = useRouter();
@@ -21,14 +20,8 @@ export const AddNftDialog = ({ dialog, activeStep, formData }: ICreateNftDialog)
 
             {/*TODO: make function*/}
             <div className="flex ml-7 mb-10">
-                Contract Address:
-                <div
-                    className={"flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"}
-                    onClick={() => navigator.clipboard.writeText(formData.contractAddress)}
-                >
-                    {formatAddress(formData.contractAddress)}
-                    <ClipboardCopyIcon className="h-6 w-5" />
-                </div>
+                <div className={"mr-4"}>Contract Address:</div>
+                <CopyTextButton copyText={formData.contractAddress} />
             </div>
             <button
                 className="form-submit-button"
@@ -53,22 +46,16 @@ export const CreateNftDialog = ({ dialog, formData, activeStep }: ICreateNftDial
         >
             <p className="ml-7">Deployment successful!</p>
             <div className="flex ml-7 mb-10">
-                Contract Address:
-                <div
-                    className={"flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"}
-                    onClick={() => navigator.clipboard.writeText(formData.contractAddress)}
-                >
-                    {formatAddress(formData.contractAddress)}
-                    <ClipboardCopyIcon className="h-6 w-5" />
-                </div>
+                <div className={"mr-4"}>Contract Address:</div>
+                <CopyTextButton copyText={formData.contractAddress} />
             </div>
             <Link
                 href={{
                     pathname: "create-dao",
                     query: {
                         tokenAddress: formData.contractAddress,
-                        enabledBlockchains: getChainNames().filter((chain) => formData[chain]),
-                    },
+                        enabledBlockchains: getChainNames().filter((chain) => formData[chain])
+                    }
                 }}
             >
                 <button

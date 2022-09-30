@@ -1,9 +1,8 @@
-import { formatAddress } from "utils/address";
-import { ClipboardCopyIcon } from "@heroicons/react/solid";
 import { StepperDialog } from "./base-dialogs";
 import React from "react";
 import { useRouter } from "next/router";
 import { ICreateProposalDialog } from "./dialogInterfaces";
+import { CopyTextButton } from "../Button/CopyTextButton";
 
 export const CreateProposalDialog = ({ dialog, activeStep, formData }: ICreateProposalDialog) => {
     const router = useRouter();
@@ -12,14 +11,8 @@ export const CreateProposalDialog = ({ dialog, activeStep, formData }: ICreatePr
         <StepperDialog dialog={dialog} className="dialog" activeStep={activeStep}>
             <p>Proposal created successful!</p>
             <div className="flex mb-10">
-                Proposal Id:
-                <div
-                    className={"flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"}
-                    onClick={() => navigator.clipboard.writeText(formData.proposalId)}
-                >
-                    {formatAddress(formData.proposalId)}
-                    <ClipboardCopyIcon className="h-6 w-5" />
-                </div>
+                <div className={"mr-4"}>Proposal Id:</div>
+                <CopyTextButton copyText={formData.proposalId} />
             </div>
             <button
                 className="form-submit-button"

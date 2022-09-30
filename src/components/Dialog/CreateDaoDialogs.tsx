@@ -1,26 +1,16 @@
-import { formatAddress } from "utils/address";
-import { ClipboardCopyIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { StepperDialog } from "./base-dialogs";
 import React from "react";
 import { ICreateDaoDialog } from "./dialogInterfaces";
+import { CopyTextButton } from "../Button/CopyTextButton";
 
 export const CreateDaoDialog = ({ dialog, formData, activeStep }: ICreateDaoDialog) => {
     return (
         <StepperDialog dialog={dialog} className="dialog" activeStep={activeStep}>
             <p className="ml-7">Deployment successful!</p>
-            <div className="flex ml-7 mb-10">Contract Address:
-                <div
-                    className={
-                        "flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"
-                    }
-                    onClick={() =>
-                        navigator.clipboard.writeText(formData.governorAddress)
-                    }
-                >
-                    {formatAddress(formData.governorAddress)}
-                    <ClipboardCopyIcon className="h-6 w-5" />
-                </div>
+            <div className="flex ml-7 mb-10">
+                <div className={"mr-4"}>Contract Address:</div>
+                <CopyTextButton copyText={formData.governorAddress} />
             </div>
             <Link href={`/daos/${formData.url}`}>
                 <button
@@ -33,5 +23,5 @@ export const CreateDaoDialog = ({ dialog, formData, activeStep }: ICreateDaoDial
                 </button>
             </Link>
         </StepperDialog>
-    )
-}
+    );
+};

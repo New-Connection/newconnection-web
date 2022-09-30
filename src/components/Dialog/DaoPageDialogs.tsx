@@ -2,8 +2,7 @@ import { CustomDialog, StepperDialog } from "./base-dialogs";
 import * as React from "react";
 import { NFTImage } from "../Cards/NFTCard";
 import { getChainScanner, getTokenSymbol } from "utils/blockchains";
-import { ClipboardCopyIcon, ExternalLinkIcon } from "@heroicons/react/solid";
-import { formatAddress } from "utils/address";
+import { ExternalLinkIcon } from "@heroicons/react/solid";
 import { BlockchainImage } from "../Icons/BlockchainImage";
 import Image from "next/image";
 import { isIpfsAddress } from "utils/ipfsUpload";
@@ -13,15 +12,16 @@ import { createTreasurySteps, SpinnerLoading } from "./base-dialogs/Stepper";
 import {
     IContributeTreasuryDialog,
     ICreateTreasuryDialog,
-    IDetainNftDialog,
+    IDetainNftDialog
 } from "./dialogInterfaces";
+import { CopyTextButton } from "../Button/CopyTextButton";
 
 export const DetailNftDialog = ({
     dialog,
     DAO,
     currentNFT,
     buttonState,
-    mintButton,
+    mintButton
 }: IDetainNftDialog) => {
     return (
         <CustomDialog dialog={dialog} className="h-full items-center text-center">
@@ -58,9 +58,9 @@ export const DetailNftDialog = ({
                             <p className="font-normal text-black">{currentNFT.price}</p>
                         </li>
                         <li className="flex py-4 justify-between">
-                            <p className="font-light text-gray2">{"Token Address"}</p>
+                            <p className="font-light text-gray2 mr-4">{"Address"}</p>
                             <p className="font-normal text-black">
-                                {formatAddress(currentNFT.tokenAddress)}
+                                <CopyTextButton copyText={currentNFT.tokenAddress} />
                             </p>
                         </li>
                         <li className="flex py-4 justify-between">
@@ -85,7 +85,7 @@ export const ContributeTreasuryDialog = ({
     setSending,
     contributeAmount,
     setContributeAmount,
-    contributeToTreasuryButton,
+    contributeToTreasuryButton
 }: IContributeTreasuryDialog) => {
     return (
         <CustomDialog dialog={dialog} className="items-center text-center">
@@ -99,13 +99,7 @@ export const ContributeTreasuryDialog = ({
                 <div>
                     <div className={"text-xl capitalize font-semibold"}>{DAO.name} treasury</div>
                     {DAO.treasuryAddress ? (
-                        <div
-                            className={"flex text-lightGray hover:text-gray5 hover:cursor-pointer"}
-                            onClick={() => navigator.clipboard.writeText(DAO.treasuryAddress)}
-                        >
-                            {formatAddress(DAO.treasuryAddress)}
-                            <ClipboardCopyIcon className="h-6 w-5" />
-                        </div>
+                        <CopyTextButton copyText={DAO.treasuryAddress} />
                     ) : (
                         <></>
                     )}
@@ -151,7 +145,7 @@ export const ContributeTreasuryDialog = ({
 export const CreateTreasuryDialog = ({
     dialog,
     DAO,
-    createTreasuryStep,
+    createTreasuryStep
 }: ICreateTreasuryDialog) => {
     return (
         <StepperDialog
@@ -162,14 +156,8 @@ export const CreateTreasuryDialog = ({
         >
             <p className="ml-7">Deployment successful!</p>
             <div className="flex ml-7 mb-10">
-                Treasury Contract Address:
-                <div
-                    className={"flex ml-4 text-lightGray hover:text-gray5 hover:cursor-pointer"}
-                    onClick={() => navigator.clipboard.writeText(DAO.treasuryAddress)}
-                >
-                    {formatAddress(DAO.treasuryAddress)}
-                    <ClipboardCopyIcon className="h-6 w-5" />
-                </div>
+                <div className={"mr-4"}>Treasury Address:</div>
+                <CopyTextButton copyText={DAO.treasuryAddress} />
             </div>
             <button
                 className="form-submit-button"

@@ -55,7 +55,7 @@ const CreateNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-        ];
+            ];
     };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -197,19 +197,6 @@ const CreateNFT: NextPage = () => {
                                                 }
                                             />
                                         )
-                                        // )
-                                        // : (
-                                        //     <InputSupplyOfNFT
-                                        //         key={chain}
-                                        //         label={chain}
-                                        //         name={chain}
-                                        //         image={CHAINS_IMG[chain]}
-                                        //         handleChange={(event) => {
-                                        //             handleTextChange(event, setFormData);
-                                        //         }}
-                                        //         isDisabled={true}
-                                        //     />
-                                        // )
                                     )}
                                 </div>
                             </div>
