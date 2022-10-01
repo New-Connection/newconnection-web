@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
     DragAndDropImage,
     InputAmount,
@@ -6,7 +6,7 @@ import {
     Button,
     TypeSelector,
     InputTextArea,
-    InputSupplyOfNFT,
+    InputSupplyOfNFT
 } from "components/Form";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
@@ -21,7 +21,7 @@ import {
     handleImageChange,
     handleNftSupplyChange,
     handleSelectorChange,
-    handleTextChange,
+    handleTextChange
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
@@ -33,6 +33,7 @@ import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { addToken, deployNFTContract } from "contract-interactions";
 import { IAddNftQuery } from "types/queryInterfaces";
 import { AddNftDialog } from "components/Dialog/CreateNftDialogs";
+import { checkCorrectNetwork } from "../../../logic";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -45,15 +46,34 @@ const AddNewNFT: NextPage = () => {
         contractAddress: "",
         governorAddress: "",
         ipfsAddress: "",
-        blockchain: "",
+        blockchain: ""
     });
 
     const router = useRouter();
-    const { data: signer_data } = useSigner();
+    const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
     const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
+
+    const { fetch: DAOsQuery } = useMoralisQuery(
+        "DAO",
+        (query) => query.equalTo("governorAddress", formData.governorAddress),
+        [formData.governorAddress],
+        {
+            autoFetch: false
+        }
+    );
+
+    useEffect(() => {
+        fetchQuery();
+    }, [router]);
+
+    const fetchQuery = () => {
+        const query = router.query as IAddNftQuery;
+        handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
+        handleChangeBasic(query.blockchain, setFormData, "blockchain");
+    };
 
     const calculateSupply = () => {
         return formData[
@@ -61,17 +81,8 @@ const AddNewNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-        ];
+            ];
     };
-
-    const { fetch: DAOsQuery } = useMoralisQuery(
-        "DAO",
-        (query) => query.equalTo("governorAddress", formData.governorAddress),
-        [formData.governorAddress],
-        {
-            autoFetch: false,
-        }
-    );
 
     const saveNewNFTContractAddress = async (nftTokenAddress: string) => {
         console.log("nft token address", nftTokenAddress);
@@ -86,33 +97,21 @@ const AddNewNFT: NextPage = () => {
                 },
                 onError: (error) => {
                     console.log("Error fetching saveNewNFTContractAddress query" + error);
-                },
+                }
             });
         }
     };
 
-    useLayoutEffect(() => {
-        fetchQuery();
-    }, [router]);
-
-    const fetchQuery = () => {
-        const query = router.query as IAddNftQuery;
-        handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        handleChangeBasic(query.blockchain, setFormData, "blockchain");
-    };
-
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        if (!signer_data) {
-            toast.error("Please connect wallet");
-            return;
-        }
 
         if (!validateForm(formData, ["ipfsAddress", "contractAddress", "price"])) {
             return;
         }
 
-        switchNetwork(CHAINS[formData.blockchain].id);
+        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))) {
+            return;
+        }
 
         handleReset(setActiveStep);
         confirmDialog.toggle();
@@ -133,11 +132,11 @@ const AddNewNFT: NextPage = () => {
 
         let contract;
         try {
-            const chainId = await signer_data.getChainId();
+            const chainId = await signerData.getChainId();
             const endpoint: string =
                 layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
-            contract = await deployNFTContract(signer_data as Signer, {
+            contract = await deployNFTContract(signerData as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
                 price: formData.price.toString(),
@@ -145,7 +144,7 @@ const AddNewNFT: NextPage = () => {
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
-                endMintId: calculateSupply(),
+                endMintId: calculateSupply()
             });
             handleNext(setActiveStep);
 
@@ -153,7 +152,7 @@ const AddNewNFT: NextPage = () => {
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
             handleNext(setActiveStep);
 
-            const addTx = await addToken(formData.governorAddress, signer_data, contract.address);
+            const addTx = await addToken(formData.governorAddress, signerData, contract.address);
             handleNext(setActiveStep);
 
             await addTx.wait();
