@@ -48,6 +48,25 @@ const AddNewMember: NextPage = () => {
         }
     );
 
+    useEffect(() => {
+        console.log("fetch query");
+        const query = router.query as IAddMemberQuery;
+
+        handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
+        handleChangeBasic(query.daoName, setFormData, "daoName");
+        handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
+        handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
+
+        const saved = localStorage.getItem(query.daoName + " NFTs");
+        const initialValue = JSON.parse(saved);
+        const tokenNames = [];
+        console.log("fetch localStorage");
+        initialValue.map((object) => {
+            tokenNames.push(object.title);
+        });
+        handleAddArray(tokenNames, setFormData, "tokenNames");
+    }, [router]);
+
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
@@ -106,25 +125,6 @@ const AddNewMember: NextPage = () => {
         });
         return available;
     };
-
-    useEffect(() => {
-        console.log("fetch query");
-        const query = router.query as IAddMemberQuery;
-
-        handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
-        handleChangeBasic(query.daoName, setFormData, "daoName");
-        handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
-        handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
-
-        const saved = localStorage.getItem(query.daoName + " NFTs");
-        const initialValue = JSON.parse(saved);
-        const tokenNames = [];
-        console.log("fetch localStorage");
-        initialValue.map((object) => {
-            tokenNames.push(object.title);
-        });
-        handleAddArray(tokenNames, setFormData, "tokenNames");
-    }, [router]);
 
     return (
         <div>
