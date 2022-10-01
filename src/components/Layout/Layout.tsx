@@ -32,7 +32,7 @@ export default function Layout({
             >
                 <Header />
                 {/* <NewFeaturesBanner /> */}
-                <SwitchNetworkBanner />
+                {/* <SwitchNetworkBanner /> */}
                 <main className={classNames("flex-1 pb-36 mt-[6.5em]", className)} {...props}>
                     {children}
                 </main>
