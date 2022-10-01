@@ -190,23 +190,23 @@ export const CHAINS: {
     // MAIN CHAINS
     // ----------------------------------------------------------------------
 
-    // Aurora: {
-    //     id: 1313161554,
-    //     name: "Aurora",
-    //     network: "Aurora",
-    //     nativeCurrency: {
-    //         decimals: 18,
-    //         name: "Ethereum",
-    //         symbol: "ETH",
-    //     },
-    //     rpcUrls: {
-    //         default: `https://aurora-mainnet.infura.io/v3/${infuraId}`,
-    //     },
-    //     blockExplorers: {
-    //         default: { name: "aurorascan", url: "https://aurorascan.dev" },
-    //     },
-    //     testnet: false,
-    // },
+    Aurora: {
+        id: 1313161554,
+        name: "Aurora",
+        network: "Aurora",
+        nativeCurrency: {
+            decimals: 18,
+            name: "Ethereum",
+            symbol: "ETH",
+        },
+        rpcUrls: {
+            default: `https://aurora-mainnet.infura.io/v3/${infuraId}`,
+        },
+        blockExplorers: {
+            default: { name: "aurorascan", url: "https://aurorascan.dev" },
+        },
+        testnet: false,
+    },
 };
 
 export const getChains = (): Chain[] => {
