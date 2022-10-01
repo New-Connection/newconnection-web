@@ -21,6 +21,7 @@ export interface IProposalsQuery extends ParsedUrlQuery {
     name: string;
     governorAddress: string;
     chainId: string;
+    url: string;
 }
 
 export interface IAddMemberQuery extends ParsedUrlQuery {

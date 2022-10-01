@@ -19,24 +19,23 @@ import { IDetailProposalProps } from "types/pagePropsInterfaces";
 import { errors } from "ethers";
 import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
 import { checkCorrectNetwork } from "logic";
+import { fetchDetailProposal } from "network/fetchProposals";
 
-export const getServerSideProps: GetServerSideProps<
-    IDetailProposalProps,
-    IDetailProposalQuery
-> = async (context) => {
+export const getServerSideProps: GetServerSideProps<IDetailProposalProps,
+    IDetailProposalQuery> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;
     const result: IDetailProposalProps = {
-        detailProposal: detailProposal,
+        detailProposal: detailProposal
     };
     return {
-        props: result,
+        props: result
     };
 };
 
 const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
     const [formData, setFormData] = useState<IProposal>({
         voteResult: undefined,
-        txConfirm: "",
+        txConfirm: ""
     });
     const [activeStep, setActiveStep] = useState(0);
     const { data: signerData } = useSigner();
@@ -45,39 +44,26 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
     const [proposalData, setProposal] = useState<IProposalDetail>();
     const { switchNetwork } = useSwitchNetwork();
 
-    const { fetch } = useMoralisQuery(
+    const { fetch: ProposalDetailQuery } = useMoralisQuery(
         "Proposal",
         (query) => query.equalTo("proposalId", detailProposal),
         [],
         {
-            autoFetch: false,
+            autoFetch: false
         }
     );
 
     useEffect(() => {
-        const fetchData = async () => {
+        const loadingProposal = async () => {
             if (isInitialized) {
-                await fetch({
-                    onSuccess: async (results) => {
-                        const proposal = results[0];
-                        const newProposal: IProposalDetail = {
-                            title: proposal.get("name"),
-                            description: proposal.get("description"),
-                            shortDescription: proposal.get("shortDescription"),
-                            governorAddress: proposal.get("governorAddress"),
-                            chainId: proposal.get("chainId"),
-                        };
-                        setProposal(() => newProposal);
-                        //console.log(newProposal);
-                    },
-                    onError: (error) => {
-                        console.log("Error fetching db query" + error);
-                    },
-                });
+                const newProposal = await fetchDetailProposal(ProposalDetailQuery);
+                if (newProposal) {
+                    setProposal(() => newProposal);
+                }
             }
         };
 
-        fetchData().catch(console.error);
+        loadingProposal().catch(console.error);
     }, [isInitialized]);
 
     interface ICardProposal {
@@ -141,8 +127,8 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                 const message = e.error?.message?.includes("GovernorVotingSimple")
                     ? e.error.message
                     : e.error.data?.message?.includes("GovernorVotingSimple")
-                    ? e.error.data.message
-                    : "Execution reverted";
+                        ? e.error.data.message
+                        : "Execution reverted";
                 toast.error(message);
                 return;
             } else {

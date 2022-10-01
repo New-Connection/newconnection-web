@@ -18,7 +18,7 @@ export const ProposalsListTab = ({
     proposals,
     DAOMoralisInstance,
     daoUrl,
-    DAO,
+    DAO
 }: IProposalListTab) => {
     const visibleProposalsLength: number = 3;
     let activeProposals: IProposalPageForm[];
@@ -87,7 +87,8 @@ export const ProposalsListTab = ({
                                         name: DAO.name,
                                         governorAddress: DAO.governorAddress,
                                         chainId: DAO.chainId,
-                                    },
+                                        url: daoUrl,
+                                    }
                                 }}
                             >
                                 <button className="secondary-button mt-4">

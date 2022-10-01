@@ -19,7 +19,7 @@ import { isValidHttpUrl } from "utils/transformURL";
 import { handleChangeBasic } from "utils/handlers";
 import {
     fetchDAO,
-    fetchProposal,
+    fetchProposals,
     fetchNFT,
     fetchTreasuryBalance,
     fetchWhitelist,
@@ -137,7 +137,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         if (DAO) {
             console.log("start loading");
             const loadingProposals = async () => {
-                const proposals = await fetchProposal(ProposalQuery);
+                const proposals = await fetchProposals(ProposalQuery);
                 if (proposals) {
                     setProposals(() => proposals);
                 }

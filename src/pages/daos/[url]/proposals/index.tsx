@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { BackButton } from "components/Button/";
 import { IProposalsQuery } from "types/queryInterfaces";
 import { MockupLoadingProposals } from "components/Mockup/Loading";
-import { fetchProposal } from "network";
+import { fetchProposals } from "network";
 
 const ProposalsPage: NextPage = () => {
     const [DAO, setDAO] = useState<IDAOPageForm>();
@@ -36,6 +36,7 @@ const ProposalsPage: NextPage = () => {
             newDao.governorAddress = query.governorAddress;
             newDao.name = query.name;
             newDao.chainId = +query.chainId;
+            newDao.url = query.url;
 
             console.log(newDao);
             setDAO(() => newDao);
@@ -47,7 +48,7 @@ const ProposalsPage: NextPage = () => {
     useEffect(() => {
         if (DAO) {
             const loadingProposals = async () => {
-                const proposals = await fetchProposal(ProposalQuery);
+                const proposals = await fetchProposals(ProposalQuery);
                 if (proposals) {
                     setProposals(() => proposals);
                 }
@@ -72,7 +73,7 @@ const ProposalsPage: NextPage = () => {
                             {proposals.map((proposal) => {
                                 const proposalId = proposal.proposalId;
                                 return (
-                                    <Link href={`proposals/${proposalId}`} key={proposalId}>
+                                    <Link href={`../${DAO.url}/proposals/${proposalId}`} key={proposalId}>
                                         <li
                                             key={proposalId}
                                             className="border-b-2 border-gray cursor-pointer active:bg-gray"
