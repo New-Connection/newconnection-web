@@ -1,5 +1,5 @@
 import { timestampToDate } from "utils/basic";
-import { BlockchainImage } from "../Icons/BlockchainImage";
+import { BlockchainIcon } from "components/Icons/";
 
 interface IProposalCard {
     title: string;
@@ -15,18 +15,16 @@ interface IProposalCard {
     deadline?: number;
 }
 
-export const ProposalCard = (
-    {
-        title,
-        shortDescription,
-        tokenName,
-        isActive,
-        chainId,
-        forVotes,
-        againstVotes,
-        deadline,
-
-    }: IProposalCard) => {
+export const ProposalCard = ({
+    title,
+    shortDescription,
+    tokenName,
+    isActive,
+    chainId,
+    forVotes,
+    againstVotes,
+    deadline,
+}: IProposalCard) => {
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
     return (
@@ -54,7 +52,7 @@ export const ProposalCard = (
                             <p className="text-gray3">For</p>
                             <p className="font-medium">{tokenName}</p>
                         </div>
-                        <BlockchainImage chain={chainId} />
+                        <BlockchainIcon chain={chainId} />
                     </div>
                 </div>
 
@@ -62,16 +60,14 @@ export const ProposalCard = (
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{forV}</p>
-                            <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"In favor"}</p>
                     </div>
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{againstV}</p>
-                            <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"Against"}</p>
                     </div>
@@ -80,4 +76,3 @@ export const ProposalCard = (
         </div>
     );
 };
-

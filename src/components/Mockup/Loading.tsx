@@ -1,15 +1,16 @@
-import { BlockchainImage } from "../Icons/BlockchainImage";
+import { BlockchainIcon } from "components/Icons/";
 import * as React from "react";
 
 const getLoadingStrings = (amount: number) => {
-    const array = new Array(amount).fill(0)
+    const array = new Array(amount).fill(0);
     return (
         <div>
-            {array.map((element, index) =>
-                <div key={index} className="mt-4 mx-4 h-2.5 w-full-8 bg-gray2 rounded"></div>)}
+            {array.map((element, index) => (
+                <div key={index} className="mt-4 mx-4 h-2.5 w-full-8 bg-gray2 rounded"></div>
+            ))}
         </div>
-    )
-}
+    );
+};
 
 export const MockupLoadingDAO = () => {
     return (
@@ -27,8 +28,7 @@ export const MockupLoadingDAO = () => {
             </div>
         </div>
     );
-
-}
+};
 
 export const MockupLoadingProposals = ({ chain }: { chain: number | string }) => {
     return (
@@ -42,7 +42,7 @@ export const MockupLoadingProposals = ({ chain }: { chain: number | string }) =>
                 </div>
                 <div className="flex pt-4 justify-between">
                     <div className="h-2.5 w-14 bg-gray2 rounded"></div>
-                    <BlockchainImage chain={chain} />
+                    <BlockchainIcon chain={chain} />
                 </div>
             </div>
         </div>
@@ -61,10 +61,9 @@ export const MockupLoadingNFT = ({ chain }: { chain: number | string }) => {
                 </div>
                 <div className="flex pt-4 justify-between">
                     <div className="h-2.5 w-14 bg-gray2 rounded"></div>
-                    <BlockchainImage chain={chain} />
+                    <BlockchainIcon chain={chain} />
                 </div>
             </div>
         </div>
     );
 };
-
