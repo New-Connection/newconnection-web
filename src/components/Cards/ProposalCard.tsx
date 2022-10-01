@@ -1,5 +1,7 @@
 import { timestampToDate } from "utils/basic";
 import { BlockchainIcon } from "components/Icons/";
+import React from "react";
+import classNames from "classnames";
 
 interface IProposalCard {
     title: string;
@@ -23,7 +25,7 @@ export const ProposalCard = ({
     chainId,
     forVotes,
     againstVotes,
-    deadline,
+    deadline
 }: IProposalCard) => {
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
@@ -60,19 +62,50 @@ export const ProposalCard = ({
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{forV}</p>
-                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                            <span
+                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"In favor"}</p>
                     </div>
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{againstV}</p>
-                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                            <span
+                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"Against"}</p>
                     </div>
                 </div>
             </div>
         </div>
+    );
+};
+
+
+interface ICardProposal {
+    title: string;
+    children?: React.ReactNode;
+    className?: string;
+}
+
+const CardProposal = ({ title, children, className }: ICardProposal) => {
+    return (
+        <div
+            className={classNames(
+                "w-full h-64 border-2 border-gray rounded-xl mt-6 p-4",
+                className
+            )}
+        >
+            <p className="text-purple mb-4 text-lg">{title}</p>
+            {children}
+        </div>
+    );
+};
+
+export const AboutProposalCard = ({ description }) => {
+    return (
+        <CardProposal title="About" className="lg:w-1/3 w-full">
+            <p className="text-sm line-clamp-6">{description}</p>
+        </CardProposal>
     );
 };

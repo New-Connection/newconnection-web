@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import classNames from "classnames";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { useDialogState } from "ariakit";
 import toast from "react-hot-toast";
@@ -20,6 +19,7 @@ import { errors } from "ethers";
 import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
 import { checkCorrectNetwork } from "logic";
 import { fetchDetailProposal } from "network/fetchProposals";
+import { AboutProposalCard } from "components/Cards/ProposalCard";
 
 export const getServerSideProps: GetServerSideProps<IDetailProposalProps,
     IDetailProposalQuery> = async (context) => {
@@ -65,34 +65,6 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
 
         loadingProposal().catch(console.error);
     }, [isInitialized]);
-
-    interface ICardProposal {
-        title: string;
-        children?: React.ReactNode;
-        className?: string;
-    }
-
-    const CardProposal = ({ title, children, className }: ICardProposal) => {
-        return (
-            <div
-                className={classNames(
-                    "w-full h-64 border-2 border-gray rounded-xl mt-6 p-4",
-                    className
-                )}
-            >
-                <p className="text-purple mb-4 text-lg">{title}</p>
-                {children}
-            </div>
-        );
-    };
-
-    const AboutCard = ({ description }) => {
-        return (
-            <CardProposal title="About" className="lg:w-1/3 w-full">
-                <p className="text-sm line-clamp-6">{description}</p>
-            </CardProposal>
-        );
-    };
 
     // send voted
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -149,11 +121,10 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <div className="flex">
                             <h1 className="text-highlighter w-1/2">{proposalData.title}</h1>
-                            {/* <BadgeIsActive isActive={false} /> */}
                         </div>
                         <p className="pb-4">{proposalData.shortDescription}</p>
                         <div className="flex gap-6 pb-10">
-                            <AboutCard description={proposalData.description} />
+                            <AboutProposalCard description={proposalData.description} />
                         </div>
                         <RadioSelector
                             name="voteResult"
