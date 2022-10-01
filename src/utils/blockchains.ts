@@ -165,48 +165,48 @@ export const CHAINS: {
         testnet: true,
     },
 
-    "Skale Testnet": {
-        id: 0x2696efe5,
-        name: "Skale Testnet",
-        network: "Skale",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Skale",
-            symbol: "SFUEL",
-        },
-        rpcUrls: {
-            default: "https://eth-online.skalenodes.com/v1/hackathon-complex-easy-naos",
-        },
-        blockExplorers: {
-            default: {
-                name: "skalescan",
-                url: "https://hackathon-complex-easy-naos.explorer.eth-online.skalenodes.com",
-            },
-        },
-        testnet: true,
-    },
+    // "Skale Testnet": {
+    //     id: 0x2696efe5,
+    //     name: "Skale Testnet",
+    //     network: "Skale",
+    //     nativeCurrency: {
+    //         decimals: 18,
+    //         name: "Skale",
+    //         symbol: "SFUEL",
+    //     },
+    //     rpcUrls: {
+    //         default: "https://eth-online.skalenodes.com/v1/hackathon-complex-easy-naos",
+    //     },
+    //     blockExplorers: {
+    //         default: {
+    //             name: "skalescan",
+    //             url: "https://hackathon-complex-easy-naos.explorer.eth-online.skalenodes.com",
+    //         },
+    //     },
+    //     testnet: true,
+    // },
 
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
 
-    Aurora: {
-        id: 1313161554,
-        name: "Aurora",
-        network: "Aurora",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Ethereum",
-            symbol: "ETH",
-        },
-        rpcUrls: {
-            default: `https://aurora-mainnet.infura.io/v3/${infuraId}`,
-        },
-        blockExplorers: {
-            default: { name: "aurorascan", url: "https://aurorascan.dev" },
-        },
-        testnet: false,
-    },
+    // Aurora: {
+    //     id: 1313161554,
+    //     name: "Aurora",
+    //     network: "Aurora",
+    //     nativeCurrency: {
+    //         decimals: 18,
+    //         name: "Ethereum",
+    //         symbol: "ETH",
+    //     },
+    //     rpcUrls: {
+    //         default: `https://aurora-mainnet.infura.io/v3/${infuraId}`,
+    //     },
+    //     blockExplorers: {
+    //         default: { name: "aurorascan", url: "https://aurorascan.dev" },
+    //     },
+    //     testnet: false,
+    // },
 };
 
 export const getChains = (): Chain[] => {

@@ -29,6 +29,8 @@ export const NetworksMenu = () => {
 
     const currentChains = chains.filter((chain) => getChainIds().includes(chain.id));
 
+    const mainnets = currentChains.filter((chain) => !chain.testnet);
+
     const nameChain = getChainNames().find((name) => name === chain.name);
 
     return (
@@ -60,34 +62,39 @@ export const NetworksMenu = () => {
                     state={select}
                     className="shadow-2 z-10 max-h-[280px] w-fit min-w-[13rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
-                    <SelectGroup>
-                        <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">
-                            Mainnets
-                        </SelectGroupLabel>
-                        {currentChains
-                            .filter((chain) => !chain.testnet)
-                            .map((chain) => {
-                                return (
-                                    <SelectItem
-                                        key={chain.id}
-                                        value={chain.id?.toString()}
-                                        className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
-                                        onClick={() => switchNetwork?.(chain.id)}
-                                    >
-                                        <Image
-                                            src={getLogoURI(chain.id) ?? ASSETS.defaultToken}
-                                            alt={chain.name}
-                                            objectFit="contain"
-                                            width="20px"
-                                            height="20px"
-                                            priority
-                                        />
-                                        <span>{chain.name}</span>
-                                    </SelectItem>
-                                );
-                            })}
-                    </SelectGroup>
-                    <SelectSeparator className="my-2" />
+                    {mainnets.length > 0 ? (
+                        <>
+                            <SelectGroup>
+                                <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500">
+                                    Mainnets
+                                </SelectGroupLabel>
+                                {mainnets.map((chain) => {
+                                    return (
+                                        <SelectItem
+                                            key={chain.id}
+                                            value={chain.id?.toString()}
+                                            className="btn-state flex rounded-md scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-graySupport outline-none cursor-pointer aria-disabled:opacity-40 "
+                                            onClick={() => switchNetwork?.(chain.id)}
+                                        >
+                                            <Image
+                                                src={getLogoURI(chain.id) ?? ASSETS.defaultToken}
+                                                alt={chain.name}
+                                                objectFit="contain"
+                                                width="20px"
+                                                height="20px"
+                                                priority
+                                            />
+                                            <span>{chain.name}</span>
+                                        </SelectItem>
+                                    );
+                                })}
+                            </SelectGroup>
+                            <SelectSeparator className="my-2" />
+                        </>
+                    ) : (
+                        <></>
+                    )}
+
                     <SelectGroup>
                         <SelectGroupLabel className="p-2 text-sm font-normal text-graySupport">
                             Test Chains
