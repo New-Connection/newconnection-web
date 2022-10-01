@@ -16,9 +16,9 @@ import { TabsType } from "types/tabs";
 const TabOne: FC = () => {
     return (
         <div>
-            <DAOCard />
-            <DAOCard />
-            <DAOCard />
+            {/* //     <DAOCard />
+        //     <DAOCard />
+        //     <DAOCard /> */}
         </div>
     );
 };
@@ -27,9 +27,9 @@ const TabTwo: FC = () => {
     return (
         <div>
             <p>Administration</p>
+            {/* <DAOCard />
             <DAOCard />
-            <DAOCard />
-            <DAOCard />
+            <DAOCard /> */}
         </div>
     );
 };
@@ -98,9 +98,9 @@ const Home: NextPage = () => {
         return (
             <>
                 <ReccomendationHeader title="Reccomendation DAO" isFirstTime={true} />
+                {/* <DAOCard />
                 <DAOCard />
-                <DAOCard />
-                <DAOCard />
+                <DAOCard /> */}
                 <ViewAll />
             </>
         );
