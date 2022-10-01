@@ -7,7 +7,6 @@ import { Moralis } from "moralis-v1";
 import ASSETS from "assets/index";
 import { getChainScanner } from "utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
-import Tabs from "components/Tabs/Tabs";
 import { IDAOPageForm, INFTVoting, IProposalPageForm, IWhitelistPageForm } from "types/forms";
 import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
@@ -29,8 +28,7 @@ import { BlockchainImage } from "components/Icons/BlockchainImage";
 import { MockupLoadingDAO, MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
 import { NFTCard } from "components/Cards/NFTCard";
-import { ProposalsListTab } from "components/Tabs/ProposalsListTab";
-import { WhitelistTab } from "components/Tabs/WhitelistTab";
+import { ProposalsListTab, WhitelistTab, Tabs } from "components/Tabs/";
 import { DAOPageProps } from "types/pagePropsInterfaces";
 import { ButtonState } from "types/daoIntefaces";
 import {

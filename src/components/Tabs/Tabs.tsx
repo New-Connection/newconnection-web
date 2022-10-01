@@ -20,7 +20,7 @@ type TabsProps = {
  * @param selectedTab number
  * @param onClick Function to set the active tab
  */
-const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, isLoaded }) => {
+export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, isLoaded }) => {
     const Panel = tabs && tabs.find((tab) => tab.index === selectedTab);
     return (
         <div>
@@ -48,11 +48,10 @@ const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, isLoade
                 <Link href={url}>
                     <button
                         className={
-                            isLoaded
-                                ? "secondary-button"
-                                : "secondary-button bg-gray hover:bg-gray"
+                            isLoaded ? "secondary-button" : "secondary-button bg-gray hover:bg-gray"
                         }
-                        disabled={!isLoaded}>
+                        disabled={!isLoaded}
+                    >
                         Add new proposal
                     </button>
                 </Link>
@@ -63,4 +62,3 @@ const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, isLoade
         </div>
     );
 };
-export default Tabs;

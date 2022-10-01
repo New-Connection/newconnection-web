@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 import Link from "next/link";
 import ASSETS from "assets/index";
 import { useDialogState } from "ariakit";
-import Tabs from "components/Tabs/Tabs";
+import { Tabs } from "components/Tabs/";
 import DAOCard from "components/Cards/DAOCard";
 import { useIsMounted } from "hooks";
 import DAOsPage from "./daos/index";
