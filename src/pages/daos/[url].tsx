@@ -24,10 +24,10 @@ import {
     fetchTreasuryBalance,
     fetchWhitelist,
 } from "network/index";
-import { BlockchainImage } from "components/Icons/BlockchainImage";
+import { BlockchainIcon } from "components/Icons/";
 import { MockupLoadingDAO, MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
-import { NFTCard } from "components/Cards/NFTCard";
+import { NFTCard } from "components/Cards/";
 import { ProposalsListTab, WhitelistTab, Tabs } from "components/Tabs/";
 import { DAOPageProps } from "types/pagePropsInterfaces";
 import { ButtonState } from "types/daoIntefaces";
@@ -303,7 +303,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         </a>
                         <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                             <p className="text-xs">Blockchain</p>
-                            <BlockchainImage chain={DAO.blockchain[0]} />
+                            <BlockchainIcon chain={DAO.blockchain[0]} />
                         </div>
 
                         {DAO.discordURL ? (

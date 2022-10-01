@@ -1,9 +1,9 @@
 import { CustomDialog, StepperDialog } from "./base-dialogs";
 import * as React from "react";
-import { NFTImage } from "../Cards/NFTCard";
+import { NFTImage } from "components/Cards/";
 import { getChainScanner, getTokenSymbol } from "utils/blockchains";
 import { ExternalLinkIcon } from "@heroicons/react/solid";
-import { BlockchainImage } from "../Icons/BlockchainImage";
+import { BlockchainIcon } from "components/Icons/";
 import Image from "next/image";
 import { isIpfsAddress } from "utils/ipfsUpload";
 import ASSETS from "assets";
@@ -66,7 +66,7 @@ export const DetailNftDialog = ({
                         <li className="flex py-4 justify-between">
                             <p className="font-light text-gray2">{"Blockchain"}</p>
                             <p className="font-normal text-black">
-                                <BlockchainImage chain={DAO.blockchain[0]} />
+                                <BlockchainIcon chain={DAO.blockchain[0]} />
                             </p>
                         </li>
                     </ul>

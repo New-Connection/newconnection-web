@@ -2,7 +2,7 @@ import * as React from "react";
 import Image from "next/image";
 import ASSETS from "assets/index";
 
-const DAOCard = (props) => {
+export const DAOCard = (props) => {
     return (
         <div className="flex my-4 gap-16">
             <Image src={ASSETS.daoLogoMock} width="125" height="125" layout="fixed" />
@@ -26,5 +26,3 @@ const DAOCard = (props) => {
         </div>
     );
 };
-
-export default DAOCard;

@@ -3,7 +3,7 @@ import { getLogoURI } from "utils/blockchains";
 import ASSETS from "assets";
 import * as React from "react";
 
-export const BlockchainImage = ({ chain }: { chain: number | string }) => {
+export const BlockchainIcon = ({ chain }: { chain: number | string }) => {
     return (
         <Image
             src={chain ? getLogoURI(chain) : ASSETS.defaultToken}

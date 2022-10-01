@@ -3,11 +3,10 @@ import ASSETS from "assets";
 import Image from "next/image";
 import classNames from "classnames";
 import { formatAddress } from "utils/address";
-import { BlockchainImage } from "../Icons/BlockchainImage";
+import { BlockchainIcon } from "components/Icons/";
 import { INFTVoting } from "types/forms";
 import { DisclosureState } from "ariakit";
 import { ButtonState } from "types/daoIntefaces";
-
 
 interface INFTImage {
     image?: string;
@@ -33,12 +32,18 @@ export const NFTImage = ({ className, image }: INFTImage) => {
 interface INFTCard {
     nftObject: INFTVoting;
     setCurrentNFT: React.Dispatch<React.SetStateAction<INFTVoting>>;
-    setButtonState: React.Dispatch<React.SetStateAction<ButtonState>>
+    setButtonState: React.Dispatch<React.SetStateAction<ButtonState>>;
     detailNFTDialog: DisclosureState;
     chain: number | string;
 }
 
-export const NFTCard = ({ nftObject, setCurrentNFT, setButtonState, detailNFTDialog, chain }: INFTCard) => {
+export const NFTCard = ({
+    nftObject,
+    setCurrentNFT,
+    setButtonState,
+    detailNFTDialog,
+    chain,
+}: INFTCard) => {
     return (
         <button
             className="nft-card"
@@ -59,7 +64,7 @@ export const NFTCard = ({ nftObject, setCurrentNFT, setButtonState, detailNFTDia
                     <p className="font-light text-sm text-[#AAAAAA]">
                         {formatAddress(nftObject.tokenAddress)}
                     </p>
-                    <BlockchainImage chain={chain} />
+                    <BlockchainIcon chain={chain} />
                 </div>
             </div>
         </button>

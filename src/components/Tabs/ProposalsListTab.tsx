@@ -1,20 +1,25 @@
 import { IDAOPageForm, IProposalPageForm } from "types/forms";
 import { saveMoralisInstance } from "database/interactions";
 import Link from "next/link";
-import { ProposalCard } from "../Cards/ProposalCard";
+import { ProposalCard } from "components/Cards/";
 import { MockupTextCard } from "../Mockup";
 import { MockupLoadingProposals } from "../Mockup/Loading";
 import * as React from "react";
 import { Moralis } from "moralis-v1";
 
 interface IProposalListTab {
-    DAOMoralisInstance: Moralis.Object<Moralis.Attributes>,
-    DAO: IDAOPageForm,
-    proposals: IProposalPageForm[],
-    daoUrl: string,
+    DAOMoralisInstance: Moralis.Object<Moralis.Attributes>;
+    DAO: IDAOPageForm;
+    proposals: IProposalPageForm[];
+    daoUrl: string;
 }
 
-export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }: IProposalListTab) => {
+export const ProposalsListTab = ({
+    proposals,
+    DAOMoralisInstance,
+    daoUrl,
+    DAO,
+}: IProposalListTab) => {
     const visibleProposalsLength: number = 3;
     let activeProposals: IProposalPageForm[];
     if (proposals && proposals.length > 0 && DAOMoralisInstance) {
@@ -97,13 +102,15 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
             </>
         );
     } else if (proposals && proposals.length === 0) {
-        return <MockupTextCard
-            label={"No proposals here yet"}
-            text={
-                "You should first add NFTs so that members can vote " +
-                "then click the button “Add new proposal” and initiate a proposal"
-            }
-        />
+        return (
+            <MockupTextCard
+                label={"No proposals here yet"}
+                text={
+                    "You should first add NFTs so that members can vote " +
+                    "then click the button “Add new proposal” and initiate a proposal"
+                }
+            />
+        );
     } else {
         return <MockupLoadingProposals chain={DAO.blockchain[0]} />;
     }

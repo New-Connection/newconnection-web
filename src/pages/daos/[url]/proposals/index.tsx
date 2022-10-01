@@ -10,7 +10,7 @@ import {
     proposalDeadline,
     proposalForVotes,
 } from "contract-interactions";
-import { ProposalCard } from "components/Cards/ProposalCard";
+import { ProposalCard } from "components/Cards/";
 import * as React from "react";
 import { useRouter } from "next/router";
 import { BackButton } from "components/Button/";
