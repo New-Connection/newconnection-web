@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { ICreateNftDialog } from "./dialogInterfaces";
 import Link from "next/link";
 import { getChainNames } from "utils/blockchains";
-import { CopyTextButton } from "../Button/CopyTextButton";
+import { CopyTextButton } from "components/Button/";
 
 export const AddNftDialog = ({ dialog, activeStep, formData }: ICreateNftDialog) => {
     const router = useRouter();
@@ -54,8 +54,8 @@ export const CreateNftDialog = ({ dialog, formData, activeStep }: ICreateNftDial
                     pathname: "create-dao",
                     query: {
                         tokenAddress: formData.contractAddress,
-                        enabledBlockchains: getChainNames().filter((chain) => formData[chain])
-                    }
+                        enabledBlockchains: getChainNames().filter((chain) => formData[chain]),
+                    },
                 }}
             >
                 <button

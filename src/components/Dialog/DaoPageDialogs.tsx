@@ -12,16 +12,16 @@ import { createTreasurySteps, SpinnerLoading } from "./base-dialogs/Stepper";
 import {
     IContributeTreasuryDialog,
     ICreateTreasuryDialog,
-    IDetainNftDialog
+    IDetainNftDialog,
 } from "./dialogInterfaces";
-import { CopyTextButton } from "../Button/CopyTextButton";
+import { CopyTextButton } from "components/Button/";
 
 export const DetailNftDialog = ({
     dialog,
     DAO,
     currentNFT,
     buttonState,
-    mintButton
+    mintButton,
 }: IDetainNftDialog) => {
     return (
         <CustomDialog dialog={dialog} className="h-full items-center text-center">
@@ -85,7 +85,7 @@ export const ContributeTreasuryDialog = ({
     setSending,
     contributeAmount,
     setContributeAmount,
-    contributeToTreasuryButton
+    contributeToTreasuryButton,
 }: IContributeTreasuryDialog) => {
     return (
         <CustomDialog dialog={dialog} className="items-center text-center">
@@ -145,7 +145,7 @@ export const ContributeTreasuryDialog = ({
 export const CreateTreasuryDialog = ({
     dialog,
     DAO,
-    createTreasuryStep
+    createTreasuryStep,
 }: ICreateTreasuryDialog) => {
     return (
         <StepperDialog

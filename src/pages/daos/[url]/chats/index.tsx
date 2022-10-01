@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 
 import Layout from "components/Layout/Layout";
-import BackButton from "components/Button/backButton";
+import { BackButton } from "components/Button/";
 import { handleAddArray, handleChangeBasic, handleChangeBasicArray } from "utils/handlers";
 import { IAddNewMember } from "types/forms";
 import { formatAddress } from "utils/address";
@@ -105,17 +105,15 @@ const ChatsPage: NextPage = () => {
                                                     console.log("Index", index);
                                                 }}
                                                 //TODO change condition
-                                                disabled={
-                                                    !indexOfOpenChatsForUser.includes(index)
-                                                }
+                                                disabled={!indexOfOpenChatsForUser.includes(index)}
                                             >
                                                 <div className="w-full">
                                                     <div className="text-lg font-semibold">
                                                         {chatName}
                                                     </div>
                                                     <span className="text-gray-500">
-                                                            DAO members
-                                                        </span>
+                                                        DAO members
+                                                    </span>
                                                 </div>
                                                 {indexOfOpenChatsForUser.includes(index) ? (
                                                     <></>
@@ -144,15 +142,14 @@ const ChatsPage: NextPage = () => {
                                     <div className="w-full px-5 flex flex-col justify-between">
                                         <div className="flex flex-col mt-5 items-center content-center">
                                             <p>
-                                                Join to one of DAOs and get NFT-membership to
-                                                get access
+                                                Join to one of DAOs and get NFT-membership to get
+                                                access
                                             </p>
                                         </div>
                                     </div>
                                 )}
                             </div>
                         </div>
-
                     </form>
                 </section>
             </Layout>

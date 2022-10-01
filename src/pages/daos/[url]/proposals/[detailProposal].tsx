@@ -6,11 +6,11 @@ import toast from "react-hot-toast";
 import type { GetServerSideProps, NextPage } from "next";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import Layout from "components/Layout/Layout";
-import BackButton from "components/Button/backButton";
+import { BackButton } from "components/Button/";
 import { Button, RadioSelector } from "components/Form";
 import { validateForm } from "utils/validate";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { IProposal, IProposalDetail } from "types/forms";
+import { IProposalDetail, IProposal } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";
 import { castVote } from "contract-interactions/writeGovernorContract";
@@ -20,8 +20,10 @@ import { errors } from "ethers";
 import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
 import { checkCorrectNetwork } from "logic";
 
-export const getServerSideProps: GetServerSideProps<IDetailProposalProps,
-    IDetailProposalQuery> = async (context) => {
+export const getServerSideProps: GetServerSideProps<
+    IDetailProposalProps,
+    IDetailProposalQuery
+> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;
     const result: IDetailProposalProps = {
         detailProposal: detailProposal,
@@ -63,7 +65,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                             description: proposal.get("description"),
                             shortDescription: proposal.get("shortDescription"),
                             governorAddress: proposal.get("governorAddress"),
-                            chainId: proposal.get("chainId")
+                            chainId: proposal.get("chainId"),
                         };
                         setProposal(() => newProposal);
                         //console.log(newProposal);
@@ -139,8 +141,8 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                 const message = e.error?.message?.includes("GovernorVotingSimple")
                     ? e.error.message
                     : e.error.data?.message?.includes("GovernorVotingSimple")
-                        ? e.error.data.message
-                        : "Execution reverted";
+                    ? e.error.data.message
+                    : "Execution reverted";
                 toast.error(message);
                 return;
             } else {

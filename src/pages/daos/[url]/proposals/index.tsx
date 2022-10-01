@@ -13,7 +13,7 @@ import {
 import { ProposalCard } from "components/Cards/ProposalCard";
 import * as React from "react";
 import { useRouter } from "next/router";
-import BackButton from "components/Button/backButton";
+import { BackButton } from "components/Button/";
 import { IProposalsQuery } from "types/queryInterfaces";
 import { MockupLoadingProposals } from "components/Mockup/Loading";
 

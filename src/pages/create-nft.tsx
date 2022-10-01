@@ -25,7 +25,7 @@ import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { handleReset, handleNext } from "components/Dialog/base-dialogs";
 import { deployNFTContract } from "contract-interactions/";
-import BackButton from "components/Button/backButton";
+import { BackButton } from "components/Button/";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
@@ -55,7 +55,7 @@ const CreateNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-            ];
+        ];
     };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -175,29 +175,27 @@ const CreateNFT: NextPage = () => {
                                     <div className="input-label"> NFT Supply</div>
                                 </label>
                                 <div className="grid w-full grid-cols-4 gap-4">
-                                    {getChainNames().map(
-                                        (chain) => (
-                                            // chain === "Polygon" ? (
-                                            <InputSupplyOfNFT
-                                                key={chain}
-                                                label={chain}
-                                                name={chain}
-                                                image={getLogoURI(chain)}
-                                                handleChange={(event) => {
-                                                    handleNftSupplyChange(
-                                                        event,
-                                                        setFormData,
-                                                        chain,
-                                                        "blockchain"
-                                                    );
-                                                }}
-                                                isDisabled={
-                                                    chain !== formData.blockchain &&
-                                                    formData.blockchain !== ""
-                                                }
-                                            />
-                                        )
-                                    )}
+                                    {getChainNames().map((chain) => (
+                                        // chain === "Polygon" ? (
+                                        <InputSupplyOfNFT
+                                            key={chain}
+                                            label={chain}
+                                            name={chain}
+                                            image={getLogoURI(chain)}
+                                            handleChange={(event) => {
+                                                handleNftSupplyChange(
+                                                    event,
+                                                    setFormData,
+                                                    chain,
+                                                    "blockchain"
+                                                );
+                                            }}
+                                            isDisabled={
+                                                chain !== formData.blockchain &&
+                                                formData.blockchain !== ""
+                                            }
+                                        />
+                                    ))}
                                 </div>
                             </div>
                             <div className="lg:w-1/3 lg:ml-10">

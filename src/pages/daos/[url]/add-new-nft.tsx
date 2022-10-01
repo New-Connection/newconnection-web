@@ -26,7 +26,7 @@ import {
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import BackButton from "components/Button/backButton";
+import { BackButton } from "components/Button/";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
@@ -61,7 +61,7 @@ const AddNewNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-            ];
+        ];
     };
 
     const { fetch: DAOsQuery } = useMoralisQuery(

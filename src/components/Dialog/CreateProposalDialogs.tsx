@@ -2,7 +2,7 @@ import { StepperDialog } from "./base-dialogs";
 import React from "react";
 import { useRouter } from "next/router";
 import { ICreateProposalDialog } from "./dialogInterfaces";
-import { CopyTextButton } from "../Button/CopyTextButton";
+import { CopyTextButton } from "components/Button/";
 
 export const CreateProposalDialog = ({ dialog, activeStep, formData }: ICreateProposalDialog) => {
     const router = useRouter();

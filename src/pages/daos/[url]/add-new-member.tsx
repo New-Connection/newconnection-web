@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
 import { Button, InputTextArea, RadioSelectorMulti } from "components/Form";
-import BackButton from "components/Button/backButton";
+import { BackButton } from "components/Button/";
 import { validateForm } from "utils/validate";
 import { IAddNewMember } from "types/forms";
 import {
