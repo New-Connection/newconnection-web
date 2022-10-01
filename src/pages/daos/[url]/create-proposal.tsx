@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import toast from "react-hot-toast";
 import { IMultiNFTVoting } from "types/forms";
@@ -10,14 +10,14 @@ import {
     handleChangeBasic,
     handleTextChangeAddNewMember,
     handleAddArray,
-    handleChangeBasicArray,
+    handleChangeBasicArray
 } from "utils/handlers";
 import {
     CheckboxGroup,
     InputText,
     Button,
     InputTextArea,
-    RadioSelectorMulti,
+    RadioSelectorMulti
 } from "components/Form";
 import { ICreateProposal } from "types/forms";
 import { BackButton } from "components/Button/";
@@ -30,15 +30,14 @@ import {
     getMoralisInstance,
     MoralisClassEnum,
     saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
+    setFieldsIntoMoralisInstance
 } from "database/interactions";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 import { getChainNames } from "utils/blockchains";
 import { ICreateProposalQuery } from "types/queryInterfaces";
 import { CreateProposalDialog } from "components/Dialog/CreateProposalDialogs";
-
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+import { fetchDAO } from "network";
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
@@ -50,7 +49,7 @@ const CreateProposal: NextPage = () => {
         description: "",
         options: [],
         blockchain: [],
-        enabledBlockchains: [],
+        enabledBlockchains: []
     });
     const router = useRouter();
     const [votingNFTs, setVotingNFTs] = useState<IMultiNFTVoting>();
@@ -59,77 +58,69 @@ const CreateProposal: NextPage = () => {
     const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
-    const firstUpdate = useRef(true);
 
-    const { fetch } = useMoralisQuery(
+    const { fetch: DaoQuery } = useMoralisQuery(
         "DAO",
         (query) => {
             return query.equalTo("governorAddress", formData.governorAddress);
         },
         [formData.governorAddress],
         {
-            autoFetch: false,
+            autoFetch: false
         }
     );
 
-    const fetchData = async () => {
-        console.log("isInitialized: ", isInitialized);
-        if (isInitialized) {
-            await fetch({
-                onSuccess: async (results) => {
-                    const votingTokens = results[0];
-                    const newVotingTokens: IMultiNFTVoting = {
-                        daoAddress: await votingTokens.get("governorAddress"),
-                        tokenAddress: await votingTokens.get("tokenAddress"),
-                        daoName: await votingTokens.get("name"),
-                    };
-                    setVotingNFTs(() => newVotingTokens);
-
-                    const saved = localStorage.getItem(newVotingTokens.daoName + " NFTs");
-                    const initialValue = JSON.parse(saved);
-                    // console.log("saved", initialValue);
-                    let tokensNames = [];
-                    initialValue.map((object) => {
-                        tokensNames.push(object.title);
-                    });
-                    handleAddArray(tokensNames, setVotingNFTs, "tokenNames");
-                },
-                onError: (error) => {
-                    console.log("Error fetching db query" + error);
-                },
-            });
-        }
-    };
-
-    const setupData = async () => {
+    useEffect(() => {
         const query = router.query as ICreateProposalQuery;
-        // console.log(query)
+
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
         handleChangeBasic(query.chainId, setFormData, "chainId");
-    };
-
-    useEffect(() => {
-        setupData();
     }, [router]);
 
-    useIsomorphicLayoutEffect(() => {
-        if (formData.governorAddress && firstUpdate.current) {
-            console.log("IsomorphicLayout", formData.governorAddress);
-            firstUpdate.current = false;
-            fetchData();
+    useEffect(() => {
+        if (formData.governorAddress) {
+            console.log("fetch dao");
+
+            const fetchLocalStorage = (newVotingTokens: IMultiNFTVoting) => {
+                const tokensNames = [];
+
+                const saved = localStorage.getItem(newVotingTokens.daoName + " NFTs");
+                const initialValue = JSON.parse(saved);
+                initialValue.map((object) => {
+                    tokensNames.push(object.title);
+                });
+
+                return tokensNames;
+            };
+
+            const fetchData = async () => {
+                const { newDao: dao } = await fetchDAO(isInitialized, DaoQuery);
+                if (dao) {
+                    const newVotingTokens: IMultiNFTVoting = {
+                        daoAddress: dao.governorAddress,
+                        tokenAddress: dao.tokenAddress,
+                        daoName: dao.name
+                    };
+
+                    setVotingNFTs(() => newVotingTokens);
+                    handleAddArray(fetchLocalStorage(newVotingTokens), setVotingNFTs, "tokenNames");
+                }
+            };
+
+            fetchData().catch(console.error);
         }
-    });
+    }, [formData.governorAddress]);
 
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        if (!signer_data) {
-            toast.error("Please connect wallet");
+        if (!validateForm(formData, ["options"])) {
             return;
         }
 
-        if (!validateForm(formData, ["options"])) {
+        if (!signer_data) {
+            toast.error("Please connect wallet");
             return;
         }
 
