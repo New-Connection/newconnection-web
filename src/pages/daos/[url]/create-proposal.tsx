@@ -38,6 +38,7 @@ import { getChainNames } from "utils/blockchains";
 import { ICreateProposalQuery } from "types/queryInterfaces";
 import { CreateProposalDialog } from "components/Dialog/CreateProposalDialogs";
 import { fetchDAO } from "network";
+import { checkCorrectNetwork } from "logic";
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
@@ -53,7 +54,7 @@ const CreateProposal: NextPage = () => {
     });
     const router = useRouter();
     const [votingNFTs, setVotingNFTs] = useState<IMultiNFTVoting>();
-    const { data: signer_data } = useSigner();
+    const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
     const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
@@ -119,12 +120,9 @@ const CreateProposal: NextPage = () => {
             return;
         }
 
-        if (!signer_data) {
-            toast.error("Please connect wallet");
+        if (!(await checkCorrectNetwork(signerData, formData.chainId, switchNetwork))) {
             return;
         }
-
-        switchNetwork(formData.chainId);
 
         handleReset(setActiveStep);
         confirmDialog.toggle();
@@ -134,7 +132,7 @@ const CreateProposal: NextPage = () => {
         try {
             proposalId = await createProposal(
                 formData.governorAddress,
-                signer_data as Signer,
+                signerData as Signer,
                 formData.name,
                 formData.tokenAddress
             );
@@ -150,7 +148,7 @@ const CreateProposal: NextPage = () => {
         }
 
         try {
-            const chainId = await signer_data.getChainId();
+            const chainId = await signerData.getChainId();
             handleChangeBasic(chainId.toString(), setFormData, "chainId");
             const moralisProposal = getMoralisInstance(MoralisClassEnum.PROPOSAL);
             setFieldsIntoMoralisInstance(moralisProposal, formData);

@@ -13,14 +13,14 @@ import {
     InputAmount,
     InputText,
     InputTextArea,
-    Button,
+    Button
 } from "components/Form";
 import {
     handleChangeBasic,
     handleCheckboxChange,
     handleImageChange,
     handleTextChange,
-    handleChangeBasicSimple,
+    handleChangeBasicSimple
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/";
 import { BLOCKS_IN_DAY } from "utils/constants";
@@ -28,7 +28,7 @@ import {
     getMoralisInstance,
     MoralisClassEnum,
     saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
+    setFieldsIntoMoralisInstance
 } from "database/interactions";
 import { useRouter } from "next/router";
 import { handleReset, handleNext } from "components/Dialog/base-dialogs";
@@ -37,6 +37,7 @@ import { storeNFT } from "utils/ipfsUpload";
 import { useMoralisQuery } from "react-moralis";
 import { ICreateDaoQuery } from "types/queryInterfaces";
 import { CreateDaoDialog } from "components/Dialog/CreateDaoDialogs";
+import { checkCorrectNetwork } from "logic";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 
@@ -60,10 +61,10 @@ const CreateDAO: NextPage = () => {
         type: [],
         blockchain: [],
         description: "",
-        isActive: false,
+        isActive: false
     });
 
-    const { data: signer_data } = useSigner();
+    const { data: signerData } = useSigner();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
 
@@ -74,7 +75,7 @@ const CreateDAO: NextPage = () => {
         (query) => query.equalTo("url", formData.url),
         [formData.url],
         {
-            autoFetch: false,
+            autoFetch: false
         }
     );
 
@@ -85,7 +86,7 @@ const CreateDAO: NextPage = () => {
                 available = results.length === 0;
             },
             onError: (e) => {
-                console.log("error" + e)
+                console.log("error" + e);
             }
         });
         return available;
@@ -110,10 +111,6 @@ const CreateDAO: NextPage = () => {
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(formData);
-        if (!signer_data) {
-            toast.error("Please connect wallet");
-            return;
-        }
 
         if (!validateForm(formData)) {
             return;
@@ -126,7 +123,9 @@ const CreateDAO: NextPage = () => {
         }
         console.log(formData.url);
 
-        switchNetwork(CHAINS[formData.blockchain[0]].id);
+        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain[0]].id, switchNetwork))) {
+            return;
+        }
 
         handleReset(setActiveStep);
         confirmDialog.toggle();
@@ -160,11 +159,11 @@ const CreateDAO: NextPage = () => {
 
         let contract;
         try {
-            contract = await deployGovernorContract(signer_data as Signer, {
+            contract = await deployGovernorContract(signerData as Signer, {
                 name: formData.name,
                 tokenAddress: formData.tokenAddress[0],
                 votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
-                quorumPercentage: +formData.quorumPercentage,
+                quorumPercentage: +formData.quorumPercentage
             });
             handleNext(setActiveStep);
             await contract.deployed();
@@ -178,7 +177,7 @@ const CreateDAO: NextPage = () => {
             return;
         }
 
-        const chainId = await signer_data.getChainId();
+        const chainId = await signerData.getChainId();
         handleChangeBasic(chainId, setFormData, "chainId");
 
         try {

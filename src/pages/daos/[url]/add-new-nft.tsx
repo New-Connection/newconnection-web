@@ -33,8 +33,8 @@ import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { addToken, deployNFTContract } from "contract-interactions";
 import { IAddNftQuery } from "types/queryInterfaces";
 import { AddNftDialog } from "components/Dialog/CreateNftDialogs";
-import { checkCorrectNetwork } from "../../../logic";
-import { fetchDAO } from "../../../network";
+import { checkCorrectNetwork } from "logic";
+import { fetchDAO } from "network";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
