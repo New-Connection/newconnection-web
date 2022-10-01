@@ -1,6 +1,6 @@
 import { sendEthToAddress } from "contract-interactions/utils";
 import toast from "react-hot-toast";
-import { checkCorrectNetwork } from "./utills";
+import { checkCorrectNetwork } from "./utils";
 import { IDAOPageForm } from "types/forms";
 
 export const contributeToTreasury = async (

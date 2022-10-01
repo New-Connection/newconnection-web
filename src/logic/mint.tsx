@@ -1,7 +1,7 @@
 import { mintReserveAndDelegation, mintNFT } from "contract-interactions/writeNFTContract";
 import toast from "react-hot-toast";
 import { IDAOPageForm } from "types/forms";
-import { checkCorrectNetwork } from "./utills";
+import { checkCorrectNetwork } from "./utils";
 
 export const mint = async (
     tokenAddress: string,

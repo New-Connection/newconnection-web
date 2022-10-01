@@ -6,7 +6,7 @@ import { deployTreasuryContract } from "contract-interactions/deploy";
 import { Signer } from "ethers";
 import { saveMoralisInstance } from "database/interactions";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { checkCorrectNetwork } from "./utills";
+import { checkCorrectNetwork } from "./utils";
 
 export async function addTreasury(
     DAO: IDAOPageForm,
