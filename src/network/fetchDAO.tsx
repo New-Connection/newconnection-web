@@ -2,7 +2,7 @@ import { IDAOPageForm } from "types/forms";
 import { getChainScanner } from "utils/blockchains";
 import { Moralis } from "moralis-v1";
 
-export async function fetchDAO(isInitialized: any, daoQuery: any) {
+export async function fetchDAO(isInitialized: any, daoQuery: Function) {
     if (isInitialized) {
         const results: Moralis.Object<Moralis.Attributes>[] = await daoQuery();
         //setIsLoaded(false);
@@ -32,7 +32,7 @@ export async function fetchDAO(isInitialized: any, daoQuery: any) {
             totalVotes: 0,
             totalMembers: 0,
             totalProposals: 0,
-            activeProposals: 0,
+            activeProposals: 0
         };
         return { newDao, moralisInstance };
     }

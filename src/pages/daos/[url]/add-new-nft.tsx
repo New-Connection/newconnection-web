@@ -34,6 +34,7 @@ import { addToken, deployNFTContract } from "contract-interactions";
 import { IAddNftQuery } from "types/queryInterfaces";
 import { AddNftDialog } from "components/Dialog/CreateNftDialogs";
 import { checkCorrectNetwork } from "../../../logic";
+import { fetchDAO } from "../../../network";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -56,7 +57,7 @@ const AddNewNFT: NextPage = () => {
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
 
-    const { fetch: DAOsQuery } = useMoralisQuery(
+    const { fetch: DaoQuery } = useMoralisQuery(
         "DAO",
         (query) => query.equalTo("governorAddress", formData.governorAddress),
         [formData.governorAddress],
@@ -86,19 +87,10 @@ const AddNewNFT: NextPage = () => {
 
     const saveNewNFTContractAddress = async (nftTokenAddress: string) => {
         console.log("nft token address", nftTokenAddress);
-        if (isInitialized && nftTokenAddress) {
-            await DAOsQuery({
-                onSuccess: async (results) => {
-                    const moralisInstance = results[0];
-                    console.log("Result", results);
-                    console.log("Result Moralis Contract Address", nftTokenAddress);
-                    moralisInstance.addUnique("tokenAddress", nftTokenAddress);
-                    await moralisInstance.save();
-                },
-                onError: (error) => {
-                    console.log("Error fetching saveNewNFTContractAddress query" + error);
-                }
-            });
+        const { moralisInstance } = await fetchDAO(isInitialized, DaoQuery);
+        if (moralisInstance && nftTokenAddress) {
+            moralisInstance.addUnique("tokenAddress", nftTokenAddress);
+            await moralisInstance.save();
         }
     };
 
