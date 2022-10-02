@@ -35,7 +35,7 @@ export async function fetchProposals(proposalQuery: any) {
     return proposals;
 }
 
-export async function fetchDetailProposal(proposalQuery: any) {
+export async function fetchDetailProposal(proposalQuery: Function) {
     const result: Moralis.Object<Moralis.Attributes> = (await proposalQuery())[0];
     const proposal: IProposalDetail = {
         title: result.get("name"),

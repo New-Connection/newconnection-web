@@ -1,7 +1,7 @@
 import { Moralis } from "moralis-v1";
 import { IWhitelistPageForm } from "types/forms";
 
-export const fetchWhitelist = async (whitelistQuery: any) => {
+export const fetchWhitelist = async (whitelistQuery: Function) => {
     const results: Moralis.Object<Moralis.Attributes>[] = await whitelistQuery();
     const whitelist: IWhitelistPageForm[] = await Promise.all(
         results.map(async (whitelistMoralis) => {
