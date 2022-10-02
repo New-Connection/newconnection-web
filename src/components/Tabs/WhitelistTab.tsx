@@ -8,6 +8,7 @@ import * as React from "react";
 import { getLogoURI } from "utils/blockchains";
 import { useSwitchNetwork } from "wagmi";
 import { IWhitelistPageForm } from "types/forms";
+import { checkCorrectNetwork } from "logic";
 
 const renderValue = (chain: string) => {
     const image = getLogoURI(chain);
@@ -55,14 +56,14 @@ export const WhitelistTab = ({ whitelist, signer, chainId }: IWhitelistTab) => {
                         <button
                             className="w-1/4 settings-button py-2 px-4 bg-white border-gray2 border-2 btn-state"
                             onClick={async () => {
-                                if (!signer) {
-                                    toast.error("Please connect wallet");
+                                if (
+                                    !(await checkCorrectNetwork(
+                                        signer,
+                                        chainId,
+                                        switchNetwork
+                                    ))
+                                ) {
                                     return;
-                                }
-
-                                if ((await signer.getChainId()) !== chainId) {
-                                    switchNetwork(chainId);
-                                    return
                                 }
 
                                 setClick(true);
@@ -71,7 +72,7 @@ export const WhitelistTab = ({ whitelist, signer, chainId }: IWhitelistTab) => {
                                     const status = await AddToWhitelist({
                                         addressNFT: votingTokenAddress,
                                         walletAddress: walletAddress,
-                                        signer: signer,
+                                        signer: signer
                                     });
 
                                     status

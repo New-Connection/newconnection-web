@@ -30,6 +30,7 @@ import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { CreateNftDialog } from "components/Dialog/CreateNftDialogs";
+import { checkCorrectNetwork } from "logic";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -43,7 +44,7 @@ const CreateNFT: NextPage = () => {
         ipfsAddress: "",
         blockchain: "",
     });
-    const { data: signer_data } = useSigner();
+    const { data: signerData } = useSigner();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
 
@@ -61,15 +62,15 @@ const CreateNFT: NextPage = () => {
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        if (!signer_data) {
-            toast.error("Please connect wallet");
-            return;
-        }
         if (!validateForm(formData, ["ipfsAddress", "contractAddress", "price"])) {
             return;
         }
 
-        switchNetwork?.(CHAINS[formData.blockchain].id);
+        if (
+            !(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))
+        ) {
+            return;
+        }
 
         handleReset(setActiveStep);
         confirmDialog.toggle();
@@ -90,11 +91,11 @@ const CreateNFT: NextPage = () => {
 
         let contract;
         try {
-            const chainId = await signer_data.getChainId();
+            const chainId = await signerData.getChainId();
             const endpoint: string =
                 layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
-            contract = await deployNFTContract(signer_data as Signer, {
+            contract = await deployNFTContract(signerData as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
                 baseURI: fullPath,
