@@ -1,5 +1,6 @@
 import { ethers, Signer } from "ethers";
 import { GOVERNANCE_NFT_ABI } from "abis";
+import { handleContractError } from "utils/errors";
 
 interface IAddToWhitelist {
     addressNFT: string;
@@ -15,7 +16,7 @@ export async function AddToWhitelist({ addressNFT, walletAddress, signer }: IAdd
         console.log("Transaction add to WL", tx);
         return true;
     } catch (e) {
-        console.log("[ERROR] add to whitelist", e);
+        handleContractError(e);
         return false;
     }
 }

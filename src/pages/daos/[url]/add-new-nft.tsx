@@ -9,7 +9,6 @@ import {
     InputSupplyOfNFT
 } from "components/Form";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 import { Signer } from "ethers";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 import { useSigner, useSwitchNetwork } from "wagmi";
@@ -35,6 +34,7 @@ import { IAddNftQuery } from "types/queryInterfaces";
 import { AddNftDialog } from "components/Dialog/CreateNftDialogs";
 import { checkCorrectNetwork } from "logic";
 import { fetchDAO } from "network";
+import { handleContractError } from "utils/errors";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -116,9 +116,8 @@ const AddNewNFT: NextPage = () => {
             console.log(fullPath);
             handleChangeBasic(fullPath, setFormData, "ipfsAddress");
         } catch (error) {
-            confirmDialog.toggle();
+            handleContractError(error, confirmDialog);
             handleReset(setActiveStep);
-            toast.error("Couldn't save your NFT on IPFS. Please try again");
             return;
         }
 
@@ -154,18 +153,14 @@ const AddNewNFT: NextPage = () => {
             await saveNewNFTContractAddress(contract.address);
             handleNext(setActiveStep);
         } catch (error) {
-            console.log(error);
-            confirmDialog.toggle();
+            handleContractError(error, confirmDialog);
             handleReset(setActiveStep);
-            toast.error("Please approve transaction to create DAO");
             return;
         }
         try {
         } catch (error) {
-            console.log(error);
-            confirmDialog.toggle();
+            handleContractError(error, confirmDialog);
             handleReset(setActiveStep);
-            toast.error("Can't save token into backend");
             return;
         }
     }

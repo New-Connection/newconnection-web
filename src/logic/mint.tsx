@@ -2,6 +2,7 @@ import { mintReserveAndDelegation, mintNFT } from "contract-interactions/writeNF
 import toast from "react-hot-toast";
 import { IDAOPageForm } from "types/forms";
 import { checkCorrectNetwork } from "./utils";
+import { handleContractError } from "utils/errors";
 
 export const mint = async (
     tokenAddress: string,
@@ -29,6 +30,6 @@ export const mint = async (
         setButtonState("Success");
     } catch (e) {
         setButtonState("Error");
-        return;
+        handleContractError(e);
     }
 };

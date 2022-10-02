@@ -41,6 +41,7 @@ import { ICreateDaoQuery } from "types/queryInterfaces";
 import { CreateDaoDialog } from "components/Dialog/CreateDaoDialogs";
 import { checkCorrectNetwork } from "logic";
 import { fetchDAOs } from "network";
+import { handleContractError } from "utils/errors";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
 
@@ -138,9 +139,8 @@ const CreateDAO: NextPage = () => {
             console.log(coverImagePath);
             handleChangeBasic(coverImagePath, setFormData, "coverImage");
         } catch (error) {
-            confirmDialog.toggle();
+            handleContractError(error, confirmDialog);
             handleReset(setActiveStep);
-            toast.error("Couldn't save your NFT on IPFS. Please try again");
             return;
         }
 
@@ -158,9 +158,8 @@ const CreateDAO: NextPage = () => {
             handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "governorAddress");
         } catch (error) {
-            confirmDialog.toggle();
+            handleContractError(error, confirmDialog);
             handleReset(setActiveStep);
-            toast.error("Please approve transaction to create DAO");
             return;
         }
 
@@ -178,8 +177,7 @@ const CreateDAO: NextPage = () => {
             moralisDao.set("coverImage", coverImagePath);
             await saveMoralisInstance(moralisDao);
         } catch (error) {
-            confirmDialog.toggle();
-            toast.error("Couldn't save your DAO on backend. Please try again");
+            handleContractError(error, confirmDialog);
             return;
         }
     };

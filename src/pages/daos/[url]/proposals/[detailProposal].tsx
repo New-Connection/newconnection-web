@@ -15,11 +15,11 @@ import { MockupTextCard } from "components/Mockup";
 import { castVote } from "contract-interactions/writeGovernorContract";
 import { IDetailProposalQuery } from "types/queryInterfaces";
 import { IDetailProposalProps } from "types/pagePropsInterfaces";
-import { errors } from "ethers";
 import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
 import { checkCorrectNetwork } from "logic";
 import { fetchDetailProposal } from "network/fetchProposals";
 import { AboutProposalCard } from "components/Cards/ProposalCard";
+import { handleContractError } from "utils/errors";
 
 export const getServerSideProps: GetServerSideProps<IDetailProposalProps,
     IDetailProposalQuery> = async (context) => {
@@ -89,26 +89,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
             console.log(tx);
             toast.success("Your vote is send");
         } catch (e: any) {
-            if (e.code === errors.ACTION_REJECTED) {
-                confirmDialog.toggle();
-                toast.error("User reject transaction");
-                return;
-            } else if (e.error) {
-                console.log(e.error);
-                confirmDialog.toggle();
-                const message = e.error?.message?.includes("GovernorVotingSimple")
-                    ? e.error.message
-                    : e.error.data?.message?.includes("GovernorVotingSimple")
-                        ? e.error.data.message
-                        : "Execution reverted";
-                toast.error(message);
-                return;
-            } else {
-                confirmDialog.toggle();
-                console.error(e);
-                toast.error("Something went wrong");
-                return;
-            }
+            handleContractError(e, confirmDialog);
         }
         handleNext(setActiveStep, 3);
     }

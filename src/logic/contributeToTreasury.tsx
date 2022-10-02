@@ -2,6 +2,7 @@ import { sendEthToAddress } from "contract-interactions/utils";
 import toast from "react-hot-toast";
 import { checkCorrectNetwork } from "./utils";
 import { IDAOPageForm } from "types/forms";
+import { handleContractError } from "utils/errors";
 
 export const contributeToTreasury = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -23,10 +24,8 @@ export const contributeToTreasury = async (
         await sendTx.wait(1);
         setSending(() => false);
     } catch (error) {
-        console.log(error);
-        contributeTreasuryDialog.hide();
+        handleContractError(e, contributeTreasuryDialog);
         setSending(() => false);
-        toast.error("Something went wrong");
         return;
     }
 

@@ -28,7 +28,7 @@ export const DetailNftDialog = ({
             {currentNFT ? (
                 <div className="w-full">
                     <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image} />
-                    <p className="mt-4 text-black">{`${currentNFT.title}`}</p>
+                    <div className="mt-4 text-black">{`${currentNFT.title}`}</div>
                     <a
                         href={getChainScanner(DAO.chainId, currentNFT.tokenAddress)}
                         target={"_blank"}
@@ -59,15 +59,15 @@ export const DetailNftDialog = ({
                         </li>
                         <li className="flex py-4 justify-between">
                             <p className="font-light text-gray2 mr-4">{"Address"}</p>
-                            <p className="font-normal text-black">
+                            <div className="font-normal text-black">
                                 <CopyTextButton copyText={currentNFT.tokenAddress} />
-                            </p>
+                            </div>
                         </li>
                         <li className="flex py-4 justify-between">
                             <p className="font-light text-gray2">{"Blockchain"}</p>
-                            <p className="font-normal text-black">
+                            <div className="font-normal text-black">
                                 <BlockchainIcon chain={DAO.blockchain[0]} />
-                            </p>
+                            </div>
                         </li>
                     </ul>
                 </div>

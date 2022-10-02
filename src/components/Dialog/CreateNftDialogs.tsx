@@ -18,7 +18,6 @@ export const AddNftDialog = ({ dialog, activeStep, formData }: ICreateNftDialog)
         >
             <p className="ml-7">Deployment successful!</p>
 
-            {/*TODO: make function*/}
             <div className="flex ml-7 mb-10">
                 <div className={"mr-4"}>Contract Address:</div>
                 <CopyTextButton copyText={formData.contractAddress} />
@@ -54,8 +53,8 @@ export const CreateNftDialog = ({ dialog, formData, activeStep }: ICreateNftDial
                     pathname: "create-dao",
                     query: {
                         tokenAddress: formData.contractAddress,
-                        enabledBlockchains: getChainNames().filter((chain) => formData[chain]),
-                    },
+                        enabledBlockchains: getChainNames().filter((chain) => formData[chain])
+                    }
                 }}
             >
                 <button

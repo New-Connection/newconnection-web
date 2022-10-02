@@ -6,9 +6,8 @@ import {
     Button,
     TypeSelector,
     InputTextArea,
-    InputSupplyOfNFT,
+    InputSupplyOfNFT
 } from "components/Form";
-import toast from "react-hot-toast";
 import { Signer } from "ethers";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
@@ -19,7 +18,7 @@ import {
     handleImageChange,
     handleNftSupplyChange,
     handleSelectorChange,
-    handleTextChange,
+    handleTextChange
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
@@ -31,6 +30,7 @@ import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";
 import { CreateNftDialog } from "components/Dialog/CreateNftDialogs";
 import { checkCorrectNetwork } from "logic";
+import { handleContractError } from "utils/errors";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -42,7 +42,7 @@ const CreateNFT: NextPage = () => {
         price: 0,
         contractAddress: "",
         ipfsAddress: "",
-        blockchain: "",
+        blockchain: ""
     });
     const { data: signerData } = useSigner();
     const confirmDialog = useDialogState();
@@ -56,7 +56,7 @@ const CreateNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-        ];
+            ];
     };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -83,9 +83,8 @@ const CreateNFT: NextPage = () => {
             console.log(fullPath);
             handleChangeBasic(fullPath, setFormData, "ipfsAddress");
         } catch (error) {
-            confirmDialog.toggle();
+            handleContractError(error, confirmDialog);
             handleReset(setActiveStep);
-            toast.error("Couldn't save your NFT on IPFS. Please try again");
             return;
         }
 
@@ -103,7 +102,7 @@ const CreateNFT: NextPage = () => {
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
-                endMintId: calculateSupply(),
+                endMintId: calculateSupply()
             });
             handleNext(setActiveStep);
             await contract.deployed();
@@ -112,10 +111,8 @@ const CreateNFT: NextPage = () => {
             handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
-            console.log(error);
-            confirmDialog.toggle();
+            handleContractError(error, confirmDialog);
             handleReset(setActiveStep);
-            toast.error("Please approve transaction to create DAO");
             return;
         }
     }

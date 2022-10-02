@@ -1,6 +1,7 @@
 import { NFT_STORAGE_KEY } from "./constants";
 //https://nft.storage/docs/troubleshooting/
 import { NFTStorage } from "nft.storage/dist/bundle.esm.min.js";
+import { handleContractError } from "./errors";
 
 export const NFTStorageInitialization = (): NFTStorage => {
     return new NFTStorage({ token: NFT_STORAGE_KEY });
@@ -37,7 +38,7 @@ export const storeNFT = async (image: File, name: String, description: String) =
         console.log(status);
         return UID;
     } catch (error) {
-        console.log(error, "Token is invalid");
+        handleContractError(error);
     }
 };
 
@@ -50,7 +51,7 @@ export const loadImage = async (ipfsNFTStorageAddress: string) => {
         const blob = await responseImage.blob();
         return URL.createObjectURL(blob);
     } catch (e) {
-        console.log(`Invalid URL: ${ipfsNFTStorageAddress}`);
+        handleContractError(e);
     }
     return image;
 };

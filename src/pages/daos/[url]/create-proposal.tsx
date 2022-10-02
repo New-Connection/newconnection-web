@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import toast from "react-hot-toast";
 import { IMultiNFTVoting } from "types/forms";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout from "components/Layout/Layout";
@@ -39,6 +38,7 @@ import { ICreateProposalQuery } from "types/queryInterfaces";
 import { CreateProposalDialog } from "components/Dialog/CreateProposalDialogs";
 import { fetchDAO } from "network";
 import { checkCorrectNetwork } from "logic";
+import { handleContractError } from "utils/errors";
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
@@ -76,7 +76,7 @@ const CreateProposal: NextPage = () => {
 
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
-        handleChangeBasic(query.chainId, setFormData, "chainId");
+        handleChangeBasic(+query.chainId, setFormData, "chainId");
     }, [router]);
 
     useEffect(() => {
@@ -120,6 +120,7 @@ const CreateProposal: NextPage = () => {
             return;
         }
 
+        console.log(formData.chainId);
         if (!(await checkCorrectNetwork(signerData, formData.chainId, switchNetwork))) {
             return;
         }
@@ -141,9 +142,7 @@ const CreateProposal: NextPage = () => {
             handleChangeBasic(proposalId, setFormData, "proposalId");
             handleNext(setActiveStep);
         } catch (error) {
-            console.log(error);
-            confirmDialog.toggle();
-            toast.error("Please approve transaction to create DAO");
+            handleContractError(error, confirmDialog);
             return;
         }
 
@@ -156,8 +155,7 @@ const CreateProposal: NextPage = () => {
             moralisProposal.set("chainId", chainId);
             await saveMoralisInstance(moralisProposal);
         } catch (error) {
-            confirmDialog.toggle();
-            toast.error("Сouldn't save your DAO. Please try again");
+            handleContractError(error, confirmDialog);
             return;
         }
     }

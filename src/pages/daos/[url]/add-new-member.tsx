@@ -22,6 +22,7 @@ import {
 import { useSigner } from "wagmi";
 import { useMoralisQuery } from "react-moralis";
 import { IAddMemberQuery } from "types/queryInterfaces";
+import { handleContractError } from "utils/errors";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IAddNewMember>({
@@ -100,7 +101,7 @@ const AddNewMember: NextPage = () => {
             });
             form.reset();
         } catch (error) {
-            toast.error("Couldn't save your . Please try again");
+            handleContractError(error);
             return;
         }
 

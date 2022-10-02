@@ -9,6 +9,7 @@ import { getLogoURI } from "utils/blockchains";
 import { useSwitchNetwork } from "wagmi";
 import { IWhitelistPageForm } from "types/forms";
 import { checkCorrectNetwork } from "logic";
+import { handleContractError } from "utils/errors";
 
 const renderValue = (chain: string) => {
     const image = getLogoURI(chain);
@@ -87,8 +88,7 @@ export const WhitelistTab = ({ whitelist, signer, chainId }: IWhitelistTab) => {
                                     // toast.success("Wallet added to Whitelist");
                                     setClick(false);
                                 } catch (error) {
-                                    toast.error("Please approve transaction to create DAO");
-                                    return;
+                                    handleContractError(error);
                                 }
                                 setClick(false);
                             }}

@@ -5,7 +5,6 @@ import Header from "./Header";
 import Footer from "./Footer";
 import CustomToast from "components/Toast/CustomToast";
 import HeadInfo from "./HeadInfo";
-import SwitchNetworkBanner from "components/Banners/SwitchNetworksBanner";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -19,9 +18,6 @@ export default function Layout({
     isMinHeightTurnOff = false,
     ...props
 }: ILayoutProps) {
-    {
-        /* pb-20 should be same as a footer height */
-    }
     return (
         <>
             <HeadInfo />

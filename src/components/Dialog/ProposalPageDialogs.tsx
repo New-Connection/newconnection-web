@@ -2,7 +2,7 @@ import { StepperDialog } from "./base-dialogs";
 import React from "react";
 import { IProposalPageDialog } from "./dialogInterfaces";
 
-export const ProposalVoteDialog = ({ dialog, activeStep, formData }: IProposalPageDialog) => {
+export const ProposalVoteDialog = ({ dialog, activeStep }: IProposalPageDialog) => {
     return (
         <StepperDialog
             dialog={dialog}
@@ -10,8 +10,7 @@ export const ProposalVoteDialog = ({ dialog, activeStep, formData }: IProposalPa
             activeStep={activeStep}
             isClose={true}
         >
-            <p className="ml-7">Voted successfully!</p>
-            <p className="ml-7 mb-10">Transaction: {formData.txConfirm}</p>
+            <p className="ml-7 mb-7">Voted successfully!</p>
 
             <button
                 className="form-submit-button"
@@ -22,5 +21,5 @@ export const ProposalVoteDialog = ({ dialog, activeStep, formData }: IProposalPa
                 Back to proposal
             </button>
         </StepperDialog>
-    )
-}
+    );
+};

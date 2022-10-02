@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { IDAOPageForm } from "types/forms";
 import { DisclosureState } from "ariakit";
 import { transferTreasuryOwnership } from "contract-interactions/writeTreasuryContract";
@@ -7,6 +6,7 @@ import { Signer } from "ethers";
 import { saveMoralisInstance } from "database/interactions";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
 import { checkCorrectNetwork } from "./utils";
+import { handleContractError } from "utils/errors";
 
 export async function addTreasury(
     DAO: IDAOPageForm,
@@ -44,10 +44,8 @@ export async function addTreasury(
         // handleChangeBasic(treasuryContract.address, setDAO, "treasuryAddress");
         return treasuryContract.address;
     } catch (error) {
-        console.log(error);
-        treasuryDialog.toggle();
+        handleContractError(error, treasuryDialog);
         handleReset(setCreateTreasuryStep);
-        toast.error("Please approve transaction to create Treasury");
         return;
     }
 }
@@ -63,8 +61,7 @@ export async function addTreasureMoralis(
             await saveMoralisInstance(DAOMoralisInstance);
         }
     } catch (error) {
-        treasuryDialog.toggle();
-        toast.error("Couldn't save your DAO on database. Please try again");
+        handleContractError(error, treasuryDialog);
         return;
     }
 }

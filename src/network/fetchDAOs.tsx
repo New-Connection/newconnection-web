@@ -1,5 +1,6 @@
 import { IDAOPageForm } from "types/forms";
 import { Moralis } from "moralis-v1";
+import { handleContractError } from "utils/errors";
 
 export async function fetchDAOs(isInitialized: any, DAOsQuery: Function) {
     if (isInitialized) {
@@ -38,7 +39,7 @@ export async function fetchDAOs(isInitialized: any, DAOsQuery: Function) {
                 } as IDAOPageForm;
             });
         } catch (e) {
-            console.log("[ERROR] to fetch DAOs", e);
+            handleContractError(e);
         }
     }
 }

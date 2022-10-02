@@ -5,7 +5,6 @@ import classNames from "classnames";
 import React from "react";
 import { useState } from "react";
 
-// TODO: Add labels
 export const RadioSelector = ({ name, labels, className, handleChange }: IRadioSelector) => {
     return (
         <>
@@ -88,12 +87,7 @@ export const RadioSelectorMulti = (radioSelector: IRadioSelector) => {
                                 clickedValue === index ? "border-purple text-purple" : ""
                             )}
                         >
-                            <p>
-                                {
-                                    //TODO: localcache
-                                    index
-                                }
-                            </p>
+                            <p>{index}</p>
                             {radioSelector.labels[index]}
                         </label>
                     </React.Fragment>
