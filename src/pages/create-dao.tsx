@@ -1,10 +1,10 @@
-import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
-import { ICreate, ICreateDAO } from "types/forms";
+import { ICreateDAO } from "types/forms";
 import { validateForm } from "utils/validate";
 import Layout from "components/Layout";
 import {
@@ -20,7 +20,9 @@ import {
     handleCheckboxChange,
     handleImageChange,
     handleTextChange,
-    handleChangeBasicSimple
+    handleChangeBasicSimple,
+    handleDaoNameUrlChange,
+    handleAddArray
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/";
 import { BLOCKS_IN_DAY } from "utils/constants";
@@ -32,19 +34,15 @@ import {
 } from "database/interactions";
 import { useRouter } from "next/router";
 import { handleReset, handleNext } from "components/Dialog/base-dialogs";
-import { CHAINS, getChainNames } from "utils/blockchains";
+import { CHAINS } from "utils/blockchains";
 import { storeNFT } from "utils/ipfsUpload";
-import { useMoralisQuery } from "react-moralis";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 import { ICreateDaoQuery } from "types/queryInterfaces";
 import { CreateDaoDialog } from "components/Dialog/CreateDaoDialogs";
 import { checkCorrectNetwork } from "logic";
+import { fetchDAOs } from "network";
 
 const DaoTypeValues = ["Grants", "Investment", "Social"];
-
-const createUrl = (name: string): string => {
-    // console.log("url: ", name);
-    return name.replace(/ /g, "-");
-};
 
 const CreateDAO: NextPage = () => {
     const router = useRouter();
@@ -69,8 +67,9 @@ const CreateDAO: NextPage = () => {
     const [activeStep, setActiveStep] = useState(0);
 
     const { switchNetwork } = useSwitchNetwork();
+    const { isInitialized } = useMoralis();
 
-    const { fetch: urlFetch } = useMoralisQuery(
+    const { fetch: DAOsQuery } = useMoralisQuery(
         "DAO",
         (query) => query.equalTo("url", formData.url),
         [formData.url],
@@ -80,33 +79,16 @@ const CreateDAO: NextPage = () => {
     );
 
     const checkUrlAvailability = async () => {
-        let available = false;
-        await urlFetch({
-            onSuccess: (results) => {
-                available = results.length === 0;
-            },
-            onError: (e) => {
-                console.log("error" + e);
-            }
-        });
-        return available;
-    };
-
-    const handleDaoNameUrlChange = <T extends ICreate,
-        E extends HTMLInputElement | HTMLTextAreaElement>(
-        event: ChangeEvent<E>,
-        set: Dispatch<SetStateAction<T>>,
-        field: string
-    ) => {
-        set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-        handleChangeBasic(createUrl(event.target.value), set, field);
+        const results = await fetchDAOs(isInitialized, DAOsQuery);
+        return results && results.length === 0;
     };
 
     useEffect(() => {
         const query = router.query as ICreateDaoQuery;
         handleChangeBasicSimple(query.tokenAddress, setFormData, "tokenAddress");
-        handleChangeBasic(query.enabledBlockchains, setFormData, "enabledBlockchains");
-    }, []);
+        // handleAddArray(query.enabledBlockchains, setFormData, "enabledBlockchains");
+        handleAddArray(query.enabledBlockchains, setFormData, "blockchain");
+    }, [router]);
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -121,9 +103,14 @@ const CreateDAO: NextPage = () => {
             toast.error("Name unavailable");
             return;
         }
-        console.log(formData.url);
 
-        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain[0]].id, switchNetwork))) {
+        if (
+            !(await checkCorrectNetwork(
+                signerData,
+                CHAINS[formData.blockchain[0]].id,
+                switchNetwork
+            ))
+        ) {
             return;
         }
 
@@ -293,13 +280,17 @@ const CreateDAO: NextPage = () => {
                         <CheckboxGroup
                             label={"DAO Blockchain"}
                             images={true}
-                            description={"You can choose one or more blockchains"}
-                            values={[...getChainNames()]}
-                            enabledValues={formData.enabledBlockchains}
-                            handleChange={(event) =>
-                                handleCheckboxChange(event, formData, setFormData, "blockchain")
-                            }
+                            values={formData.blockchain}
+
+                            // when few blockchains
+                            // description={"You can choose one or more blockchains"}
+                            // values={[...getChainNames()]}
+                            // enabledValues={formData.enabledBlockchains}
+                            // handleChange={(event) =>
+                            //     handleCheckboxChange(event, formData, setFormData, "blockchain")
+                            // }
                         />
+
                         <h2 className="mt-2 text-xl font-medium">Social profiles (optional)</h2>
                         <div className="flex w-full gap-10">
                             <InputText
@@ -335,7 +326,11 @@ const CreateDAO: NextPage = () => {
                     </form>
                 </section>
 
-                <CreateDaoDialog dialog={confirmDialog} formData={formData} activeStep={activeStep} />
+                <CreateDaoDialog
+                    dialog={confirmDialog}
+                    formData={formData}
+                    activeStep={activeStep}
+                />
             </Layout>
         </div>
     );

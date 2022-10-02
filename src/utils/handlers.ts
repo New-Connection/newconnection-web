@@ -30,9 +30,11 @@ export const handleAddArray = <T>(
     set: Dispatch<SetStateAction<T>>,
     field: string
 ) => {
-    typeof value === "string" ?
-        set((prev) => ({ ...prev, [field]: [value] })) :
-        set((prev) => ({ ...prev, [field]: [...value] }));
+    value
+        ? typeof value === "string"
+            ? set((prev) => ({ ...prev, [field]: [value] }))
+            : set((prev) => ({ ...prev, [field]: [...value] }))
+        : "return";
 };
 
 export const handleTextChange = <T extends ICreate,
@@ -103,4 +105,18 @@ export const handleSelectorChange = <T extends ICreate>(
     const label = elem.parentNode.textContent;
     set((prev) => ({ ...prev, [field]: label }));
     return true;
+};
+
+export const handleDaoNameUrlChange = <T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement>(
+    event: ChangeEvent<E>,
+    set: Dispatch<SetStateAction<T>>,
+    field: string
+) => {
+    const createUrl = (name: string): string => {
+        return name.replace(/ /g, "-");
+    };
+
+    set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+    handleChangeBasic(createUrl(event.target.value), set, field);
 };
