@@ -20,6 +20,7 @@ type chainType = [
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
+    "Goerli",
     "Rinkeby",
     "Polygon Mumbai",
     "Arbitrum Goerli",
@@ -32,7 +33,7 @@ type chainType = [
 ];
 
 const CHAINS_IMG: {
-    [key in chainType[number]]?: StaticImageData;
+    [key in chainType[number]]: StaticImageData;
 } = {
     //
     // MAIN CHAINS
@@ -52,6 +53,7 @@ const CHAINS_IMG: {
     // TEST CHAINS
     // ----------------------------------------------------------------------
     "Rinkeby": ASSETS.Ethereum,
+    "Goerli": ASSETS.Ethereum,
     "Polygon Mumbai": ASSETS.Polygon,
     "Arbitrum Goerli": ASSETS.Arbitrum,
     "Binance Testnet": ASSETS.Binance,
@@ -59,7 +61,7 @@ const CHAINS_IMG: {
     "Fantom Testnet": ASSETS.Fantom,
     "Optimism Goerli": ASSETS.Optimism,
     "Aurora Testnet": ASSETS.Aurora,
-    "Skale Testnet": ASSETS.Skale,
+    "Skale Testnet": ASSETS.Skale
 };
 
 export const CHAINS: {
@@ -69,7 +71,9 @@ export const CHAINS: {
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    "Rinkeby": chain.rinkeby,
+    // "Rinkeby": chain.rinkeby,
+
+    "Goerli": chain.goerli,
 
     "Polygon Mumbai": chain.polygonMumbai,
 
@@ -80,15 +84,15 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Avalanche",
-            symbol: "AVAX",
+            symbol: "AVAX"
         },
         rpcUrls: {
-            default: "https://api.avax-test.network/ext/bc/C/rpc",
+            default: "https://api.avax-test.network/ext/bc/C/rpc"
         },
         blockExplorers: {
-            default: { name: "Snowtrace", url: "https://testnet.snowtrace.io" },
+            default: { name: "Snowtrace", url: "https://testnet.snowtrace.io" }
         },
-        testnet: true,
+        testnet: true
     },
 
     "Binance Testnet": {
@@ -98,15 +102,15 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "BSC",
-            symbol: "BNB",
+            symbol: "BNB"
         },
         rpcUrls: {
-            default: "https://data-seed-prebsc-1-s1.binance.org:8545",
+            default: "https://data-seed-prebsc-1-s1.binance.org:8545"
         },
         blockExplorers: {
-            default: { name: "bscscan", url: "https://testnet.bscscan.com" },
+            default: { name: "bscscan", url: "https://testnet.bscscan.com" }
         },
-        testnet: true,
+        testnet: true
     },
 
     // "Arbitrum Testnet": chain.arbitrumGoerli,
@@ -118,15 +122,15 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Ethereum",
-            symbol: "ETH",
+            symbol: "ETH"
         },
         rpcUrls: {
-            default: `https://optimism-goerli.infura.io/v3/${infuraId}`,
+            default: `https://optimism-goerli.infura.io/v3/${infuraId}`
         },
         blockExplorers: {
-            default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" },
+            default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" }
         },
-        testnet: true,
+        testnet: true
     },
 
     "Fantom Testnet": {
@@ -136,15 +140,15 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Fantom",
-            symbol: "FTM",
+            symbol: "FTM"
         },
         rpcUrls: {
-            default: "https://rpc.testnet.fantom.network/",
+            default: "https://rpc.testnet.fantom.network/"
         },
         blockExplorers: {
-            default: { name: "ftmscan", url: "https://testnet.ftmscan.com" },
+            default: { name: "ftmscan", url: "https://testnet.ftmscan.com" }
         },
-        testnet: true,
+        testnet: true
     },
 
     "Aurora Testnet": {
@@ -154,15 +158,15 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Ethereum",
-            symbol: "ETH",
+            symbol: "ETH"
         },
         rpcUrls: {
-            default: `https://aurora-testnet.infura.io/v3/${infuraId}`,
+            default: `https://aurora-testnet.infura.io/v3/${infuraId}`
         },
         blockExplorers: {
-            default: { name: "aurorascan", url: "https://testnet.aurorascan.dev" },
+            default: { name: "aurorascan", url: "https://testnet.aurorascan.dev" }
         },
-        testnet: true,
+        testnet: true
     },
 
     // "Skale Testnet": {
@@ -197,16 +201,16 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Ethereum",
-            symbol: "ETH",
+            symbol: "ETH"
         },
         rpcUrls: {
-            default: `https://aurora-mainnet.infura.io/v3/${infuraId}`,
+            default: `https://aurora-mainnet.infura.io/v3/${infuraId}`
         },
         blockExplorers: {
-            default: { name: "aurorascan", url: "https://aurorascan.dev" },
+            default: { name: "aurorascan", url: "https://aurorascan.dev" }
         },
-        testnet: false,
-    },
+        testnet: false
+    }
 };
 
 export const getChains = (): Chain[] => {
@@ -215,12 +219,12 @@ export const getChains = (): Chain[] => {
 
 export const getChainIds = () => {
     return getChains()
-        .map((chain) => chain.id)
+        .map((chain) => chain.id);
 };
 
 export const getChainNames = () => {
     return getChains()
-        .map((chain) => chain.name)
+        .map((chain) => chain.name);
 };
 
 export const getChain = (
@@ -238,8 +242,8 @@ export function getChainScanner(chainId: number | undefined, address: string | u
 }
 
 export const getTokenSymbol = (chainId: number) => {
-    return getChain(chainId).nativeCurrency.symbol
-}
+    return getChain(chainId).nativeCurrency.symbol;
+};
 
 export const isBlockchainSupported = (chain: { id }) => {
     if (!chain) {
@@ -254,4 +258,4 @@ export const getLogoURI = (chain: number | string) => {
     } else {
         return CHAINS_IMG[chain] || CHAINS_IMG["Ethereum"];
     }
-}
+};
