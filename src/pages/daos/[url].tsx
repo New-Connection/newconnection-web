@@ -22,7 +22,7 @@ import {
     fetchProposals,
     fetchNFT,
     fetchTreasuryBalance,
-    fetchWhitelist,
+    fetchWhitelist
 } from "network/index";
 import { BlockchainIcon } from "components/Icons/";
 import { MockupLoadingDAO, MockupLoadingNFT } from "components/Mockup/Loading";
@@ -36,22 +36,22 @@ import {
     mint,
     contributeToTreasury,
     addTreasury,
-    addTreasureMoralis,
+    addTreasureMoralis
 } from "logic/index";
 import {
     ContributeTreasuryDialog,
     CreateTreasuryDialog,
-    DetailNftDialog,
+    DetailNftDialog
 } from "components/Dialog/DaoPageDialogs";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
 
     const result: DAOPageProps = {
-        url: url.toString(),
+        url: url.toString()
     };
     return {
-        props: result,
+        props: result
     };
 };
 
@@ -89,7 +89,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // Moralis queries
     const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.equalTo("url", url), [], {
-        autoFetch: false,
+        autoFetch: false
     });
     const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
@@ -104,7 +104,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             query.equalTo("chainId", DAO?.chainId),
         [DAO],
         {
-            autoFetch: false,
+            autoFetch: false
         }
     );
 
@@ -179,7 +179,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             DAO &&
             signerData &&
             (await signerData.getAddress()) ===
-                (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
                 ? setIsOwner(true)
                 : setIsOwner(false);
         };
@@ -274,15 +274,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 governorAddress: DAO.governorAddress,
                                 daoName: DAO.name,
                                 blockchains: DAO.blockchain,
-                                tokenAddress: DAO.tokenAddress,
-                            },
+                                tokenAddress: DAO.tokenAddress
+                            }
                         }}
                     >
                         <button
                             className={
-                                isLoaded
-                                    ? "secondary-button"
-                                    : "secondary-button bg-gray hover:bg-gray"
+                                "secondary-button disabled:bg-gray disabled:hover:bg-gray"
                             }
                             disabled={!isLoaded}
                         >
@@ -301,7 +299,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             Contract
                             <ExternalLinkIcon className="h-4 w-3" />
                         </a>
-                        <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
+                        <div
+                            className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
                             <p className="text-xs">Blockchain</p>
                             <BlockchainIcon chain={DAO.blockchain[0]} />
                         </div>
@@ -333,14 +332,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 blockchains: DAO.blockchain,
                                 tokenAddress: DAO.tokenAddress,
                                 daoName: DAO.name,
-                                chainId: DAO.chainId,
-                            },
+                                chainId: DAO.chainId
+                            }
                         }}
                     >
                         <button
                             className={
                                 isLoaded
-                                    ? "secondary-button gradient-btn-color"
+                                    ? "secondary-button gradient-btn-color hover:bg-gradient-to-tl"
                                     : "secondary-button bg-gray hover:bg-gray"
                             }
                             disabled={!isLoaded}
@@ -421,7 +420,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                             daoUrl={url}
                                         />
                                     );
-                                },
+                                }
                             },
                             {
                                 label: "WHITELIST",
@@ -434,8 +433,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                             chainId={DAO.chainId}
                                         />
                                     );
-                                },
-                            },
+                                }
+                            }
                         ]}
                         isLoaded={isLoaded}
                         url={{
@@ -443,8 +442,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             query: {
                                 governorAddress: DAO.governorAddress,
                                 blockchains: [DAO.blockchain[0]],
-                                chainId: DAO.chainId,
-                            },
+                                chainId: DAO.chainId
+                            }
                         }}
                     />
                 </div>
@@ -458,8 +457,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 query: {
                                     url: url,
                                     governorAddress: DAO.governorAddress,
-                                    blockchain: DAO.blockchain,
-                                },
+                                    blockchain: DAO.blockchain
+                                }
                             }}
                         >
                             <button

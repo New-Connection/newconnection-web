@@ -58,7 +58,7 @@ const DAOsPage: NextPage = () => {
     const CreateDAOButton = () => {
         return (
             <Link href="./create-new-dao">
-                <button className="secondary-button h-10" disabled={!isBlockchainSupported(chain)}>
+                <button className="secondary-button h-10 disabled:bg-gray" disabled={!isBlockchainSupported(chain)}>
                     Create DAO
                 </button>
             </Link>
