@@ -48,7 +48,7 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
                 <Link href={url}>
                     <button
                         className={
-                            isLoaded ? "secondary-button" : "secondary-button bg-gray hover:bg-gray"
+                            "secondary-button disabled:bg-gray disabled:hover:bg-gray"
                         }
                         disabled={!isLoaded}
                     >
