@@ -59,17 +59,17 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = a
 const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
-
-    const [DAOMoralisInstance, setDAOMoralisInstance] =
-        useState<Moralis.Object<Moralis.Attributes>>();
     const { isInitialized } = useMoralis();
-
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const [isLoaded, setIsLoaded] = useState(false);
     const [notFound, setNotFound] = useState(false);
 
     // Moralis states
     const [DAO, setDAO] = useState<IDAOPageForm>();
+    const [DAOMoralisInstance, setDAOMoralisInstance] =
+        useState<Moralis.Object<Moralis.Attributes>>();
+    const [WhitelistMoralisInstance, setWhitelistMoralisInstance] =
+        useState<Moralis.Object<Moralis.Attributes>[]>();
     const [whitelist, setWhitelist] = useState<IWhitelistPageForm[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
@@ -133,6 +133,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     }, [isInitialized]);
 
     // Loading data
+    const loadingWhitelist = async () => {
+        const data = await fetchWhitelist(WhitelistQuery);
+        if (data) {
+            setWhitelist(data.whitelist);
+            setWhitelistMoralisInstance(data.moralisInstance);
+        }
+    };
     useEffect(() => {
         if (DAO) {
             console.log("start loading");
@@ -148,13 +155,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 if (nftsArray) {
                     localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
                     setNFTs(nftsArray);
-                }
-            };
-
-            const loadingWhitelist = async () => {
-                const whitelist = await fetchWhitelist(WhitelistQuery);
-                if (whitelist) {
-                    setWhitelist(whitelist);
                 }
             };
 
@@ -201,6 +201,18 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // FUNCTIONS
     // ----------------------------------------------------------------------
+
+    const deleteFromWhitelist = async (walletAddress: string) => {
+        console.log("deleting");
+        WhitelistMoralisInstance
+            ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
+                ?.destroy()
+                .then()
+                .catch(console.error)
+            : 0;
+        //  rerender
+        loadingWhitelist().catch(console.error);
+    };
 
     const addTreasuryAndSave = async () => {
         const treasuryAddress = await addTreasury(
@@ -346,7 +358,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 </a>
                             </div>
                         ) : (
-                            <div className={"flex justify-center text-3xl text-gray5"}>Treasury</div>
+                            <div className={"flex justify-center text-3xl text-gray5"}>
+                                Treasury
+                            </div>
                         )}
                         <div className={"text-4xl"}>$ {treasuryBalance}</div>
                         <div>
@@ -411,6 +425,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                                 whitelist={whitelist}
                                                 signer={signerData}
                                                 chainId={DAO.chainId}
+                                                deleteFunction={deleteFromWhitelist}
                                             />
                                         );
                                     }

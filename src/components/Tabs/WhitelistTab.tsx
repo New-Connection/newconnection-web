@@ -17,12 +17,13 @@ const renderValue = (chain: string) => {
 };
 
 interface IWhitelistTab {
-    whitelist: IWhitelistPageForm[],
-    signer: Signer,
-    chainId: number
+    whitelist: IWhitelistPageForm[];
+    signer: Signer;
+    chainId: number;
+    deleteFunction: Function;
 }
 
-export const WhitelistTab = ({ whitelist, signer, chainId }: IWhitelistTab) => {
+export const WhitelistTab = ({ whitelist, signer, chainId, deleteFunction }: IWhitelistTab) => {
     const [click, setClick] = useState(false);
     const { switchNetwork } = useSwitchNetwork();
 
@@ -47,9 +48,7 @@ export const WhitelistTab = ({ whitelist, signer, chainId }: IWhitelistTab) => {
                     <div className="w-full flex gap-5" key={index}>
                         <div className="flex w-2/4">
                             <div className=" flex w-1/3">{formatAddress(walletAddress)}</div>
-                            <div className="flex pl-5 w-1/3">
-                                {renderValue(blockchainSelected)}
-                            </div>
+                            <div className="flex pl-5 w-1/3">{renderValue(blockchainSelected)}</div>
                             <div className="flex w-1/3">{votingTokenName}</div>
                         </div>
                         <p className="w-1/4 text-sm line-clamp-3 text-center">{note}</p>
@@ -57,13 +56,7 @@ export const WhitelistTab = ({ whitelist, signer, chainId }: IWhitelistTab) => {
                         <button
                             className="w-1/4 settings-button py-2 px-4 bg-white border-gray2 border-2 btn-state"
                             onClick={async () => {
-                                if (
-                                    !(await checkCorrectNetwork(
-                                        signer,
-                                        chainId,
-                                        switchNetwork
-                                    ))
-                                ) {
+                                if (!(await checkCorrectNetwork(signer, chainId, switchNetwork))) {
                                     return;
                                 }
 
@@ -73,20 +66,15 @@ export const WhitelistTab = ({ whitelist, signer, chainId }: IWhitelistTab) => {
                                     const status = await AddToWhitelist({
                                         addressNFT: votingTokenAddress,
                                         walletAddress: walletAddress,
-                                        signer: signer
+                                        signer: signer,
                                     });
 
                                     status
                                         ? toast.success("Wallet added to Whitelist")
-                                        : toast.error(
-                                            "Only owner of DAO can add a new members"
-                                        );
-                                    // TODO: DELETE ROW FROM MORALIS
-                                    // removeItem(walletAddress);
-                                    // console.log("WL DELETE");
-                                    // toast.success("Wallet added to Whitelist");
-                                    // toast.success("Wallet added to Whitelist");
+                                        : toast.error("Only owner of DAO can add a new members");
                                     setClick(false);
+
+                                    deleteFunction(walletAddress);
                                 } catch (error) {
                                     handleContractError(error);
                                 }
