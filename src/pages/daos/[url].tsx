@@ -43,6 +43,7 @@ import {
     CreateTreasuryDialog,
     DetailNftDialog,
 } from "components/Dialog/DaoPageDialogs";
+import { Discord2, Twitter } from "@web3uikit/icons";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
@@ -107,7 +108,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             autoFetch: false,
         }
     );
-
     // EFFECTS
     // ----------------------------------------------------------------------
 
@@ -241,290 +241,274 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     };
 
     return DAO ? (
-        <Layout className="layout-base mt-0">
-            <div className="cover h-36 w-full relative justify-center">
+        <div>
+            <div className="cover h-48 w-full relative justify-center">
                 <Image
                     priority={true}
                     src={!isIpfsAddress(DAO.coverImage) ? DAO.coverImage : ASSETS.daoCoverMock}
                     layout={"fill"}
                 />
             </div>
-
-            <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
-                <div className="dao-info lg:flex md:flex xl:flex justify-between items-center">
-                    <div className="flex">
-                        <div className="mt-[-50px]">
+            <Layout className="layout-base mt-0">
+                <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
+                    <div className="dao-header lg:flex md:flex xl:flex items-center -mt-10">
+                        <div className={"logo"}>
                             <Image
                                 src={
                                     !isIpfsAddress(DAO.profileImage)
                                         ? DAO.profileImage
                                         : ASSETS.daoLogoMock
                                 }
-                                height={"150px"}
-                                width={"150px"}
-                                className="rounded-xl"
+                                height={"175px"}
+                                width={"175px"}
+                                className="rounded-full"
                             />
                         </div>
-                        <h1 className="dao-label capitalize">{DAO.name}</h1>
-                    </div>
-                    <Link
-                        href={{
-                            pathname: `${url}/add-new-member`,
-                            query: {
-                                governorAddress: DAO.governorAddress,
-                                daoName: DAO.name,
-                                blockchains: DAO.blockchain,
-                                tokenAddress: DAO.tokenAddress,
-                            },
-                        }}
-                    >
-                        <button
-                            className={"secondary-button disabled:bg-gray disabled:hover:bg-gray"}
-                            disabled={!isLoaded}
-                        >
-                            Become a member
-                        </button>
-                    </Link>
-                </div>
+                        <div className={"info flex flex-col ml-6 w-full gap-8"}>
+                            <div className={"info-row-1 flex justify-between items-center"}>
+                                <div className={"dao-name"}>
+                                    <div className="dao-label capitalize">{DAO.name}</div>
+                                </div>
+                                <div className={"member-button"}>
+                                    <Link
+                                        href={{
+                                            pathname: `${url}/add-new-member`,
+                                            query: {
+                                                governorAddress: DAO.governorAddress,
+                                                daoName: DAO.name,
+                                                blockchains: DAO.blockchain,
+                                                tokenAddress: DAO.tokenAddress,
+                                            },
+                                        }}
+                                    >
+                                        <button
+                                            className={
+                                                "secondary-button disabled:bg-gray disabled:hover:bg-gray"
+                                            }
+                                            disabled={!isLoaded}
+                                        >
+                                            Become a member
+                                        </button>
+                                    </Link>
+                                </div>
+                            </div>
+                            <div className={"info-row-2 flex justify-between"}>
+                                <div className={"about flex gap-10"}>
+                                    <a
+                                        href={DAO.scanURL}
+                                        target={"_blank"}
+                                        className="hover:text-purple dao-about-button"
+                                    >
+                                        About
+                                        <ExternalLinkIcon className="h-4 w-3" />
+                                    </a>
+                                    <div className="dao-about-button items-center">
+                                        <p>Blockchain</p>
+                                        <BlockchainIcon chain={DAO.blockchain[0]} />
+                                    </div>
+                                </div>
+                                <div className={"links flex gap-5"}>
+                                    {DAO.discordURL ? (
+                                        <a href={isValidHttpUrl(DAO.discordURL)} target={"_blank"}>
+                                            <Discord2 className={"h-6 w-6 "} />
+                                        </a>
+                                    ) : null}
+                                    {DAO.twitterURL ? (
+                                        <a href={isValidHttpUrl(DAO.twitterURL)} target={"_blank"}>
+                                            <Twitter color={"#4793DF"} className={"h-6 w-6"} />
+                                        </a>
+                                    ) : null}
 
-                <div className="dao-links lg:flex md:flex lg:justify-between gap-10 justify-between w-full">
-                    <div className="dao-links-social flex lg:w-1/3 gap-10 items-center">
-                        <a
-                            href={DAO.scanURL}
-                            target={"_blank"}
-                            className="hover:text-purple text-xs flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full"
-                        >
-                            Contract
-                            <ExternalLinkIcon className="h-4 w-3" />
-                        </a>
-                        <div className="flex px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full items-center">
-                            <p className="text-xs">Blockchain</p>
-                            <BlockchainIcon chain={DAO.blockchain[0]} />
+                                    {DAO.websiteURL ? (
+                                        <a href={isValidHttpUrl(DAO.websiteURL)} target="_blank">
+                                            <GlobeAltIcon className="h-6 w-6" />
+                                        </a>
+                                    ) : null}
+                                </div>
+                            </div>
                         </div>
-
-                        {DAO.discordURL ? (
-                            <a href={isValidHttpUrl(DAO.discordURL)} target={"_blank"}>
-                                <Image height={"25"} width={"25"} src={ASSETS.discord} />
-                            </a>
-                        ) : null}
-                        {DAO.twitterURL ? (
-                            <a href={isValidHttpUrl(DAO.twitterURL)} target={"_blank"}>
-                                <Image height={"25"} width={"25"} src={ASSETS.twitter} />
-                            </a>
-                        ) : null}
-
-                        {DAO.websiteURL ? (
-                            <a href={isValidHttpUrl(DAO.websiteURL)} target="_blank">
-                                <GlobeAltIcon className="h-6 w-6" />
-                            </a>
-                        ) : null}
                     </div>
 
-                    <Link
-                        className={"dao-links-chats"}
-                        href={{
-                            pathname: `${url}/chats`,
-                            query: {
-                                governorAddress: DAO.governorAddress,
-                                blockchains: DAO.blockchain,
-                                tokenAddress: DAO.tokenAddress,
-                                daoName: DAO.name,
-                                chainId: DAO.chainId,
-                            },
-                        }}
+                    <div
+                        className={
+                            "treasury flex flex-col justify-between border-2 text-center border-lightGray rounded-lg h-40 p-3"
+                        }
                     >
-                        <button
-                            className={
-                                isLoaded
-                                    ? "secondary-button gradient-btn-color hover:bg-gradient-to-tl"
-                                    : "secondary-button bg-gray hover:bg-gray"
-                            }
-                            disabled={!isLoaded}
-                        >
-                            DAO Chats
-                        </button>
-                    </Link>
-                </div>
-
-                <div
-                    className={
-                        "treasury flex flex-col justify-between border-2 text-center border-lightGray rounded-lg h-40 p-3"
-                    }
-                >
-                    {DAO.treasuryAddress ? (
-                        <div className={"flex justify-center text-xl text-gray5"}>
-                            <a
-                                href={getChainScanner(DAO.chainId, DAO.treasuryAddress)}
-                                target={"_blank"}
-                                className="hover:text-purple flex gap-3"
-                            >
-                                Treasury
-                                <ExternalLinkIcon className="h-6 w-5" />
-                            </a>
-                        </div>
-                    ) : (
-                        <div className={"flex justify-center text-xl text-gray5"}>Treasury</div>
-                    )}
-                    <div className={"text-4xl"}>$ {treasuryBalance}</div>
-                    <div>
-                        {!DAO.treasuryAddress && isOwner ? (
-                            <button className="form-submit-button" onClick={addTreasuryAndSave}>
-                                Add treasury
-                            </button>
-                        ) : !DAO.treasuryAddress ? (
-                            <button
-                                className="secondary-button bg-gray hover:bg-gray"
-                                disabled={true}
-                            >
-                                Treasury not added
-                            </button>
+                        {DAO.treasuryAddress ? (
+                            <div className={"flex justify-center text-xl text-gray5"}>
+                                <a
+                                    href={getChainScanner(DAO.chainId, DAO.treasuryAddress)}
+                                    target={"_blank"}
+                                    className="hover:text-purple flex gap-3"
+                                >
+                                    Treasury
+                                    <ExternalLinkIcon className="h-6 w-5" />
+                                </a>
+                            </div>
                         ) : (
-                            <button
-                                className="form-submit-button w-1/5"
-                                onClick={async () => {
-                                    if (
-                                        !(await checkCorrectNetwork(
-                                            signerData,
-                                            DAO.chainId,
-                                            switchNetwork
-                                        ))
-                                    ) {
-                                        return;
-                                    }
-                                    contributeTreasuryDialog.toggle();
-                                }}
-                            >
-                                Contribute
-                            </button>
+                            <div className={"flex justify-center text-xl text-gray5"}>Treasury</div>
                         )}
-                    </div>
-                </div>
-
-                <div className="dao-proposals-members lg:w-full">
-                    <Tabs
-                        selectedTab={selectedTab}
-                        onClick={setSelectedTab}
-                        tabs={[
-                            {
-                                label: "PROPOSALS",
-                                index: 0,
-                                Component: () => {
-                                    return (
-                                        <ProposalsListTab
-                                            DAOMoralisInstance={DAOMoralisInstance}
-                                            DAO={DAO}
-                                            proposals={proposals}
-                                            daoUrl={url}
-                                        />
-                                    );
-                                },
-                            },
-                            {
-                                label: "WHITELIST",
-                                index: 1,
-                                Component: () => {
-                                    return (
-                                        <WhitelistTab
-                                            whitelist={whitelist}
-                                            signer={signerData}
-                                            chainId={DAO.chainId}
-                                        />
-                                    );
-                                },
-                            },
-                        ]}
-                        isLoaded={isLoaded}
-                        url={{
-                            pathname: `${url}/create-proposal`,
-                            query: {
-                                governorAddress: DAO.governorAddress,
-                                blockchains: [DAO.blockchain[0]],
-                                chainId: DAO.chainId,
-                            },
-                        }}
-                    />
-                </div>
-
-                <div className={"dao-nft"}>
-                    <div className="flex flex-row justify-between mb-4 ">
-                        <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
-                        <Link
-                            href={{
-                                pathname: `${url}/add-new-nft`,
-                                query: {
-                                    url: url,
-                                    governorAddress: DAO.governorAddress,
-                                    blockchain: DAO.blockchain,
-                                },
-                            }}
-                        >
-                            <button
-                                className={
-                                    isOwner
-                                        ? "secondary-button bg-purple text-white"
-                                        : "secondary-button bg-gray hover:bg-gray"
-                                }
-                                disabled={!isOwner}
-                            >
-                                Add NFT
-                            </button>
-                        </Link>
-                    </div>
-                    {DAO.tokenAddress ? (
-                        <div className="place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3">
-                            {NFTs ? (
-                                NFTs.map((nft, index) => (
-                                    <NFTCard
-                                        nftObject={nft}
-                                        setButtonState={setButtonState}
-                                        setCurrentNFT={setCurrentNFT}
-                                        detailNFTDialog={detailNFTDialog}
-                                        chain={DAO.blockchain[0]}
-                                        key={index}
-                                    />
-                                ))
+                        <div className={"text-4xl"}>$ {treasuryBalance}</div>
+                        <div>
+                            {!DAO.treasuryAddress && isOwner ? (
+                                <button className="form-submit-button" onClick={addTreasuryAndSave}>
+                                    Add treasury
+                                </button>
+                            ) : !DAO.treasuryAddress ? (
+                                <button
+                                    className="secondary-button bg-gray hover:bg-gray"
+                                    disabled={true}
+                                >
+                                    Treasury not added
+                                </button>
                             ) : (
-                                <MockupLoadingNFT chain={DAO.blockchain[0]} />
+                                <button
+                                    className="form-submit-button w-1/5"
+                                    onClick={async () => {
+                                        if (
+                                            !(await checkCorrectNetwork(
+                                                signerData,
+                                                DAO.chainId,
+                                                switchNetwork
+                                            ))
+                                        ) {
+                                            return;
+                                        }
+                                        contributeTreasuryDialog.toggle();
+                                    }}
+                                >
+                                    Contribute
+                                </button>
                             )}
                         </div>
-                    ) : (
-                        <MockupTextCard
-                            label={"No NFT membership"}
-                            text={
-                                "You should first add NFTs so that members can vote " +
-                                "then click the button “Add new proposals” and initiate a proposals"
-                            }
+                    </div>
+
+                    <div className="dao-proposals-members lg:w-full">
+                        <Tabs
+                            selectedTab={selectedTab}
+                            onClick={setSelectedTab}
+                            tabs={[
+                                {
+                                    label: "PROPOSALS",
+                                    index: 0,
+                                    Component: () => {
+                                        return (
+                                            <ProposalsListTab
+                                                DAOMoralisInstance={DAOMoralisInstance}
+                                                DAO={DAO}
+                                                proposals={proposals}
+                                                daoUrl={url}
+                                            />
+                                        );
+                                    },
+                                },
+                                {
+                                    label: "WHITELIST",
+                                    index: 1,
+                                    Component: () => {
+                                        return (
+                                            <WhitelistTab
+                                                whitelist={whitelist}
+                                                signer={signerData}
+                                                chainId={DAO.chainId}
+                                            />
+                                        );
+                                    },
+                                },
+                            ]}
+                            isLoaded={isLoaded}
+                            url={{
+                                pathname: `${url}/create-proposal`,
+                                query: {
+                                    governorAddress: DAO.governorAddress,
+                                    blockchains: [DAO.blockchain[0]],
+                                    chainId: DAO.chainId,
+                                },
+                            }}
                         />
-                    )}
+                    </div>
+
+                    <div className={"dao-nft"}>
+                        <div className="flex flex-row justify-between mb-4 ">
+                            <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
+                            <Link
+                                href={{
+                                    pathname: `${url}/add-new-nft`,
+                                    query: {
+                                        url: url,
+                                        governorAddress: DAO.governorAddress,
+                                        blockchain: DAO.blockchain,
+                                    },
+                                }}
+                            >
+                                <button
+                                    className={
+                                        isOwner
+                                            ? "secondary-button bg-purple text-white"
+                                            : "secondary-button bg-gray hover:bg-gray"
+                                    }
+                                    disabled={!isOwner}
+                                >
+                                    Add NFT
+                                </button>
+                            </Link>
+                        </div>
+                        {DAO.tokenAddress ? (
+                            <div className="place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3">
+                                {NFTs ? (
+                                    NFTs.map((nft, index) => (
+                                        <NFTCard
+                                            nftObject={nft}
+                                            setButtonState={setButtonState}
+                                            setCurrentNFT={setCurrentNFT}
+                                            detailNFTDialog={detailNFTDialog}
+                                            chain={DAO.blockchain[0]}
+                                            key={index}
+                                        />
+                                    ))
+                                ) : (
+                                    <MockupLoadingNFT chain={DAO.blockchain[0]} />
+                                )}
+                            </div>
+                        ) : (
+                            <MockupTextCard
+                                label={"No NFT membership"}
+                                text={
+                                    "You should first add NFTs so that members can vote " +
+                                    "then click the button “Add new proposals” and initiate a proposals"
+                                }
+                            />
+                        )}
+                    </div>
+                </section>
+
+                <div className={"dialogs"}>
+                    <DetailNftDialog
+                        dialog={detailNFTDialog}
+                        DAO={DAO}
+                        currentNFT={currentNFT}
+                        buttonState={buttonState}
+                        mintButton={mintButton}
+                    />
+
+                    <ContributeTreasuryDialog
+                        dialog={contributeTreasuryDialog}
+                        DAO={DAO}
+                        sending={sending}
+                        setSending={setSending}
+                        contributeAmount={contributeAmount}
+                        setContributeAmount={setContributeAmount}
+                        contributeToTreasuryButton={(e) => contributeToTreasuryButton(e)}
+                    />
+
+                    <CreateTreasuryDialog
+                        dialog={createTreasuryDialog}
+                        DAO={DAO}
+                        createTreasuryStep={createTreasuryStep}
+                    />
                 </div>
-            </section>
-
-            <div className={"dialogs"}>
-                <DetailNftDialog
-                    dialog={detailNFTDialog}
-                    DAO={DAO}
-                    currentNFT={currentNFT}
-                    buttonState={buttonState}
-                    mintButton={mintButton}
-                />
-
-                <ContributeTreasuryDialog
-                    dialog={contributeTreasuryDialog}
-                    DAO={DAO}
-                    sending={sending}
-                    setSending={setSending}
-                    contributeAmount={contributeAmount}
-                    setContributeAmount={setContributeAmount}
-                    contributeToTreasuryButton={(e) => contributeToTreasuryButton(e)}
-                />
-
-                <CreateTreasuryDialog
-                    dialog={createTreasuryDialog}
-                    DAO={DAO}
-                    createTreasuryStep={createTreasuryStep}
-                />
-            </div>
-        </Layout>
+            </Layout>
+        </div>
     ) : (
         <Layout className="layout-base">
             <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
