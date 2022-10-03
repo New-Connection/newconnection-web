@@ -37,36 +37,48 @@ interface INFTCard {
     chain: number | string;
 }
 
-export const NFTCard = ({
+export function NFTCard({
     nftObject,
     setCurrentNFT,
     setButtonState,
     detailNFTDialog,
     chain,
-}: INFTCard) => {
+}: INFTCard) {
     return (
-        <button
-            className="nft-card"
-            onClick={() => {
-                setButtonState("Mint");
-                setCurrentNFT(nftObject);
-                detailNFTDialog.toggle();
-            }}
-        >
-            {/* //Wrap to div for center elements */}
-            <NFTImage image={nftObject.image} />
-            <div className="p-4 gap-y-6">
-                <div className="flex justify-between">
-                    <p className="text-start">{nftObject.title}</p>
-                    <p className="font-light text-sm text-purple">{nftObject.price}</p>
+        <div className="flex flex-col overflow-hidden w-72 rounded-lg border border-gray3">
+            <button
+                onClick={() => {
+                    setButtonState("Mint");
+                    setCurrentNFT(nftObject);
+                    detailNFTDialog.toggle();
+                }}
+            >
+                <div className="flex-shrink-0">
+                    <img className="h-72 w-full object-cover" src={nftObject.image} alt="" />
                 </div>
-                <div className="flex pt-4 justify-between">
-                    <p className="font-light text-sm text-[#AAAAAA]">
-                        {formatAddress(nftObject.tokenAddress)}
-                    </p>
-                    <BlockchainIcon chain={chain} />
+                <div className="flex flex-1 flex-col justify-between bg-white px-6 pt-2 pb-6">
+                    <div className="flex-1">
+                        <div className="mt-1 flex justify-between">
+                            <p className="text-base font-medium text-black mt-1">
+                                {nftObject.title}
+                            </p>
+                            {/* TODO: Pass variable how many minted NFT and how many left */}
+                            <p className="text-base font-medium ml-4 mt-2 text-gray2">499/500</p>
+                        </div>
+                    </div>
+                    <div className="mt-[0.75rem] flex items-center justify-between">
+                        <div className="flex-shrink-0">
+                            <p className="text-sm font-normal text-black">
+                                {formatAddress(nftObject.tokenAddress)}
+                            </p>
+                        </div>
+                        <div className="ml-3 flex gap-2">
+                            <p className="text-sm font-normal text-purple">{nftObject.price}</p>
+                            <BlockchainIcon chain={chain} />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </button>
+            </button>
+        </div>
     );
-};
+}
