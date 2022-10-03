@@ -5,11 +5,9 @@ import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout from "components/Layout/Layout";
 import {
     handleTextChange,
-    handleCheckboxChange,
     handleChangeBasic,
     handleTextChangeAddNewMember,
     handleAddArray,
-    handleChangeBasicArray
 } from "utils/handlers";
 import {
     CheckboxGroup,
@@ -33,7 +31,6 @@ import {
 } from "database/interactions";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
 import { useMoralisQuery, useMoralis } from "react-moralis";
-import { getChainNames } from "utils/blockchains";
 import { ICreateProposalQuery } from "types/queryInterfaces";
 import { CreateProposalDialog } from "components/Dialog/CreateProposalDialogs";
 import { fetchDAO } from "network";
@@ -50,7 +47,7 @@ const CreateProposal: NextPage = () => {
         description: "",
         options: [],
         blockchain: [],
-        enabledBlockchains: []
+        // enabledBlockchains: []
     });
     const router = useRouter();
     const [votingNFTs, setVotingNFTs] = useState<IMultiNFTVoting>();
@@ -75,10 +72,11 @@ const CreateProposal: NextPage = () => {
         const query = router.query as ICreateProposalQuery;
 
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
+        // handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
+        handleAddArray(query.blockchains, setFormData, "blockchain");
         handleChangeBasic(+query.chainId, setFormData, "chainId");
     }, [router]);
-
+    console.log(formData.blockchain);
     useEffect(() => {
         if (formData.governorAddress) {
             console.log("fetch dao");
@@ -195,13 +193,14 @@ const CreateProposal: NextPage = () => {
                         />
                         <CheckboxGroup
                             label="Proposal Blockchain"
-                            description="You can choose one or more blockchains"
                             images={true}
-                            values={[...getChainNames()]}
-                            enabledValues={formData.enabledBlockchains}
-                            handleChange={(event) =>
-                                handleCheckboxChange(event, formData, setFormData, "blockchain")
-                            }
+                            values={formData.blockchain}
+                            // description="You can choose one or more blockchains"
+                            // values={[...getChainNames()]}
+                            // enabledValues={formData.enabledBlockchains}
+                            // handleChange={(event) =>
+                            //     handleCheckboxChange(event, formData, setFormData, "blockchain")
+                            // }
                         />
                         <p>Choose voting token</p>
                         {votingNFTs ? (
