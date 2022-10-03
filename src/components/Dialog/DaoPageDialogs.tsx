@@ -26,7 +26,7 @@ export const DetailNftDialog = ({
     return (
         <CustomDialog dialog={dialog} className="h-full items-center text-center">
             {currentNFT ? (
-                <div className="w-full">
+                <>
                     <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image} />
                     <div className="mt-4 text-black">{`${currentNFT.title}`}</div>
                     <a
@@ -39,7 +39,7 @@ export const DetailNftDialog = ({
                     </a>
 
                     <button
-                        className={`secondary-button w-full h-12 mt-4 mb-6 
+                        className={`secondary-button w-1/2 h-12 mt-4 mb-6 
                             ${buttonState === "Success" ? "bg-green" : ""} 
                             ${buttonState === "Error" ? "bg-red" : ""}`}
                         onClick={mintButton}
@@ -47,7 +47,7 @@ export const DetailNftDialog = ({
                         {buttonState}
                     </button>
 
-                    <p className="w-full mt-12 text-start text-black">Details</p>
+                    <p className="w-full mt-8 text-start text-black">Details</p>
                     <ul className="py-6 w-full divide-y divide-slate-200">
                         <li className="flex py-4 justify-between">
                             <p className="font-light text-gray2">{"Type"}</p>
@@ -69,8 +69,12 @@ export const DetailNftDialog = ({
                                 <BlockchainIcon chain={DAO.blockchain[0]} />
                             </div>
                         </li>
+                        <li className="flex py-4 justify-between">
+                            <p className="font-light text-gray2">{"Supply"}</p>
+                            <p className="font-normal text-black">{currentNFT.price}/100</p>
+                        </li>
                     </ul>
-                </div>
+                </>
             ) : (
                 <></>
             )}

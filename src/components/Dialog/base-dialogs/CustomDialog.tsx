@@ -15,8 +15,8 @@ export const CustomDialog = ({ dialog, className, children }: CustomDialogProps)
     return (
         <Dialog state={dialog} className={classNames("dialog", className)}>
             <DialogHeader title="" dialog={dialog}></DialogHeader>
-            <div className="h-full mt-10">
-                <div className="p-3">{children}</div>
+            <div className="h-full w-full mt-10">
+                <div className="pt-4 px-6">{children}</div>
             </div>
         </Dialog>
     );
