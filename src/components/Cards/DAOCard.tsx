@@ -37,7 +37,7 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
 
                         <p
                             className={
-                                "text-gray2 text-sm cursor-pointer mb-1.5 hover:text-gray3 active:text-gray2"
+                                "text-gray2 text-sm cursor-pointer hover:text-gray3 active:text-gray2"
                             }
                         >
                             View more
