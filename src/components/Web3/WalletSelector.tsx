@@ -58,7 +58,7 @@ export const WalletSelector = ({ dialog }: Props) => {
             hideOnEscape={false}
         >
             {isMounted && isConnected ? (
-                <>
+                <div className={"p-5"}>
                     <DialogHeader title="Account" dialog={dialog} />
                     <div className="mt-3 flex flex-col gap-2">
                         <p className="text-sm text-gray2 font-light">
@@ -74,7 +74,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                             Disconnect
                         </button>
                     </div>
-                </>
+                </div>
             ) : (
                 // Connect Wallet
                 <>

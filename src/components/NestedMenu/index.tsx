@@ -57,7 +57,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B(
     const renderMenuButton = (menuButtonProps: MenuButtonProps) => (
         <MenuButton
             state={menu}
-            className="rounded-full border-none bg-white py-2 px-4 text-[#3D3D3D] hover:bg-btnHover active:bg-btnActive hover:text-white hover:fill-white"
+            className="rounded-full border-none bg-gray py-2 px-4 text-[#3D3D3D] hover:bg-btnHover active:bg-btnActive hover:text-white hover:fill-white"
             {...menuButtonProps}
         >
             {label}

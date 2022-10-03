@@ -22,7 +22,7 @@ import {
     fetchProposals,
     fetchNFT,
     fetchTreasuryBalance,
-    fetchWhitelist,
+    fetchWhitelist
 } from "network/index";
 import { BlockchainIcon } from "components/Icons/";
 import { MockupLoadingDAO, MockupLoadingNFT } from "components/Mockup/Loading";
@@ -36,12 +36,12 @@ import {
     mint,
     contributeToTreasury,
     addTreasury,
-    addTreasureMoralis,
+    addTreasureMoralis
 } from "logic/index";
 import {
     ContributeTreasuryDialog,
     CreateTreasuryDialog,
-    DetailNftDialog,
+    DetailNftDialog
 } from "components/Dialog/DaoPageDialogs";
 import { Discord2, Twitter } from "@web3uikit/icons";
 
@@ -49,10 +49,10 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = a
     const { url } = context.params as IDaoQuery;
 
     const result: DAOPageProps = {
-        url: url.toString(),
+        url: url.toString()
     };
     return {
-        props: result,
+        props: result
     };
 };
 
@@ -90,7 +90,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // Moralis queries
     const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.equalTo("url", url), [], {
-        autoFetch: false,
+        autoFetch: false
     });
     const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
@@ -105,7 +105,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             query.equalTo("chainId", DAO?.chainId),
         [DAO],
         {
-            autoFetch: false,
+            autoFetch: false
         }
     );
     // EFFECTS
@@ -179,7 +179,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             DAO &&
             signerData &&
             (await signerData.getAddress()) ===
-                (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+            (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
                 ? setIsOwner(true)
                 : setIsOwner(false);
         };
@@ -277,8 +277,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                                 governorAddress: DAO.governorAddress,
                                                 daoName: DAO.name,
                                                 blockchains: DAO.blockchain,
-                                                tokenAddress: DAO.tokenAddress,
-                                            },
+                                                tokenAddress: DAO.tokenAddress
+                                            }
                                         }}
                                     >
                                         <button
@@ -331,22 +331,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
                     <div
                         className={
-                            "treasury flex flex-col justify-between border-2 text-center border-lightGray rounded-lg h-40 p-3"
+                            "treasury flex flex-col justify-between border-2 text-center border-lightGray rounded-lg h-48 p-3"
                         }
                     >
                         {DAO.treasuryAddress ? (
-                            <div className={"flex justify-center text-xl text-gray5"}>
+                            <div className={"flex justify-center text-3xl text-gray5"}>
                                 <a
                                     href={getChainScanner(DAO.chainId, DAO.treasuryAddress)}
                                     target={"_blank"}
-                                    className="hover:text-purple flex gap-3"
+                                    className="flex hover:text-purple gap-3"
                                 >
                                     Treasury
                                     <ExternalLinkIcon className="h-6 w-5" />
                                 </a>
                             </div>
                         ) : (
-                            <div className={"flex justify-center text-xl text-gray5"}>Treasury</div>
+                            <div className={"flex justify-center text-3xl text-gray5"}>Treasury</div>
                         )}
                         <div className={"text-4xl"}>$ {treasuryBalance}</div>
                         <div>
@@ -400,7 +400,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                                 daoUrl={url}
                                             />
                                         );
-                                    },
+                                    }
                                 },
                                 {
                                     label: "WHITELIST",
@@ -413,8 +413,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                                 chainId={DAO.chainId}
                                             />
                                         );
-                                    },
-                                },
+                                    }
+                                }
                             ]}
                             isLoaded={isLoaded}
                             url={{
@@ -422,8 +422,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 query: {
                                     governorAddress: DAO.governorAddress,
                                     blockchains: [DAO.blockchain[0]],
-                                    chainId: DAO.chainId,
-                                },
+                                    chainId: DAO.chainId
+                                }
                             }}
                         />
                     </div>
@@ -437,8 +437,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     query: {
                                         url: url,
                                         governorAddress: DAO.governorAddress,
-                                        blockchain: DAO.blockchain,
-                                    },
+                                        blockchain: DAO.blockchain
+                                    }
                                 }}
                             >
                                 <button
@@ -454,7 +454,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             </Link>
                         </div>
                         {DAO.tokenAddress ? (
-                            <div className="place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3">
+                            <div
+                                className="place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3">
                                 {NFTs ? (
                                     NFTs.map((nft, index) => (
                                         <NFTCard
