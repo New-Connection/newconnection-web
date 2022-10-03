@@ -45,31 +45,33 @@ export const BlockchainSelector = ({
                 </Select>
                 <SelectPopover
                     state={select}
-                    className="shadow-1 z-10 max-h-[280px] w-fit min-w-full overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
+                    className="shadow z-10 max-h-[280px] w-fit min-w-full overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2"
                 >
-                    {getChainNames().filter((chain) => chain != select.value).map((chain) =>
-                        enabledValues.includes(chain) ? (
-                            <SelectItem
-                                key={chain}
-                                value={chain}
-                                className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"
-                                setValueOnClick={handleChange}
-                                disabled={false}
-                            >
-                                {renderValue(chain)}
-                            </SelectItem>
-                        ) : (
-                            <SelectItem
-                                key={chain}
-                                value={chain}
-                                className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"
-                                setValueOnClick={handleChange}
-                                disabled={true}
-                            >
-                                {renderValue(chain)}
-                            </SelectItem>
-                        )
-                    )}
+                    {getChainNames()
+                        .filter((chain) => chain != select.value)
+                        .map((chain) =>
+                            enabledValues.includes(chain) ? (
+                                <SelectItem
+                                    key={chain}
+                                    value={chain}
+                                    className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"
+                                    setValueOnClick={handleChange}
+                                    disabled={false}
+                                >
+                                    {renderValue(chain)}
+                                </SelectItem>
+                            ) : (
+                                <SelectItem
+                                    key={chain}
+                                    value={chain}
+                                    className="btn-state h-12 border-none rounded-md cursor-pointer flex scroll-m-2 items-center gap-2 p-2"
+                                    setValueOnClick={handleChange}
+                                    disabled={true}
+                                >
+                                    {renderValue(chain)}
+                                </SelectItem>
+                            )
+                        )}
                 </SelectPopover>
             </div>
         </div>

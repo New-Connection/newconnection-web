@@ -9,7 +9,7 @@ import {
     SelectGroupLabel,
     SelectSeparator,
 } from "ariakit/select";
-import { SelectorIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import ASSETS from "assets/index";
@@ -40,10 +40,10 @@ export const NetworksMenu = () => {
             </SelectLabel>
             <Select
                 state={select}
-                className="nav-button shadow-none border-none hidden items-center justify-between gap-2 sm:flex"
+                className="nav-button border-none hidden items-center justify-between gap-1 text-black font-normal text-sm sm:flex"
             >
                 <>
-                    <div className="flex h-5 w-5 items-center rounded-full">
+                    {/* <div className="flex h-5 w-5 items-center rounded-full">
                         <Image
                             src={getLogoURI(chain.id) ?? ASSETS.defaultToken}
                             objectFit="contain"
@@ -52,9 +52,9 @@ export const NetworksMenu = () => {
                             height="20px"
                             priority
                         />
-                    </div>
+                    </div> */}
                     <span>{nameChain ?? "Unsupported"}</span>
-                    <SelectorIcon className="relative right-[-4px] h-4 w-4" aria-hidden="true" />
+                    <ChevronDownIcon className="relative right-[-4px] h-4 w-4" aria-hidden="true" />
                 </>
             </Select>
             {select.mounted && (

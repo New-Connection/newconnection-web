@@ -67,7 +67,10 @@ export const WalletSelector = ({ dialog }: Props) => {
                         <p className="flex items-center gap-4 break-words text-gray2">
                             {ensName ? `${ensName} (${formattedAddress})` : address}
                         </p>
-                        <button className="nav-button mt-5" onClick={() => handlerDisconect()}>
+                        <button
+                            className="nav-button mt-5 items-center"
+                            onClick={() => handlerDisconect()}
+                        >
                             Disconnect
                         </button>
                     </div>

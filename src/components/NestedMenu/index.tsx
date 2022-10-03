@@ -28,7 +28,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(function A(
 ) {
     return (
         <BaseMenuItem
-            className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 hover:text-white hover:bg-[#7343DF] rounded-md"
+            className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-black outline-none active-item:text-black aria-disabled:opacity-40 hover:text-white hover:bg-[#7343DF] active:bg-btnActive rounded-md"
             ref={ref}
             {...props}
         >
@@ -57,7 +57,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B(
     const renderMenuButton = (menuButtonProps: MenuButtonProps) => (
         <MenuButton
             state={menu}
-            className=" rounded-2xl border border-[#f7f8fa] bg-white py-2 px-4 text-[#3D3D3D] hover:bg-gray2 hover:text-white active:bg-[#7343DF]"
+            className="rounded-full border-none bg-white py-2 px-4 text-[#3D3D3D] hover:bg-btnHover active:bg-btnActive hover:text-white hover:fill-white"
             {...menuButtonProps}
         >
             {label}
@@ -90,7 +90,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B(
             )}
             <BaseMenu
                 state={menu}
-                className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 cursor-pointer"
+                className="z-10 min-w-[10rem] shadow rounded-xl border border-[#EAEAEA] bg-white p-2 cursor-pointer"
             >
                 <MenuContext.Provider value={true}>{children}</MenuContext.Provider>
             </BaseMenu>
