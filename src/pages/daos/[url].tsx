@@ -320,33 +320,33 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     </div>
                                 </div>
                                 <div className={"links flex gap-5"}>
-                                    {DAO.discordURL ? (
+                                    {DAO.discordURL && (
                                         <a href={isValidHttpUrl(DAO.discordURL)} target={"_blank"}>
                                             <Discord2 className={"h-6 w-6 "} />
                                         </a>
-                                    ) : null}
-                                    {DAO.twitterURL ? (
+                                    )}
+                                    {DAO.twitterURL && (
                                         <a href={isValidHttpUrl(DAO.twitterURL)} target={"_blank"}>
                                             <Twitter color={"#4793DF"} className={"h-6 w-6"} />
                                         </a>
-                                    ) : null}
+                                    )}
 
-                                    {DAO.websiteURL ? (
+                                    {DAO.websiteURL && (
                                         <a href={isValidHttpUrl(DAO.websiteURL)} target="_blank">
                                             <GlobeAltIcon className="h-6 w-6" />
                                         </a>
-                                    ) : null}
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div
-                        className={
-                            "treasury flex flex-col justify-between border-2 text-center border-lightGray rounded-lg h-48 p-3"
-                        }
-                    >
-                        {DAO.treasuryAddress ? (
+                    {DAO.treasuryAddress ? (
+                        <div
+                            className={
+                                "treasury flex flex-col justify-between border-2 text-center border-lightGray rounded-2xl h-48 p-3"
+                            }
+                        >
                             <div className={"flex justify-center text-3xl text-gray5"}>
                                 <a
                                     href={getChainScanner(DAO.chainId, DAO.treasuryAddress)}
@@ -357,25 +357,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     <ExternalLinkIcon className="h-6 w-5" />
                                 </a>
                             </div>
-                        ) : (
-                            <div className={"flex justify-center text-3xl text-gray5"}>
-                                Treasury
-                            </div>
-                        )}
-                        <div className={"text-4xl"}>$ {treasuryBalance}</div>
-                        <div>
-                            {!DAO.treasuryAddress && isOwner ? (
-                                <button className="form-submit-button" onClick={addTreasuryAndSave}>
-                                    Add treasury
-                                </button>
-                            ) : !DAO.treasuryAddress ? (
-                                <button
-                                    className="secondary-button bg-gray hover:bg-gray"
-                                    disabled={true}
-                                >
-                                    Treasury not added
-                                </button>
-                            ) : (
+                            <div className={"text-4xl"}>$ {treasuryBalance}</div>
+                            <div className={"treasury-button"}>
                                 <button
                                     className="form-submit-button w-1/5"
                                     onClick={async () => {
@@ -393,9 +376,17 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 >
                                     Contribute
                                 </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={"flex justify-around"}>
+                            {isOwner && (
+                                <button className="secondary-button" onClick={addTreasuryAndSave}>
+                                    Add treasury
+                                </button>
                             )}
                         </div>
-                    </div>
+                    )}
 
                     <div className="dao-proposals-members lg:w-full">
                         <Tabs
@@ -458,9 +449,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             >
                                 <button
                                     className={
-                                        isOwner
-                                            ? "secondary-button bg-purple text-white"
-                                            : "secondary-button bg-gray hover:bg-gray"
+                                        "secondary-button"
                                     }
                                     disabled={!isOwner}
                                 >
