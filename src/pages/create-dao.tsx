@@ -25,7 +25,7 @@ import {
     handleAddArray
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/";
-import { BLOCKS_IN_DAY } from "utils/constants";
+import { getBlocksPerDay } from "utils/blockchains";
 import {
     getMoralisInstance,
     MoralisClassEnum,
@@ -149,7 +149,8 @@ const CreateDAO: NextPage = () => {
             contract = await deployGovernorContract(signerData as Signer, {
                 name: formData.name,
                 tokenAddress: formData.tokenAddress[0],
-                votingPeriod: +formData.votingPeriod * BLOCKS_IN_DAY,
+                votingPeriod:
+                    +formData.votingPeriod * getBlocksPerDay(CHAINS[formData.blockchain[0]]),
                 quorumPercentage: +formData.quorumPercentage
             });
             handleNext(setActiveStep);
