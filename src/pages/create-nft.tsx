@@ -83,7 +83,7 @@ const CreateNFT: NextPage = () => {
             console.log(fullPath);
             handleChangeBasic(fullPath, setFormData, "ipfsAddress");
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, {dialog: confirmDialog });
             handleReset(setActiveStep);
             return;
         }
@@ -111,7 +111,7 @@ const CreateNFT: NextPage = () => {
             handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, {dialog: confirmDialog });
             handleReset(setActiveStep);
             return;
         }

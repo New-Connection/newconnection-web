@@ -89,7 +89,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
             console.log(tx);
             toast.success("Your vote is send");
         } catch (e: any) {
-            handleContractError(e, confirmDialog);
+            handleContractError(e, { dialog: confirmDialog });
         }
         handleNext(setActiveStep, 3);
     }

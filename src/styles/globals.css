@@ -68,7 +68,7 @@
     }
 
     .secondary-button {
-        @apply whitespace-nowrap bg-purple text-white font-medium h-10 rounded-full py-2 px-8 text-sm hover:bg-btnHover active:bg-btnActive disabled:cursor-not-allowed;
+        @apply whitespace-nowrap bg-purple text-white font-medium h-10 rounded-full py-2 px-8 text-sm hover:bg-btnHover active:bg-btnActive disabled:cursor-not-allowed disabled:bg-gray;
     }
 
     .form-submit-button {

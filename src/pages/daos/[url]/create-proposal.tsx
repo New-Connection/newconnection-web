@@ -7,7 +7,7 @@ import {
     handleTextChange,
     handleChangeBasic,
     handleTextChangeAddNewMember,
-    handleAddArray,
+    handleAddArray
 } from "utils/handlers";
 import {
     CheckboxGroup,
@@ -46,7 +46,7 @@ const CreateProposal: NextPage = () => {
         tokenName: "",
         description: "",
         options: [],
-        blockchain: [],
+        blockchain: []
         // enabledBlockchains: []
     });
     const router = useRouter();
@@ -140,7 +140,7 @@ const CreateProposal: NextPage = () => {
             handleChangeBasic(proposalId, setFormData, "proposalId");
             handleNext(setActiveStep);
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, { dialog: confirmDialog });
             return;
         }
 
@@ -153,7 +153,7 @@ const CreateProposal: NextPage = () => {
             moralisProposal.set("chainId", chainId);
             await saveMoralisInstance(moralisProposal);
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, { dialog: confirmDialog });
             return;
         }
     }

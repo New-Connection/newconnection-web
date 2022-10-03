@@ -2,7 +2,12 @@ import { DisclosureState } from "ariakit";
 import { errors } from "ethers";
 import toast from "react-hot-toast";
 
-export const handleContractError = (error: any, dialog?: DisclosureState) => {
+interface IErrorHandlerOptions {
+    dialog?: DisclosureState,
+    hideToast?: boolean
+}
+
+export const handleContractError = (error, option?: IErrorHandlerOptions) => {
     let message: string;
     if (error.code === errors.ACTION_REJECTED) {
         message = "User reject transaction";
@@ -17,8 +22,8 @@ export const handleContractError = (error: any, dialog?: DisclosureState) => {
     } else {
         message = "Something went wrong";
     }
-    dialog ? dialog.hide() : 0;
+    option?.dialog?.hide();
+    !option?.hideToast && toast.error(message);
     console.error(error);
-    toast.error(message);
     return;
 };

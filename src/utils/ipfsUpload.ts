@@ -10,7 +10,7 @@ export const NFTStorageInitialization = (): NFTStorage => {
 export const ipfsFullPath = (address: string) => "ipfs://" + `${address}`;
 
 export const isIpfsAddress = (address: string) => {
-    return address.includes("ipfs://")
+    return address.includes("ipfs://");
 };
 
 const parseIpfsAddress = (address: string) => {
@@ -32,7 +32,7 @@ export const storeNFT = async (image: File, name: String, description: String) =
         const UID = await client.store({
             image,
             name,
-            description,
+            description
         });
         const status = await client.status(UID.ipnft);
         console.log(status);
@@ -51,7 +51,7 @@ export const loadImage = async (ipfsNFTStorageAddress: string) => {
         const blob = await responseImage.blob();
         return URL.createObjectURL(blob);
     } catch (e) {
-        handleContractError(e);
+        handleContractError(e, { hideToast: true });
     }
     return image;
 };

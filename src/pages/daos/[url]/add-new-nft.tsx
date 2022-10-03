@@ -116,7 +116,7 @@ const AddNewNFT: NextPage = () => {
             console.log(fullPath);
             handleChangeBasic(fullPath, setFormData, "ipfsAddress");
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
             return;
         }
@@ -153,13 +153,13 @@ const AddNewNFT: NextPage = () => {
             await saveNewNFTContractAddress(contract.address);
             handleNext(setActiveStep);
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
             return;
         }
         try {
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
             return;
         }

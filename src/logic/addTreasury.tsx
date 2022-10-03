@@ -44,7 +44,7 @@ export async function addTreasury(
         // handleChangeBasic(treasuryContract.address, setDAO, "treasuryAddress");
         return treasuryContract.address;
     } catch (error) {
-        handleContractError(error, treasuryDialog);
+        handleContractError(error, { dialog: treasuryDialog });
         handleReset(setCreateTreasuryStep);
         return;
     }
@@ -61,7 +61,7 @@ export async function addTreasureMoralis(
             await saveMoralisInstance(DAOMoralisInstance);
         }
     } catch (error) {
-        handleContractError(error, treasuryDialog);
+        handleContractError(error, { dialog: treasuryDialog });
         return;
     }
 }

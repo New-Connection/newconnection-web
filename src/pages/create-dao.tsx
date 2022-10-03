@@ -139,7 +139,7 @@ const CreateDAO: NextPage = () => {
             console.log(coverImagePath);
             handleChangeBasic(coverImagePath, setFormData, "coverImage");
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
             return;
         }
@@ -159,7 +159,7 @@ const CreateDAO: NextPage = () => {
             handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "governorAddress");
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
             return;
         }
@@ -178,7 +178,7 @@ const CreateDAO: NextPage = () => {
             moralisDao.set("coverImage", coverImagePath);
             await saveMoralisInstance(moralisDao);
         } catch (error) {
-            handleContractError(error, confirmDialog);
+            handleContractError(error, { dialog: confirmDialog });
             return;
         }
     };
