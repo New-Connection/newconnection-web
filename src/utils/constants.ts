@@ -8,8 +8,8 @@ export const NFT_STORAGE_KEY = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
 // EVM MODULE
 export const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
 export const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
-export const BLOCKS_IN_DAY = 6545;
-export const SECONDS_IN_BLOCK = 13.2;
+export const BLOCKS_IN_DAY = 7200;
+export const SECONDS_IN_BLOCK = 12;
 
 //Moralis
 // export const moralisAppId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
