@@ -1,29 +1,9 @@
-import Ethereum from "assets/chains/Ethereum.png";
-import Polygon from "assets/chains/Polygon.png";
-import Arbitrum from "assets/chains/Arbitrum.png";
-import Binance from "assets/chains/Binance.png";
-import Avalanche from "assets/chains/Avalanche.png";
-import Fantom from "assets/chains/Fantom.png";
-import Optimism from "assets/chains/Optimism.png";
-import Aurora from "assets/chains/Aurora.png";
-import Skale from "assets/chains/Skale.png";
-import { Chain } from "wagmi";
+import ASSETS from "assets/index";
+import { chain, Chain } from "wagmi";
 import { StaticImageData } from "next/image";
+import { INFURA_ID } from "./constants";
 
 type chainType = [
-    //
-    // TEST CHAINS
-    // ----------------------------------------------------------------------
-    "Ethereum Rinkeby",
-    "Polygon Mumbai",
-    "Arbitrum Testnet",
-    "Binance Testnet",
-    "Avalanche Testnet",
-    "Fantom Testnet",
-    "Optimism Testnet",
-    "Aurora Testnet",
-    "Skale Testnet",
-
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
@@ -35,83 +15,87 @@ type chainType = [
     "Fantom",
     "Optimism",
     "Aurora",
-    "Skale",
-];
-
-const CHAINS_IMG: {
-    [key in chainType[number]]?: StaticImageData;
-} = {
-    //
-    // MAIN CHAINS
-    // ----------------------------------------------------------------------
-    Ethereum: Ethereum,
-    Polygon: Polygon,
-    Arbitrum: Arbitrum,
-    Binance: Binance,
-    Avalanche: Avalanche,
-    Fantom: Fantom,
-    Optimism: Optimism,
-    Aurora: Aurora,
-    Skale: Skale,
-
 
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    "Ethereum Rinkeby": Ethereum,
-    "Polygon Mumbai": Polygon,
-    "Arbitrum Testnet": Arbitrum,
-    "Binance Testnet": Binance,
-    "Avalanche Testnet": Avalanche,
-    "Fantom Testnet": Fantom,
-    "Optimism Testnet": Optimism,
-    "Aurora Testnet": Aurora,
-    "Skale Testnet": Skale,
+    "Goerli",
+    "Polygon Mumbai",
+    "Arbitrum Goerli",
+    "Binance Testnet",
+    "Avalanche Testnet",
+    "Fantom Testnet",
+    "Optimism Goerli",
+    "Aurora Testnet"
+];
+
+const CHAINS_IMG: {
+    [key in chainType[number]]: StaticImageData;
+} = {
+    //
+    // MAIN CHAINS
+    // ----------------------------------------------------------------------
+    Ethereum: ASSETS.Ethereum,
+    Polygon: ASSETS.Polygon,
+    Arbitrum: ASSETS.Arbitrum,
+    Binance: ASSETS.Binance,
+    Avalanche: ASSETS.Avalanche,
+    Fantom: ASSETS.Fantom,
+    Optimism: ASSETS.Optimism,
+    Aurora: ASSETS.Aurora,
+
+    //
+    // TEST CHAINS
+    // ----------------------------------------------------------------------
+    Goerli: ASSETS.Ethereum,
+    "Polygon Mumbai": ASSETS.Polygon,
+    "Arbitrum Goerli": ASSETS.Arbitrum,
+    "Binance Testnet": ASSETS.Binance,
+    "Avalanche Testnet": ASSETS.Avalanche,
+    "Fantom Testnet": ASSETS.Fantom,
+    "Optimism Goerli": ASSETS.Optimism,
+    "Aurora Testnet": ASSETS.Aurora,
+};
+
+const CHAINS_BLOCKTIME: {
+    [key in chainType[number]]?: number;
+} = {
+    //
+    // MAIN CHAINS
+    // ----------------------------------------------------------------------
+    Ethereum: 12,
+    Polygon: 2,
+    Arbitrum: 0.5,
+    Binance: 3,
+    Avalanche: 2,
+    Fantom: 1.2,
+    Optimism: 12,
+    Aurora: 1.2,
+
+    //
+    // TEST CHAINS
+    // ----------------------------------------------------------------------
+    Goerli: 12,
+    "Polygon Mumbai": 5,
+    "Arbitrum Goerli": 0.5,
+    "Binance Testnet": 3,
+    "Avalanche Testnet": 2,
+    "Fantom Testnet": 1.2,
+    "Optimism Goerli": 12,
+    "Aurora Testnet": 1.2,
 };
 
 export const CHAINS: {
     [key in chainType[number]]?: Chain;
 } = {
-
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
+    // "Rinkeby": chain.rinkeby,
 
-    "Ethereum Rinkeby": {
-        id: 4,
-        name: "Ethereum Rinkeby",
-        network: "Ethereum",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Ethereum",
-            symbol: "ETH",
-        },
-        rpcUrls: {
-            default: "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-        },
-        blockExplorers: {
-            default: { name: "Etherscan", url: "https://rinkeby.etherscan.io" },
-        },
-        testnet: true,
-    },
+    Goerli: chain.goerli,
 
-    "Polygon Mumbai": {
-        id: 80001,
-        name: "Polygon Mumbai",
-        network: "Polygon",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Polygon",
-            symbol: "MATIC",
-        },
-        rpcUrls: {
-            default: "https://rpc-mumbai.maticvigil.com",
-        },
-        blockExplorers: {
-            default: { name: "Polygonscan", url: "https://mumbai.polygonscan.com" },
-        },
-        testnet: true,
-    },
+    "Polygon Mumbai": chain.polygonMumbai,
 
     "Avalanche Testnet": {
         id: 43113,
@@ -131,45 +115,29 @@ export const CHAINS: {
         testnet: true,
     },
 
-    "Binance Testnet": {
-        id: 97,
-        name: "Binance Testnet",
-        network: "Binance",
-        nativeCurrency: {
-            decimals: 18,
-            name: "BSC",
-            symbol: "BNB",
-        },
-        rpcUrls: {
-            default: "https://data-seed-prebsc-1-s1.binance.org:8545",
-        },
-        blockExplorers: {
-            default: { name: "bscscan", url: "https://testnet.bscscan.com" },
-        },
-        testnet: true,
-    },
-
-    // "Arbitrum Testnet": {
-    //     id: 421611,
-    //     name: "Arbitrum Testnet",
-    //     network: "Arbitrum",
+    // "Binance Testnet": {
+    //     id: 97,
+    //     name: "Binance Testnet",
+    //     network: "Binance",
     //     nativeCurrency: {
     //         decimals: 18,
-    //         name: "Ethereum",
-    //         symbol: "ETH",
+    //         name: "BSC",
+    //         symbol: "BNB"
     //     },
     //     rpcUrls: {
-    //         default: "https://rinkeby.arbitrum.io/rpc",
+    //         default: "https://data-seed-prebsc-1-s1.binance.org:8545"
     //     },
     //     blockExplorers: {
-    //         default: { name: "arbiscan", url: "https://testnet.arbiscan.io" },
+    //         default: { name: "bscscan", url: "https://testnet.bscscan.com" }
     //     },
-    //     testnet: true,
+    //     testnet: true
     // },
 
-    "Optimism Testnet": {
+    // "Arbitrum Testnet": chain.arbitrumGoerli,
+
+    "Optimism Goerli": {
         id: 420,
-        name: "Optimism Testnet",
+        name: "Optimism Goerli",
         network: "Optimism",
         nativeCurrency: {
             decimals: 18,
@@ -177,7 +145,7 @@ export const CHAINS: {
             symbol: "ETH",
         },
         rpcUrls: {
-            default: "https://goerli.optimism.io/",
+            default: `https://optimism-goerli.infura.io/v3/${INFURA_ID}`,
         },
         blockExplorers: {
             default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" },
@@ -185,23 +153,23 @@ export const CHAINS: {
         testnet: true,
     },
 
-    "Fantom Testnet": {
-        id: 4002,
-        name: "Fantom Testnet",
-        network: "Fantom",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Fantom",
-            symbol: "FTM",
-        },
-        rpcUrls: {
-            default: "https://rpc.testnet.fantom.network/",
-        },
-        blockExplorers: {
-            default: { name: "ftmscan", url: "https://testnet.ftmscan.com" },
-        },
-        testnet: true,
-    },
+    // "Fantom Testnet": {
+    //     id: 4002,
+    //     name: "Fantom Testnet",
+    //     network: "Fantom",
+    //     nativeCurrency: {
+    //         decimals: 18,
+    //         name: "Fantom",
+    //         symbol: "FTM"
+    //     },
+    //     rpcUrls: {
+    //         default: "https://rpc.testnet.fantom.network/"
+    //     },
+    //     blockExplorers: {
+    //         default: { name: "ftmscan", url: "https://testnet.ftmscan.com" }
+    //     },
+    //     testnet: true
+    // },
 
     "Aurora Testnet": {
         id: 1313161555,
@@ -213,7 +181,7 @@ export const CHAINS: {
             symbol: "ETH",
         },
         rpcUrls: {
-            default: "https://testnet.aurora.dev",
+            default: `https://aurora-testnet.infura.io/v3/${INFURA_ID}`,
         },
         blockExplorers: {
             default: { name: "aurorascan", url: "https://testnet.aurorascan.dev" },
@@ -221,26 +189,26 @@ export const CHAINS: {
         testnet: true,
     },
 
-    "Skale Testnet": {
-        id: 0x2696efe5,
-        name: "Skale Testnet",
-        network: "Skale",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Skale",
-            symbol: "SFUEL",
-        },
-        rpcUrls: {
-            default: "https://eth-online.skalenodes.com/v1/hackathon-complex-easy-naos",
-        },
-        blockExplorers: {
-            default: {
-                name: "skalescan",
-                url: "https://hackathon-complex-easy-naos.explorer.eth-online.skalenodes.com",
-            },
-        },
-        testnet: true,
-    },
+    // "Skale Testnet": {
+    //     id: 0x2696efe5,
+    //     name: "Skale Testnet",
+    //     network: "Skale",
+    //     nativeCurrency: {
+    //         decimals: 18,
+    //         name: "Skale",
+    //         symbol: "SFUEL",
+    //     },
+    //     rpcUrls: {
+    //         default: "https://eth-online.skalenodes.com/v1/hackathon-complex-easy-naos",
+    //     },
+    //     blockExplorers: {
+    //         default: {
+    //             name: "skalescan",
+    //             url: "https://hackathon-complex-easy-naos.explorer.eth-online.skalenodes.com",
+    //         },
+    //     },
+    //     testnet: true,
+    // },
 
     //
     // MAIN CHAINS
@@ -256,14 +224,13 @@ export const CHAINS: {
             symbol: "ETH",
         },
         rpcUrls: {
-            default: "https://mainnet.aurora.dev",
+            default: `https://aurora-mainnet.infura.io/v3/${INFURA_ID}`,
         },
         blockExplorers: {
             default: { name: "aurorascan", url: "https://aurorascan.dev" },
         },
         testnet: false,
     },
-
 };
 
 export const getChains = (): Chain[] => {
@@ -271,44 +238,46 @@ export const getChains = (): Chain[] => {
 };
 
 export const getChainIds = () => {
-    return getChains()
-        .map((chain) => chain.id)
+    return getChains().map((chain) => chain.id);
 };
 
 export const getChainNames = () => {
-    return getChains()
-        .map((chain) => chain.name)
+    return getChains().map((chain) => chain.name);
 };
 
-export const getChain = (
-    chainId: number
-): Chain => {
-    return getChains()
-        .find((chain) => chain.id === chainId);
+export const getChain = (chainId: number): Chain => {
+    return getChains().find((chain) => chain.id === chainId);
 };
 
 export function getChainScanner(chainId: number | undefined, address: string | undefined) {
-    if (!chainId || !address) {
-        return "";
-    }
-    return `${getChain(chainId).blockExplorers.default.url}/address/${address}`;
+    return chainId && address
+        ? `${getChain(chainId).blockExplorers.default.url}/address/${address}`
+        : "";
 }
 
 export const getTokenSymbol = (chainId: number) => {
-    return getChain(chainId).nativeCurrency.symbol
-}
-
-export const isBlockchainSupported = (chain: { id }) => {
-    if (!chain) {
-        return false;
-    }
-    return getChainIds().includes(chain.id);
+    return getChain(chainId).nativeCurrency.symbol;
 };
 
-export const getLogoURI = (chain: number | string) => {
-    if (typeof chain === "number") {
-        return CHAINS_IMG[getChain(chain)?.network]?.src || CHAINS_IMG["Ethereum"];
-    } else {
-        return CHAINS_IMG[chain] || CHAINS_IMG["Ethereum"];
-    }
-}
+export const isBlockchainSupported = (chain: { id }) => {
+    return chain ? getChainIds().includes(chain.id) : false;
+};
+
+export const getLogoURI = (chain: number | string): StaticImageData => {
+    return (
+        (typeof chain === "number" ? CHAINS_IMG[getChain(chain)?.name]?.src : CHAINS_IMG[chain]) ||
+        CHAINS_IMG["Ethereum"]
+    );
+};
+
+export const getSecondsPerBlock = (chain: number | string): number => {
+    return (
+        (typeof chain === "number"
+            ? CHAINS_BLOCKTIME[getChain(chain)?.name]
+            : CHAINS_BLOCKTIME[chain]) || CHAINS_BLOCKTIME["Goerli"]
+    );
+};
+
+export const getBlocksPerDay = (chain: number | string): number => {
+    return (60 * 60 * 24) / getSecondsPerBlock(chain);
+};

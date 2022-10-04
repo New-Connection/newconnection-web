@@ -1,5 +1,5 @@
 import { FileUploader } from "react-drag-drop-files";
-import ImageIcon from "assets/ImageIcon.png";
+import ASSETS from "assets/index";
 import Image from "next/image";
 import { IDragAndDropProps } from "./types";
 import { useState } from "react";
@@ -69,7 +69,7 @@ export const DragAndDropImage = ({
                                 </div>
                             ) : (
                                 <>
-                                    <Image src={ImageIcon} width={"50"} height={"50"} />
+                                    <Image src={ASSETS.imageIcon} width={"50"} height={"50"} />
                                     <p className="text-gray2 mt-6 text-sm px-4">
                                         PNG, JPEG and JPG accept. Max 1mb.
                                     </p>

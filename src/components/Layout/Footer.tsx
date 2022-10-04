@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Separator } from "ariakit/separator";
 
 import { DiscordIcon, TwitterIcon } from "components/Icons/";
 
@@ -17,16 +16,16 @@ const Footer = () => {
                         <button className="cursor-not-allowed hover:text-gray2">Privacy</button>
                     </div>
                     <div className="flex justify-center sm:justify-start space-x-2 mt-4">
-                        <button className="flex pl-[0.6em] items-center cursor-not-allowed w-[60px] h-[60px] bg-gray rounded-md fill-purple hover:fill-gray2">
-                            <DiscordIcon />
+                        <button className="grid place-items-center cursor-not-allowed w-[50px] h-[50px] bg-gray rounded-md fill-purple hover:fill-gray2">
+                            <DiscordIcon height="33" width="35" />
                         </button>
                         <a
                             href="https://twitter.com/NewConnectionX"
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <button className="w-[60px] h-[60px] pl-[0.6em] bg-gray rounded-md fill-[#1DA1F2] hover:bg-purple hover:fill-white">
-                                <TwitterIcon />
+                            <button className="w-[50px] h-[50px] grid place-items-center bg-gray rounded-md fill-[#1DA1F2] hover:bg-purple hover:fill-white">
+                                <TwitterIcon height="26" width="30" />
                             </button>
                         </a>
                     </div>

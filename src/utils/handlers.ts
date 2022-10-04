@@ -30,37 +30,27 @@ export const handleAddArray = <T>(
     set: Dispatch<SetStateAction<T>>,
     field: string
 ) => {
-    set((prev) => ({ ...prev, [field]: [...value] }));
+    value
+        ? typeof value === "string"
+            ? set((prev) => ({ ...prev, [field]: [value] }))
+            : set((prev) => ({ ...prev, [field]: [...value] }))
+        : "return";
 };
 
-export const promisedHandleChangeBasic = <T extends ICreate>(
-    value: string | boolean | number,
-    set: Dispatch<SetStateAction<T>>,
-    field: string
-) => {
-    return new Promise((resolve) => {
-        set((prev) => ({ ...prev, [field]: value }));
-    });
-};
-
-export const handleDatePicker = <T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement>(
+export const handleTextChange = <
+    T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement
+>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>
 ) => {
     set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 };
 
-export const handleTextChange = <T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement>(
-    event: ChangeEvent<E>,
-    set: Dispatch<SetStateAction<T>>
-) => {
-    set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-};
-
-export const handleNftSupplyChange = <T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement>(
+export const handleNftSupplyChange = <
+    T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement
+>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>,
     value: string | boolean | number,
@@ -121,13 +111,18 @@ export const handleSelectorChange = <T extends ICreate>(
     return true;
 };
 
-export const handleSelectorChangeNewMember = <T>(
-    event: BaseSyntheticEvent,
+export const handleDaoNameUrlChange = <
+    T extends ICreate,
+    E extends HTMLInputElement | HTMLTextAreaElement
+>(
+    event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>,
     field: string
 ) => {
-    const elem = event.currentTarget;
-    const label = elem.parentNode.textContent;
-    set((prev) => ({ ...prev, [field]: label }));
-    return true;
+    const createUrl = (name: string): string => {
+        return name.replace(/ /g, "-");
+    };
+
+    set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+    handleChangeBasic(createUrl(event.target.value), set, field);
 };

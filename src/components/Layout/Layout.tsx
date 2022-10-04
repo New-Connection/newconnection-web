@@ -5,8 +5,6 @@ import Header from "./Header";
 import Footer from "./Footer";
 import CustomToast from "components/Toast/CustomToast";
 import HeadInfo from "./HeadInfo";
-import SwitchNetworkBanner from "components/Banners/SwitchNetworksBanner";
-// import NewFeaturesBanner from "components/Banners/NewFeaturesBanner";
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -20,9 +18,6 @@ export default function Layout({
     isMinHeightTurnOff = false,
     ...props
 }: ILayoutProps) {
-    {
-        /* pb-20 should be same as a footer height */
-    }
     return (
         <>
             <HeadInfo />
@@ -33,7 +28,7 @@ export default function Layout({
             >
                 <Header />
                 {/* <NewFeaturesBanner /> */}
-                <SwitchNetworkBanner />
+                {/* <SwitchNetworkBanner /> */}
                 <main className={classNames("flex-1 pb-36 mt-[6.5em]", className)} {...props}>
                     {children}
                 </main>

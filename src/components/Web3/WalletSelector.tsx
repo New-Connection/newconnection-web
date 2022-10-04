@@ -1,15 +1,13 @@
 import * as React from "react";
-import { Connector, useAccount, useConnect, useDisconnect, useEnsName } from "wagmi";
+import { Connector, useAccount, useConnect, useDisconnect } from "wagmi";
 import { Dialog, DisclosureState } from "ariakit";
 
 // OWN
 import { useIsMounted } from "hooks";
 import { formatAddress } from "utils/address";
-import { DialogHeader } from "components/Dialog";
+import { DialogHeader } from "components/Dialog/base-dialogs";
 
-// Wallet icon
-import MetamaskIcon from "assets/wallets/mm.png";
-import WalletConnectIcon from "assets/wallets/wc.png";
+import ASSETS from "assets/index";
 
 interface Props {
     dialog: DisclosureState;
@@ -26,8 +24,8 @@ export const WalletSelector = ({ dialog }: Props) => {
     const isMounted = useIsMounted();
 
     const imageID = {
-        MetaMask: MetamaskIcon.src,
-        WalletConnect: WalletConnectIcon.src,
+        MetaMask: ASSETS.metamask,
+        WalletConnect: ASSETS.walletConnect,
     };
 
     const handleConnect = React.useCallback(
@@ -60,7 +58,7 @@ export const WalletSelector = ({ dialog }: Props) => {
             hideOnEscape={false}
         >
             {isMounted && isConnected ? (
-                <>
+                <div className={"p-5"}>
                     <DialogHeader title="Account" dialog={dialog} />
                     <div className="mt-3 flex flex-col gap-2">
                         <p className="text-sm text-gray2 font-light">
@@ -69,11 +67,14 @@ export const WalletSelector = ({ dialog }: Props) => {
                         <p className="flex items-center gap-4 break-words text-gray2">
                             {ensName ? `${ensName} (${formattedAddress})` : address}
                         </p>
-                        <button className="nav-button mt-5" onClick={() => handlerDisconect()}>
+                        <button
+                            className="nav-button mt-5 items-center"
+                            onClick={() => handlerDisconect()}
+                        >
                             Disconnect
                         </button>
                     </div>
-                </>
+                </div>
             ) : (
                 // Connect Wallet
                 <>
@@ -88,7 +89,11 @@ export const WalletSelector = ({ dialog }: Props) => {
                                 }}
                                 className="flex gap-4 btn-connect-wallets text-purple justify-center pr-12 rounded-full"
                             >
-                                <img src={imageID[x.name]} className="w-8 h-8" />
+                                <img
+                                    alt={"wallet"}
+                                    src={imageID[x.name]["src"]}
+                                    className="w-8 h-8"
+                                />
                                 {x?.name}
                                 {isLoading && x.id === pendingConnector?.id && " (connecting)"}
                             </button>

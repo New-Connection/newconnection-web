@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useDialogState } from "ariakit";
-import { TextDialog } from "components/Dialog";
+import { TextDialog } from "components/Dialog/base-dialogs";
 
 const NewFeaturesBanner = () => {
     const textDialog = useDialogState();

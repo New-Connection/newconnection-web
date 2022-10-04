@@ -1,4 +1,4 @@
-import { useAccount, useEnsName } from "wagmi";
+import { useAccount } from "wagmi";
 import { formatAddress } from "utils/address";
 import * as React from "react";
 
@@ -16,7 +16,7 @@ export const Account = ({ showAccountInfo }: Props) => {
 
     return (
         <button
-            className="nav-button border-none shadow-none text-black hidden md:block"
+            className="nav-button bg-gray border-none shadow-none text-black font-normal text-sm hidden md:block"
             onClick={showAccountInfo}
         >
             {ensName ?? formattedAddress}

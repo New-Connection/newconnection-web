@@ -2,10 +2,8 @@
 // https://flowbite.com/docs/forms/radio/
 import { IRadioSelector } from "./types";
 import classNames from "classnames";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
-// TODO: Add labels
 export const RadioSelector = ({ name, labels, className, handleChange }: IRadioSelector) => {
     return (
         <>
@@ -28,8 +26,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-black">
                         {labels[0]}
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                     </div>
                 </label>
             </div>
@@ -51,8 +48,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-black">
                         {labels[1]}
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                     </div>
                 </label>
             </div>
@@ -62,7 +58,6 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
 
 export const RadioSelectorMulti = (radioSelector: IRadioSelector) => {
     const [clickedValue, setClickValue] = useState(null);
-    // console.log(radioSelector.values);
 
     return (
         <>
@@ -89,12 +84,7 @@ export const RadioSelectorMulti = (radioSelector: IRadioSelector) => {
                                 clickedValue === index ? "border-purple text-purple" : ""
                             )}
                         >
-                            <p>
-                                {
-                                    //TODO: localcache
-                                    index
-                                }
-                            </p>
+                            <p>{index}</p>
                             {radioSelector.labels[index]}
                         </label>
                     </React.Fragment>

@@ -1,11 +1,11 @@
 import React from "react";
-import { moralisAppId, moralisServerUrl } from "utils/constants";
+import { MORALIS_APP_ID, MORALIS_SERVER_URL } from "utils/constants";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "react-query"; // it makes fetching, caching, synchronizing and updating server state
 import { WagmiConfig } from "wagmi";
 import type { AppProps } from "next/app";
 import "styles/globals.css";
-import { WalletConfig } from "components/Web3";
+import { WagmiClient } from "components/Web3";
 import { MoralisProvider } from "react-moralis";
 import Script from "next/script";
 import "nprogress/nprogress.css";
@@ -31,9 +31,9 @@ function App({ Component, pageProps }: AppProps) {
     `}
             </Script>
 
-            <MoralisProvider appId={moralisAppId!} serverUrl={moralisServerUrl!}>
+            <MoralisProvider appId={MORALIS_APP_ID!} serverUrl={MORALIS_SERVER_URL!}>
                 <ThemeProvider defaultTheme="system" attribute="class">
-                    <WagmiConfig client={WalletConfig}>
+                    <WagmiConfig client={WagmiClient}>
                         <QueryClientProvider client={queryClient}>
                             <Component {...pageProps} />
                         </QueryClientProvider>

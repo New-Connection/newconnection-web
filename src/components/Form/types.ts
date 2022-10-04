@@ -42,8 +42,8 @@ export interface ISelectorProps {
 }
 
 export interface IRadioSelectorClickOption {
-    tokenName: string,
-    tokenAddress: string,
+    tokenName: string;
+    tokenAddress: string;
 }
 
 export interface IRadioSelector {
@@ -51,7 +51,10 @@ export interface IRadioSelector {
     labels: string[];
     className?: string;
     values?: string[];
-    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, option?: IRadioSelectorClickOption) => void;
+    handleChange?: (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        option?: IRadioSelectorClickOption
+    ) => void;
 }
 
 export interface IDragAndDropProps {
@@ -61,27 +64,6 @@ export interface IDragAndDropProps {
     handleChange: (file: File) => void;
     hoverTitle?: string;
     multipleFiles?: boolean;
-}
-
-export interface InputWithTokenElement extends InputTextProps {
-    handleTokenChange: (token: string) => void;
-    tokens: string[];
-}
-
-export interface InputWithTokenSelectProps extends InputTextProps {
-    handleTokenChange: (token: string) => void;
-    handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    tokenOptions: string[];
-}
-
-export interface InputAmountWithDaysProps {
-    name: string;
-    selectInputName: string;
-    label: string;
-    isRequired: boolean;
-    className?: string;
-    handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleSelectChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export interface ButtonProps {
@@ -99,10 +81,4 @@ export interface CheckboxProps {
     images?: boolean;
     enabledValues?: string[];
     handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-}
-
-export interface IDatePicker {
-    label: string;
-    value: Date | null;
-    handleChange: () => void;
 }

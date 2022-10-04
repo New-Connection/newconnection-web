@@ -1,7 +1,8 @@
 import Layout from "./Layout";
 
+export * from "./Logo";
+export * from "./Header";
+export * from "./Navbar";
+export * from "./Footer";
+
 export default Layout;
-export { default as Logo } from "./Logo";
-export { default as Header } from "./Header";
-export { default as Navbar } from "./Navbar";
-export { default as Footer } from "./Footer";

@@ -1,3 +1,5 @@
+import { VotingType } from "contract-interactions";
+
 export interface ICreate {
     name: string;
     description?: string;
@@ -8,11 +10,10 @@ export interface ICreateDAO extends ICreate {
     goals: string;
     profileImage: any;
     coverImage: any;
-    isActive?:boolean;
+    isActive?: boolean;
     tokenAddress: string[];
     votingPeriod: string;
     quorumPercentage: string;
-    type: string[];
     blockchain: string[];
     governorAddress?: string;
     chainId?: number;
@@ -33,13 +34,6 @@ export interface IDAOPageForm extends ICreateDAO {
     treasuryAddress?: string;
 }
 
-
-export interface IMembershipForm {
-    walletAddress?: string;
-    note?: string;
-    blockchainSelected?: string;
-}
-
 export interface IBlockchains {
     Polygon?: number;
     Ethereum?: number;
@@ -52,7 +46,6 @@ export interface IBlockchains {
 
 export interface ICreateNFT extends ICreate, IBlockchains {
     file: object;
-    NFTtype: string;
     symbol: string;
     price: number;
     blockchain: string;
@@ -83,13 +76,27 @@ export interface IProposalPageForm extends ICreateProposal {
     deadline?: number;
 }
 
+export interface IProposal {
+    voteResult: VotingType;
+    txConfirm?: string;
+}
+
+export interface IWhitelistPageForm {
+    walletAddress?: string;
+    votingTokenName?: string;
+    votingTokenAddress?: string;
+    note?: string;
+    blockchainSelected?: string;
+}
+
 export interface INFTVoting {
     title?: string;
     type?: string;
     image?: string;
     tokenAddress: string;
     price?: string;
-
+    totalSupply?: string;
+    totalMinted?: string;
 }
 
 export interface IMultiNFTVoting {
@@ -101,7 +108,7 @@ export interface IMultiNFTVoting {
 
 export interface IAddNewMember {
     daoName: string;
-    walletAddress: string;
+    walletAddress?: string;
     chainId?: string;
     daoAddress: string;
     tokenAddress: string[];
@@ -120,5 +127,6 @@ export interface IProposalDetail {
     startDate?: Date;
     endDate?: Date;
     results?: number;
+    chainId?: number;
     ownerAddress?: string;
 }
