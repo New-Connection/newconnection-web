@@ -7,13 +7,13 @@ import { getLogoURI } from "utils/blockchains";
 import classNames from "classnames";
 
 export function CheckboxGroup({
-                                  label,
-                                  description,
-                                  values,
-                                  enabledValues,
-                                  images = false,
-                                  handleChange,
-                              }: CheckboxProps) {
+    label,
+    description,
+    values,
+    enabledValues,
+    images = false,
+    handleChange,
+}: CheckboxProps) {
     let isDisabled;
 
     return (
@@ -30,7 +30,7 @@ export function CheckboxGroup({
                         <label
                             key={value.toUpperCase()}
                             className={classNames(
-                                isDisabled ? "input-label cursor-not-allowed" : "input-label",
+                                isDisabled ? "input-label cursor-not-allowed" : "input-label"
                             )}
                         >
                             <Checkbox
@@ -42,15 +42,15 @@ export function CheckboxGroup({
                             >
                                 {value}
                                 {images ? (
-                                        <Image
-                                            src={getLogoURI(value) as StaticImageData}
-                                            height="25"
-                                            width="25"
-                                            layout="fixed"
-                                        />)
-                                    : (
-                                        <></>
-                                    )}
+                                    <Image
+                                        src={getLogoURI(value) as StaticImageData}
+                                        height="25"
+                                        width="25"
+                                        layout="fixed"
+                                    />
+                                ) : (
+                                    <></>
+                                )}
                             </Checkbox>
                         </label>
                     );

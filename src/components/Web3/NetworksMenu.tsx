@@ -1,13 +1,13 @@
 import * as React from "react";
 import {
     Select,
+    SelectGroup,
+    SelectGroupLabel,
     SelectItem,
     SelectLabel,
     SelectPopover,
-    useSelectState,
-    SelectGroup,
-    SelectGroupLabel,
     SelectSeparator,
+    useSelectState,
 } from "ariakit/select";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useNetwork, useSwitchNetwork } from "wagmi";

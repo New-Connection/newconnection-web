@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { useDialogState } from "ariakit";
 import toast from "react-hot-toast";
@@ -9,7 +9,7 @@ import { BackButton } from "components/Button/";
 import { Button, RadioSelector } from "components/Form";
 import { validateForm } from "utils/validate";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { IProposalDetail, IProposal } from "types/forms";
+import { IProposal, IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { MockupTextCard } from "components/Mockup";
 import { castVote } from "contract-interactions/writeGovernorContract";
@@ -21,21 +21,23 @@ import { fetchDetailProposal } from "network/fetchProposals";
 import { AboutProposalCard } from "components/Cards/ProposalCard";
 import { handleContractError } from "utils/errors";
 
-export const getServerSideProps: GetServerSideProps<IDetailProposalProps,
-    IDetailProposalQuery> = async (context) => {
+export const getServerSideProps: GetServerSideProps<
+    IDetailProposalProps,
+    IDetailProposalQuery
+> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;
     const result: IDetailProposalProps = {
-        detailProposal: detailProposal
+        detailProposal: detailProposal,
     };
     return {
-        props: result
+        props: result,
     };
 };
 
 const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
     const [formData, setFormData] = useState<IProposal>({
         voteResult: undefined,
-        txConfirm: ""
+        txConfirm: "",
     });
     const [activeStep, setActiveStep] = useState(0);
     const { data: signerData } = useSigner();
@@ -49,7 +51,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         (query) => query.equalTo("proposalId", detailProposal),
         [],
         {
-            autoFetch: false
+            autoFetch: false,
         }
     );
 

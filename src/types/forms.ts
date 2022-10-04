@@ -95,7 +95,6 @@ export interface INFTVoting {
     image?: string;
     tokenAddress: string;
     price?: string;
-
 }
 
 export interface IMultiNFTVoting {

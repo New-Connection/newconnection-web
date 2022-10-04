@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { GOVERNOR_ABI } from "abis";
-import { getBlocksPerDay, getSecondsPerBlock } from "utils/blockchains";
+import { getSecondsPerBlock } from "utils/blockchains";
 import { provider } from "components/Web3";
 
 enum ProposalState {
@@ -58,7 +58,10 @@ export async function proposalDeadline(
     const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, baseProvider);
     const votingPeriod = (await governor.votingPeriod()).toNumber();
     const blockNumber = (await governor.proposalSnapshot(proposalId)).toNumber();
-    return (await baseProvider.getBlock(blockNumber)).timestamp + getSecondsPerBlock(chainId) * votingPeriod;
+    return (
+        (await baseProvider.getBlock(blockNumber)).timestamp +
+        getSecondsPerBlock(chainId) * votingPeriod
+    );
 }
 
 export async function proposalSnapshot(

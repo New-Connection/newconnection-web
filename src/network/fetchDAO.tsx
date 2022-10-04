@@ -33,7 +33,7 @@ export async function fetchDAO(isInitialized: any, daoQuery: Function) {
             totalVotes: 0,
             totalMembers: 0,
             totalProposals: 0,
-            activeProposals: 0
+            activeProposals: 0,
         };
         return { newDao, moralisInstance };
     }

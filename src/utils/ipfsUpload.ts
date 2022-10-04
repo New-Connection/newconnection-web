@@ -7,8 +7,8 @@ export const ipfs = ipfsHttpClient({
     port: 5001,
     protocol: "https",
     headers: {
-        authorization: INFURA_IPFS_AUTHORIZATION
-    }
+        authorization: INFURA_IPFS_AUTHORIZATION,
+    },
 });
 
 export const getIpfsImage = (path: string, mockImage: string) => {

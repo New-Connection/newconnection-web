@@ -1,9 +1,8 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useMoralisQuery } from "react-moralis";
-import { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 import { useNetwork } from "wagmi";
 
 import Layout from "components/Layout/Layout";
@@ -23,7 +22,7 @@ const DAOsPage: NextPage = () => {
         (query) => query.notEqualTo("objectId", ""),
         [],
         {
-            autoFetch: false
+            autoFetch: false,
         }
     );
 

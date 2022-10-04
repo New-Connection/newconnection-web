@@ -37,7 +37,7 @@ export async function fetchDAOs(isInitialized: any, DAOsQuery: Function) {
                     tokenAddress: [""],
                     votingPeriod: "",
                     type: [],
-                    quorumPercentage: ""
+                    quorumPercentage: "",
                 } as IDAOPageForm;
             });
         } catch (e) {

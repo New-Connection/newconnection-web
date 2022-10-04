@@ -1,9 +1,9 @@
 {
     "createDAO": {
-      "connectWallet": "Connect wallet to create NFT",
-      "noData": "Create a Balance First",
-      "error": "Couldn't load balances",
-      "networkNotSupported": "Network is not supported"
+        "connectWallet": "Connect wallet to create NFT",
+        "noData": "Create a Balance First",
+        "error": "Couldn't load balances",
+        "networkNotSupported": "Network is not supported"
     },
     "createNFT": {
         "connectWallet": "Connect wallet to create NFT",
@@ -11,5 +11,4 @@
         "error": "Couldn't load balances",
         "networkNotSupported": "Network is not supported"
     }
-  }
-  
+}

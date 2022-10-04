@@ -44,7 +44,7 @@ export interface IConstructorNFT {
     name: string;
     symbol: string;
     layerzeroEndpoint: string;
-    baseURI:string;
+    baseURI: string;
     price: string;
     startMintId: number;
     endMintId: number;

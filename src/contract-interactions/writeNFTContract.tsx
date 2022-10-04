@@ -12,7 +12,7 @@ export async function AddToWhitelist({ addressNFT, walletAddress, signer }: IAdd
     const erc721_rw = new ethers.Contract(addressNFT, GOVERNANCE_NFT_ABI, signer);
     try {
         const tx = await erc721_rw.setAllowList([walletAddress], 1);
-        await tx.wait()
+        await tx.wait();
         console.log("Transaction add to WL", tx);
         return true;
     } catch (e) {

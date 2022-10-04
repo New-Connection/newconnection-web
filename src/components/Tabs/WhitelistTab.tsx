@@ -1,10 +1,10 @@
+import * as React from "react";
 import { useState } from "react";
 import { formatAddress } from "utils/address";
 import { AddToWhitelist } from "contract-interactions";
 import { Signer } from "ethers";
 import toast from "react-hot-toast";
 import { MockupTextCard } from "../Mockup";
-import * as React from "react";
 import { getLogoURI } from "utils/blockchains";
 import { useSwitchNetwork } from "wagmi";
 import { IWhitelistPageForm } from "types/forms";

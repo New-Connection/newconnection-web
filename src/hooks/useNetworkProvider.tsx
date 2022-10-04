@@ -7,7 +7,7 @@ export const useNetworkProvider = () => {
 
     let chainId = chain?.id ?? null;
     let name: string | null = chain?.name ?? null;
-    const chainDetails = getChain(chainId)
+    const chainDetails = getChain(chainId);
 
     return {
         provider: chainDetails ? providers.getDefaultProvider() : null,

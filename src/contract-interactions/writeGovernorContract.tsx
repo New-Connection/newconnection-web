@@ -1,5 +1,5 @@
 import { ethers, Signer } from "ethers";
-import { GOVERNOR_ABI, GOVERNANCE_NFT_ABI } from "abis";
+import { GOVERNANCE_NFT_ABI, GOVERNOR_ABI } from "abis";
 
 export async function createProposal(
     contractAddress: string,

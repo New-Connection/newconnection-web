@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import {
+    Button,
     DragAndDropImage,
     InputAmount,
-    InputText,
-    Button,
-    TypeSelector,
-    InputTextArea,
     InputSupplyOfNFT,
+    InputText,
+    InputTextArea,
 } from "components/Form";
 import { Signer } from "ethers";
 import { useSigner, useSwitchNetwork } from "wagmi";
@@ -17,12 +16,11 @@ import {
     handleChangeBasic,
     handleImageChange,
     handleNftSupplyChange,
-    handleSelectorChange,
     handleTextChange,
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
-import { handleReset, handleNext } from "components/Dialog/base-dialogs";
+import { handleNext, handleReset } from "components/Dialog/base-dialogs";
 import { deployNFTContract } from "contract-interactions/";
 import { BackButton } from "components/Button/";
 import { storeNFT } from "utils/ipfsUpload";
