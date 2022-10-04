@@ -43,7 +43,7 @@ import {
     CreateTreasuryDialog,
     DetailNftDialog,
 } from "components/Dialog/DaoPageDialogs";
-import { Discord2, Twitter } from "@web3uikit/icons";
+import { DiscordIcon, TwitterIcon, WebsiteIcon } from "components/Icons/";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
@@ -316,18 +316,24 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 <div className={"links flex gap-5"}>
                                     {DAO.discordURL && (
                                         <a href={isValidHttpUrl(DAO.discordURL)} target={"_blank"}>
-                                            <Discord2 className={"h-6 w-6 "} />
+                                            <div className="bg-gray rounded-full h-9 w-9 grid place-items-center">
+                                                <DiscordIcon width="19" height="20" />
+                                            </div>
                                         </a>
                                     )}
                                     {DAO.twitterURL && (
                                         <a href={isValidHttpUrl(DAO.twitterURL)} target={"_blank"}>
-                                            <Twitter color={"#4793DF"} className={"h-6 w-6"} />
+                                            <div className="bg-gray rounded-full h-9 w-9 grid place-items-center">
+                                                <TwitterIcon width="18" height="20" />
+                                            </div>
                                         </a>
                                     )}
 
                                     {DAO.websiteURL && (
                                         <a href={isValidHttpUrl(DAO.websiteURL)} target="_blank">
-                                            <GlobeAltIcon className="h-6 w-6" />
+                                            <div className="bg-gray rounded-full h-9 w-9 grid place-items-center">
+                                                <WebsiteIcon width="19" height="20" />
+                                            </div>
                                         </a>
                                     )}
                                 </div>
