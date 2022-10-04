@@ -50,7 +50,7 @@ export const ProposalsListTab = ({
                             <Link href={`${daoUrl}/proposals/${proposalId}`} key={proposalId}>
                                 <li
                                     key={proposalId}
-                                    className="border-b-2 border-gray cursor-pointer active:bg-gray"
+                                    className="border-b-2 mb-4 border-gray cursor-pointer active:bg-gray"
                                 >
                                     <ProposalCard
                                         title={name}
