@@ -77,7 +77,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                 </div>
             ) : (
                 // Connect Wallet
-                <>
+                <div className={"p-5"}>
                     <DialogHeader title="Connect Wallet" dialog={dialog} />
                     {/* choose profile: metamask, wallet connect  */}
                     <div className="mt-4 flex flex-col gap-4">
@@ -100,7 +100,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                         ))}
                         {error && <div>{error.message}</div>}
                     </div>
-                </>
+                </div>
             )}
         </Dialog>
     );
