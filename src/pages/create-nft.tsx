@@ -75,15 +75,13 @@ const CreateNFT: NextPage = () => {
         handleReset(setActiveStep);
         confirmDialog.toggle();
 
-        let fullPath: string;
+        let path;
         try {
-            const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
-            console.log(UID);
-            fullPath = UID.url;
-            console.log(fullPath);
-            handleChangeBasic(fullPath, setFormData, "ipfsAddress");
+            path = await storeNFT(formData.file as File);
+            console.log(path);
+            handleChangeBasic(path, setFormData, "ipfsAddress");
         } catch (error) {
-            handleContractError(error, {dialog: confirmDialog });
+            handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
             return;
         }
@@ -97,7 +95,7 @@ const CreateNFT: NextPage = () => {
             contract = await deployNFTContract(signerData as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
-                baseURI: fullPath,
+                baseURI: path,
                 price: formData.price ? formData.price.toString() : "0",
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
@@ -111,7 +109,7 @@ const CreateNFT: NextPage = () => {
             handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
-            handleContractError(error, {dialog: confirmDialog });
+            handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
             return;
         }

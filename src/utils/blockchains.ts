@@ -1,7 +1,7 @@
 import ASSETS from "assets/index";
 import { chain, Chain } from "wagmi";
 import { StaticImageData } from "next/image";
-import { infuraId } from "./constants";
+import { INFURA_ID } from "./constants";
 
 type chainType = [
     //
@@ -145,7 +145,7 @@ export const CHAINS: {
             symbol: "ETH"
         },
         rpcUrls: {
-            default: `https://optimism-goerli.infura.io/v3/${infuraId}`
+            default: `https://optimism-goerli.infura.io/v3/${INFURA_ID}`
         },
         blockExplorers: {
             default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" }
@@ -181,7 +181,7 @@ export const CHAINS: {
             symbol: "ETH"
         },
         rpcUrls: {
-            default: `https://aurora-testnet.infura.io/v3/${infuraId}`
+            default: `https://aurora-testnet.infura.io/v3/${INFURA_ID}`
         },
         blockExplorers: {
             default: { name: "aurorascan", url: "https://testnet.aurorascan.dev" }
@@ -224,7 +224,7 @@ export const CHAINS: {
             symbol: "ETH"
         },
         rpcUrls: {
-            default: `https://aurora-mainnet.infura.io/v3/${infuraId}`
+            default: `https://aurora-mainnet.infura.io/v3/${INFURA_ID}`
         },
         blockExplorers: {
             default: { name: "aurorascan", url: "https://aurorascan.dev" }

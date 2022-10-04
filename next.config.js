@@ -9,7 +9,7 @@ const nextConfig = {
         defaultLocale: "en"
     },
     images: {
-        domains: [""]
+        domains: ["newconnection.infura-ipfs.io"]
     },
     eslint: {
         ignoreDuringBuilds: true

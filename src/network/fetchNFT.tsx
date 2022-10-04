@@ -1,15 +1,16 @@
 import {
     getNftName,
-    getNumberOfMintedTokens,
     getPrice,
     getSymbol,
-    getTokenURI,
+    getTokenURI
 } from "contract-interactions/viewNftContract";
 import { INFTVoting, IDAOPageForm } from "types/forms";
-import { loadImage } from "utils/ipfsUpload";
+import { getIpfsImage } from "utils/ipfsUpload";
+import ASSETS from "assets";
 
 async function getImage(tokenAddress: string, chainID: number) {
-    return await loadImage(await getTokenURI(tokenAddress, chainID));
+    const nftTokenUri: string = await getTokenURI(tokenAddress, chainID);
+    return getIpfsImage(nftTokenUri, ASSETS.daoNFTMock.src);
 }
 
 export async function fetchNFT(DAO: IDAOPageForm) {
@@ -20,7 +21,7 @@ export async function fetchNFT(DAO: IDAOPageForm) {
                 type: await getSymbol(tokenAddress, DAO.chainId),
                 image: await getImage(tokenAddress, DAO.chainId),
                 price: await getPrice(tokenAddress, DAO.chainId),
-                tokenAddress: tokenAddress,
+                tokenAddress: tokenAddress
             };
             return nft;
         })

@@ -5,12 +5,12 @@ import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { getChains } from "utils/blockchains";
-import { infuraId } from "utils/constants";
+import { INFURA_ID } from "utils/constants";
 
 export const { chains, provider, webSocketProvider } = configureChains(
     ((getChains())),
     [
-        infuraProvider({ priority: 0, apiKey: infuraId }),
+        infuraProvider({ priority: 0, apiKey: INFURA_ID }),
         // alchemyProvider({ priority: 1, apiKey: alchemyId }),
         jsonRpcProvider({
             priority: 2,

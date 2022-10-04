@@ -1,5 +1,5 @@
 import React from "react";
-import { moralisAppId, moralisServerUrl } from "utils/constants";
+import { MORALIS_APP_ID, MORALIS_SERVER_URL } from "utils/constants";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "react-query"; // it makes fetching, caching, synchronizing and updating server state
 import { WagmiConfig } from "wagmi";
@@ -31,7 +31,7 @@ function App({ Component, pageProps }: AppProps) {
     `}
             </Script>
 
-            <MoralisProvider appId={moralisAppId!} serverUrl={moralisServerUrl!}>
+            <MoralisProvider appId={MORALIS_APP_ID!} serverUrl={MORALIS_SERVER_URL!}>
                 <ThemeProvider defaultTheme="system" attribute="class">
                     <WagmiConfig client={WagmiClient}>
                         <QueryClientProvider client={queryClient}>

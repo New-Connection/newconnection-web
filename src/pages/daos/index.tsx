@@ -8,7 +8,6 @@ import { useNetwork } from "wagmi";
 
 import Layout from "components/Layout/Layout";
 import { IDAOPageForm } from "types/forms";
-import { loadImage } from "utils/ipfsUpload";
 import { getTotalProposals } from "contract-interactions/viewGovernorContract";
 import { isBlockchainSupported } from "utils/blockchains";
 import { DAOCard } from "components/Cards";
@@ -34,7 +33,6 @@ const DAOsPage: NextPage = () => {
                 return {
                     ...dao,
                     totalProposals: await getTotalProposals(dao.governorAddress!, dao.chainId!),
-                    profileImage: await loadImage(dao.profileImage),
                 };
             })
         );
@@ -58,7 +56,10 @@ const DAOsPage: NextPage = () => {
     const CreateDAOButton = () => {
         return (
             <Link href="./create-new-dao">
-                <button className="secondary-button h-10 disabled:bg-gray" disabled={!isBlockchainSupported(chain)}>
+                <button
+                    className="secondary-button h-10 disabled:bg-gray"
+                    disabled={!isBlockchainSupported(chain)}
+                >
                     Create DAO
                 </button>
             </Link>

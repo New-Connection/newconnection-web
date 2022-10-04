@@ -2,7 +2,7 @@ import * as React from "react";
 import Image from "next/image";
 import ASSETS from "assets/index";
 import Link from "next/link";
-import { isIpfsAddress } from "utils/ipfsUpload";
+import { getIpfsImage } from "utils/ipfsUpload";
 
 export const DAOCard = ({ name, description, profileImage, url, isActive, proposals }) => {
     return (
@@ -14,24 +14,22 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
             >
                 <div className="flex gap-6 w-10/12 pt-3 pb-3">
                     <div className="w-28 h-28">
-                        {!isIpfsAddress(profileImage) ? (
+                        {
                             <Image
                                 width={"115"}
                                 height={"115"}
                                 layout={"fixed"}
                                 priority={true}
-                                src={profileImage || ASSETS.daoLogoMock}
+                                src={getIpfsImage(profileImage, ASSETS.daoLogoMock.src)}
                                 className="rounded-2xl"
                             />
-                        ) : (
-                            <div className="w-28 h-28 bg-gray2 rounded-2xl animate-pulse"></div>
-                        )}
+                        }
                     </div>
                     <div className="w-5/6 grid grid-cols-1 content-between">
                         <div className="w-full">
-                            <p className="lg:text-lg text-base uppercase font-medium cursor-pointer">
+                            <div className="lg:text-lg text-base uppercase font-medium cursor-pointer">
                                 {name}
-                            </p>
+                            </div>
                             <div className="text-gray-500 line-clamp-2">{description}</div>
                         </div>
 

@@ -108,13 +108,11 @@ const AddNewNFT: NextPage = () => {
         handleReset(setActiveStep);
         confirmDialog.toggle();
 
-        let fullPath: string;
+        let path;
         try {
-            const UID = await storeNFT(formData.file as File, formData.name, formData.description!);
-            console.log(UID);
-            fullPath = UID.url;
-            console.log(fullPath);
-            handleChangeBasic(fullPath, setFormData, "ipfsAddress");
+            path = await storeNFT(formData.file as File);
+            console.log(path);
+            handleChangeBasic(path, setFormData, "ipfsAddress");
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
@@ -131,7 +129,7 @@ const AddNewNFT: NextPage = () => {
                 name: formData.name,
                 symbol: formData.symbol,
                 price: formData.price.toString(),
-                baseURI: fullPath,
+                baseURI: path,
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,

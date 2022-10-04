@@ -121,21 +121,15 @@ const CreateDAO: NextPage = () => {
         let profileImagePath;
         let coverImagePath;
         try {
-            const profileImageUID = await storeNFT(
-                formData.profileImage as File,
-                formData.name,
-                "Profile Image"
+            profileImagePath = await storeNFT(
+                formData.profileImage as File
             );
-            profileImagePath = profileImageUID.url;
             console.log(profileImagePath);
             handleChangeBasic(profileImagePath, setFormData, "profileImage");
 
-            const coverImageUID = await storeNFT(
-                formData.coverImage as File,
-                formData.name,
-                "Cover Image"
+            coverImagePath = await storeNFT(
+                formData.coverImage as File
             );
-            coverImagePath = coverImageUID.url;
             console.log(coverImagePath);
             handleChangeBasic(coverImagePath, setFormData, "coverImage");
         } catch (error) {

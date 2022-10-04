@@ -12,7 +12,7 @@ import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import { isIpfsAddress, loadImage } from "utils/ipfsUpload";
+import { getIpfsImage } from "utils/ipfsUpload";
 import { getGovernorOwnerAddress } from "contract-interactions/";
 import { IDaoQuery } from "types/queryInterfaces";
 import { isValidHttpUrl } from "utils/transformURL";
@@ -120,8 +120,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 // not used
                 // data.newDao.totalProposals= await getTotalProposals(DAO!.governorAddress!, DAO!.chainId!);
                 // data.newDao.totalMembers= await getNumberOfMintedTokens(DAO!.tokenAddress[0]!, DAO!.chainId!);
-                data.newDao.profileImage = await loadImage(data.newDao.profileImage);
-                data.newDao.coverImage = await loadImage(data.newDao.coverImage);
                 setDAOMoralisInstance(() => data.moralisInstance);
             }
         };
@@ -257,7 +255,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             <div className="cover h-48 w-full relative justify-center">
                 <Image
                     priority={true}
-                    src={!isIpfsAddress(DAO.coverImage) ? DAO.coverImage : ASSETS.daoCoverMock}
+                    src={getIpfsImage(DAO.coverImage, ASSETS.daoCoverMock.src)}
                     layout={"fill"}
                 />
             </div>
@@ -267,9 +265,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         <div className={"logo"}>
                             <Image
                                 src={
-                                    !isIpfsAddress(DAO.profileImage)
-                                        ? DAO.profileImage
-                                        : ASSETS.daoLogoMock
+                                    getIpfsImage(DAO.profileImage, ASSETS.daoLogoMock.src)
                                 }
                                 height={"175px"}
                                 width={"175px"}
