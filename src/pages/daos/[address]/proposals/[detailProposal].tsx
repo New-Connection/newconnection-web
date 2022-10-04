@@ -7,7 +7,7 @@ import { ParsedUrlQuery } from "querystring";
 import type { GetServerSideProps, NextPage } from "next";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import Layout from "components/Layout/Layout";
-import BackButton from "components/Button/backButton";
+import BackButton from "components/Button/BackButton";
 import { Button, RadioSelector } from "components/Form";
 import { formatAddress } from "utils/address";
 import { validateForm } from "utils/validate";

@@ -6,7 +6,7 @@ import { ParsedUrlQuery } from "querystring";
 import { useAccount } from "wagmi";
 
 import Layout from "components/Layout/Layout";
-import BackButton from "components/Button/backButton";
+import BackButton from "components/Button/BackButton";
 import { handleAddArray, handleChangeBasic, handleChangeBasicArray } from "utils/handlers";
 import { IAddNewMember } from "types/forms";
 import { formatAddress } from "utils/address";
