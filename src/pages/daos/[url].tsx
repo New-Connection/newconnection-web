@@ -23,7 +23,7 @@ import {
     fetchWhitelist,
 } from "network/index";
 import { BlockchainIcon } from "components/Icons/";
-import { MockupLoadingDAO, MockupLoadingNFT } from "components/Mockup/Loading";
+import { MockupLoadingDetailDAOPage, MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
 import { NFTCard } from "components/Cards/NFTCard";
 import { ProposalsListTab, Tabs, WhitelistTab } from "components/Tabs/";
@@ -253,7 +253,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             <div className="cover h-48 w-full relative justify-center">
                 <Image priority={true} src={DAO.coverImage} layout={"fill"} />
             </div>
-            <Layout className="layout-base mt-0">
+            <Layout className="layout-base">
                 <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className="dao-header lg:flex md:flex xl:flex items-center -mt-10">
                         <div className={"logo"}>
@@ -503,18 +503,21 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             </Layout>
         </div>
     ) : (
-        <Layout className="layout-base">
-            <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                {notFound ? (
-                    <MockupTextCard
-                        label={"DAO not found"}
-                        text={"Sorry, DAO not fount. Please try to reload page"}
-                    />
-                ) : (
-                    <MockupLoadingDAO />
-                )}
-            </section>
-        </Layout>
+        <div>
+            <div className="cover h-48 w-full relative justify-center bg-gray animate-pulse"></div>
+            <Layout className="layout-base">
+                <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
+                    {notFound ? (
+                        <MockupTextCard
+                            label={"DAO not found"}
+                            text={"Sorry, DAO not fount. Please try to reload page"}
+                        />
+                    ) : (
+                        <MockupLoadingDetailDAOPage />
+                    )}
+                </section>
+            </Layout>
+        </div>
     );
 };
 

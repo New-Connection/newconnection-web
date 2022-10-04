@@ -12,6 +12,50 @@ const getLoadingStrings = (amount: number) => {
     );
 };
 
+export const MockupLoadingDetailDAOPage = () => {
+    return (
+        <>
+            <div className="dao-header lg:flex md:flex xl:flex items-center -mt-10">
+                <div className={"bg-gray2 h-52 w-52 animate-pulse rounded-md"}></div>
+                <div className={"info flex flex-col ml-6 w-full gap-8"}>
+                    <div className={"info-row-1 flex justify-between items-center"}>
+                        <div className={"dao-name bg-gray2 animate-pulse rounded-full"}>
+                            <div className="text-gray2 dao-label capitalize px-2">
+                                DAO NAME HELLO
+                            </div>
+                        </div>
+                        <div className={"member-button"}>
+                            <button
+                                className={
+                                    "secondary-button disabled:bg-gray disabled:hover:bg-gray animate-pulse text-gray2"
+                                }
+                                disabled={true}
+                            >
+                                Become a member
+                            </button>
+                        </div>
+                    </div>
+                    <div className={"info-row-2 flex justify-between"}>
+                        <div className={"about flex gap-10"}>
+                            <a target={"_blank"} className="dao-about-button">
+                                About
+                            </a>
+                            <div className="dao-about-button items-center">
+                                <p>Blockchain</p>
+                            </div>
+                        </div>
+                        <div className={"links flex gap-5"}>
+                            <div className="bg-gray2 rounded-full h-9 w-9 animate-pulse "></div>
+                            <div className="bg-gray2 rounded-full h-9 w-9 animate-pulse"></div>
+                            <div className="bg-gray2 rounded-full h-9 w-9 animate-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+};
+
 export const MockupLoadingDAO = () => {
     return (
         <div className="nft-card w-full animate-pulse">
