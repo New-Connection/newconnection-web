@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import Layout from "components/Layout/Layout";
 import { Button } from "components/Form";
-import BackButton from "components/Button/backButton";
+import BackButton from "components/Button/BackButton";
 import { isBlockchainSupported } from "utils/blockchains";
 import { useNetwork } from "wagmi";
 

@@ -20,7 +20,7 @@ import {
     RadioSelectorMulti,
 } from "components/Form";
 import { ICreateProposal } from "types/forms";
-import BackButton from "components/Button/backButton";
+import BackButton from "components/Button/BackButton";
 import { useDialogState } from "ariakit";
 import { validateForm } from "utils/validate";
 import { createProposal } from "contract-interactions/writeGovernorContract";

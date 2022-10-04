@@ -26,7 +26,7 @@ import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { StepperDialog, handleReset, handleNext } from "components/Dialog";
 import { deployNFTContract } from "contract-interactions/";
-import BackButton from "components/Button/backButton";
+import BackButton from "components/Button/BackButton";
 import { storeNFT } from "utils/ipfsUpload";
 import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
 import { chainIds, layerzeroEndpoints } from "utils/layerzero";

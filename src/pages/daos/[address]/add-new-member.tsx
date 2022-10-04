@@ -5,7 +5,7 @@ import { ParsedUrlQuery } from "querystring";
 import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
 import { Button, InputText, InputTextArea, RadioSelectorMulti } from "components/Form";
-import BackButton from "components/Button/backButton";
+import BackButton from "components/Button/BackButton";
 import { validateForm } from "utils/validate";
 import { IAddNewMember } from "types/forms";
 import {

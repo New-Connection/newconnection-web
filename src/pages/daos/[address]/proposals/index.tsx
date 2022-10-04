@@ -15,7 +15,7 @@ import ProposalCard from "components/Cards/ProposalCard";
 import * as React from "react";
 import { MockupTextCard } from "components/Mockup";
 import { useRouter } from "next/router";
-import BackButton from "components/Button/backButton";
+import BackButton from "components/Button/BackButton";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
