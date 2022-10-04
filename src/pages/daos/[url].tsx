@@ -337,53 +337,83 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             </div>
                         </div>
                     </div>
-
-                    {DAO.treasuryAddress ? (
-                        <div
-                            className={
-                                "flex flex-col justify-between border-2 text-center border-lightGray rounded-2xl h-52 p-3 "
-                            }
-                        >
-                            <div className={"flex justify-center text-2xl text-gray5 pt-3"}>
-                                <a
-                                    href={getChainScanner(DAO.chainId, DAO.treasuryAddress)}
-                                    target={"_blank"}
-                                    className="flex hover:text-purple gap-3 items-center content-center text-black2"
-                                >
-                                    Treasury
-                                    <ExternalLinkIcon className="h-6 w-5" />
-                                </a>
+                    <div className="flex justify-between">
+                        {DAO.treasuryAddress ? (
+                            <div
+                                className={
+                                    "flex flex-col justify-between border-2 text-center border-lightGray rounded-2xl h-52 p-3 w-4/5"
+                                }
+                            >
+                                <div className={"flex justify-center text-2xl text-gray5 pt-3"}>
+                                    <a
+                                        href={getChainScanner(DAO.chainId, DAO.treasuryAddress)}
+                                        target={"_blank"}
+                                        className="flex hover:text-purple gap-3 items-center content-center text-black2"
+                                    >
+                                        Treasury
+                                        <ExternalLinkIcon className="h-6 w-5" />
+                                    </a>
+                                </div>
+                                <div className={"text-5xl"}>$ {treasuryBalance}</div>
+                                <div className={"pb-3"}>
+                                    <button
+                                        className="form-submit-button border-none text-gray3 hover:underline active:text-gray2"
+                                        onClick={async () => {
+                                            if (
+                                                !(await checkCorrectNetwork(
+                                                    signerData,
+                                                    DAO.chainId,
+                                                    switchNetwork
+                                                ))
+                                            ) {
+                                                return;
+                                            }
+                                            contributeTreasuryDialog.toggle();
+                                        }}
+                                    >
+                                        Contribute
+                                    </button>
+                                </div>
                             </div>
-                            <div className={"text-5xl"}>$ {treasuryBalance}</div>
-                            <div className={"pb-3"}>
+                        ) : (
+                            <div className={"flex justify-around w-4/5 h-52"}>
+                                {isOwner && (
+                                    <button
+                                        className="secondary-button"
+                                        onClick={addTreasuryAndSave}
+                                    >
+                                        Add treasury
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                        <div>
+                            <Link
+                                className={"dao-links-chats"}
+                                href={{
+                                    pathname: `${url}/chats`,
+                                    query: {
+                                        governorAddress: DAO.governorAddress,
+                                        blockchains: DAO.blockchain,
+                                        tokenAddress: DAO.tokenAddress,
+                                        daoName: DAO.name,
+                                        chainId: DAO.chainId,
+                                    },
+                                }}
+                            >
                                 <button
-                                    className="form-submit-button border-none text-gray3 hover:underline active:text-gray2"
-                                    onClick={async () => {
-                                        if (
-                                            !(await checkCorrectNetwork(
-                                                signerData,
-                                                DAO.chainId,
-                                                switchNetwork
-                                            ))
-                                        ) {
-                                            return;
-                                        }
-                                        contributeTreasuryDialog.toggle();
-                                    }}
+                                    className={
+                                        isLoaded
+                                            ? "secondary-button gradient-btn-color hover:bg-gradient-to-tl h-full w-full rounded-xl"
+                                            : "secondary-button bg-gray hover:bg-gray h-full w-full rounded-xl"
+                                    }
+                                    disabled={!isLoaded}
                                 >
-                                    Contribute
+                                    DAO Chats
                                 </button>
-                            </div>
+                            </Link>
                         </div>
-                    ) : (
-                        <div className={"flex justify-around"}>
-                            {isOwner && (
-                                <button className="secondary-button" onClick={addTreasuryAndSave}>
-                                    Add treasury
-                                </button>
-                            )}
-                        </div>
-                    )}
+                    </div>
 
                     <div className="dao-proposals-members lg:w-full">
                         <Tabs
