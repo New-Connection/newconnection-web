@@ -41,6 +41,7 @@ import {
     CreateTreasuryDialog,
     DetailNftDialog,
 } from "components/Dialog/DaoPageDialogs";
+import classNames from "classnames";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
@@ -376,13 +377,17 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 </div>
                             </div>
                         ) : (
-                            <div className={"flex justify-around w-4/5 h-52"}>
-                                {isOwner && (
+                            <div>
+                                {isOwner ? (
                                     <button
                                         className="secondary-button"
                                         onClick={addTreasuryAndSave}
                                     >
                                         Add treasury
+                                    </button>
+                                ) : (
+                                    <button className="secondary-button" disabled={true}>
+                                        Treasury not added
                                     </button>
                                 )}
                             </div>
@@ -402,11 +407,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 }}
                             >
                                 <button
-                                    className={
+                                    className={classNames(
                                         isLoaded
-                                            ? "secondary-button gradient-btn-color hover:bg-gradient-to-tl h-full w-full rounded-xl"
-                                            : "secondary-button bg-gray hover:bg-gray h-full w-full rounded-xl"
-                                    }
+                                            ? "secondary-button gradient-btn-color hover:bg-gradient-to-tl w-full"
+                                            : "secondary-button bg-gray hover:bg-gray h-full w-full",
+                                        DAO.treasuryAddress && "rounded-xl h-full"
+                                    )}
                                     disabled={!isLoaded}
                                 >
                                     DAO Chats
