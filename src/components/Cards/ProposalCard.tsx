@@ -25,12 +25,12 @@ export const ProposalCard = ({
     chainId,
     forVotes,
     againstVotes,
-    deadline
+    deadline,
 }: IProposalCard) => {
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
     return (
-        <div className="h-52 py-5 justify-between">
+        <div className="h-56 py-5 justify-between">
             <div className="flex justify-between pb-6">
                 <p className="font-medium text-xl">{title}</p>
                 <div>
@@ -48,8 +48,10 @@ export const ProposalCard = ({
             </div>
             <div className="flex justify-between">
                 <div className="w-3/4 grid grid-cols-1 content-between">
-                    <p className="w-full font-normal line-clamp-3 pr-4">{shortDescription}</p>
-                    <div className="flex gap-5 pb-2 items-center">
+                    <p className="w-full h-24 font-normal line-clamp-3 pr-4 pb-2">
+                        {shortDescription}
+                    </p>
+                    <div className="flex gap-5">
                         <div className="flex gap-5">
                             <p className="text-gray3">For</p>
                             <p className="font-medium">{tokenName}</p>
@@ -58,20 +60,18 @@ export const ProposalCard = ({
                     </div>
                 </div>
 
-                <div className="w-1/5 flex gap-10 items-left justify-between">
+                <div className="w-1/5 flex gap-10 items-left justify-between pt-2">
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{forV}</p>
-                            <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"In favor"}</p>
                     </div>
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{againstV}</p>
-                            <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"Against"}</p>
                     </div>
@@ -80,7 +80,6 @@ export const ProposalCard = ({
         </div>
     );
 };
-
 
 interface ICardProposal {
     title: string;
