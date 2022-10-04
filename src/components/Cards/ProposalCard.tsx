@@ -25,7 +25,7 @@ export const ProposalCard = ({
     chainId,
     forVotes,
     againstVotes,
-    deadline,
+    deadline
 }: IProposalCard) => {
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
@@ -36,7 +36,7 @@ export const ProposalCard = ({
                 <div>
                     {isActive ? (
                         <div className="flex gap-5">
-                            <p className="font-light text-sm mt-1">
+                            <p className="hidden md:block font-light text-sm pt-1">
                                 Ends {timestampToDate(deadline || 0)}
                             </p>
                             <p className="text-green bg-gray px-5 py-0.5 rounded-full">Active</p>
@@ -47,8 +47,8 @@ export const ProposalCard = ({
                 </div>
             </div>
             <div className="flex justify-between">
-                <div className="w-3/4 grid grid-cols-1 content-between">
-                    <p className="w-full h-24 font-normal line-clamp-3 pr-4 pb-2">
+                <div className="grid grid-cols-1 gap-2 content-between md:w-3/4">
+                    <p className="w-full h-24 font-normal line-clamp-3">
                         {shortDescription}
                     </p>
                     <div className="flex gap-5">
@@ -60,18 +60,20 @@ export const ProposalCard = ({
                     </div>
                 </div>
 
-                <div className="w-1/5 flex gap-10 items-left justify-between pt-2">
+                <div className="hidden md:flex gap-10 items-left justify-between pt-1">
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{forV}</p>
-                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                            <span
+                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"In favor"}</p>
                     </div>
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{againstV}</p>
-                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                            <span
+                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"Against"}</p>
                     </div>

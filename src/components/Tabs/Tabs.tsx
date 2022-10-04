@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import Link from "next/link";
+import classNames from "classnames";
 
 type TabsProps = {
     tabs: {
@@ -30,8 +31,8 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
                         <button
                             className={
                                 selectedTab === tab.index
-                                    ? "border-b-2 border-solid w-36 border-[#6858CB] pb-4 my-4 text-purple"
-                                    : "border-b-2 border-solid w-36 border-transparent pb-4 my-4 focus:border-[#6858CB] focus:text-[#6858CB] hover:border-[#6858CB] hover:text-[#6858CB]"
+                                    ? "border-b-2 border-solid w-36 border-[#6858CB] pb-4 text-purple"
+                                    : "border-b-2 border-solid w-36 border-transparent pb-4 focus:border-[#6858CB] focus:text-[#6858CB] hover:border-[#6858CB] hover:text-[#6858CB]"
                             }
                             onClick={() => onClick(tab.index)}
                             key={tab.index}
@@ -45,14 +46,16 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
                         </button>
                     ))}
                 </div>
-                <Link href={url}>
+                <div className={classNames("add-prop-button mt-4 md:mt-0",
+                    selectedTab === 0 ? "block" : "hidden")}><Link href={url}>
                     <button
-                        className={"secondary-button disabled:bg-gray disabled:hover:bg-gray"}
+                        className={
+                            "secondary-button disabled:bg-gray disabled:hover:bg-gray"}
                         disabled={!isLoaded}
                     >
                         Add new proposal
                     </button>
-                </Link>
+                </Link></div>
             </div>
             <div id={`tabpanel-${selectedTab}`} className="w-full py-2 px-2">
                 {Panel && <Panel.Component index={selectedTab} />}
