@@ -38,9 +38,7 @@ const ChatsPage: NextPage = () => {
         });
         console.log("query token address", query.tokenAddress);
         handleAddArray(tokenNames, setFormData, "tokenNames");
-        query.tokenAddress
-            ? checkNFTs(query.tokenAddress, address, +query.chainId)
-            : console.log("don't have token");
+        query.tokenAddress ? checkNFTs(query.tokenAddress, address, +query.chainId) : console.log("don't have token");
     }, [router]);
 
     async function checkNFTs(tokenAddresses: string[], walletAddress: string, chainId: number) {
@@ -48,11 +46,7 @@ const ChatsPage: NextPage = () => {
         console.log(tokenAddresses);
         // Only one token
         if (typeof tokenAddresses === "string") {
-            const numberOfTokens = +(await getNumberOfTokenInOwnerAddress(
-                walletAddress,
-                tokenAddresses,
-                chainId
-            ));
+            const numberOfTokens = +(await getNumberOfTokenInOwnerAddress(walletAddress, tokenAddresses, chainId));
             console.log("Number of tokens", numberOfTokens);
             if (numberOfTokens > 0) {
                 setIndexOpenChat([...indexOfOpenChatsForUser, 0]);
@@ -60,11 +54,7 @@ const ChatsPage: NextPage = () => {
         } else {
             tokenAddresses.map(async (token, index) => {
                 console.log(index);
-                const numberOfTokens = +(await getNumberOfTokenInOwnerAddress(
-                    walletAddress,
-                    token,
-                    chainId
-                ));
+                const numberOfTokens = +(await getNumberOfTokenInOwnerAddress(walletAddress, token, chainId));
                 console.log("Number of tokens", numberOfTokens);
                 if (numberOfTokens > 0) {
                     setIndexOpenChat(() => [...indexOfOpenChatsForUser, index]);
@@ -108,18 +98,10 @@ const ChatsPage: NextPage = () => {
                                                 disabled={!indexOfOpenChatsForUser.includes(index)}
                                             >
                                                 <div className="w-full">
-                                                    <div className="text-lg font-semibold">
-                                                        {chatName}
-                                                    </div>
-                                                    <span className="text-gray-500">
-                                                        DAO members
-                                                    </span>
+                                                    <div className="text-lg font-semibold">{chatName}</div>
+                                                    <span className="text-gray-500">DAO members</span>
                                                 </div>
-                                                {indexOfOpenChatsForUser.includes(index) ? (
-                                                    <></>
-                                                ) : (
-                                                    <LockIcon />
-                                                )}
+                                                {indexOfOpenChatsForUser.includes(index) ? <></> : <LockIcon />}
                                             </button>
                                         ))
                                     ) : (
@@ -141,10 +123,7 @@ const ChatsPage: NextPage = () => {
                                 ) : (
                                     <div className="w-full px-5 flex flex-col justify-between">
                                         <div className="flex flex-col mt-5 items-center content-center">
-                                            <p>
-                                                Join to one of DAOs and get NFT-membership to get
-                                                access
-                                            </p>
+                                            <p>Join to one of DAOs and get NFT-membership to get access</p>
                                         </div>
                                     </div>
                                 )}

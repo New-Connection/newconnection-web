@@ -31,11 +31,7 @@ export async function addTreasury(
         //     `Deployment successful! Treasury Contract Address: ${treasuryContract.address}`
         // );
         handleNext(setCreateTreasuryStep);
-        const renounceTx = await transferTreasuryOwnership(
-            treasuryContract.address,
-            DAO.governorAddress,
-            signerData
-        );
+        const renounceTx = await transferTreasuryOwnership(treasuryContract.address, DAO.governorAddress, signerData);
         handleNext(setCreateTreasuryStep);
         await renounceTx.wait();
         handleNext(setCreateTreasuryStep);
@@ -50,11 +46,7 @@ export async function addTreasury(
     }
 }
 
-export async function addTreasureMoralis(
-    DAOMoralisInstance,
-    treasuryAddress: string,
-    treasuryDialog: DisclosureState
-) {
+export async function addTreasureMoralis(DAOMoralisInstance, treasuryAddress: string, treasuryDialog: DisclosureState) {
     try {
         if (DAOMoralisInstance) {
             DAOMoralisInstance.set("treasuryAddress", treasuryAddress);

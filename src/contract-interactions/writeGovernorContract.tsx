@@ -24,12 +24,7 @@ export async function createProposal(
 
 export type VotingType = 0 | 1 | 2 | undefined; //0 - Against, 1 - For, 2 - just results
 
-export async function castVote(
-    contractAddress: string,
-    signer: Signer,
-    proposalAddress: string,
-    vote: VotingType
-) {
+export async function castVote(contractAddress: string, signer: Signer, proposalAddress: string, vote: VotingType) {
     const governorContract = new ethers.Contract(contractAddress, GOVERNOR_ABI, signer);
     console.log("Contract Address", contractAddress);
     console.log("proposals Address", proposalAddress);
@@ -41,11 +36,7 @@ export async function castVote(
     return proposeReceipt.events![0].args!.proposalId._hex;
 }
 
-export async function addToken(
-    governorContractAddress: string,
-    signer: Signer,
-    tokenAddress: string
-) {
+export async function addToken(governorContractAddress: string, signer: Signer, tokenAddress: string) {
     const governorContract = new ethers.Contract(governorContractAddress, GOVERNOR_ABI, signer);
     return await governorContract.addToken(tokenAddress);
 }

@@ -2,13 +2,7 @@ import * as React from "react";
 import classNames from "classnames";
 import { ButtonProps } from "./types";
 
-export const Button = ({
-    disabled = false,
-    type = "submit",
-    className,
-    children,
-    ...props
-}: ButtonProps) => {
+export const Button = ({ disabled = false, type = "submit", className, children, ...props }: ButtonProps) => {
     return (
         <button
             className={classNames(

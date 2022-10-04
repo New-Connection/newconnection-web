@@ -21,10 +21,7 @@ import { fetchDetailProposal } from "network/fetchProposals";
 import { AboutProposalCard } from "components/Cards/ProposalCard";
 import { handleContractError } from "utils/errors";
 
-export const getServerSideProps: GetServerSideProps<
-    IDetailProposalProps,
-    IDetailProposalQuery
-> = async (context) => {
+export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetailProposalQuery> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;
     const result: IDetailProposalProps = {
         detailProposal: detailProposal,
@@ -82,12 +79,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         handleReset(setActiveStep);
         confirmDialog.toggle();
         try {
-            const tx = await castVote(
-                proposalData!.governorAddress,
-                signerData,
-                detailProposal,
-                formData!.voteResult
-            );
+            const tx = await castVote(proposalData!.governorAddress, signerData, detailProposal, formData!.voteResult);
             console.log(tx);
             toast.success("Your vote is send");
         } catch (e: any) {
@@ -112,9 +104,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                         <RadioSelector
                             name="voteResult"
                             labels={["Against", "In favor"]}
-                            handleChange={(event) =>
-                                handleTextChangeAddNewMember(event, setFormData)
-                            }
+                            handleChange={(event) => handleTextChangeAddNewMember(event, setFormData)}
                         />
                         <Button className="mt-10">
                             <p>Vote</p>
@@ -122,21 +112,14 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                     </form>
                 </section>
 
-                <ProposalVoteDialog
-                    dialog={confirmDialog}
-                    formData={formData}
-                    activeStep={activeStep}
-                />
+                <ProposalVoteDialog dialog={confirmDialog} formData={formData} activeStep={activeStep} />
             </Layout>
         </div>
     ) : (
         <div>
             <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    <MockupTextCard
-                        label={"DAO not found"}
-                        text={"Sorry, DAO not fount. Please try to reload page"}
-                    />
+                    <MockupTextCard label={"DAO not found"} text={"Sorry, DAO not fount. Please try to reload page"} />
                 </section>
             </Layout>
         </div>

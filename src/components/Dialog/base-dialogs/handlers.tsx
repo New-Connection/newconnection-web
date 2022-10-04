@@ -1,9 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-export const handleNext = (
-    setActiveStep: Dispatch<SetStateAction<number>>,
-    defaultStep: number = 1
-) => {
+export const handleNext = (setActiveStep: Dispatch<SetStateAction<number>>, defaultStep: number = 1) => {
     setActiveStep((prevActiveStep) => prevActiveStep + defaultStep);
 };
 

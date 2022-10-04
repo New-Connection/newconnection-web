@@ -52,10 +52,7 @@ const Navbar = () => {
                         <Account showAccountInfo={walletDailog.toggle} />
                     </>
                 ) : (
-                    <button
-                        className="form-submit-button hidden md:block"
-                        onClick={walletDailog.toggle}
-                    >
+                    <button className="form-submit-button hidden md:block" onClick={walletDailog.toggle}>
                         Connect Wallet
                     </button>
                 )}

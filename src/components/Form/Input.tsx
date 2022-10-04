@@ -17,10 +17,7 @@ export const InputAmount = ({
     return (
         <div className={className}>
             <label>
-                <div
-                    title={labelTitle}
-                    className={isDisabled ? "input-label text-gray-400" : "input-label"}
-                >
+                <div title={labelTitle} className={isDisabled ? "input-label text-gray-400" : "input-label"}>
                     {label}
                 </div>
             </label>
@@ -140,10 +137,7 @@ export const InputSupplyOfNFT = ({
     return (
         <div className={className}>
             <label>
-                <div
-                    title={labelTitle}
-                    className={isDisabled ? "sub-label" : "sub-label text-black"}
-                >
+                <div title={labelTitle} className={isDisabled ? "sub-label" : "sub-label text-black"}>
                     {label}
                 </div>
             </label>

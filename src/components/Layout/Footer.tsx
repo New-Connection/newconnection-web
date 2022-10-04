@@ -19,11 +19,7 @@ const Footer = () => {
                         <button className="grid place-items-center cursor-not-allowed w-[50px] h-[50px] bg-gray rounded-md fill-purple hover:fill-gray2">
                             <DiscordIcon height="33" width="35" />
                         </button>
-                        <a
-                            href="https://twitter.com/NewConnectionX"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
+                        <a href="https://twitter.com/NewConnectionX" target="_blank" rel="noreferrer">
                             <button className="w-[50px] h-[50px] grid place-items-center bg-gray rounded-md fill-[#1DA1F2] hover:bg-purple hover:fill-white">
                                 <TwitterIcon height="26" width="30" />
                             </button>

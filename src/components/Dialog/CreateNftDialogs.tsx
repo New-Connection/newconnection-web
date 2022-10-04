@@ -10,12 +10,7 @@ export const AddNftDialog = ({ dialog, activeStep, formData }: ICreateNftDialog)
     const router = useRouter();
 
     return (
-        <StepperDialog
-            dialog={dialog}
-            className="dialog"
-            activeStep={activeStep}
-            steps={addNFTSteps}
-        >
+        <StepperDialog dialog={dialog} className="dialog" activeStep={activeStep} steps={addNFTSteps}>
             <p className="ml-7">Deployment successful!</p>
 
             <div className="flex ml-7 mb-10">
@@ -37,12 +32,7 @@ export const AddNftDialog = ({ dialog, activeStep, formData }: ICreateNftDialog)
 
 export const CreateNftDialog = ({ dialog, formData, activeStep }: ICreateNftDialog) => {
     return (
-        <StepperDialog
-            dialog={dialog}
-            className="dialog"
-            activeStep={activeStep}
-            steps={createNFTSteps}
-        >
+        <StepperDialog dialog={dialog} className="dialog" activeStep={activeStep} steps={createNFTSteps}>
             <p className="ml-7">Deployment successful!</p>
             <div className="flex ml-7 mb-10">
                 <div className={"mr-4"}>Contract Address:</div>

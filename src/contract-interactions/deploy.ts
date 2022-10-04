@@ -27,10 +27,7 @@ export interface IConstructorGovernor {
     quorumPercentage: number;
 }
 
-export async function deployGovernorContract(
-    signer: Signer,
-    constructor: IConstructorGovernor
-): Promise<Contract> {
+export async function deployGovernorContract(signer: Signer, constructor: IConstructorGovernor): Promise<Contract> {
     const factory = CreateGovernorContract(signer);
     return await factory.deploy(
         constructor.name,
@@ -51,10 +48,7 @@ export interface IConstructorNFT {
     isWalletApproved?: boolean;
 }
 
-export async function deployNFTContract(
-    signer: Signer,
-    constructor: IConstructorNFT
-): Promise<Contract> {
+export async function deployNFTContract(signer: Signer, constructor: IConstructorNFT): Promise<Contract> {
     const factory = CreateNFTContract(signer);
     const contract = await factory.deploy(
         constructor.name,
@@ -72,10 +66,7 @@ export async function deployNFTContract(
 // For future constructor arguments
 export interface IConstructorTreasury {}
 
-export async function deployTreasuryContract(
-    signer: Signer,
-    constructor: IConstructorTreasury
-): Promise<Contract> {
+export async function deployTreasuryContract(signer: Signer, constructor: IConstructorTreasury): Promise<Contract> {
     const factory = CreateTreasuryContract(signer);
     return await factory.deploy();
 }

@@ -29,9 +29,7 @@ export function CheckboxGroup({
                     return (
                         <label
                             key={value.toUpperCase()}
-                            className={classNames(
-                                isDisabled ? "input-label cursor-not-allowed" : "input-label"
-                            )}
+                            className={classNames(isDisabled ? "input-label cursor-not-allowed" : "input-label")}
                         >
                             <Checkbox
                                 as="div"

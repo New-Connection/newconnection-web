@@ -54,10 +54,7 @@ export async function getSupplyNumber(contractAddress: string, chainId: number):
     }
 }
 
-export async function getNumberOfMintedTokens(
-    contractAddress: string,
-    chainId: number
-): Promise<string> {
+export async function getNumberOfMintedTokens(contractAddress: string, chainId: number): Promise<string> {
     try {
         let baseProvider = provider({ chainId });
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
@@ -68,11 +65,7 @@ export async function getNumberOfMintedTokens(
     }
 }
 
-export async function getNumAvailableToMint(
-    userAddress: string,
-    contractAddress: string,
-    chainId: number
-) {
+export async function getNumAvailableToMint(userAddress: string, contractAddress: string, chainId: number) {
     try {
         let baseProvider = provider({ chainId });
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
@@ -82,11 +75,7 @@ export async function getNumAvailableToMint(
     }
 }
 
-export async function getNumberOfTokenInOwnerAddress(
-    userAddress: string,
-    contractAddress: string,
-    chainId: number
-) {
+export async function getNumberOfTokenInOwnerAddress(userAddress: string, contractAddress: string, chainId: number) {
     try {
         let baseProvider = provider({ chainId });
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);

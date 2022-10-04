@@ -3,19 +3,8 @@ import type { NextPage } from "next";
 import { ICreateProposal, IMultiNFTVoting } from "types/forms";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout from "components/Layout/Layout";
-import {
-    handleAddArray,
-    handleChangeBasic,
-    handleTextChange,
-    handleTextChangeAddNewMember,
-} from "utils/handlers";
-import {
-    Button,
-    CheckboxGroup,
-    InputText,
-    InputTextArea,
-    RadioSelectorMulti,
-} from "components/Form";
+import { handleAddArray, handleChangeBasic, handleTextChange, handleTextChangeAddNewMember } from "utils/handlers";
+import { Button, CheckboxGroup, InputText, InputTextArea, RadioSelectorMulti } from "components/Form";
 import { BackButton } from "components/Button/";
 import { useDialogState } from "ariakit";
 import { validateForm } from "utils/validate";
@@ -162,10 +151,7 @@ const CreateProposal: NextPage = () => {
             <Layout className="layout-base">
                 <section className="relative w-full">
                     <BackButton />
-                    <form
-                        className="mx-auto flex max-w-4xl flex-col gap-4"
-                        onSubmit={createProposalContract}
-                    >
+                    <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={createProposalContract}>
                         <h1 className="text-highlighter">New Proposal</h1>
                         <InputText
                             label="Title"
@@ -208,8 +194,7 @@ const CreateProposal: NextPage = () => {
                                 labels={[...votingNFTs.tokenNames]}
                                 handleChange={(event) => {
                                     // setting tokenName
-                                    const currentTokenName =
-                                        event.currentTarget.nextSibling.textContent.slice(1);
+                                    const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);
                                     handleChangeBasic(currentTokenName, setFormData, "tokenName");
 
                                     // setting tokenAddress
@@ -224,11 +209,7 @@ const CreateProposal: NextPage = () => {
                     </form>
                 </section>
 
-                <CreateProposalDialog
-                    dialog={confirmDialog}
-                    formData={formData}
-                    activeStep={activeStep}
-                />
+                <CreateProposalDialog dialog={confirmDialog} formData={formData} activeStep={activeStep} />
             </Layout>
         </div>
     );

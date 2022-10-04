@@ -51,10 +51,7 @@ export interface IRadioSelector {
     labels: string[];
     className?: string;
     values?: string[];
-    handleChange?: (
-        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        option?: IRadioSelectorClickOption
-    ) => void;
+    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, option?: IRadioSelectorClickOption) => void;
 }
 
 export interface IDragAndDropProps {

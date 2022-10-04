@@ -250,9 +250,7 @@ export const getChain = (chainId: number): Chain => {
 };
 
 export function getChainScanner(chainId: number | undefined, address: string | undefined) {
-    return chainId && address
-        ? `${getChain(chainId).blockExplorers.default.url}/address/${address}`
-        : "";
+    return chainId && address ? `${getChain(chainId).blockExplorers.default.url}/address/${address}` : "";
 }
 
 export const getTokenSymbol = (chainId: number) => {
@@ -272,9 +270,8 @@ export const getLogoURI = (chain: number | string): StaticImageData => {
 
 export const getSecondsPerBlock = (chain: number | string): number => {
     return (
-        (typeof chain === "number"
-            ? CHAINS_BLOCKTIME[getChain(chain)?.name]
-            : CHAINS_BLOCKTIME[chain]) || CHAINS_BLOCKTIME["Goerli"]
+        (typeof chain === "number" ? CHAINS_BLOCKTIME[getChain(chain)?.name] : CHAINS_BLOCKTIME[chain]) ||
+        CHAINS_BLOCKTIME["Goerli"]
     );
 };
 

@@ -7,20 +7,10 @@ import { BlockchainIcon } from "components/Icons/";
 import Image from "next/image";
 import { InputAmount } from "../Form";
 import { createTreasurySteps, SpinnerLoading } from "./base-dialogs/Stepper";
-import {
-    IContributeTreasuryDialog,
-    ICreateTreasuryDialog,
-    IDetainNftDialog,
-} from "./dialogInterfaces";
+import { IContributeTreasuryDialog, ICreateTreasuryDialog, IDetainNftDialog } from "./dialogInterfaces";
 import { CopyTextButton } from "components/Button/";
 
-export const DetailNftDialog = ({
-    dialog,
-    DAO,
-    currentNFT,
-    buttonState,
-    mintButton,
-}: IDetainNftDialog) => {
+export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButton }: IDetainNftDialog) => {
     return (
         <CustomDialog dialog={dialog} className="h-full items-center text-center">
             {currentNFT ? (
@@ -94,19 +84,10 @@ export const ContributeTreasuryDialog = ({
     return (
         <CustomDialog dialog={dialog} className="items-center text-center">
             <div className={"flex items-center gap-2"}>
-                <Image
-                    src={DAO.profileImage}
-                    height={"50px"}
-                    width={"50px"}
-                    className="rounded-xl"
-                />
+                <Image src={DAO.profileImage} height={"50px"} width={"50px"} className="rounded-xl" />
                 <div>
                     <div className={"text-xl capitalize font-semibold"}>{DAO.name} treasury</div>
-                    {DAO.treasuryAddress ? (
-                        <CopyTextButton copyText={DAO.treasuryAddress} />
-                    ) : (
-                        <></>
-                    )}
+                    {DAO.treasuryAddress ? <CopyTextButton copyText={DAO.treasuryAddress} /> : <></>}
                 </div>
             </div>
             <form
@@ -136,9 +117,7 @@ export const ContributeTreasuryDialog = ({
                         <div className={"w-7"}>
                             <SpinnerLoading />
                         </div>
-                        <div className="text-xl text-black">
-                            Waiting confirmation from blockchain
-                        </div>
+                        <div className="text-xl text-black">Waiting confirmation from blockchain</div>
                     </div>
                 )}
             </form>
@@ -146,18 +125,9 @@ export const ContributeTreasuryDialog = ({
     );
 };
 
-export const CreateTreasuryDialog = ({
-    dialog,
-    DAO,
-    createTreasuryStep,
-}: ICreateTreasuryDialog) => {
+export const CreateTreasuryDialog = ({ dialog, DAO, createTreasuryStep }: ICreateTreasuryDialog) => {
     return (
-        <StepperDialog
-            dialog={dialog}
-            className="dialog"
-            activeStep={createTreasuryStep}
-            steps={createTreasurySteps}
-        >
+        <StepperDialog dialog={dialog} className="dialog" activeStep={createTreasuryStep} steps={createTreasurySteps}>
             <p className="ml-7">Deployment successful!</p>
             <div className="flex ml-7 mb-10">
                 <div className={"mr-4"}>Treasury Address:</div>

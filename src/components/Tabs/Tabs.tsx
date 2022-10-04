@@ -46,12 +46,7 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
                         </button>
                     ))}
                 </div>
-                <div
-                    className={classNames(
-                        "add-prop-button mt-4 md:mt-0",
-                        selectedTab === 0 ? "block" : "hidden"
-                    )}
-                >
+                <div className={classNames("add-prop-button mt-4 md:mt-0", selectedTab === 0 ? "block" : "hidden")}>
                     <Link href={url}>
                         <button
                             className={"secondary-button disabled:bg-gray disabled:hover:bg-gray"}

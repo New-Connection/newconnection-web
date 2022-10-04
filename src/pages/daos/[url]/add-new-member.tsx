@@ -112,10 +112,7 @@ const AddNewMember: NextPage = () => {
         let available = false;
         await whitelistFetch({
             onSuccess: (results) => {
-                if (
-                    results.filter((result) => result.get("walletAddress") === walletAddress)
-                        .length === 0
-                ) {
+                if (results.filter((result) => result.get("walletAddress") === walletAddress).length === 0) {
                     console.log("available=true");
                     available = true;
                 }
@@ -132,10 +129,7 @@ const AddNewMember: NextPage = () => {
             <Layout className="layout-base">
                 <section className="relative w-full">
                     <BackButton />
-                    <form
-                        className="mx-auto flex max-w-4xl flex-col gap-4"
-                        onSubmit={sendSignatureRequest}
-                    >
+                    <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={sendSignatureRequest}>
                         <h1 className="text-highlighter">Become a member of</h1>
                         <h1 className="text-highlighter mt-0 text-purple">{formData.daoName}</h1>
                         <label>
@@ -147,13 +141,8 @@ const AddNewMember: NextPage = () => {
                                 labels={[...formData.tokenNames]}
                                 handleChange={(event) => {
                                     // setting tokenName
-                                    const currentTokenName =
-                                        event.currentTarget.nextSibling.textContent.slice(1);
-                                    handleChangeBasic(
-                                        currentTokenName,
-                                        setFormData,
-                                        "votingTokenName"
-                                    );
+                                    const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);
+                                    handleChangeBasic(currentTokenName, setFormData, "votingTokenName");
 
                                     // setting tokenAddress
                                     handleTextChangeAddNewMember(event, setFormData);
@@ -168,9 +157,7 @@ const AddNewMember: NextPage = () => {
                             label="Note (optional)"
                             placeholder="You can add note and type something for DAO’s admin"
                             maxLength={2000}
-                            handleChange={(event) =>
-                                handleTextChangeAddNewMember(event, setFormData)
-                            }
+                            handleChange={(event) => handleTextChangeAddNewMember(event, setFormData)}
                         />
                         <Button className="mt-5 w-full">Send a request</Button>
                     </form>

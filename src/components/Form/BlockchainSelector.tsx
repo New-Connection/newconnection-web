@@ -3,13 +3,7 @@ import { Select, SelectArrow, SelectItem, SelectPopover, useSelectState } from "
 import { ISelectorProps } from "./types";
 import { getChainNames, getLogoURI } from "utils/blockchains";
 
-export const BlockchainSelector = ({
-    name,
-    label,
-    className,
-    enabledValues,
-    handleChange,
-}: ISelectorProps) => {
+export const BlockchainSelector = ({ name, label, className, enabledValues, handleChange }: ISelectorProps) => {
     const select = useSelectState({
         defaultValue: enabledValues[0],
         setValueOnMove: true,

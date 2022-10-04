@@ -1,18 +1,5 @@
-import {
-    createContext,
-    forwardRef,
-    HTMLAttributes,
-    ReactNode,
-    RefAttributes,
-    useContext,
-} from "react";
-import {
-    Menu as BaseMenu,
-    MenuButton,
-    MenuButtonArrow,
-    MenuItem as BaseMenuItem,
-    useMenuState,
-} from "ariakit/menu";
+import { createContext, forwardRef, HTMLAttributes, ReactNode, RefAttributes, useContext } from "react";
+import { Menu as BaseMenu, MenuButton, MenuButtonArrow, MenuItem as BaseMenuItem, useMenuState } from "ariakit/menu";
 
 // Use React Context so we can determine if the menu is a submenu or not.
 const MenuContext = createContext(false);
@@ -22,10 +9,7 @@ export type MenuItemProps = HTMLAttributes<HTMLDivElement> & {
     disabled?: boolean;
 };
 
-export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(function A(
-    { label, ...props },
-    ref
-) {
+export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(function A({ label, ...props }, ref) {
     return (
         <BaseMenuItem
             className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-black outline-none active-item:text-black aria-disabled:opacity-40 hover:text-white hover:bg-[#7343DF] active:bg-btnActive rounded-md"
@@ -44,10 +28,7 @@ export type MenuProps = HTMLAttributes<HTMLDivElement> & {
 
 type MenuButtonProps = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>;
 
-export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B(
-    { label, children, ...props },
-    ref
-) {
+export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B({ label, children, ...props }, ref) {
     const inSubmenu = useContext(MenuContext);
     const menu = useMenuState({
         gutter: 8,

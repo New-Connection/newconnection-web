@@ -87,12 +87,7 @@ interface ICardProposal {
 
 const CardProposal = ({ title, children, className }: ICardProposal) => {
     return (
-        <div
-            className={classNames(
-                "w-full h-64 border-2 border-gray rounded-xl mt-6 p-4",
-                className
-            )}
-        >
+        <div className={classNames("w-full h-64 border-2 border-gray rounded-xl mt-6 p-4", className)}>
             <p className="text-purple mb-4 text-lg">{title}</p>
             {children}
         </div>

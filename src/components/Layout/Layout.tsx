@@ -12,20 +12,11 @@ interface ILayoutProps {
     isMinHeightTurnOff?: boolean;
 }
 
-export default function Layout({
-    children,
-    className,
-    isMinHeightTurnOff = false,
-    ...props
-}: ILayoutProps) {
+export default function Layout({ children, className, isMinHeightTurnOff = false, ...props }: ILayoutProps) {
     return (
         <>
             <HeadInfo />
-            <div
-                className={
-                    isMinHeightTurnOff ? "relative h-[calc(100vh-135px)]" : "relative min-h-screen"
-                }
-            >
+            <div className={isMinHeightTurnOff ? "relative h-[calc(100vh-135px)]" : "relative min-h-screen"}>
                 <Header />
                 {/* <NewFeaturesBanner /> */}
                 {/* <SwitchNetworkBanner /> */}

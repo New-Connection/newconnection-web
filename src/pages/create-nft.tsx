@@ -1,23 +1,11 @@
 import React, { useState } from "react";
-import {
-    Button,
-    DragAndDropImage,
-    InputAmount,
-    InputSupplyOfNFT,
-    InputText,
-    InputTextArea,
-} from "components/Form";
+import { Button, DragAndDropImage, InputAmount, InputSupplyOfNFT, InputText, InputTextArea } from "components/Form";
 import { Signer } from "ethers";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import { ICreateNFT } from "types/forms";
-import {
-    handleChangeBasic,
-    handleImageChange,
-    handleNftSupplyChange,
-    handleTextChange,
-} from "utils/handlers";
+import { handleChangeBasic, handleImageChange, handleNftSupplyChange, handleTextChange } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
@@ -63,9 +51,7 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        if (
-            !(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))
-        ) {
+        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))) {
             return;
         }
 
@@ -86,8 +72,7 @@ const CreateNFT: NextPage = () => {
         let contract;
         try {
             const chainId = await signerData.getChainId();
-            const endpoint: string =
-                layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
+            const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
             contract = await deployNFTContract(signerData as Signer, {
                 name: formData.name,
@@ -148,9 +133,7 @@ const CreateNFT: NextPage = () => {
                                         label="Price"
                                         placeholder="Price in ETH"
                                         name="price"
-                                        handleChange={(event) =>
-                                            handleTextChange(event, setFormData)
-                                        }
+                                        handleChange={(event) => handleTextChange(event, setFormData)}
                                         className="w-full"
                                         min={0}
                                         step={0.0001}
@@ -170,17 +153,9 @@ const CreateNFT: NextPage = () => {
                                             name={chain}
                                             image={getLogoURI(chain)}
                                             handleChange={(event) => {
-                                                handleNftSupplyChange(
-                                                    event,
-                                                    setFormData,
-                                                    chain,
-                                                    "blockchain"
-                                                );
+                                                handleNftSupplyChange(event, setFormData, chain, "blockchain");
                                             }}
-                                            isDisabled={
-                                                chain !== formData.blockchain &&
-                                                formData.blockchain !== ""
-                                            }
+                                            isDisabled={chain !== formData.blockchain && formData.blockchain !== ""}
                                         />
                                     ))}
                                 </div>
@@ -189,9 +164,7 @@ const CreateNFT: NextPage = () => {
                                 <DragAndDropImage
                                     label="Image"
                                     name="file"
-                                    handleChange={(file) =>
-                                        handleImageChange(file, setFormData, "file")
-                                    }
+                                    handleChange={(file) => handleImageChange(file, setFormData, "file")}
                                 />
                             </div>
                         </div>
@@ -199,11 +172,7 @@ const CreateNFT: NextPage = () => {
                     </form>
                 </section>
 
-                <CreateNftDialog
-                    formData={formData}
-                    activeStep={activeStep}
-                    dialog={confirmDialog}
-                />
+                <CreateNftDialog formData={formData} activeStep={activeStep} dialog={confirmDialog} />
             </Layout>
         </div>
     );

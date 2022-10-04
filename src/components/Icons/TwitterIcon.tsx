@@ -2,13 +2,7 @@ import React from "react";
 
 export const TwitterIcon = ({ width = "23", height = "20", fill = "none" }) => {
     return (
-        <svg
-            width={width}
-            height={height}
-            viewBox="0 0 23 20"
-            fill={fill}
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width={width} height={height} viewBox="0 0 23 20" fill={fill} xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M15.7404 0.5C12.9894 0.5 10.7523 2.72375 10.7523 5.45833C10.7523 5.62265 10.7936 5.78341 10.8098 5.94416C7.40832 5.62087 4.40035 3.99191 
                 2.3573 1.50024C2.26207 1.38057 2.11472 1.31627 1.96019 1.32698C1.80746 1.3377 1.67089 1.42522 1.59543 1.5574C1.16597 2.2915 0.919801 3.13634 0.919801 

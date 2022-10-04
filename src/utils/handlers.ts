@@ -25,11 +25,7 @@ export const handleChangeBasicSimple = <T>(
     set((prev) => ({ ...prev, [field]: [value] }));
 };
 
-export const handleAddArray = <T>(
-    value: string[] | string,
-    set: Dispatch<SetStateAction<T>>,
-    field: string
-) => {
+export const handleAddArray = <T>(value: string[] | string, set: Dispatch<SetStateAction<T>>, field: string) => {
     value
         ? typeof value === "string"
             ? set((prev) => ({ ...prev, [field]: [value] }))
@@ -37,20 +33,14 @@ export const handleAddArray = <T>(
         : "return";
 };
 
-export const handleTextChange = <
-    T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement
->(
+export const handleTextChange = <T extends ICreate, E extends HTMLInputElement | HTMLTextAreaElement>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>
 ) => {
     set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 };
 
-export const handleNftSupplyChange = <
-    T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement
->(
+export const handleNftSupplyChange = <T extends ICreate, E extends HTMLInputElement | HTMLTextAreaElement>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>,
     value: string | boolean | number,
@@ -111,10 +101,7 @@ export const handleSelectorChange = <T extends ICreate>(
     return true;
 };
 
-export const handleDaoNameUrlChange = <
-    T extends ICreate,
-    E extends HTMLInputElement | HTMLTextAreaElement
->(
+export const handleDaoNameUrlChange = <T extends ICreate, E extends HTMLInputElement | HTMLTextAreaElement>(
     event: ChangeEvent<E>,
     set: Dispatch<SetStateAction<T>>,
     field: string

@@ -51,26 +51,16 @@ export const WalletSelector = ({ dialog }: Props) => {
     const formattedAddress = address && formatAddress(address);
     return (
         // Display Connected Wallet
-        <Dialog
-            state={dialog}
-            className="dialog"
-            hideOnInteractOutside={false}
-            hideOnEscape={false}
-        >
+        <Dialog state={dialog} className="dialog" hideOnInteractOutside={false} hideOnEscape={false}>
             {isMounted && isConnected ? (
                 <div className={"p-5"}>
                     <DialogHeader title="Account" dialog={dialog} />
                     <div className="mt-3 flex flex-col gap-2">
-                        <p className="text-sm text-gray2 font-light">
-                            Connected to {connector?.name}
-                        </p>
+                        <p className="text-sm text-gray2 font-light">Connected to {connector?.name}</p>
                         <p className="flex items-center gap-4 break-words text-gray2">
                             {ensName ? `${ensName} (${formattedAddress})` : address}
                         </p>
-                        <button
-                            className="nav-button mt-5 items-center"
-                            onClick={() => handlerDisconect()}
-                        >
+                        <button className="nav-button mt-5 items-center" onClick={() => handlerDisconect()}>
                             Disconnect
                         </button>
                     </div>
@@ -85,15 +75,11 @@ export const WalletSelector = ({ dialog }: Props) => {
                             <button
                                 key={x?.id}
                                 onClick={() => {
-                                    handleConnect(x);
+                                    handleConnect(x).then();
                                 }}
                                 className="flex gap-4 btn-connect-wallets text-purple justify-center pr-12 rounded-full"
                             >
-                                <img
-                                    alt={"wallet"}
-                                    src={imageID[x.name]["src"]}
-                                    className="w-8 h-8"
-                                />
+                                <img alt={"wallet"} src={imageID[x.name]["src"]} className="w-8 h-8" />
                                 {x?.name}
                                 {isLoading && x.id === pendingConnector?.id && " (connecting)"}
                             </button>

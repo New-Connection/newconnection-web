@@ -101,9 +101,7 @@ const AddNewNFT: NextPage = () => {
             return;
         }
 
-        if (
-            !(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))
-        ) {
+        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))) {
             return;
         }
 
@@ -124,8 +122,7 @@ const AddNewNFT: NextPage = () => {
         let contract;
         try {
             const chainId = await signerData.getChainId();
-            const endpoint: string =
-                layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
+            const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
             contract = await deployNFTContract(signerData as Signer, {
                 name: formData.name,
@@ -191,9 +188,7 @@ const AddNewNFT: NextPage = () => {
                                     <TypeSelector
                                         label="Membership type"
                                         name="NFTtype"
-                                        handleChange={(event) =>
-                                            handleSelectorChange(event, setFormData, "NFTtype")
-                                        }
+                                        handleChange={(event) => handleSelectorChange(event, setFormData, "NFTtype")}
                                         className="w-1/2 mt-6"
                                     />
                                     <InputText
@@ -229,12 +224,7 @@ const AddNewNFT: NextPage = () => {
                                             name={chain}
                                             image={getLogoURI(chain)}
                                             handleChange={(event) => {
-                                                handleNftSupplyChange(
-                                                    event,
-                                                    setFormData,
-                                                    chain,
-                                                    "blockchain"
-                                                );
+                                                handleNftSupplyChange(event, setFormData, chain, "blockchain");
                                                 fetchQuery();
                                             }}
                                             isDisabled={chain !== formData.blockchain}
@@ -246,9 +236,7 @@ const AddNewNFT: NextPage = () => {
                                 <DragAndDropImage
                                     label="Image"
                                     name="file"
-                                    handleChange={(file) =>
-                                        handleImageChange(file, setFormData, "file")
-                                    }
+                                    handleChange={(file) => handleImageChange(file, setFormData, "file")}
                                 />
                             </div>
                         </div>

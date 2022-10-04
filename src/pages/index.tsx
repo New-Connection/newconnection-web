@@ -114,9 +114,7 @@ const Home: NextPage = () => {
                 </div>
                 <div className="text-center my-32">
                     <p>No proposals here</p>
-                    <p className="text-gray-400">
-                        You should first join a DAO or create a new DAO to add a proposal
-                    </p>
+                    <p className="text-gray-400">You should first join a DAO or create a new DAO to add a proposal</p>
                 </div>
             </div>
         );
@@ -141,9 +139,7 @@ const Home: NextPage = () => {
                 </div>
                 <div className="text-center my-32">
                     <p>No NFTs here</p>
-                    <p className="text-gray-400">
-                        You should first join a DAO and get NFT from its administrator
-                    </p>
+                    <p className="text-gray-400">You should first join a DAO and get NFT from its administrator</p>
                 </div>
             </>
         );

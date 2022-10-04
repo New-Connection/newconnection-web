@@ -19,9 +19,7 @@ const ProposalsPage: NextPage = () => {
 
     const { fetch: ProposalQuery } = useMoralisQuery(
         "Proposal",
-        (query) =>
-            query.equalTo("governorAddress", DAO?.governorAddress) &&
-            query.equalTo("chainId", DAO?.chainId),
+        (query) => query.equalTo("governorAddress", DAO?.governorAddress) && query.equalTo("chainId", DAO?.chainId),
         [DAO],
         {
             autoFetch: false,
@@ -73,10 +71,7 @@ const ProposalsPage: NextPage = () => {
                             {proposals.map((proposal) => {
                                 const proposalId = proposal.proposalId;
                                 return (
-                                    <Link
-                                        href={`../${DAO.url}/proposals/${proposalId}`}
-                                        key={proposalId}
-                                    >
+                                    <Link href={`../${DAO.url}/proposals/${proposalId}`} key={proposalId}>
                                         <li
                                             key={proposalId}
                                             className="border-b-2 border-gray cursor-pointer active:bg-gray"

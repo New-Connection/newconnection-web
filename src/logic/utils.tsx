@@ -1,10 +1,6 @@
 import toast from "react-hot-toast";
 
-export const checkCorrectNetwork = async (
-    signerData,
-    chainID: number,
-    switchNetwork
-): Promise<boolean> => {
+export const checkCorrectNetwork = async (signerData, chainID: number, switchNetwork): Promise<boolean> => {
     if (!signerData) {
         toast.error("Please connect wallet");
         return false;

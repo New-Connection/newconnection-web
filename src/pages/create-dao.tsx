@@ -7,14 +7,7 @@ import { Signer } from "ethers";
 import { ICreateDAO } from "types/forms";
 import { validateForm } from "utils/validate";
 import Layout from "components/Layout";
-import {
-    Button,
-    CheckboxGroup,
-    DragAndDropImage,
-    InputAmount,
-    InputText,
-    InputTextArea,
-} from "components/Form";
+import { Button, CheckboxGroup, DragAndDropImage, InputAmount, InputText, InputTextArea } from "components/Form";
 import {
     handleAddArray,
     handleChangeBasic,
@@ -65,14 +58,9 @@ const CreateDAO: NextPage = () => {
     const { switchNetwork } = useSwitchNetwork();
     const { isInitialized } = useMoralis();
 
-    const { fetch: DAOsQuery } = useMoralisQuery(
-        "DAO",
-        (query) => query.equalTo("url", formData.url),
-        [formData.url],
-        {
-            autoFetch: false,
-        }
-    );
+    const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.equalTo("url", formData.url), [formData.url], {
+        autoFetch: false,
+    });
 
     const checkUrlAvailability = async () => {
         const results = await fetchDAOs(isInitialized, DAOsQuery);
@@ -100,13 +88,7 @@ const CreateDAO: NextPage = () => {
             return;
         }
 
-        if (
-            !(await checkCorrectNetwork(
-                signerData,
-                CHAINS[formData.blockchain[0]].id,
-                switchNetwork
-            ))
-        ) {
+        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain[0]].id, switchNetwork))) {
             return;
         }
 
@@ -134,8 +116,7 @@ const CreateDAO: NextPage = () => {
             contract = await deployGovernorContract(signerData as Signer, {
                 name: formData.name,
                 tokenAddress: formData.tokenAddress[0],
-                votingPeriod:
-                    +formData.votingPeriod * getBlocksPerDay(CHAINS[formData.blockchain[0]]),
+                votingPeriod: +formData.votingPeriod * getBlocksPerDay(CHAINS[formData.blockchain[0]]),
                 quorumPercentage: +formData.quorumPercentage,
             });
             handleNext(setActiveStep);
@@ -183,9 +164,7 @@ const CreateDAO: NextPage = () => {
                             placeholder="Unique DAO name"
                             labelTitle="Unique DAO name"
                             maxLength={30}
-                            handleChange={(event) =>
-                                handleDaoNameUrlChange(event, setFormData, "url")
-                            }
+                            handleChange={(event) => handleDaoNameUrlChange(event, setFormData, "url")}
                         />
                         <InputText
                             label="NFT Address"
@@ -240,17 +219,13 @@ const CreateDAO: NextPage = () => {
                                 label="Profile Image"
                                 name="profileImage"
                                 className="w-1/3 mr-10"
-                                handleChange={(file) =>
-                                    handleImageChange(file, setFormData, "profileImage")
-                                }
+                                handleChange={(file) => handleImageChange(file, setFormData, "profileImage")}
                             />
                             <DragAndDropImage
                                 label="Cover Image"
                                 name="coverImage"
                                 className="w-2/3"
-                                handleChange={(file) =>
-                                    handleImageChange(file, setFormData, "coverImage")
-                                }
+                                handleChange={(file) => handleImageChange(file, setFormData, "coverImage")}
                             />
                         </div>
                         <CheckboxGroup
@@ -302,11 +277,7 @@ const CreateDAO: NextPage = () => {
                     </form>
                 </section>
 
-                <CreateDaoDialog
-                    dialog={confirmDialog}
-                    formData={formData}
-                    activeStep={activeStep}
-                />
+                <CreateDaoDialog dialog={confirmDialog} formData={formData} activeStep={activeStep} />
             </Layout>
         </div>
     );

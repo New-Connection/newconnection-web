@@ -17,14 +17,9 @@ const DAOsPage: NextPage = () => {
     const { chain } = useNetwork();
     const { isInitialized } = useMoralis();
 
-    const { fetch: DAOsQuery } = useMoralisQuery(
-        "DAO",
-        (query) => query.notEqualTo("objectId", ""),
-        [],
-        {
-            autoFetch: false,
-        }
-    );
+    const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
+        autoFetch: false,
+    });
 
     const loadingLargeData = async (DAOsList: IDAOPageForm[]) => {
         const newDAOs = await Promise.all(
@@ -55,10 +50,7 @@ const DAOsPage: NextPage = () => {
     const CreateDAOButton = () => {
         return (
             <Link href="./create-new-dao">
-                <button
-                    className="secondary-button h-10 disabled:bg-gray"
-                    disabled={!isBlockchainSupported(chain)}
-                >
+                <button className="secondary-button h-10 disabled:bg-gray" disabled={!isBlockchainSupported(chain)}>
                     Create DAO
                 </button>
             </Link>

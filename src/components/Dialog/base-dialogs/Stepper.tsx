@@ -147,11 +147,7 @@ export const StepperDialog = ({
             hideOnEscape={isClose}
         >
             <div className="h-full m-10">
-                <Stepper
-                    activeStep={activeStep}
-                    orientation="vertical"
-                    connector={<ColorlibConnector />}
-                >
+                <Stepper activeStep={activeStep} orientation="vertical" connector={<ColorlibConnector />}>
                     {steps.map((step, index) => (
                         <Step key={index}>
                             <div className="flex gap-2">

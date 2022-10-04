@@ -26,11 +26,7 @@ const CreateNewDAO: NextPage = () => {
                 <p className="pb-6">{subtitle}</p>
                 <Link href={{ pathname: linkToPage }}>
                     <a>
-                        <Button
-                            type={"button"}
-                            className="mt-5 mb-5 py-4 border-2 w-full"
-                            disabled={isDisabled}
-                        >
+                        <Button type={"button"} className="mt-5 mb-5 py-4 border-2 w-full" disabled={isDisabled}>
                             {buttonTitle}
                         </Button>
                     </a>
@@ -48,8 +44,8 @@ const CreateNewDAO: NextPage = () => {
                         <h1 className="text-highlighter">Create new DAO</h1>
                         <p className="input-label text-lg font-medium">NFT smart contract</p>
                         <p className="pb-4">
-                            To create your DAO, you first need to add a created NFT collection or
-                            mint a new one in our system
+                            To create your DAO, you first need to add a created NFT collection or mint a new one in our
+                            system
                         </p>
                         <div className="lg:flex gap-10">
                             <Card

@@ -15,21 +15,13 @@ interface IProposalListTab {
     daoUrl: string;
 }
 
-export const ProposalsListTab = ({
-    proposals,
-    DAOMoralisInstance,
-    daoUrl,
-    DAO,
-}: IProposalListTab) => {
+export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }: IProposalListTab) => {
     const visibleProposalsLength: number = 3;
     let activeProposals: IProposalPageForm[];
     if (proposals && proposals.length > 0 && DAOMoralisInstance) {
         activeProposals = proposals.filter((proposals) => proposals.isActive);
         const isActive = DAOMoralisInstance.get("isActive");
-        if (
-            (activeProposals.length > 0 && !isActive) ||
-            (activeProposals.length === 0 && isActive)
-        ) {
+        if ((activeProposals.length > 0 && !isActive) || (activeProposals.length === 0 && isActive)) {
             DAOMoralisInstance.set("isActive", !isActive);
             saveMoralisInstance(DAOMoralisInstance);
         }
@@ -68,14 +60,10 @@ export const ProposalsListTab = ({
                         );
                     })}
                 </ul>
-                {proposals.length > visibleProposalsLength ||
-                activeProposals.length < visibleProposalsLength ? (
+                {proposals.length > visibleProposalsLength || activeProposals.length < visibleProposalsLength ? (
                     <div className={"flex flex-col "}>
                         {activeProposals.length === 0 ? (
-                            <MockupTextCard
-                                label={"No active proposals"}
-                                text={"You can view previous proposals"}
-                            />
+                            <MockupTextCard label={"No active proposals"} text={"You can view previous proposals"} />
                         ) : (
                             <></>
                         )}

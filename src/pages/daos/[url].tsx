@@ -15,13 +15,7 @@ import { getGovernorOwnerAddress } from "contract-interactions/";
 import { IDaoQuery } from "types/queryInterfaces";
 import { isValidHttpUrl } from "utils/transformURL";
 import { handleChangeBasic } from "utils/handlers";
-import {
-    fetchDAO,
-    fetchNFT,
-    fetchProposals,
-    fetchTreasuryBalance,
-    fetchWhitelist,
-} from "network/index";
+import { fetchDAO, fetchNFT, fetchProposals, fetchTreasuryBalance, fetchWhitelist } from "network/index";
 import { BlockchainIcon, DiscordIcon, TwitterIcon, WebsiteIcon } from "components/Icons/";
 import { MockupLoadingDetailDAOPage, MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
@@ -29,18 +23,8 @@ import { NFTCard } from "components/Cards/NFTCard";
 import { ProposalsListTab, Tabs, WhitelistTab } from "components/Tabs/";
 import { DAOPageProps } from "types/pagePropsInterfaces";
 import { ButtonState } from "types/daoIntefaces";
-import {
-    addTreasureMoralis,
-    addTreasury,
-    checkCorrectNetwork,
-    contributeToTreasury,
-    mint,
-} from "logic/index";
-import {
-    ContributeTreasuryDialog,
-    CreateTreasuryDialog,
-    DetailNftDialog,
-} from "components/Dialog/DaoPageDialogs";
+import { addTreasureMoralis, addTreasury, checkCorrectNetwork, contributeToTreasury, mint } from "logic/index";
+import { ContributeTreasuryDialog, CreateTreasuryDialog, DetailNftDialog } from "components/Dialog/DaoPageDialogs";
 import classNames from "classnames";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
@@ -64,10 +48,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // Moralis states
     const [DAO, setDAO] = useState<IDAOPageForm>();
-    const [DAOMoralisInstance, setDAOMoralisInstance] =
-        useState<Moralis.Object<Moralis.Attributes>>();
-    const [WhitelistMoralisInstance, setWhitelistMoralisInstance] =
-        useState<Moralis.Object<Moralis.Attributes>[]>();
+    const [DAOMoralisInstance, setDAOMoralisInstance] = useState<Moralis.Object<Moralis.Attributes>>();
+    const [WhitelistMoralisInstance, setWhitelistMoralisInstance] = useState<Moralis.Object<Moralis.Attributes>[]>();
     const [whitelist, setWhitelist] = useState<IWhitelistPageForm[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
@@ -98,9 +80,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     );
     const { fetch: ProposalQuery } = useMoralisQuery(
         "Proposal",
-        (query) =>
-            query.equalTo("governorAddress", DAO?.governorAddress) &&
-            query.equalTo("chainId", DAO?.chainId),
+        (query) => query.equalTo("governorAddress", DAO?.governorAddress) && query.equalTo("chainId", DAO?.chainId),
         [DAO],
         {
             autoFetch: false,
@@ -174,8 +154,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         const fetchIsOwner = async () => {
             DAO &&
             signerData &&
-            (await signerData.getAddress()) ===
-                (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+            (await signerData.getAddress()) === (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
                 ? setIsOwner(true)
                 : setIsOwner(false);
         };
@@ -226,14 +205,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     };
 
     const mintButton = async () => {
-        await mint(
-            currentNFT.tokenAddress,
-            DAO,
-            signerData,
-            switchNetwork,
-            setButtonState,
-            isOwner
-        );
+        await mint(currentNFT.tokenAddress, DAO, signerData, switchNetwork, setButtonState, isOwner);
     };
 
     const contributeToTreasuryButton = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -257,19 +229,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className="dao-header flex flex-col md:flex-row items-center -mt-10">
                         <div className={"logo"}>
-                            <Image
-                                src={DAO.profileImage}
-                                height={"175px"}
-                                width={"175px"}
-                                className="rounded-full"
-                            />
+                            <Image src={DAO.profileImage} height={"175px"} width={"175px"} className="rounded-full" />
                         </div>
                         <div className={"info flex flex-col w-full gap-8 md:ml-6"}>
-                            <div
-                                className={
-                                    "info-row-1 flex flex-col md:flex-row justify-between items-center"
-                                }
-                            >
+                            <div className={"info-row-1 flex flex-col md:flex-row justify-between items-center"}>
                                 <div className={"dao-name"}>
                                     <div className="dao-label capitalize">{DAO.name}</div>
                                 </div>
@@ -286,9 +249,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                         }}
                                     >
                                         <button
-                                            className={
-                                                "secondary-button disabled:bg-gray disabled:hover:bg-gray"
-                                            }
+                                            className={"secondary-button disabled:bg-gray disabled:hover:bg-gray"}
                                             disabled={!isLoaded}
                                         >
                                             Become a member
@@ -360,13 +321,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     <button
                                         className="form-submit-button border-none text-gray3 hover:underline active:text-gray2"
                                         onClick={async () => {
-                                            if (
-                                                !(await checkCorrectNetwork(
-                                                    signerData,
-                                                    DAO.chainId,
-                                                    switchNetwork
-                                                ))
-                                            ) {
+                                            if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
                                                 return;
                                             }
                                             contributeTreasuryDialog.toggle();
@@ -379,10 +334,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         ) : (
                             <div>
                                 {isOwner ? (
-                                    <button
-                                        className="secondary-button"
-                                        onClick={addTreasuryAndSave}
-                                    >
+                                    <button className="secondary-button" onClick={addTreasuryAndSave}>
                                         Add treasury
                                     </button>
                                 ) : (

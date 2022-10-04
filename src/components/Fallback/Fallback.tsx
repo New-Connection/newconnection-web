@@ -14,14 +14,7 @@ interface FallbackProps {
     supressWalletConnection?: boolean;
 }
 
-export const Fallback = ({
-    isLoading,
-    isError,
-    noData,
-    type,
-    supressWalletConnection,
-    showLoader,
-}: FallbackProps) => {
+export const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, showLoader }: FallbackProps) => {
     const { address: basicAccountData } = useAccount();
 
     const accountData = supressWalletConnection === true || basicAccountData !== undefined;
@@ -62,13 +55,7 @@ export const Fallback = ({
     return (
         <FallbackContainer>
             {defaultMessage ||
-                (isLoading ? (
-                    loader
-                ) : isError ? (
-                    <p>{errorMessage}</p>
-                ) : noData ? (
-                    <p>{emptyDataMessage}</p>
-                ) : null)}
+                (isLoading ? loader : isError ? <p>{errorMessage}</p> : noData ? <p>{emptyDataMessage}</p> : null)}
         </FallbackContainer>
     );
 };

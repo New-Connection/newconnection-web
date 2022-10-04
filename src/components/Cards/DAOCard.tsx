@@ -5,11 +5,7 @@ import Link from "next/link";
 export const DAOCard = ({ name, description, profileImage, url, isActive, proposals }) => {
     return (
         <Link href={`/daos/${url}`}>
-            <div
-                className={
-                    "flex justify-between w-full h-50 p-3 border-b border-gray cursor-pointer active:bg-gray"
-                }
-            >
+            <div className={"flex justify-between w-full h-50 p-3 border-b border-gray cursor-pointer active:bg-gray"}>
                 <div className="flex gap-6 w-10/12 pt-3 pb-3">
                     <div className="w-28 h-28">
                         {
@@ -25,17 +21,11 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
                     </div>
                     <div className="w-5/6 grid grid-cols-1 content-between">
                         <div className="w-full">
-                            <div className="lg:text-lg text-base uppercase font-medium cursor-pointer">
-                                {name}
-                            </div>
+                            <div className="lg:text-lg text-base uppercase font-medium cursor-pointer">{name}</div>
                             <div className="text-gray-500 line-clamp-2">{description}</div>
                         </div>
 
-                        <p
-                            className={
-                                "text-gray2 text-sm cursor-pointer hover:text-gray3 active:text-gray2"
-                            }
-                        >
+                        <p className={"text-gray2 text-sm cursor-pointer hover:text-gray3 active:text-gray2"}>
                             View more
                         </p>
                     </div>
@@ -55,9 +45,7 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
                                     proposals || 0
                                 ) : (
                                     //MOCK UP FOR LOADING
-                                    <div className="bg-gray2 text-gray2 animate-pulse rounded-md">
-                                        000
-                                    </div>
+                                    <div className="bg-gray2 text-gray2 animate-pulse rounded-md">000</div>
                                 )}
                             </div>
                         </div>

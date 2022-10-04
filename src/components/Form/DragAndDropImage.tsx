@@ -70,9 +70,7 @@ export const DragAndDropImage = ({
                             ) : (
                                 <>
                                     <Image src={ASSETS.imageIcon} width={"50"} height={"50"} />
-                                    <p className="text-gray2 mt-6 text-sm px-4">
-                                        PNG, JPEG and JPG accept. Max 1mb.
-                                    </p>
+                                    <p className="text-gray2 mt-6 text-sm px-4">PNG, JPEG and JPG accept. Max 1mb.</p>
                                 </>
                             )}
                         </>
