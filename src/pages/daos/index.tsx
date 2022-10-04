@@ -23,7 +23,7 @@ const DAOsPage: NextPage = () => {
         (query) => query.notEqualTo("objectId", ""),
         [],
         {
-            autoFetch: false,
+            autoFetch: false
         }
     );
 
@@ -44,7 +44,7 @@ const DAOsPage: NextPage = () => {
             const listOfDAOs = await fetchDAOs(isInitialized, DAOsQuery);
             if (listOfDAOs) {
                 setDAOs(listOfDAOs);
-                loadingLargeData(listOfDAOs);
+                loadingLargeData(listOfDAOs).then();
             }
         };
 

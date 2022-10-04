@@ -41,7 +41,7 @@ const AddNewNFT: NextPage = () => {
         name: "",
         description: "",
         file: {},
-        NFTtype: "Member",
+        // NFTtype: "Member",
         symbol: "",
         price: 0,
         contractAddress: "",

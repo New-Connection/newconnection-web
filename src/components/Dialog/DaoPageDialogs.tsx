@@ -5,14 +5,12 @@ import { getChainScanner, getTokenSymbol } from "utils/blockchains";
 import { ExternalLinkIcon } from "@heroicons/react/solid";
 import { BlockchainIcon } from "components/Icons/";
 import Image from "next/image";
-import { getIpfsImage } from "utils/ipfsUpload";
-import ASSETS from "assets";
 import { InputAmount } from "../Form";
 import { createTreasurySteps, SpinnerLoading } from "./base-dialogs/Stepper";
 import {
     IContributeTreasuryDialog,
     ICreateTreasuryDialog,
-    IDetainNftDialog,
+    IDetainNftDialog
 } from "./dialogInterfaces";
 import { CopyTextButton } from "components/Button/";
 
@@ -21,7 +19,7 @@ export const DetailNftDialog = ({
     DAO,
     currentNFT,
     buttonState,
-    mintButton,
+    mintButton
 }: IDetainNftDialog) => {
     return (
         <CustomDialog dialog={dialog} className="h-full items-center text-center">
@@ -89,13 +87,13 @@ export const ContributeTreasuryDialog = ({
     setSending,
     contributeAmount,
     setContributeAmount,
-    contributeToTreasuryButton,
+    contributeToTreasuryButton
 }: IContributeTreasuryDialog) => {
     return (
         <CustomDialog dialog={dialog} className="items-center text-center">
             <div className={"flex items-center gap-2"}>
                 <Image
-                    src={getIpfsImage(DAO.profileImage, ASSETS.daoLogoMock.src)}
+                    src={DAO.profileImage}
                     height={"50px"}
                     width={"50px"}
                     className="rounded-xl"
@@ -149,7 +147,7 @@ export const ContributeTreasuryDialog = ({
 export const CreateTreasuryDialog = ({
     dialog,
     DAO,
-    createTreasuryStep,
+    createTreasuryStep
 }: ICreateTreasuryDialog) => {
     return (
         <StepperDialog

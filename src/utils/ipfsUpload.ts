@@ -7,8 +7,8 @@ export const ipfs = ipfsHttpClient({
     port: 5001,
     protocol: "https",
     headers: {
-        authorization: INFURA_IPFS_AUTHORIZATION,
-    },
+        authorization: INFURA_IPFS_AUTHORIZATION
+    }
 });
 
 export const getIpfsImage = (path: string, mockImage: string) => {
@@ -28,6 +28,7 @@ export const storeNFT = async (image: File) => {
 const ipfsFullPath = (path: string) => IPFS + `${path}`;
 
 const imageExists = (imageUrl: string) => {
+    console.log("exists");
     let http = new XMLHttpRequest();
     http.open("HEAD", imageUrl, false);
     http.send();
