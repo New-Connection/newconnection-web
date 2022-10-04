@@ -6,7 +6,7 @@ import {
     Button,
     TypeSelector,
     InputTextArea,
-    InputSupplyOfNFT
+    InputSupplyOfNFT,
 } from "components/Form";
 import { Signer } from "ethers";
 import { useSigner, useSwitchNetwork } from "wagmi";
@@ -18,7 +18,7 @@ import {
     handleImageChange,
     handleNftSupplyChange,
     handleSelectorChange,
-    handleTextChange
+    handleTextChange,
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
@@ -37,12 +37,11 @@ const CreateNFT: NextPage = () => {
         name: "",
         description: "",
         file: {},
-        NFTtype: "Member",
         symbol: "",
         price: 0,
         contractAddress: "",
         ipfsAddress: "",
-        blockchain: ""
+        blockchain: "",
     });
     const { data: signerData } = useSigner();
     const confirmDialog = useDialogState();
@@ -56,7 +55,7 @@ const CreateNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-            ];
+        ];
     };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -100,7 +99,7 @@ const CreateNFT: NextPage = () => {
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
-                endMintId: calculateSupply()
+                endMintId: calculateSupply(),
             });
             handleNext(setActiveStep);
             await contract.deployed();
@@ -138,14 +137,6 @@ const CreateNFT: NextPage = () => {
                                     handleChange={(event) => handleTextChange(event, setFormData)}
                                 />
                                 <div className="flex justify-between gap-10">
-                                    <TypeSelector
-                                        label="Membership type"
-                                        name="NFTtype"
-                                        handleChange={(event) =>
-                                            handleSelectorChange(event, setFormData, "NFTtype")
-                                        }
-                                        className="w-1/2 mt-6"
-                                    />
                                     <InputText
                                         label="Symbol"
                                         name="symbol"
@@ -155,18 +146,20 @@ const CreateNFT: NextPage = () => {
                                         }}
                                         className="w-1/2"
                                     />
+                                    <InputAmount
+                                        label="Price"
+                                        placeholder="Price in ETH"
+                                        name="price"
+                                        handleChange={(event) =>
+                                            handleTextChange(event, setFormData)
+                                        }
+                                        className="w-full"
+                                        min={0}
+                                        step={0.0001}
+                                        max={10}
+                                    />
                                 </div>
 
-                                <InputAmount
-                                    label="Price"
-                                    placeholder="Price in ETH"
-                                    name="price"
-                                    handleChange={(event) => handleTextChange(event, setFormData)}
-                                    className="w-full"
-                                    min={0}
-                                    step={0.0001}
-                                    max={10}
-                                />
                                 <label>
                                     <div className="input-label"> NFT Supply</div>
                                 </label>

@@ -13,7 +13,7 @@ import {
     InputAmount,
     InputText,
     InputTextArea,
-    Button
+    Button,
 } from "components/Form";
 import {
     handleChangeBasic,
@@ -22,7 +22,7 @@ import {
     handleTextChange,
     handleChangeBasicSimple,
     handleDaoNameUrlChange,
-    handleAddArray
+    handleAddArray,
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/";
 import { getBlocksPerDay } from "utils/blockchains";
@@ -30,7 +30,7 @@ import {
     getMoralisInstance,
     MoralisClassEnum,
     saveMoralisInstance,
-    setFieldsIntoMoralisInstance
+    setFieldsIntoMoralisInstance,
 } from "database/interactions";
 import { useRouter } from "next/router";
 import { handleReset, handleNext } from "components/Dialog/base-dialogs";
@@ -42,8 +42,6 @@ import { CreateDaoDialog } from "components/Dialog/CreateDaoDialogs";
 import { checkCorrectNetwork } from "logic";
 import { fetchDAOs } from "network";
 import { handleContractError } from "utils/errors";
-
-const DaoTypeValues = ["Grants", "Investment", "Social"];
 
 const CreateDAO: NextPage = () => {
     const router = useRouter();
@@ -57,10 +55,9 @@ const CreateDAO: NextPage = () => {
         tokenAddress: [],
         votingPeriod: "",
         quorumPercentage: "",
-        type: [],
         blockchain: [],
         description: "",
-        isActive: false
+        isActive: false,
     });
 
     const { data: signerData } = useSigner();
@@ -75,7 +72,7 @@ const CreateDAO: NextPage = () => {
         (query) => query.equalTo("url", formData.url),
         [formData.url],
         {
-            autoFetch: false
+            autoFetch: false,
         }
     );
 
@@ -121,15 +118,11 @@ const CreateDAO: NextPage = () => {
         let profileImagePath;
         let coverImagePath;
         try {
-            profileImagePath = await storeNFT(
-                formData.profileImage as File
-            );
+            profileImagePath = await storeNFT(formData.profileImage as File);
             console.log(profileImagePath);
             handleChangeBasic(profileImagePath, setFormData, "profileImage");
 
-            coverImagePath = await storeNFT(
-                formData.coverImage as File
-            );
+            coverImagePath = await storeNFT(formData.coverImage as File);
             console.log(coverImagePath);
             handleChangeBasic(coverImagePath, setFormData, "coverImage");
         } catch (error) {
@@ -145,7 +138,7 @@ const CreateDAO: NextPage = () => {
                 tokenAddress: formData.tokenAddress[0],
                 votingPeriod:
                     +formData.votingPeriod * getBlocksPerDay(CHAINS[formData.blockchain[0]]),
-                quorumPercentage: +formData.quorumPercentage
+                quorumPercentage: +formData.quorumPercentage,
             });
             handleNext(setActiveStep);
             await contract.deployed();
@@ -244,14 +237,6 @@ const CreateDAO: NextPage = () => {
                                 handleChange={(event) => handleTextChange(event, setFormData)}
                             />
                         </div>
-                        <CheckboxGroup
-                            label={"DAO Type"}
-                            description={"You can choose one or more types"}
-                            values={DaoTypeValues}
-                            handleChange={(event) =>
-                                handleCheckboxChange(event, formData, setFormData, "type")
-                            }
-                        />
                         <div className="flex flex-row">
                             <DragAndDropImage
                                 label="Profile Image"
