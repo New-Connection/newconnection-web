@@ -3,12 +3,12 @@ import classNames from "classnames";
 import { ButtonProps } from "./types";
 
 export const Button = ({
-                           disabled = false,
-                           type = "submit",
-                           className,
-                           children,
-                           ...props
-                       }: ButtonProps) => {
+    disabled = false,
+    type = "submit",
+    className,
+    children,
+    ...props
+}: ButtonProps) => {
     return (
         <button
             className={classNames(

@@ -28,8 +28,7 @@ const SwitchNetworkBanner = () => {
                         onClick={() => switchNetwork(chainIDs[2])}
                     >
                         Avalanche Fuji
-                    </button>
-                    {" "}
+                    </button>{" "}
                     or{" "}
                     <button
                         className="hover:text-gray hover:underline"

@@ -1,6 +1,5 @@
 import { Select, SelectArrow, SelectItem, SelectPopover, useSelectState } from "ariakit/select";
 
-import classNames from "classnames";
 import { ISelectorProps } from "./types";
 
 const types = ["Member", "Design", "VC"];

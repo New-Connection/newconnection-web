@@ -1,16 +1,10 @@
-import {
-    HomeIcon,
-    UserGroupIcon,
-    ScaleIcon,
-    QuestionMarkCircleIcon,
-} from "@heroicons/react/outline";
+import { QuestionMarkCircleIcon } from "@heroicons/react/outline";
 import { DisclosureState } from "ariakit";
 import { Menu, MenuItem } from "components/NestedMenu";
 import { useIsMounted, useWindowSize } from "hooks";
 import { formatAddress } from "utils/address";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useTheme } from "next-themes";
-import Link from "next/link";
 
 export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureState }) {
     const { address: accountData, isConnected } = useAccount();
@@ -35,7 +29,7 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
                     <span className="sr-only">menu</span>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
+                        className="h-4 w-4 font-light"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                     >
@@ -48,10 +42,8 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
                 <MenuItem
                     label={
                         <div className="flex flex-col gap-1 p-2 cursor-pointer">
-                            <p className="text-xs text-neutral-500">Connected as</p>
-                            <p className="font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40">
-                                {address}
-                            </p>
+                            <p className="text-xs text-black">Connected as</p>
+                            <p className="font-normal text-black">{address}</p>
                         </div>
                     }
                     className="md:hidden"
@@ -60,7 +52,7 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
             ) : (
                 <MenuItem
                     label="Connect Wallet"
-                    className="break-words font-normal text-[#666666] border-2 rounded-md hover:bg-[#7343DF] hover:text-white p-2 md:hidden cursor-pointer"
+                    className="break-words font-normal text-black border-2 rounded-md hover:bg-purple hover:text-white p-2 md:hidden cursor-pointer"
                     onClick={walletDialog.toggle}
                 />
             )}
