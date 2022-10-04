@@ -64,7 +64,7 @@ const CreateProposal: NextPage = () => {
         handleAddArray(query.blockchains, setFormData, "blockchain");
         handleChangeBasic(+query.chainId, setFormData, "chainId");
     }, [router]);
-    console.log(formData.blockchain);
+
     useEffect(() => {
         if (formData.governorAddress) {
             console.log("fetch dao");

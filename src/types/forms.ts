@@ -64,8 +64,8 @@ export interface ICreateProposal extends ICreate {
     shortDescription: string;
     file?: object;
     linkForum?: object;
-    options: string[];
-    blockchain: string[];
+    options?: string[];
+    blockchain?: string[];
     enabledBlockchains?: string[];
 }
 
@@ -73,7 +73,12 @@ export interface IProposalPageForm extends ICreateProposal {
     isActive?: boolean;
     forVotes?: string;
     againstVotes?: string;
-    deadline?: number;
+    endDateTimestamp?: number;
+}
+
+export interface IProposalDetail extends IProposalPageForm {
+    startDateTimestamp?: number;
+    ownerAddress?: string;
 }
 
 export interface IProposal {
@@ -117,16 +122,4 @@ export interface IAddNewMember {
     votingTokenName: string;
     blockchainSelected: string[];
     note?: string;
-}
-
-export interface IProposalDetail {
-    title: string;
-    shortDescription: string;
-    governorAddress: string;
-    description?: string;
-    startDate?: Date;
-    endDate?: Date;
-    results?: number;
-    chainId?: number;
-    ownerAddress?: string;
 }

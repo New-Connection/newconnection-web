@@ -11,15 +11,15 @@ import { validateForm } from "utils/validate";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
 import { IProposal, IProposalDetail } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
-import { MockupTextCard } from "components/Mockup";
 import { castVote } from "contract-interactions/writeGovernorContract";
 import { IDetailProposalQuery } from "types/queryInterfaces";
 import { IDetailProposalProps } from "types/pagePropsInterfaces";
 import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
 import { checkCorrectNetwork } from "logic";
 import { fetchDetailProposal } from "network/fetchProposals";
-import { AboutProposalCard } from "components/Cards/ProposalCard";
+import { AboutProposalCard, InfoProposalCard, VotingResultsCard } from "components/Cards/ProposalCard";
 import { handleContractError } from "utils/errors";
+import { MockupLoadingProposals } from "components/Mockup/Loading";
 
 export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetailProposalQuery> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;
@@ -91,15 +91,13 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
     return proposalData ? (
         <div>
             <Layout className="layout-base">
-                <BackButton />
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
-                        <div className="flex">
-                            <h1 className="text-highlighter w-1/2">{proposalData.title}</h1>
-                        </div>
-                        <p className="pb-4">{proposalData.shortDescription}</p>
+                        <BackButton />
                         <div className="flex gap-6 pb-10">
-                            <AboutProposalCard description={proposalData.description} />
+                            <AboutProposalCard proposalData={proposalData} />
+                            <InfoProposalCard proposalData={proposalData} />
+                            <VotingResultsCard proposalData={proposalData} />
                         </div>
                         <RadioSelector
                             name="voteResult"
@@ -119,7 +117,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         <div>
             <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    <MockupTextCard label={"DAO not found"} text={"Sorry, DAO not fount. Please try to reload page"} />
+                    <MockupLoadingProposals  chain={proposalData?.chainId}/>
                 </section>
             </Layout>
         </div>

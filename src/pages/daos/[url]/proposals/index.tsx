@@ -85,7 +85,7 @@ const ProposalsPage: NextPage = () => {
                                                 isActive={proposal.isActive}
                                                 forVotes={proposal.forVotes}
                                                 againstVotes={proposal.againstVotes}
-                                                deadline={proposal.deadline}
+                                                deadline={proposal.endDateTimestamp}
                                             />
                                         </li>
                                     </Link>

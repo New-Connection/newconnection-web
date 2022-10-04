@@ -2,6 +2,8 @@ import { timestampToDate } from "utils/basic";
 import { BlockchainIcon } from "components/Icons/";
 import React from "react";
 import classNames from "classnames";
+import { CopyTextButton } from "../Button";
+import { IProposalDetail } from "types/forms";
 
 interface IProposalCard {
     title: string;
@@ -89,15 +91,65 @@ const CardProposal = ({ title, children, className }: ICardProposal) => {
     return (
         <div className={classNames("w-full h-64 border-2 border-gray rounded-xl mt-6 p-4", className)}>
             <p className="text-purple mb-4 text-lg">{title}</p>
-            {children}
+            <div>{children}</div>
         </div>
     );
 };
 
-export const AboutProposalCard = ({ description }) => {
+interface IInformationCard {
+    proposalData: IProposalDetail;
+}
+
+export const AboutProposalCard = ({ proposalData }: IInformationCard) => {
     return (
         <CardProposal title="About" className="lg:w-1/3 w-full">
-            <p className="text-sm line-clamp-6">{description}</p>
+            <div className="text-sm h-44 overflow-y-auto">{proposalData.description}</div>
+        </CardProposal>
+    );
+};
+
+export const InfoProposalCard = ({ proposalData }: IInformationCard) => {
+    const InfoRow = ({ name, value }) => {
+        return (
+            <div className={"flex justify-between"}>
+                <p className={"text-gray2"}>{name}</p>
+                <p>{value}</p>
+            </div>
+        );
+    };
+
+    return (
+        <CardProposal title="Info" className="lg:w-1/3 w-full">
+            <div className={"flex flex-col h-44 justify-between"}>
+                <InfoRow name={"Start date"} value={timestampToDate(proposalData.startDateTimestamp)} />
+                <InfoRow name={"End date"} value={timestampToDate(proposalData.endDateTimestamp)} />
+                <InfoRow name={"Voting NFT"} value={proposalData.tokenName} />
+                <InfoRow name={"Submitted by"} value={<CopyTextButton copyText={proposalData.ownerAddress} />} />
+                <InfoRow name={"Proposal ID"} value={<CopyTextButton copyText={proposalData.proposalId} />} />
+            </div>
+        </CardProposal>
+    );
+};
+
+export const VotingResultsCard = ({ proposalData }: IInformationCard) => {
+    return (
+        <CardProposal title="Voting Results" className="lg:w-1/3 w-full">
+            <div className="flex gap-10 justify-around pt-1">
+                <div className="text-center">
+                    <div className="relative px-5 py-3 text-black">
+                        <p className="text-2xl font-light">{proposalData.forVotes}</p>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                    </div>
+                    <p>{"In favor"}</p>
+                </div>
+                <div className="text-center">
+                    <div className="relative px-5 py-3 text-black">
+                        <p className="text-2xl font-light">{proposalData.againstVotes}</p>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                    </div>
+                    <p>{"Against"}</p>
+                </div>
+            </div>
         </CardProposal>
     );
 };

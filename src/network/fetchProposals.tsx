@@ -1,9 +1,11 @@
 import { IProposalDetail, IProposalPageForm } from "types/forms";
 import {
+    getProposer,
     isProposalActive,
     proposalAgainstVotes,
     proposalDeadline,
     proposalForVotes,
+    proposalSnapshot,
 } from "contract-interactions/viewGovernorContract";
 import { Moralis } from "moralis-v1";
 
@@ -25,9 +27,7 @@ export async function fetchProposals(proposalQuery: any) {
                 isActive: await isProposalActive(governorAddress, chainId, proposalId),
                 forVotes: await proposalForVotes(governorAddress, chainId, proposalId),
                 againstVotes: await proposalAgainstVotes(governorAddress, chainId, proposalId),
-                deadline: await proposalDeadline(governorAddress, chainId, proposalId),
-                options: [],
-                blockchain: [],
+                endDateTimestamp: await proposalDeadline(governorAddress, chainId, proposalId),
             };
             return proposal;
         })
@@ -36,13 +36,24 @@ export async function fetchProposals(proposalQuery: any) {
 }
 
 export async function fetchDetailProposal(proposalQuery: Function) {
-    const result: Moralis.Object<Moralis.Attributes> = (await proposalQuery())[0];
+    const proposalMoralis: Moralis.Object<Moralis.Attributes> = (await proposalQuery())[0];
+    const governorAddress = proposalMoralis.get("governorAddress");
+    const chainId = proposalMoralis.get("chainId");
+    const proposalId = proposalMoralis.get("proposalId");
     const proposal: IProposalDetail = {
-        title: result.get("name"),
-        description: result.get("description"),
-        shortDescription: result.get("shortDescription"),
-        governorAddress: result.get("governorAddress"),
-        chainId: result.get("chainId"),
+        proposalId: proposalId,
+        governorAddress: governorAddress,
+        chainId: chainId,
+        name: proposalMoralis.get("name"),
+        description: proposalMoralis.get("description"),
+        shortDescription: proposalMoralis.get("shortDescription"),
+        tokenAddress: proposalMoralis.get("tokenAddress"),
+        tokenName: proposalMoralis.get("tokenName"),
+        startDateTimestamp: await proposalSnapshot(governorAddress, chainId, proposalId),
+        endDateTimestamp: await proposalDeadline(governorAddress, chainId, proposalId),
+        forVotes: await proposalForVotes(governorAddress, chainId, proposalId),
+        againstVotes: await proposalAgainstVotes(governorAddress, chainId, proposalId),
+        ownerAddress: await getProposer(governorAddress, chainId, proposalId),
     };
     return proposal;
 }

@@ -37,7 +37,7 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                         const isActive = proposal.isActive;
                         const forVotes = proposal.forVotes;
                         const againstVotes = proposal.againstVotes;
-                        const deadline = proposal.deadline;
+                        const deadline = proposal.endDateTimestamp;
                         return (
                             <Link href={`${daoUrl}/proposals/${proposalId}`} key={proposalId}>
                                 <li

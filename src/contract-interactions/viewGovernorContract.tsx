@@ -79,3 +79,9 @@ export async function proposalAgainstVotes(
     const votes = await governor.proposalVotes(proposalId);
     return votes["againstVotes"].toString();
 }
+
+export async function getProposer(contractAddress: string, chainId: number, proposalId: string): Promise<string> {
+    let baseProvider = provider({ chainId });
+    const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, baseProvider);
+    return await governor.getProposer(proposalId);
+}
