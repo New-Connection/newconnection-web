@@ -56,11 +56,11 @@ export async function proposalDeadline(
 ) {
     let baseProvider = provider({ chainId });
     const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, baseProvider);
-    const votingPeriod = (await governor.votingPeriod()).toNumber();
-    const blockNumber = (await governor.proposalSnapshot(proposalId)).toNumber();
+    const proposalVotingPeriod = (await governor.votingPeriod()).toNumber();
+    const proposalStartBlock = (await governor.proposalSnapshot(proposalId)).toNumber();
     return (
-        (await baseProvider.getBlock(blockNumber)).timestamp +
-        getSecondsPerBlock(chainId) * votingPeriod
+        (await baseProvider.getBlock(proposalStartBlock)).timestamp +
+        getSecondsPerBlock(chainId) * proposalVotingPeriod
     );
 }
 
