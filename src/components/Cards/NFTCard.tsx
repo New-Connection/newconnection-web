@@ -63,7 +63,9 @@ export function NFTCard({
                                 {nftObject.title}
                             </p>
                             {/* TODO: Pass variable how many minted NFT and how many left */}
-                            <p className="text-base font-medium ml-4 mt-2 text-gray2">499/500</p>
+                            <p className="text-base font-medium ml-4 mt-2 text-gray2">
+                                {nftObject.totalMinted}/{nftObject.totalSupply}
+                            </p>
                         </div>
                     </div>
                     <div className="mt-[0.75rem] flex items-center justify-between">

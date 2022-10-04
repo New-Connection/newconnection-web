@@ -43,17 +43,21 @@ export async function getTokenURI(contractAddress: string, chainId: number) {
     }
 }
 
-export async function getSupplyNumber(contractAddress: string, chainId: number) {
+export async function getSupplyNumber(contractAddress: string, chainId: number): Promise<string> {
     try {
         let baseProvider = provider({ chainId });
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
-        return await nft.maxMintId();
+        const totalSupply = await nft.maxMintId();
+        return totalSupply.toString();
     } catch (e) {
         handleContractError(e);
     }
 }
 
-export async function getNumberOfMintedTokens(contractAddress: string, chainId: number) {
+export async function getNumberOfMintedTokens(
+    contractAddress: string,
+    chainId: number
+): Promise<string> {
     try {
         let baseProvider = provider({ chainId });
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);

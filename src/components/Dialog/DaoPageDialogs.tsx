@@ -56,6 +56,12 @@ export const DetailNftDialog = ({
                             <p className="font-normal text-black">{currentNFT.price}</p>
                         </li>
                         <li className="flex py-4 justify-between">
+                            <p className="font-light text-gray2">{"Supply"}</p>
+                            <p className="font-normal text-black">
+                                {currentNFT.totalMinted}/{currentNFT.totalSupply}
+                            </p>
+                        </li>
+                        <li className="flex py-4 justify-between">
                             <p className="font-light text-gray2 mr-4">{"Address"}</p>
                             <div className="font-normal text-black">
                                 <CopyTextButton copyText={currentNFT.tokenAddress} />
@@ -66,10 +72,6 @@ export const DetailNftDialog = ({
                             <div className="font-normal text-black">
                                 <BlockchainIcon chain={DAO.blockchain[0]} />
                             </div>
-                        </li>
-                        <li className="flex py-4 justify-between">
-                            <p className="font-light text-gray2">{"Supply"}</p>
-                            <p className="font-normal text-black">{currentNFT.price}/100</p>
                         </li>
                     </ul>
                 </>
