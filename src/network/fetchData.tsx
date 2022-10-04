@@ -1,6 +1,4 @@
-import {
-    getTreasuryBalance,
-} from "contract-interactions";
+import { getTreasuryBalance } from "contract-interactions";
 import { IDAOPageForm } from "types/forms";
 
 export async function fetchTreasuryBalance(DAO: IDAOPageForm) {

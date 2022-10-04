@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { IMultiNFTVoting } from "types/forms";
+import { ICreateProposal, IMultiNFTVoting } from "types/forms";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout from "components/Layout/Layout";
 import {
-    handleTextChange,
+    handleAddArray,
     handleChangeBasic,
+    handleTextChange,
     handleTextChangeAddNewMember,
-    handleAddArray
 } from "utils/handlers";
 import {
+    Button,
     CheckboxGroup,
     InputText,
-    Button,
     InputTextArea,
-    RadioSelectorMulti
+    RadioSelectorMulti,
 } from "components/Form";
-import { ICreateProposal } from "types/forms";
 import { BackButton } from "components/Button/";
 import { useDialogState } from "ariakit";
 import { validateForm } from "utils/validate";
@@ -27,10 +26,10 @@ import {
     getMoralisInstance,
     MoralisClassEnum,
     saveMoralisInstance,
-    setFieldsIntoMoralisInstance
+    setFieldsIntoMoralisInstance,
 } from "database/interactions";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { useMoralisQuery, useMoralis } from "react-moralis";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 import { ICreateProposalQuery } from "types/queryInterfaces";
 import { CreateProposalDialog } from "components/Dialog/CreateProposalDialogs";
 import { fetchDAO } from "network";
@@ -46,7 +45,7 @@ const CreateProposal: NextPage = () => {
         tokenName: "",
         description: "",
         options: [],
-        blockchain: []
+        blockchain: [],
         // enabledBlockchains: []
     });
     const router = useRouter();
@@ -64,7 +63,7 @@ const CreateProposal: NextPage = () => {
         },
         [formData.governorAddress],
         {
-            autoFetch: false
+            autoFetch: false,
         }
     );
 
@@ -99,7 +98,7 @@ const CreateProposal: NextPage = () => {
                     const newVotingTokens: IMultiNFTVoting = {
                         daoAddress: dao.governorAddress,
                         tokenAddress: dao.tokenAddress,
-                        daoName: dao.name
+                        daoName: dao.name,
                     };
 
                     setVotingNFTs(() => newVotingTokens);

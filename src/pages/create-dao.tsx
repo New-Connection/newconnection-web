@@ -8,24 +8,23 @@ import { ICreateDAO } from "types/forms";
 import { validateForm } from "utils/validate";
 import Layout from "components/Layout";
 import {
+    Button,
     CheckboxGroup,
     DragAndDropImage,
     InputAmount,
     InputText,
     InputTextArea,
-    Button,
 } from "components/Form";
 import {
+    handleAddArray,
     handleChangeBasic,
-    handleCheckboxChange,
-    handleImageChange,
-    handleTextChange,
     handleChangeBasicSimple,
     handleDaoNameUrlChange,
-    handleAddArray,
+    handleImageChange,
+    handleTextChange,
 } from "utils/handlers";
 import { deployGovernorContract } from "contract-interactions/";
-import { getBlocksPerDay } from "utils/blockchains";
+import { CHAINS, getBlocksPerDay } from "utils/blockchains";
 import {
     getMoralisInstance,
     MoralisClassEnum,
@@ -33,8 +32,7 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 import { useRouter } from "next/router";
-import { handleReset, handleNext } from "components/Dialog/base-dialogs";
-import { CHAINS } from "utils/blockchains";
+import { handleNext, handleReset } from "components/Dialog/base-dialogs";
 import { storeNFT } from "utils/ipfsUpload";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import { ICreateDaoQuery } from "types/queryInterfaces";

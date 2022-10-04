@@ -54,7 +54,7 @@ const CHAINS_IMG: {
     "Avalanche Testnet": ASSETS.Avalanche,
     "Fantom Testnet": ASSETS.Fantom,
     "Optimism Goerli": ASSETS.Optimism,
-    "Aurora Testnet": ASSETS.Aurora
+    "Aurora Testnet": ASSETS.Aurora,
 };
 
 const CHAINS_BLOCKTIME: {
@@ -82,7 +82,7 @@ const CHAINS_BLOCKTIME: {
     "Avalanche Testnet": 2,
     "Fantom Testnet": 1.2,
     "Optimism Goerli": 12,
-    "Aurora Testnet": 1.2
+    "Aurora Testnet": 1.2,
 };
 
 export const CHAINS: {
@@ -104,15 +104,15 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Avalanche",
-            symbol: "AVAX"
+            symbol: "AVAX",
         },
         rpcUrls: {
-            default: "https://api.avax-test.network/ext/bc/C/rpc"
+            default: "https://api.avax-test.network/ext/bc/C/rpc",
         },
         blockExplorers: {
-            default: { name: "Snowtrace", url: "https://testnet.snowtrace.io" }
+            default: { name: "Snowtrace", url: "https://testnet.snowtrace.io" },
         },
-        testnet: true
+        testnet: true,
     },
 
     // "Binance Testnet": {
@@ -142,15 +142,15 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Ethereum",
-            symbol: "ETH"
+            symbol: "ETH",
         },
         rpcUrls: {
-            default: `https://optimism-goerli.infura.io/v3/${INFURA_ID}`
+            default: `https://optimism-goerli.infura.io/v3/${INFURA_ID}`,
         },
         blockExplorers: {
-            default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" }
+            default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" },
         },
-        testnet: true
+        testnet: true,
     },
 
     // "Fantom Testnet": {
@@ -178,15 +178,15 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Ethereum",
-            symbol: "ETH"
+            symbol: "ETH",
         },
         rpcUrls: {
-            default: `https://aurora-testnet.infura.io/v3/${INFURA_ID}`
+            default: `https://aurora-testnet.infura.io/v3/${INFURA_ID}`,
         },
         blockExplorers: {
-            default: { name: "aurorascan", url: "https://testnet.aurorascan.dev" }
+            default: { name: "aurorascan", url: "https://testnet.aurorascan.dev" },
         },
-        testnet: true
+        testnet: true,
     },
 
     // "Skale Testnet": {
@@ -221,16 +221,16 @@ export const CHAINS: {
         nativeCurrency: {
             decimals: 18,
             name: "Ethereum",
-            symbol: "ETH"
+            symbol: "ETH",
         },
         rpcUrls: {
-            default: `https://aurora-mainnet.infura.io/v3/${INFURA_ID}`
+            default: `https://aurora-mainnet.infura.io/v3/${INFURA_ID}`,
         },
         blockExplorers: {
-            default: { name: "aurorascan", url: "https://aurorascan.dev" }
+            default: { name: "aurorascan", url: "https://aurorascan.dev" },
         },
-        testnet: false
-    }
+        testnet: false,
+    },
 };
 
 export const getChains = (): Chain[] => {

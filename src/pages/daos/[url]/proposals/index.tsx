@@ -2,10 +2,10 @@ import { NextPage } from "next";
 import Link from "next/link";
 import Layout from "components/Layout";
 import { useMoralisQuery } from "react-moralis";
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { IDAOPageForm, IProposalPageForm } from "types/forms";
 import { ProposalCard } from "components/Cards/";
-import * as React from "react";
 import { useRouter } from "next/router";
 import { BackButton } from "components/Button/";
 import { IProposalsQuery } from "types/queryInterfaces";
@@ -24,7 +24,7 @@ const ProposalsPage: NextPage = () => {
             query.equalTo("chainId", DAO?.chainId),
         [DAO],
         {
-            autoFetch: false
+            autoFetch: false,
         }
     );
 
@@ -73,7 +73,10 @@ const ProposalsPage: NextPage = () => {
                             {proposals.map((proposal) => {
                                 const proposalId = proposal.proposalId;
                                 return (
-                                    <Link href={`../${DAO.url}/proposals/${proposalId}`} key={proposalId}>
+                                    <Link
+                                        href={`../${DAO.url}/proposals/${proposalId}`}
+                                        key={proposalId}
+                                    >
                                         <li
                                             key={proposalId}
                                             className="border-b-2 border-gray cursor-pointer active:bg-gray"

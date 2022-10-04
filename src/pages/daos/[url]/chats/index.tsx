@@ -1,7 +1,7 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 
 import Layout from "components/Layout/Layout";

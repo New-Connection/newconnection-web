@@ -1,6 +1,8 @@
 import { IDAOPageForm } from "types/forms";
 import { getChainScanner } from "utils/blockchains";
 import { Moralis } from "moralis-v1";
+import { getIpfsImage } from "utils/ipfsUpload";
+import ASSETS from "assets";
 
 export async function fetchDAO(isInitialized: any, daoQuery: Function) {
     if (isInitialized) {
@@ -14,12 +16,11 @@ export async function fetchDAO(isInitialized: any, daoQuery: Function) {
             name: moralisInstance.get("name"),
             description: moralisInstance.get("description"),
             goals: moralisInstance.get("goals"),
-            profileImage: moralisInstance.get("profileImage"),
-            coverImage: moralisInstance.get("coverImage"),
+            profileImage: getIpfsImage(moralisInstance.get("profileImage"), ASSETS.daoLogoMock.src),
+            coverImage: getIpfsImage(moralisInstance.get("coverImage"), ASSETS.daoLogoMock.src),
             tokenAddress: moralisInstance.get("tokenAddress"),
             votingPeriod: moralisInstance.get("votingPeriod"),
             quorumPercentage: moralisInstance.get("quorumPercentage"),
-            type: moralisInstance.get("type"),
             blockchain: moralisInstance.get("blockchain"),
             governorAddress: governorAddress,
             chainId: chainId,
@@ -32,7 +33,7 @@ export async function fetchDAO(isInitialized: any, daoQuery: Function) {
             totalVotes: 0,
             totalMembers: 0,
             totalProposals: 0,
-            activeProposals: 0
+            activeProposals: 0,
         };
         return { newDao, moralisInstance };
     }

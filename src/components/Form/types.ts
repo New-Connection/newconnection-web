@@ -42,8 +42,8 @@ export interface ISelectorProps {
 }
 
 export interface IRadioSelectorClickOption {
-    tokenName: string,
-    tokenAddress: string,
+    tokenName: string;
+    tokenAddress: string;
 }
 
 export interface IRadioSelector {
@@ -51,7 +51,10 @@ export interface IRadioSelector {
     labels: string[];
     className?: string;
     values?: string[];
-    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, option?: IRadioSelectorClickOption) => void;
+    handleChange?: (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        option?: IRadioSelectorClickOption
+    ) => void;
 }
 
 export interface IDragAndDropProps {

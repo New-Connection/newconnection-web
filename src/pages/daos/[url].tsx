@@ -4,7 +4,6 @@ import type { GetServerSideProps, NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import Image from "next/image";
 import { Moralis } from "moralis-v1";
-import ASSETS from "assets/index";
 import { getChainScanner } from "utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import { IDAOPageForm, INFTVoting, IProposalPageForm, IWhitelistPageForm } from "types/forms";
@@ -12,15 +11,14 @@ import { ExternalLinkIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import { getIpfsImage } from "utils/ipfsUpload";
 import { getGovernorOwnerAddress } from "contract-interactions/";
 import { IDaoQuery } from "types/queryInterfaces";
 import { isValidHttpUrl } from "utils/transformURL";
 import { handleChangeBasic } from "utils/handlers";
 import {
     fetchDAO,
-    fetchProposals,
     fetchNFT,
+    fetchProposals,
     fetchTreasuryBalance,
     fetchWhitelist,
 } from "network/index";
@@ -28,15 +26,15 @@ import { BlockchainIcon } from "components/Icons/";
 import { MockupLoadingDAO, MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
 import { NFTCard } from "components/Cards/NFTCard";
-import { ProposalsListTab, WhitelistTab, Tabs } from "components/Tabs/";
+import { ProposalsListTab, Tabs, WhitelistTab } from "components/Tabs/";
 import { DAOPageProps } from "types/pagePropsInterfaces";
 import { ButtonState } from "types/daoIntefaces";
 import {
-    checkCorrectNetwork,
-    mint,
-    contributeToTreasury,
-    addTreasury,
     addTreasureMoralis,
+    addTreasury,
+    checkCorrectNetwork,
+    contributeToTreasury,
+    mint,
 } from "logic/index";
 import {
     ContributeTreasuryDialog,
@@ -253,18 +251,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     return DAO ? (
         <div>
             <div className="cover h-48 w-full relative justify-center">
-                <Image
-                    priority={true}
-                    src={getIpfsImage(DAO.coverImage, ASSETS.daoCoverMock.src)}
-                    layout={"fill"}
-                />
+                <Image priority={true} src={DAO.coverImage} layout={"fill"} />
             </div>
             <Layout className="layout-base mt-0">
                 <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className="dao-header lg:flex md:flex xl:flex items-center -mt-10">
                         <div className={"logo"}>
                             <Image
-                                src={getIpfsImage(DAO.profileImage, ASSETS.daoLogoMock.src)}
+                                src={DAO.profileImage}
                                 height={"175px"}
                                 width={"175px"}
                                 className="rounded-full"

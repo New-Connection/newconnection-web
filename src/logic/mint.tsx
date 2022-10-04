@@ -1,4 +1,4 @@
-import { mintReserveAndDelegation, mintNFT } from "contract-interactions/writeNFTContract";
+import { mintNFT, mintReserveAndDelegation } from "contract-interactions/writeNFTContract";
 import toast from "react-hot-toast";
 import { IDAOPageForm } from "types/forms";
 import { checkCorrectNetwork } from "./utils";

@@ -2,9 +2,9 @@ import {
     getNftName,
     getPrice,
     getSymbol,
-    getTokenURI
+    getTokenURI,
 } from "contract-interactions/viewNftContract";
-import { INFTVoting, IDAOPageForm } from "types/forms";
+import { IDAOPageForm, INFTVoting } from "types/forms";
 import { getIpfsImage } from "utils/ipfsUpload";
 import ASSETS from "assets";
 
@@ -21,7 +21,7 @@ export async function fetchNFT(DAO: IDAOPageForm) {
                 type: await getSymbol(tokenAddress, DAO.chainId),
                 image: await getImage(tokenAddress, DAO.chainId),
                 price: await getPrice(tokenAddress, DAO.chainId),
-                tokenAddress: tokenAddress
+                tokenAddress: tokenAddress,
             };
             return nft;
         })

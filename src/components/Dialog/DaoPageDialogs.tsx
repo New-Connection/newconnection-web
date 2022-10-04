@@ -5,8 +5,6 @@ import { getChainScanner, getTokenSymbol } from "utils/blockchains";
 import { ExternalLinkIcon } from "@heroicons/react/solid";
 import { BlockchainIcon } from "components/Icons/";
 import Image from "next/image";
-import { getIpfsImage } from "utils/ipfsUpload";
-import ASSETS from "assets";
 import { InputAmount } from "../Form";
 import { createTreasurySteps, SpinnerLoading } from "./base-dialogs/Stepper";
 import {
@@ -95,7 +93,7 @@ export const ContributeTreasuryDialog = ({
         <CustomDialog dialog={dialog} className="items-center text-center">
             <div className={"flex items-center gap-2"}>
                 <Image
-                    src={getIpfsImage(DAO.profileImage, ASSETS.daoLogoMock.src)}
+                    src={DAO.profileImage}
                     height={"50px"}
                     width={"50px"}
                     className="rounded-xl"

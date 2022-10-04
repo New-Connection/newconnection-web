@@ -1,6 +1,8 @@
 import { IDAOPageForm } from "types/forms";
 import { Moralis } from "moralis-v1";
 import { handleContractError } from "utils/errors";
+import { getIpfsImage } from "utils/ipfsUpload";
+import ASSETS from "assets";
 
 export async function fetchDAOs(isInitialized: any, DAOsQuery: Function) {
     if (isInitialized) {
@@ -12,7 +14,7 @@ export async function fetchDAOs(isInitialized: any, DAOsQuery: Function) {
                 const name = dao.get("name");
                 const description = dao.get("description");
                 const chainId = dao.get("chainId");
-                let profileImage = dao.get("profileImage");
+                let profileImage = getIpfsImage(dao.get("profileImage"), ASSETS.daoLogoMock.src);
                 const isActive = dao.get("isActive");
                 const totalProposals = 0;
                 const totalVotes = 0;

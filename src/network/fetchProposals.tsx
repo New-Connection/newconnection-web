@@ -3,7 +3,7 @@ import {
     isProposalActive,
     proposalAgainstVotes,
     proposalDeadline,
-    proposalForVotes
+    proposalForVotes,
 } from "contract-interactions/viewGovernorContract";
 import { Moralis } from "moralis-v1";
 
@@ -27,7 +27,7 @@ export async function fetchProposals(proposalQuery: any) {
                 againstVotes: await proposalAgainstVotes(governorAddress, chainId, proposalId),
                 deadline: await proposalDeadline(governorAddress, chainId, proposalId),
                 options: [],
-                blockchain: []
+                blockchain: [],
             };
             return proposal;
         })
@@ -42,7 +42,7 @@ export async function fetchDetailProposal(proposalQuery: Function) {
         description: result.get("description"),
         shortDescription: result.get("shortDescription"),
         governorAddress: result.get("governorAddress"),
-        chainId: result.get("chainId")
+        chainId: result.get("chainId"),
     };
     return proposal;
 }

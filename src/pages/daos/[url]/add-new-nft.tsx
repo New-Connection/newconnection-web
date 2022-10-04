@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
+    Button,
     DragAndDropImage,
     InputAmount,
+    InputSupplyOfNFT,
     InputText,
-    Button,
-    TypeSelector,
     InputTextArea,
-    InputSupplyOfNFT
+    TypeSelector,
 } from "components/Form";
 import { useRouter } from "next/router";
 import { Signer } from "ethers";
-import { useMoralisQuery, useMoralis } from "react-moralis";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
 import Layout from "components/Layout/Layout";
@@ -20,7 +20,7 @@ import {
     handleImageChange,
     handleNftSupplyChange,
     handleSelectorChange,
-    handleTextChange
+    handleTextChange,
 } from "utils/handlers";
 import { validateForm } from "utils/validate";
 import { useDialogState } from "ariakit";
@@ -41,13 +41,13 @@ const AddNewNFT: NextPage = () => {
         name: "",
         description: "",
         file: {},
-        NFTtype: "Member",
+        // NFTtype: "Member",
         symbol: "",
         price: 0,
         contractAddress: "",
         governorAddress: "",
         ipfsAddress: "",
-        blockchain: ""
+        blockchain: "",
     });
 
     const router = useRouter();
@@ -62,7 +62,7 @@ const AddNewNFT: NextPage = () => {
         (query) => query.equalTo("governorAddress", formData.governorAddress),
         [formData.governorAddress],
         {
-            autoFetch: false
+            autoFetch: false,
         }
     );
 
@@ -82,7 +82,7 @@ const AddNewNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-            ];
+        ];
     };
 
     const saveNewNFTContractAddress = async (nftTokenAddress: string) => {
@@ -101,7 +101,9 @@ const AddNewNFT: NextPage = () => {
             return;
         }
 
-        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))) {
+        if (
+            !(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))
+        ) {
             return;
         }
 
@@ -133,7 +135,7 @@ const AddNewNFT: NextPage = () => {
                 layerzeroEndpoint: endpoint,
                 //todo: need to calculate when few blockchains
                 startMintId: 0,
-                endMintId: calculateSupply()
+                endMintId: calculateSupply(),
             });
             handleNext(setActiveStep);
 

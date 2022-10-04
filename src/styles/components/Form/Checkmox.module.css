@@ -22,7 +22,7 @@
 
 .checkbox[aria-disabled="true"] {
     opacity: 0.5;
-    background-color: #F2F3F4;
+    background-color: #f2f3f4;
     cursor: not-allowed;
 }
 

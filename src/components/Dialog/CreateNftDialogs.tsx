@@ -53,8 +53,8 @@ export const CreateNftDialog = ({ dialog, formData, activeStep }: ICreateNftDial
                     pathname: "create-dao",
                     query: {
                         tokenAddress: formData.contractAddress,
-                        enabledBlockchains: getChainNames().filter((chain) => formData[chain])
-                    }
+                        enabledBlockchains: getChainNames().filter((chain) => formData[chain]),
+                    },
                 }}
             >
                 <button

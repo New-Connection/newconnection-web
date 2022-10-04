@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
@@ -8,10 +8,10 @@ import { BackButton } from "components/Button/";
 import { validateForm } from "utils/validate";
 import { IAddNewMember } from "types/forms";
 import {
-    handleTextChangeAddNewMember,
-    handleChangeBasicArray,
-    handleChangeBasic,
     handleAddArray,
+    handleChangeBasic,
+    handleChangeBasicArray,
+    handleTextChangeAddNewMember,
 } from "utils/handlers";
 import {
     getMoralisInstance,

@@ -1,7 +1,6 @@
 import { formatAddress } from "utils/address";
-import { ClipboardCopyIcon, CheckIcon } from "@heroicons/react/solid";
+import { CheckIcon, ClipboardCopyIcon } from "@heroicons/react/solid";
 import React, { useState } from "react";
-
 
 export const CopyTextButton = ({ copyText }) => {
     const [isCopied, setIsCopied] = useState(false);

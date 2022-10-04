@@ -4,12 +4,7 @@ import { IProposalPageDialog } from "./dialogInterfaces";
 
 export const ProposalVoteDialog = ({ dialog, activeStep }: IProposalPageDialog) => {
     return (
-        <StepperDialog
-            dialog={dialog}
-            className="dialog"
-            activeStep={activeStep}
-            isClose={true}
-        >
+        <StepperDialog dialog={dialog} className="dialog" activeStep={activeStep} isClose={true}>
             <p className="ml-7 mb-7">Voted successfully!</p>
 
             <button

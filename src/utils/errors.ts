@@ -3,8 +3,8 @@ import { errors } from "ethers";
 import toast from "react-hot-toast";
 
 interface IErrorHandlerOptions {
-    dialog?: DisclosureState,
-    hideToast?: boolean
+    dialog?: DisclosureState;
+    hideToast?: boolean;
 }
 
 export const handleContractError = (error, option?: IErrorHandlerOptions) => {
@@ -17,8 +17,8 @@ export const handleContractError = (error, option?: IErrorHandlerOptions) => {
         message = error.error?.message?.includes("reverted")
             ? error.error.message
             : error.error.data?.message?.includes("reverted")
-                ? error.error.data.message
-                : "Execution reverted";
+            ? error.error.data.message
+            : "Execution reverted";
     } else {
         message = "Something went wrong";
     }

@@ -1,8 +1,6 @@
 import * as React from "react";
 import Image from "next/image";
-import ASSETS from "assets/index";
 import Link from "next/link";
-import { getIpfsImage } from "utils/ipfsUpload";
 
 export const DAOCard = ({ name, description, profileImage, url, isActive, proposals }) => {
     return (
@@ -20,7 +18,7 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
                                 height={"115"}
                                 layout={"fixed"}
                                 priority={true}
-                                src={getIpfsImage(profileImage, ASSETS.daoLogoMock.src)}
+                                src={profileImage}
                                 className="rounded-2xl"
                             />
                         }
@@ -52,7 +50,7 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
                     <div className={"flex flex-col gap-3 mt-4"}>
                         <div className={"flex justify-between"}>
                             <p className={"text-gray2"}>Proposals:</p>
-                            <p>
+                            <div>
                                 {proposals ? (
                                     proposals || 0
                                 ) : (
@@ -61,7 +59,7 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
                                         000
                                     </div>
                                 )}
-                            </p>
+                            </div>
                         </div>
                         {/* <div className={"flex justify-between"}>
                             <p className={"text-gray2"}>Votes:</p>

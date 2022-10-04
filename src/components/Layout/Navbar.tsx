@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Logo from "components/Layout/Logo";
-import { Account, WalletSelector, NetworksMenu } from "components/Web3";
+import { Account, NetworksMenu, WalletSelector } from "components/Web3";
 import { useAccount } from "wagmi";
 import { useDialogState } from "ariakit";
 import { useRouter } from "next/router";
