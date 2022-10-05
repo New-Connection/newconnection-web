@@ -31,7 +31,7 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
                     </div>
                 </div>
 
-                <div className="flex flex-col lg:w-32 w-28 text-center text-xs pt-3 pb-3">
+                <div className="flex flex-col lg:w-36 w-32 text-center text-xs pt-3 pb-3">
                     {isActive ? (
                         <span className="badge-active">Active voting now</span>
                     ) : (

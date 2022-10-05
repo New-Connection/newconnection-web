@@ -80,7 +80,7 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                                     },
                                 }}
                             >
-                                <button className="flex gap-2 bg-white text-gray3 hover:underline active:text-gray2 mt-4">
+                                <button className="flex gap-2 bg-white text-black2 hover:underline active:text-gray2 mt-4">
                                     View all proposals
                                     <div className="mt-[0.125rem]">
                                         <ArrowUpRightIcon />

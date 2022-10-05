@@ -262,13 +262,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     <a
                                         href={DAO.scanURL}
                                         target={"_blank"}
-                                        className="hover:text-purple dao-about-button"
+                                        className="hover:text-purple dao-about-button items-center"
                                     >
                                         About
-                                        <ExternalLinkIcon className="h-4 w-3" />
+                                        <ExternalLinkIcon className="h-3.5 w-3.5" />
                                     </a>
                                     <div className="dao-about-button items-center">
-                                        <p>Blockchain</p>
+                                        Blockchain
                                         <BlockchainIcon chain={DAO.blockchain[0]} />
                                     </div>
                                 </div>
