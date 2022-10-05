@@ -74,12 +74,8 @@ const DAOsPage: NextPage = () => {
                                     return (
                                         <DAOCard
                                             key={index}
-                                            name={dao.name}
-                                            description={dao.description}
-                                            url={dao.url}
-                                            profileImage={dao.profileImage}
-                                            isActive={dao.isActive}
-                                            proposals={dao.totalProposals}
+                                            daoObject={dao}
+                                            lastElement={!(index !== DAOs.length - 1)}
                                         />
                                     );
                                 })}
