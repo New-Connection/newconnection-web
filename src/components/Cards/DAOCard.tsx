@@ -38,7 +38,7 @@ export const DAOCard = ({ daoObject, lastElement }) => {
                     </div>
                 </div>
 
-                <div className="flex flex-col hidden md:flex lg:w-36 w-32 text-center text-xs pt-3 pb-3">
+                <div className="flex flex-col hidden md:flex lg:w-40 w-36 text-center text-xs pt-3 pb-3">
                     {isActive ? (
                         <span className="badge-active">Active voting now</span>
                     ) : (

@@ -181,9 +181,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         console.log("deleting");
         WhitelistMoralisInstance
             ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
-                ?.destroy()
-                .then()
-                .catch(console.error)
+                  ?.destroy()
+                  .then()
+                  .catch(console.error)
             : 0;
         //  rerender
         loadingWhitelist().catch(console.error);
@@ -316,7 +316,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                         <ExternalLinkIcon className="h-6 w-5" />
                                     </a>
                                 </div>
-                                <div className={"text-5xl"}>$ {treasuryBalance}</div>
+                                <p className={"text-2xl font-medium"}>$ {treasuryBalance}</p>
                                 <div className={"pb-3"}>
                                     <button
                                         className="form-submit-button border-none text-gray3 hover:underline active:text-gray2"
@@ -438,8 +438,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             </Link>
                         </div>
                         {DAO.tokenAddress ? (
-                            <div
-                                className="place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3">
+                            <div className="place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3">
                                 {NFTs ? (
                                     NFTs.map((nft, index) => (
                                         <NFTCard

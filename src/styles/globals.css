@@ -63,7 +63,7 @@
     }
 
     .badge-active {
-        @apply font-normal text-sm text-purple bg-gray rounded-full mr-2 px-[3.0erm] py-1;
+        @apply font-normal text-sm text-purple bg-gray rounded-full mr-4 px-[4.0erm] py-1;
     }
 
     .secondary-button {
