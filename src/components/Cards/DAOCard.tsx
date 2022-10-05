@@ -13,7 +13,7 @@ export const DAOCard = ({ daoObject, lastElement }) => {
                     lastElement ? "border-none" : "border-b"
                 )}
             >
-                <div className="flex gap-6 w-10/12 pt-3 pb-3">
+                <div className="flex gap-6 md:w-10/12 pt-3 pb-3">
                     <div className="w-28 h-28">
                         {
                             <Image
@@ -38,7 +38,7 @@ export const DAOCard = ({ daoObject, lastElement }) => {
                     </div>
                 </div>
 
-                <div className="flex flex-col lg:w-36 w-32 text-center text-xs pt-3 pb-3">
+                <div className="flex flex-col hidden md:flex lg:w-36 w-32 text-center text-xs pt-3 pb-3">
                     {isActive ? (
                         <span className="badge-active">Active voting now</span>
                     ) : (
@@ -56,10 +56,6 @@ export const DAOCard = ({ daoObject, lastElement }) => {
                                 )}
                             </div>
                         </div>
-                        {/* <div className={"flex justify-between"}>
-                            <p className={"text-gray2"}>Votes:</p>
-                            <p className="text-black">{votes || 0}</p>
-                        </div> */}
                     </div>
                 </div>
             </div>

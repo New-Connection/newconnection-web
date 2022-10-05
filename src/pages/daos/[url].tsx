@@ -181,9 +181,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         console.log("deleting");
         WhitelistMoralisInstance
             ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
-                  ?.destroy()
-                  .then()
-                  .catch(console.error)
+                ?.destroy()
+                .then()
+                .catch(console.error)
             : 0;
         //  rerender
         loadingWhitelist().catch(console.error);
@@ -299,11 +299,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="treasury-and-chat flex flex-col gap-3 md:flex-row md:justify-between">
                         {DAO.treasuryAddress ? (
                             <div
                                 className={
-                                    "flex flex-col justify-between border-2 text-center border-lightGray rounded-2xl h-52 p-3 w-4/5"
+                                    "flex flex-col justify-between border-2 text-center border-lightGray rounded-2xl h-52 p-3 md:w-4/5"
                                 }
                             >
                                 <div className={"flex justify-center text-2xl text-gray5 pt-3"}>
@@ -334,11 +334,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         ) : (
                             <div>
                                 {isOwner ? (
-                                    <button className="secondary-button" onClick={addTreasuryAndSave}>
+                                    <button className="secondary-button w-full" onClick={addTreasuryAndSave}>
                                         Add treasury
                                     </button>
                                 ) : (
-                                    <button className="secondary-button" disabled={true}>
+                                    <button className="secondary-button w-full" disabled={true}>
                                         Treasury not added
                                     </button>
                                 )}
@@ -363,7 +363,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                         isLoaded
                                             ? "secondary-button gradient-btn-color hover:bg-gradient-to-tl w-full"
                                             : "secondary-button bg-gray hover:bg-gray h-full w-full",
-                                        DAO.treasuryAddress && "rounded-xl h-full"
+                                        DAO.treasuryAddress && "rounded-2xl h-full"
                                     )}
                                     disabled={!isLoaded}
                                 >
@@ -438,7 +438,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             </Link>
                         </div>
                         {DAO.tokenAddress ? (
-                            <div className="place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3">
+                            <div
+                                className="place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3">
                                 {NFTs ? (
                                     NFTs.map((nft, index) => (
                                         <NFTCard
