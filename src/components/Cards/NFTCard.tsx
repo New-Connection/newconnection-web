@@ -18,6 +18,7 @@ interface INFTImage {
 interface INFTCard {
     nftObject: INFTVoting;
     chain?: number | string;
+    className?: string,
 }
 
 interface INFTCardWithDialog extends INFTCard {
@@ -65,9 +66,9 @@ export function NFTCardWithDialog({
     );
 }
 
-export const NFTCard = ({ nftObject, chain }: INFTCard) => {
+export const NFTCard = ({ nftObject, chain, className = "nft-card" }: INFTCard) => {
     return (
-        <div className={"flex flex-col overflow-hidden w-72 rounded-lg border border-gray3"}>
+        <div className={className}>
             <div className="flex-shrink-0">
                 <img className="h-72 w-full object-cover" src={nftObject.image} alt="" />
             </div>

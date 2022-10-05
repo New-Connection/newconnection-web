@@ -1,10 +1,10 @@
 import { Moralis } from "moralis-v1";
-import { IWhitelistPageForm } from "types/forms";
+import { IWhitelistRecord } from "types/forms";
 
 export const fetchWhitelist = async (whitelistQuery: Function) => {
     const moralisInstance: Moralis.Object<Moralis.Attributes>[] = await whitelistQuery();
-    const whitelist: IWhitelistPageForm[] = moralisInstance.map((whitelistMoralis) => {
-        const proposal: IWhitelistPageForm = {
+    const whitelist: IWhitelistRecord[] = moralisInstance.map((whitelistMoralis) => {
+        const proposal: IWhitelistRecord = {
             walletAddress: whitelistMoralis.get("walletAddress"),
             votingTokenName: whitelistMoralis.get("votingTokenName"),
             votingTokenAddress: whitelistMoralis.get("votingTokenAddress"),

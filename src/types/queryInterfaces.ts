@@ -25,11 +25,10 @@ export interface IProposalsQuery extends ParsedUrlQuery {
 }
 
 export interface IAddMemberQuery extends ParsedUrlQuery {
-    daoName: string;
-    nftAddress: string;
     governorAddress: string;
+    chainId: string;
+    governorUrl: string;
     blockchains: string[];
-    tokenAddress: string[];
 }
 
 export interface IAddNftQuery extends ParsedUrlQuery {

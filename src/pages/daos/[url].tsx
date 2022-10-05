@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Moralis } from "moralis-v1";
 import { getChainScanner } from "utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
-import { IDAOPageForm, INFTVoting, IProposalPageForm, IWhitelistPageForm } from "types/forms";
+import { IDAOPageForm, INFTVoting, IProposalPageForm, IWhitelistRecord } from "types/forms";
 import { ExternalLinkIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
@@ -50,7 +50,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [DAOMoralisInstance, setDAOMoralisInstance] = useState<Moralis.Object<Moralis.Attributes>>();
     const [WhitelistMoralisInstance, setWhitelistMoralisInstance] = useState<Moralis.Object<Moralis.Attributes>[]>();
-    const [whitelist, setWhitelist] = useState<IWhitelistPageForm[]>();
+    const [whitelist, setWhitelist] = useState<IWhitelistRecord[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
@@ -242,9 +242,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                             pathname: `${url}/add-new-member`,
                                             query: {
                                                 governorAddress: DAO.governorAddress,
-                                                daoName: DAO.name,
+                                                governorUrl: DAO.url,
                                                 blockchains: DAO.blockchain,
-                                                tokenAddress: DAO.tokenAddress,
+                                                chainId: DAO.chainId
                                             },
                                         }}
                                     >

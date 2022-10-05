@@ -56,7 +56,7 @@ export const MockupLoadingDetailDAOPage = () => {
 
 export const MockupLoadingDAO = () => {
     return (
-        <div className="nft-card w-full animate-pulse">
+        <div className="nft-card-mockup w-full animate-pulse">
             {/* //Wrap to div for center elements */}
             {getLoadingStrings(10)}
             <div className="p-4 gap-y-6">
@@ -74,7 +74,7 @@ export const MockupLoadingDAO = () => {
 
 export const MockupLoadingProposals = ({ chain }: { chain: number | string }) => {
     return (
-        <div className="nft-card w-full animate-pulse">
+        <div className="nft-card-mockup w-full animate-pulse">
             {/* //Wrap to div for center elements */}
             {getLoadingStrings(4)}
             <div className="p-4 gap-y-6">

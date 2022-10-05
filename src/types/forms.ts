@@ -87,14 +87,6 @@ export interface IProposal {
     txConfirm?: string;
 }
 
-export interface IWhitelistPageForm {
-    walletAddress?: string;
-    votingTokenName?: string;
-    votingTokenAddress?: string;
-    note?: string;
-    blockchainSelected?: string;
-}
-
 export interface INFTVoting {
     title?: string;
     type?: string;
@@ -105,15 +97,26 @@ export interface INFTVoting {
     totalMinted?: string;
 }
 
-export interface IAddNewMember {
-    daoName: string;
+export interface IWhitelistRecord {
     walletAddress?: string;
-    chainId?: string;
+    votingTokenName?: string;
+    votingTokenAddress?: string;
+    note?: string;
+    blockchainSelected?: string[];
+}
+
+export interface IAddNewMember {
+    walletAddress?: string;
     daoAddress: string;
-    tokenAddress: string[];
-    tokenNames: string[];
     votingTokenAddress: string;
     votingTokenName: string;
     blockchainSelected: string[];
     note?: string;
+
+    governorUrl?: string;
+    chainId?: string;
+
+    // TODO: remove in chats
+    tokenAddress?: string[];
+    tokenNames?: string[];
 }

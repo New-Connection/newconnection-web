@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { MockupTextCard } from "../Mockup";
 import { getLogoURI } from "utils/blockchains";
 import { useSwitchNetwork } from "wagmi";
-import { IWhitelistPageForm } from "types/forms";
+import { IWhitelistRecord } from "types/forms";
 import { checkCorrectNetwork } from "logic";
 import { handleContractError } from "utils/errors";
 
@@ -17,7 +17,7 @@ const renderValue = (chain: string) => {
 };
 
 interface IWhitelistTab {
-    whitelist: IWhitelistPageForm[];
+    whitelist: IWhitelistRecord[];
     signer: Signer;
     chainId: number;
     deleteFunction: Function;
@@ -48,7 +48,7 @@ export const WhitelistTab = ({ whitelist, signer, chainId, deleteFunction }: IWh
                     <div className="w-full flex gap-5" key={index}>
                         <div className="flex w-2/4">
                             <div className=" flex w-1/3">{formatAddress(walletAddress)}</div>
-                            <div className="flex pl-5 w-1/3">{renderValue(blockchainSelected)}</div>
+                            <div className="flex pl-5 w-1/3">{renderValue(blockchainSelected[0])}</div>
                             <div className="flex w-1/3">{votingTokenName}</div>
                         </div>
                         <p className="w-1/4 text-sm line-clamp-3 text-center">{note}</p>

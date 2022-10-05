@@ -3,16 +3,11 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
-import { Button, InputTextArea } from "components/Form";
+import { Button, InputTextArea, RadioSelectorNFT } from "components/Form";
 import { BackButton } from "components/Button/";
 import { validateForm } from "utils/validate";
-import { IAddNewMember } from "types/forms";
-import {
-    handleAddArray,
-    handleChangeBasic,
-    handleChangeBasicArray,
-    handleTextChangeAddNewMember,
-} from "utils/handlers";
+import { IAddNewMember, INFTVoting } from "types/forms";
+import { handleChangeBasic, handleChangeBasicArray, handleTextChangeAddNewMember } from "utils/handlers";
 import {
     getMoralisInstance,
     MoralisClassEnum,
@@ -26,10 +21,7 @@ import { handleContractError } from "utils/errors";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IAddNewMember>({
-        daoName: "",
         daoAddress: "",
-        tokenAddress: [],
-        tokenNames: [],
         votingTokenAddress: "",
         votingTokenName: "",
         blockchainSelected: [],
@@ -37,6 +29,7 @@ const AddNewMember: NextPage = () => {
     });
     const router = useRouter();
     const { data: signer_data } = useSigner();
+    const [NFTs, setNFTs] = useState<INFTVoting[]>();
 
     const { fetch: whitelistFetch } = useMoralisQuery(
         "Whitelist",
@@ -48,24 +41,20 @@ const AddNewMember: NextPage = () => {
             autoFetch: false,
         }
     );
-
+    console.log(formData);
     useEffect(() => {
         console.log("fetch query");
         const query = router.query as IAddMemberQuery;
 
         handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
-        handleChangeBasic(query.daoName, setFormData, "daoName");
+        handleChangeBasic(query.governorUrl, setFormData, "governorUrl");
+        handleChangeBasic(query.chainId, setFormData, "chainId");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
-        handleAddArray(query.tokenAddress, setFormData, "tokenAddress");
 
-        const saved = localStorage.getItem(query.daoName + " NFTs");
-        const initialValue = JSON.parse(saved);
-        const tokenNames = [];
-        console.log("fetch localStorage");
-        initialValue.map((object) => {
-            tokenNames.push(object.title);
-        });
-        handleAddArray(tokenNames, setFormData, "tokenNames");
+        const savedNfts = JSON.parse(localStorage.getItem(query.governorUrl + " NFTs"));
+        if (savedNfts) {
+            setNFTs(savedNfts);
+        }
     }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
@@ -128,29 +117,27 @@ const AddNewMember: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton />
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={sendSignatureRequest}>
-                        <h1 className="text-highlighter">Become a member of</h1>
-                        <h1 className="text-highlighter mt-0 text-purple">{formData.daoName}</h1>
+                        <BackButton />
+                        <div className={"flex flex-col md:flex-row"}>
+                            <h1 className="text-highlighter">Become a member of</h1>
+                            <h1 className="text-highlighter text-purple capitalize md:ml-4">{formData.governorUrl}</h1>
+                        </div>
                         <label>
                             <div className="input-label">Choose voting token</div>
                         </label>
-                        {/*{Array.isArray(formData.tokenAddress) ? (*/}
-                        {/*    <RadioSelectorNFT*/}
-                        {/*        name="votingTokenAddress"*/}
-                        {/*        handleChange={(event) => {*/}
-                        {/*            // setting tokenName*/}
-                        {/*            const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);*/}
-                        {/*            handleChangeBasic(currentTokenName, setFormData, "votingTokenName");*/}
-
-                        {/*            // setting tokenAddress*/}
-                        {/*            handleTextChangeAddNewMember(event, setFormData);*/}
-                        {/*        }}*/}
-                        {/*        values={formData.tokenAddress}*/}
-                        {/*    />*/}
-                        {/*) : (*/}
-                        {/*    <></>*/}
-                        {/*)}*/}
+                        {NFTs && (
+                            <RadioSelectorNFT
+                                name={"tokenAddress"}
+                                chainId={+formData?.chainId}
+                                className={"nft-cards-grid"}
+                                handleChange={(event, votingNFT) => {
+                                    handleChangeBasic(votingNFT.title, setFormData, "votingTokenName");
+                                    handleChangeBasic(votingNFT.tokenAddress, setFormData, "votingTokenAddress");
+                                }}
+                                values={NFTs}
+                            />
+                        )}
                         <InputTextArea
                             name="note"
                             label="Note (optional)"
@@ -167,3 +154,11 @@ const AddNewMember: NextPage = () => {
 };
 
 export default AddNewMember;
+
+//http://localhost:3000/daos/opti-dao/add-new-member?
+// governorAddress=0xC2Ce0B8Ada12B4d71A7EF5E769ce75C373D1760E&
+// governorUrl=opti-dao&
+// daoName=opti+dao&
+// blockchains=Optimism+Goerli&
+// tokenAddress=
+// 0xACa4227f4403dcFD2f79C58c86090084c832E614&tokenAddress=0x652dCce7C7592cF3A3067c0941525b3c4bF4A586

@@ -27,8 +27,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-black">
                         {labels[0]}
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                     </div>
                 </label>
             </div>
@@ -50,8 +49,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-black">
                         {labels[1]}
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                     </div>
                 </label>
             </div>
@@ -61,19 +59,22 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
 
 export const RadioSelectorNFT = (radioSelector: IRadioSelectorNFT) => {
     const [clickedValue, setClickValue] = useState(0);
+    console.log(clickedValue);
     return (
         <div className={classNames(radioSelector.className, "mt-0")}>
-            {radioSelector.values && (
+            {radioSelector.values &&
                 radioSelector.values.map((value, index) => (
                     <React.Fragment key={index}>
-                        <label
-                            htmlFor={"bordered-radio-" + (index + 1)}
-                            className={classNames(
-                                "inline-flex gap-4 items-center text-black bg-white rounded-lg border border-gray2 cursor-pointer hover:text-btnHover hover:border-btnHover active:text-btnActive active:border-btnActive",
-                                clickedValue === index ? "border-purple text-purple" : ""
-                            )}
-                        >
-                            <NFTCard nftObject={value} chain={radioSelector.chainId} />
+                        <label htmlFor={"bordered-radio-" + (index + 1)}>
+                            <NFTCard
+                                nftObject={value}
+                                chain={radioSelector.chainId}
+                                className={
+                                    clickedValue === index
+                                        ? "nft-card border-2 border-purple rounded-lg"
+                                        : "nft-card cursor-pointer hover:text-btnHover hover:border-btnHover active:text-btnActive active:border-btnActive"
+                                }
+                            />
                         </label>
                         <input
                             id={"bordered-radio-" + (index + 1)}
@@ -88,8 +89,7 @@ export const RadioSelectorNFT = (radioSelector: IRadioSelectorNFT) => {
                             }}
                         />
                     </React.Fragment>
-                ))
-            )}
+                ))}
         </div>
     );
 };
