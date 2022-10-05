@@ -70,15 +70,9 @@ const DAOsPage: NextPage = () => {
                         {/* LIST OF DAOs */}
                         <ul>
                             {DAOs &&
-                                DAOs.map((dao, index) => {
-                                    return (
-                                        <DAOCard
-                                            key={index}
-                                            daoObject={dao}
-                                            lastElement={!(index !== DAOs.length - 1)}
-                                        />
-                                    );
-                                })}
+                                DAOs.map((dao, index) => (
+                                    <DAOCard key={index} daoObject={dao} lastElement={!(index !== DAOs.length - 1)} />
+                                ))}
                         </ul>
                     </form>
                 </section>
