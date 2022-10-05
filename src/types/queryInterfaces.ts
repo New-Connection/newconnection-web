@@ -5,11 +5,8 @@ export interface IDaoQuery extends ParsedUrlQuery {
 }
 
 export interface IChatsQuery extends ParsedUrlQuery {
-    daoName: string;
-    nftAddress: string;
+    governorUrl: string;
     governorAddress: string;
-    blockchains: string[];
-    tokenAddress: string[];
     chainId: string;
 }
 

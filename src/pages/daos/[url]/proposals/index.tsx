@@ -80,7 +80,7 @@ const ProposalsPage: NextPage = () => {
                                                 title={proposal.name}
                                                 description={proposal.description}
                                                 shortDescription={proposal.shortDescription}
-                                                daoName={DAO?.name}
+                                                governorName={DAO?.name}
                                                 chainId={DAO?.chainId}
                                                 isActive={proposal.isActive}
                                                 forVotes={proposal.forVotes}

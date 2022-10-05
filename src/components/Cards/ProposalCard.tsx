@@ -11,7 +11,7 @@ interface IProposalCard {
     chainId?: number;
     tokenName?: string;
     description?: string;
-    daoName?: string;
+    governorName?: string;
     blockchain?: string[];
     isActive?: boolean;
     forVotes?: string;

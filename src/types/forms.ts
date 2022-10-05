@@ -104,19 +104,3 @@ export interface IWhitelistRecord {
     note?: string;
     blockchainSelected?: string[];
 }
-
-export interface IAddNewMember {
-    walletAddress?: string;
-    daoAddress: string;
-    votingTokenAddress: string;
-    votingTokenName: string;
-    blockchainSelected: string[];
-    note?: string;
-
-    governorUrl?: string;
-    chainId?: string;
-
-    // TODO: remove in chats
-    tokenAddress?: string[];
-    tokenNames?: string[];
-}

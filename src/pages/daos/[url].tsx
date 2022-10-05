@@ -74,7 +74,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     });
     const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
-        (query) => query.equalTo("daoAddress", DAO?.governorAddress),
+        (query) => query.equalTo("governorAddress", DAO?.governorAddress),
         [DAO],
         { autoFetch: false }
     );
@@ -350,10 +350,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 href={{
                                     pathname: `${url}/chats`,
                                     query: {
-                                        governorAddress: DAO.governorAddress,
-                                        blockchains: DAO.blockchain,
-                                        tokenAddress: DAO.tokenAddress,
-                                        daoName: DAO.name,
+                                        governorUrl: DAO.url,
+                                        // governorAddress: DAO.governorAddress,
                                         chainId: DAO.chainId,
                                     },
                                 }}

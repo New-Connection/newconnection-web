@@ -21,7 +21,7 @@ import { handleContractError } from "utils/errors";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IAddNewMember>({
-        daoAddress: "",
+        governorAddress: "",
         votingTokenAddress: "",
         votingTokenName: "",
         blockchainSelected: [],
@@ -34,9 +34,9 @@ const AddNewMember: NextPage = () => {
     const { fetch: whitelistFetch } = useMoralisQuery(
         "Whitelist",
         (query) =>
-            query.equalTo("daoAddress", formData.daoAddress) &&
+            query.equalTo("governorAddress", formData.governorAddress) &&
             query.equalTo("votingTokenAddress", formData.votingTokenAddress),
-        [formData.daoAddress, formData.votingTokenAddress, signer_data],
+        [formData.governorAddress, formData.votingTokenAddress, signer_data],
         {
             autoFetch: false,
         }
