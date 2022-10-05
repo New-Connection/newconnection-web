@@ -70,7 +70,6 @@ const CreateDAO: NextPage = () => {
     useEffect(() => {
         const query = router.query as ICreateDaoQuery;
         handleChangeBasicSimple(query.tokenAddress, setFormData, "tokenAddress");
-        // handleAddArray(query.enabledBlockchains, setFormData, "enabledBlockchains");
         handleAddArray(query.enabledBlockchains, setFormData, "blockchain");
     }, [router]);
 
@@ -155,9 +154,6 @@ const CreateDAO: NextPage = () => {
                 <section className="relative w-full">
                     <form className="mx-auto flex flex-col max-w-4xl gap-4" onSubmit={onSubmit}>
                         <h1 className="text-highlighter">Create DAO</h1>
-                        <div className="flex flex-row">
-                            <h2 className="my-2 text-xl font-medium">DAO Name and Goals</h2>
-                        </div>
                         <InputText
                             label="DAO Name"
                             name="name"

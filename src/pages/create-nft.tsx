@@ -56,11 +56,13 @@ const CreateNFT: NextPage = () => {
         }
 
         handleReset(setActiveStep);
+        // SHOW DIALOG
         confirmDialog.toggle();
 
         let path;
+        // IPFS UPLOAD
         try {
-            path = await storeNFT(formData.file as File);
+            const path = await storeNFT(formData.file as File);
             console.log(path);
             handleChangeBasic(path, setFormData, "ipfsAddress");
         } catch (error) {
@@ -69,12 +71,12 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        let contract;
+        // UPLOAD NFT CONTRACT
         try {
             const chainId = await signerData.getChainId();
             const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
-            contract = await deployNFTContract(signerData as Signer, {
+            const contract = await deployNFTContract(signerData as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
                 baseURI: path,
