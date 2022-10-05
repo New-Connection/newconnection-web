@@ -129,7 +129,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             const loadingNFT = async () => {
                 const nftsArray = await fetchNFT(DAO);
                 if (nftsArray) {
-                    localStorage.setItem(DAO.name + " NFTs", JSON.stringify(nftsArray));
+                    localStorage.setItem(DAO.url + " NFTs", JSON.stringify(nftsArray));
                     setNFTs(nftsArray);
                 }
             };

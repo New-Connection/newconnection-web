@@ -51,18 +51,12 @@ const CreateProposal: NextPage = () => {
         handleChangeBasic(query.governorUrl, setFormData, "governorUrl");
         handleAddArray(query.blockchains, setFormData, "blockchain");
         handleChangeBasic(+query.chainId, setFormData, "chainId");
+        const savedNfts = JSON.parse(localStorage.getItem(query.governorUrl + " NFTs"));
+        if (savedNfts) {
+            setNFTs(savedNfts);
+        }
         // handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
     }, [router]);
-
-    useEffect(() => {
-        if (formData.governorUrl) {
-            console.log("fetch nfts");
-            const savedNfts = JSON.parse(localStorage.getItem(formData.governorUrl + " NFTs"));
-            if (savedNfts) {
-                setNFTs(savedNfts);
-            }
-        }
-    }, [formData.governorUrl]);
 
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
