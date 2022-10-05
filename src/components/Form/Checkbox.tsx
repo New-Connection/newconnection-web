@@ -27,10 +27,7 @@ export function CheckboxGroup({
                     }
 
                     return (
-                        <label
-                            key={value.toUpperCase()}
-                            className={"disabled:cursor-not-allowed"}
-                        >
+                        <label key={value.toUpperCase()} className={"disabled:cursor-not-allowed"}>
                             <Checkbox
                                 as="div"
                                 value={value}

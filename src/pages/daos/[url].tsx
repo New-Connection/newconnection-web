@@ -181,9 +181,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         console.log("deleting");
         WhitelistMoralisInstance
             ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
-                ?.destroy()
-                .then()
-                .catch(console.error)
+                  ?.destroy()
+                  .then()
+                  .catch(console.error)
             : 0;
         //  rerender
         loadingWhitelist().catch(console.error);
@@ -244,7 +244,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                                 governorAddress: DAO.governorAddress,
                                                 governorUrl: DAO.url,
                                                 blockchains: DAO.blockchain,
-                                                chainId: DAO.chainId
+                                                chainId: DAO.chainId,
                                             },
                                         }}
                                     >

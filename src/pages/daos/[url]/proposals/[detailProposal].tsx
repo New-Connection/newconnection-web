@@ -21,7 +21,7 @@ import {
     AboutProposalCard,
     InfoProposalCard,
     ProposalActivityBadge,
-    VotingResultsCard
+    VotingResultsCard,
 } from "components/Cards/ProposalCard";
 import { handleContractError } from "utils/errors";
 import { MockupLoadingProposals } from "components/Mockup/Loading";

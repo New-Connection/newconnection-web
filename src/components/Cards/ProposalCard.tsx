@@ -44,7 +44,6 @@ export const ProposalCard = ({
                         )}
                         <ProposalActivityBadge isActive={isActive} />
                     </div>
-
                 </div>
             </div>
             <div className="flex justify-between">
@@ -63,16 +62,14 @@ export const ProposalCard = ({
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{forV}</p>
-                            <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"In favor"}</p>
                     </div>
                     <div className="text-center">
                         <div className="relative px-5 py-3 text-black">
                             <p className="text-2xl font-light">{againstV}</p>
-                            <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                         </div>
                         <p>{"Against"}</p>
                     </div>
@@ -151,16 +148,14 @@ export const VotingResultsCard = ({ proposalData }: IInformationCard) => {
                 <div className="text-center">
                     <div className="relative px-5 py-3 text-black">
                         <p className="text-2xl font-light">{proposalData.forVotes}</p>
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                     </div>
                     <p>{"In favor"}</p>
                 </div>
                 <div className="text-center">
                     <div className="relative px-5 py-3 text-black">
                         <p className="text-2xl font-light">{proposalData.againstVotes}</p>
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                     </div>
                     <p>{"Against"}</p>
                 </div>

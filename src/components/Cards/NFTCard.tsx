@@ -14,11 +14,10 @@ interface INFTImage {
     index?: number;
 }
 
-
 interface INFTCard {
     nftObject: INFTVoting;
     chain?: number | string;
-    className?: string,
+    className?: string;
 }
 
 interface INFTCardWithDialog extends INFTCard {
@@ -49,7 +48,7 @@ export function NFTCardWithDialog({
     setCurrentNFT,
     setButtonState,
     detailNFTDialog,
-    chain
+    chain,
 }: INFTCardWithDialog) {
     return (
         <div>

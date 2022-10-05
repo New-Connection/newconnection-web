@@ -133,11 +133,11 @@
     }
 
     .nft-cards-grid {
-        @apply place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3
+        @apply place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3;
     }
 
     .nft-card {
-        @apply flex flex-col overflow-hidden w-72 rounded-lg border border-gray3
+        @apply flex flex-col overflow-hidden w-72 rounded-lg border border-gray3;
     }
 
     .nft-card-mockup {

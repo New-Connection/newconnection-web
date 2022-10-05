@@ -57,7 +57,7 @@ export interface IRadioSelector {
 
 export interface IRadioSelectorNFT {
     name: string;
-    chainId:number;
+    chainId: number;
     values: INFTVoting[];
     className?: string;
     handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, selectedNFT: INFTVoting) => void;
