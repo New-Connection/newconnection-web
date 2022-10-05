@@ -1,11 +1,18 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import classNames from "classnames";
 
-export const DAOCard = ({ name, description, profileImage, url, isActive, proposals }) => {
+export const DAOCard = ({ daoObject, lastElement }) => {
+    const { name, description, profileImage, url, isActive, totalProposals } = daoObject; // Name should be same like in DAOobject
     return (
         <Link href={`/daos/${url}`}>
-            <div className={"flex justify-between w-full h-50 p-3 border-b border-gray cursor-pointer active:bg-gray"}>
+            <div
+                className={classNames(
+                    "flex justify-between w-full h-50 p-3 border-gray cursor-pointer active:bg-gray",
+                    lastElement ? "border-none" : "border-b"
+                )}
+            >
                 <div className="flex gap-6 w-10/12 pt-3 pb-3">
                     <div className="w-28 h-28">
                         {
@@ -31,7 +38,7 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
                     </div>
                 </div>
 
-                <div className="flex flex-col lg:w-32 w-28 text-center text-xs pt-3 pb-3">
+                <div className="flex flex-col lg:w-36 w-32 text-center text-xs pt-3 pb-3">
                     {isActive ? (
                         <span className="badge-active">Active voting now</span>
                     ) : (
@@ -41,8 +48,8 @@ export const DAOCard = ({ name, description, profileImage, url, isActive, propos
                         <div className={"flex justify-between"}>
                             <p className={"text-gray2"}>Proposals:</p>
                             <div>
-                                {proposals ? (
-                                    proposals || 0
+                                {totalProposals ? (
+                                    totalProposals || 0
                                 ) : (
                                     //MOCK UP FOR LOADING
                                     <div className="bg-gray2 text-gray2 animate-pulse rounded-md">000</div>

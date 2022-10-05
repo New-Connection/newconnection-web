@@ -63,7 +63,7 @@
     }
 
     .badge-active {
-        @apply font-normal text-purple bg-gray rounded-full mr-2 px-[1.0erm] py-1;
+        @apply font-normal text-sm text-purple bg-gray rounded-full mr-2 px-[3.0erm] py-1;
     }
 
     .secondary-button {
@@ -91,7 +91,7 @@
     }
 
     .dao-about-button {
-        @apply flex text-xs px-[10px] py-[4px] h-[24px] bg-gray text-black gap-1 rounded-full;
+        @apply flex text-base px-[16px] py-[6px] h-[32px] bg-gray text-black gap-1 rounded-full;
     }
 
     .settings-button {

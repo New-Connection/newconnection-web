@@ -42,7 +42,7 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                             <Link href={`${daoUrl}/proposals/${proposalId}`} key={proposalId}>
                                 <li
                                     key={proposalId}
-                                    className="border-b-2 mb-4 border-gray cursor-pointer active:bg-gray"
+                                    className="border-b-2 mb-4 last:pb-0 border-gray cursor-pointer active:bg-gray"
                                 >
                                     <ProposalCard
                                         title={name}
@@ -80,7 +80,7 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                                     },
                                 }}
                             >
-                                <button className="flex gap-2 bg-white text-gray3 hover:underline active:text-gray2 mt-4">
+                                <button className="flex gap-2 bg-white text-black2 hover:underline active:text-gray2 mt-4">
                                     View all proposals
                                     <div className="mt-[0.125rem]">
                                         <ArrowUpRightIcon />
