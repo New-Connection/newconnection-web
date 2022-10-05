@@ -39,6 +39,7 @@ export interface IAddNftQuery extends ParsedUrlQuery {
 
 export interface ICreateProposalQuery extends ParsedUrlQuery {
     governorAddress: string;
+    governorUrl: string;
     blockchains: string[];
     chainId: string;
 }

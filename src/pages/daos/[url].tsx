@@ -19,7 +19,7 @@ import { fetchDAO, fetchNFT, fetchProposals, fetchTreasuryBalance, fetchWhitelis
 import { BlockchainIcon, DiscordIcon, TwitterIcon, WebsiteIcon } from "components/Icons/";
 import { MockupLoadingDetailDAOPage, MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
-import { NFTCard } from "components/Cards/NFTCard";
+import { NFTCardWithDialog } from "components/Cards/NFTCard";
 import { ProposalsListTab, Tabs, WhitelistTab } from "components/Tabs/";
 import { DAOPageProps } from "types/pagePropsInterfaces";
 import { ButtonState } from "types/daoIntefaces";
@@ -181,9 +181,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         console.log("deleting");
         WhitelistMoralisInstance
             ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
-                  ?.destroy()
-                  .then()
-                  .catch(console.error)
+                ?.destroy()
+                .then()
+                .catch(console.error)
             : 0;
         //  rerender
         loadingWhitelist().catch(console.error);
@@ -412,6 +412,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 pathname: `${url}/create-proposal`,
                                 query: {
                                     governorAddress: DAO.governorAddress,
+                                    governorUrl: DAO.url,
                                     blockchains: [DAO.blockchain[0]],
                                     chainId: DAO.chainId,
                                 },
@@ -438,10 +439,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             </Link>
                         </div>
                         {DAO.tokenAddress ? (
-                            <div className="place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3">
+                            <div className="nft-cards-grid">
                                 {NFTs ? (
                                     NFTs.map((nft, index) => (
-                                        <NFTCard
+                                        <NFTCardWithDialog
                                             nftObject={nft}
                                             setButtonState={setButtonState}
                                             setCurrentNFT={setCurrentNFT}

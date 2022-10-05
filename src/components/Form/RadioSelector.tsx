@@ -1,8 +1,9 @@
 // Radio Selector. Using for detail-proposals
 // https://flowbite.com/docs/forms/radio/
-import { IRadioSelector } from "./types";
+import { IRadioSelector, IRadioSelectorNFT } from "./types";
 import classNames from "classnames";
 import React, { useState } from "react";
+import { NFTCard } from "../Cards/NFTCard";
 
 export const RadioSelector = ({ name, labels, className, handleChange }: IRadioSelector) => {
     return (
@@ -26,7 +27,8 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-black">
                         {labels[0]}
-                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                        <span
+                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
                     </div>
                 </label>
             </div>
@@ -48,7 +50,8 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-black">
                         {labels[1]}
-                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                        <span
+                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
                     </div>
                 </label>
             </div>
@@ -56,42 +59,37 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
     );
 };
 
-export const RadioSelectorMulti = (radioSelector: IRadioSelector) => {
-    const [clickedValue, setClickValue] = useState(null);
-
+export const RadioSelectorNFT = (radioSelector: IRadioSelectorNFT) => {
+    const [clickedValue, setClickValue] = useState(0);
     return (
-        <>
-            {radioSelector.values ? (
+        <div className={classNames(radioSelector.className, "mt-0")}>
+            {radioSelector.values && (
                 radioSelector.values.map((value, index) => (
                     <React.Fragment key={index}>
-                        <input
-                            id={"bordered-radio-" + (index + 1)}
-                            type="radio"
-                            value={value}
-                            name={radioSelector.name}
-                            className="hidden peer"
-                            onChange={(event) => {
-                                // console.log(event)
-                                setClickValue(index);
-                                return radioSelector.handleChange(event);
-                            }}
-                        />
                         <label
                             htmlFor={"bordered-radio-" + (index + 1)}
                             className={classNames(
-                                radioSelector.className,
-                                "inline-flex gap-4 items-center p-5 w-full text-black bg-white rounded-lg border border-gray2 cursor-pointer hover:text-btnHover hover:border-btnHover active:text-btnActive active:border-btnActive",
+                                "inline-flex gap-4 items-center text-black bg-white rounded-lg border border-gray2 cursor-pointer hover:text-btnHover hover:border-btnHover active:text-btnActive active:border-btnActive",
                                 clickedValue === index ? "border-purple text-purple" : ""
                             )}
                         >
-                            <p>{index}</p>
-                            {radioSelector.labels[index]}
+                            <NFTCard nftObject={value} chain={radioSelector.chainId} />
                         </label>
+                        <input
+                            id={"bordered-radio-" + (index + 1)}
+                            type="radio"
+                            value={value.title}
+                            name={radioSelector.name}
+                            // name={radioSelector.name}
+                            className="hidden"
+                            onChange={(event) => {
+                                setClickValue(index);
+                                return radioSelector.handleChange(event, value);
+                            }}
+                        />
                     </React.Fragment>
                 ))
-            ) : (
-                <></>
             )}
-        </>
+        </div>
     );
 };

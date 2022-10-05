@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { ICreateProposal, IMultiNFTVoting } from "types/forms";
+import { ICreateProposal, INFTVoting } from "types/forms";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout from "components/Layout/Layout";
-import { handleAddArray, handleChangeBasic, handleTextChange, handleTextChangeAddNewMember } from "utils/handlers";
-import { Button, CheckboxGroup, InputText, InputTextArea, RadioSelectorMulti } from "components/Form";
+import { handleAddArray, handleChangeBasic, handleTextChange } from "utils/handlers";
+import { Button, CheckboxGroup, InputText, InputTextArea, RadioSelectorNFT } from "components/Form";
 import { BackButton } from "components/Button/";
 import { useDialogState } from "ariakit";
 import { validateForm } from "utils/validate";
@@ -18,16 +18,15 @@ import {
     setFieldsIntoMoralisInstance,
 } from "database/interactions";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { useMoralis, useMoralisQuery } from "react-moralis";
 import { ICreateProposalQuery } from "types/queryInterfaces";
 import { CreateProposalDialog } from "components/Dialog/CreateProposalDialogs";
-import { fetchDAO } from "network";
 import { checkCorrectNetwork } from "logic";
 import { handleContractError } from "utils/errors";
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
         governorAddress: "",
+        governorUrl: "",
         name: "",
         shortDescription: "",
         tokenAddress: "",
@@ -38,66 +37,32 @@ const CreateProposal: NextPage = () => {
         // enabledBlockchains: []
     });
     const router = useRouter();
-    const [votingNFTs, setVotingNFTs] = useState<IMultiNFTVoting>();
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
-    const { isInitialized } = useMoralis();
+
+    const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
-
-    const { fetch: DaoQuery } = useMoralisQuery(
-        "DAO",
-        (query) => {
-            return query.equalTo("governorAddress", formData.governorAddress);
-        },
-        [formData.governorAddress],
-        {
-            autoFetch: false,
-        }
-    );
 
     useEffect(() => {
         const query = router.query as ICreateProposalQuery;
 
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        // handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
+        handleChangeBasic(query.governorUrl, setFormData, "governorUrl");
         handleAddArray(query.blockchains, setFormData, "blockchain");
         handleChangeBasic(+query.chainId, setFormData, "chainId");
+        // handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
     }, [router]);
 
     useEffect(() => {
-        if (formData.governorAddress) {
-            console.log("fetch dao");
-
-            const fetchLocalStorage = (newVotingTokens: IMultiNFTVoting) => {
-                const tokensNames = [];
-
-                const saved = localStorage.getItem(newVotingTokens.daoName + " NFTs");
-                const initialValue = JSON.parse(saved);
-                initialValue.map((object) => {
-                    tokensNames.push(object.title);
-                });
-
-                return tokensNames;
-            };
-
-            const fetchData = async () => {
-                const { newDao: dao } = await fetchDAO(isInitialized, DaoQuery);
-                if (dao) {
-                    const newVotingTokens: IMultiNFTVoting = {
-                        daoAddress: dao.governorAddress,
-                        tokenAddress: dao.tokenAddress,
-                        daoName: dao.name,
-                    };
-
-                    setVotingNFTs(() => newVotingTokens);
-                    handleAddArray(fetchLocalStorage(newVotingTokens), setVotingNFTs, "tokenNames");
-                }
-            };
-
-            fetchData().catch(console.error);
+        if (formData.governorUrl) {
+            console.log("fetch nfts");
+            const savedNfts = JSON.parse(localStorage.getItem(formData.governorUrl + " NFTs"));
+            if (savedNfts) {
+                setNFTs(savedNfts);
+            }
         }
-    }, [formData.governorAddress]);
+    }, [formData.governorUrl]);
 
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -152,7 +117,10 @@ const CreateProposal: NextPage = () => {
                 <section className="relative w-full">
                     <BackButton />
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={createProposalContract}>
-                        <h1 className="text-highlighter">New Proposal</h1>
+                        <div className="text-highlighter flex flex-col md:flex-row">
+                            New Proposal for
+                            <div className={"md:ml-4 capitalize"}>{`${formData?.governorUrl}`}</div>
+                        </div>
                         <InputText
                             label="Title"
                             name="name"
@@ -187,23 +155,18 @@ const CreateProposal: NextPage = () => {
                             //     handleCheckboxChange(event, formData, setFormData, "blockchain")
                             // }
                         />
-                        <p>Choose voting token</p>
-                        {votingNFTs ? (
-                            <RadioSelectorMulti
-                                name="tokenAddress"
-                                labels={[...votingNFTs.tokenNames]}
-                                handleChange={(event) => {
-                                    // setting tokenName
-                                    const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);
-                                    handleChangeBasic(currentTokenName, setFormData, "tokenName");
-
-                                    // setting tokenAddress
-                                    handleTextChangeAddNewMember(event, setFormData);
+                        <div className={"input-label"}>Choose voting token</div>
+                        {NFTs && (
+                            <RadioSelectorNFT
+                                name={"tokenAddress"}
+                                chainId={formData.chainId}
+                                className={"nft-cards-grid"}
+                                handleChange={(event, votingNFT) => {
+                                    handleChangeBasic(votingNFT.title, setFormData, "tokenName");
+                                    handleChangeBasic(votingNFT.tokenAddress, setFormData, "tokenAddress");
                                 }}
-                                values={votingNFTs.tokenAddress}
+                                values={NFTs}
                             />
-                        ) : (
-                            <></>
                         )}
                         <Button className="mt-5">Create Proposal</Button>
                     </form>

@@ -58,6 +58,7 @@ export interface ICreateNFT extends ICreate, IBlockchains {
 export interface ICreateProposal extends ICreate {
     proposalId?: string;
     governorAddress: string;
+    governorUrl?: string;
     tokenAddress?: string;
     tokenName?: string;
     chainId?: number;
@@ -102,13 +103,6 @@ export interface INFTVoting {
     price?: string;
     totalSupply?: string;
     totalMinted?: string;
-}
-
-export interface IMultiNFTVoting {
-    daoAddress?: string;
-    tokenAddress: string[];
-    tokenNames?: string[];
-    daoName: string;
 }
 
 export interface IAddNewMember {

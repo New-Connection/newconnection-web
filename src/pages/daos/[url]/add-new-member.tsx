@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
-import { Button, InputTextArea, RadioSelectorMulti } from "components/Form";
+import { Button, InputTextArea } from "components/Form";
 import { BackButton } from "components/Button/";
 import { validateForm } from "utils/validate";
 import { IAddNewMember } from "types/forms";
@@ -35,8 +35,8 @@ const AddNewMember: NextPage = () => {
         blockchainSelected: [],
         note: "",
     });
-    const { data: signer_data } = useSigner();
     const router = useRouter();
+    const { data: signer_data } = useSigner();
 
     const { fetch: whitelistFetch } = useMoralisQuery(
         "Whitelist",
@@ -135,23 +135,22 @@ const AddNewMember: NextPage = () => {
                         <label>
                             <div className="input-label">Choose voting token</div>
                         </label>
-                        {Array.isArray(formData.tokenAddress) ? (
-                            <RadioSelectorMulti
-                                name="votingTokenAddress"
-                                labels={[...formData.tokenNames]}
-                                handleChange={(event) => {
-                                    // setting tokenName
-                                    const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);
-                                    handleChangeBasic(currentTokenName, setFormData, "votingTokenName");
+                        {/*{Array.isArray(formData.tokenAddress) ? (*/}
+                        {/*    <RadioSelectorNFT*/}
+                        {/*        name="votingTokenAddress"*/}
+                        {/*        handleChange={(event) => {*/}
+                        {/*            // setting tokenName*/}
+                        {/*            const currentTokenName = event.currentTarget.nextSibling.textContent.slice(1);*/}
+                        {/*            handleChangeBasic(currentTokenName, setFormData, "votingTokenName");*/}
 
-                                    // setting tokenAddress
-                                    handleTextChangeAddNewMember(event, setFormData);
-                                }}
-                                values={formData.tokenAddress}
-                            />
-                        ) : (
-                            <></>
-                        )}
+                        {/*            // setting tokenAddress*/}
+                        {/*            handleTextChangeAddNewMember(event, setFormData);*/}
+                        {/*        }}*/}
+                        {/*        values={formData.tokenAddress}*/}
+                        {/*    />*/}
+                        {/*) : (*/}
+                        {/*    <></>*/}
+                        {/*)}*/}
                         <InputTextArea
                             name="note"
                             label="Note (optional)"

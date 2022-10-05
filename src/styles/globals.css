@@ -132,6 +132,9 @@
         background-size: 1000px 100%;
     }
 
+    .nft-cards-grid{
+        @apply place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3
+    }
     .nft-card {
         @apply border-solid shadow-1 border-gray border-2 lg:w-1/4 w-1/2 rounded-md;
     }

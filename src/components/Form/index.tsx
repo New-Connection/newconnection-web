@@ -4,4 +4,4 @@ export { BlockchainSelector } from "./BlockchainSelector";
 export { TypeSelector } from "./TypeSelector";
 export { DragAndDropImage } from "./DragAndDropImage";
 export { CheckboxGroup } from "./Checkbox";
-export { RadioSelector, RadioSelectorMulti } from "./RadioSelector";
+export { RadioSelector, RadioSelectorNFT } from "./RadioSelector";

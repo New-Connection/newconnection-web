@@ -1,5 +1,6 @@
 import * as React from "react";
 import { BaseSyntheticEvent, ChangeEvent } from "react";
+import { INFTVoting } from "types/forms";
 
 export interface InputTextProps {
     name: string;
@@ -52,6 +53,14 @@ export interface IRadioSelector {
     className?: string;
     values?: string[];
     handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, option?: IRadioSelectorClickOption) => void;
+}
+
+export interface IRadioSelectorNFT {
+    name: string;
+    chainId:number;
+    values: INFTVoting[];
+    className?: string;
+    handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, selectedNFT: INFTVoting) => void;
 }
 
 export interface IDragAndDropProps {
