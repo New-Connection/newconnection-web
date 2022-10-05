@@ -17,7 +17,12 @@ import { IDetailProposalProps } from "types/pagePropsInterfaces";
 import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
 import { checkCorrectNetwork } from "logic";
 import { fetchDetailProposal } from "network/fetchProposals";
-import { AboutProposalCard, InfoProposalCard, VotingResultsCard } from "components/Cards/ProposalCard";
+import {
+    AboutProposalCard,
+    InfoProposalCard,
+    ProposalActivityBadge,
+    VotingResultsCard
+} from "components/Cards/ProposalCard";
 import { handleContractError } from "utils/errors";
 import { MockupLoadingProposals } from "components/Mockup/Loading";
 
@@ -94,6 +99,11 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <BackButton />
+                        <div className="flex justify-between">
+                            <h1 className="text-highlighter capitalize w-1/2">{proposalData.name}</h1>
+                            <ProposalActivityBadge isActive={proposalData.isActive} />
+                        </div>
+                        <p className="pb-4">{proposalData.shortDescription}</p>
                         <div className="flex gap-6 pb-10">
                             <AboutProposalCard proposalData={proposalData} />
                             <InfoProposalCard proposalData={proposalData} />
@@ -117,7 +127,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         <div>
             <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
-                    <MockupLoadingProposals  chain={proposalData?.chainId}/>
+                    <MockupLoadingProposals chain={proposalData?.chainId} />
                 </section>
             </Layout>
         </div>

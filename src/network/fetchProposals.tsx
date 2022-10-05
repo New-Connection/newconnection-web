@@ -49,6 +49,7 @@ export async function fetchDetailProposal(proposalQuery: Function) {
         shortDescription: proposalMoralis.get("shortDescription"),
         tokenAddress: proposalMoralis.get("tokenAddress"),
         tokenName: proposalMoralis.get("tokenName"),
+        isActive: await isProposalActive(governorAddress, chainId, proposalId),
         startDateTimestamp: await proposalSnapshot(governorAddress, chainId, proposalId),
         endDateTimestamp: await proposalDeadline(governorAddress, chainId, proposalId),
         forVotes: await proposalForVotes(governorAddress, chainId, proposalId),
