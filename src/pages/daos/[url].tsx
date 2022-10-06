@@ -122,6 +122,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             const loadingProposals = async () => {
                 const proposals = await fetchProposals(ProposalQuery);
                 if (proposals) {
+                    localStorage.setItem(DAO.url + " Proposals", JSON.stringify(proposals));
                     setProposals(() => proposals);
                 }
             };
@@ -181,9 +182,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         console.log("deleting");
         WhitelistMoralisInstance
             ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
-                  ?.destroy()
-                  .then()
-                  .catch(console.error)
+                ?.destroy()
+                .then()
+                .catch(console.error)
             : 0;
         //  rerender
         loadingWhitelist().catch(console.error);

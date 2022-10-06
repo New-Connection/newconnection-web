@@ -6,7 +6,7 @@ import Layout from "components/Layout/Layout";
 import { Button, InputTextArea, RadioSelectorNFT } from "components/Form";
 import { BackButton } from "components/Button/";
 import { validateForm } from "utils/validate";
-import { IAddNewMember, INFTVoting } from "types/forms";
+import { INFTVoting, IWhitelistRecord } from "types/forms";
 import { handleChangeBasic, handleChangeBasicArray, handleTextChangeAddNewMember } from "utils/handlers";
 import {
     getMoralisInstance,
@@ -20,10 +20,12 @@ import { IAddMemberQuery } from "types/queryInterfaces";
 import { handleContractError } from "utils/errors";
 
 const AddNewMember: NextPage = () => {
-    const [formData, setFormData] = useState<IAddNewMember>({
+    const [formData, setFormData] = useState<IWhitelistRecord>({
         governorAddress: "",
+        governorUrl: "",
         votingTokenAddress: "",
         votingTokenName: "",
+        chainId: 0,
         blockchainSelected: [],
         note: "",
     });
@@ -46,7 +48,7 @@ const AddNewMember: NextPage = () => {
         console.log("fetch query");
         const query = router.query as IAddMemberQuery;
 
-        handleChangeBasic(query.governorAddress, setFormData, "daoAddress");
+        handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
         handleChangeBasic(query.governorUrl, setFormData, "governorUrl");
         handleChangeBasic(query.chainId, setFormData, "chainId");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");

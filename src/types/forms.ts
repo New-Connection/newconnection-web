@@ -98,6 +98,9 @@ export interface INFTVoting {
 }
 
 export interface IWhitelistRecord {
+    governorAddress: string;
+    governorUrl: string;
+    chainId: number;
     walletAddress?: string;
     votingTokenName?: string;
     votingTokenAddress?: string;
