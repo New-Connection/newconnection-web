@@ -48,10 +48,10 @@ const CreateProposal: NextPage = () => {
         const query = router.query as ICreateProposalQuery;
 
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        handleChangeBasic(query.governorUrl, setFormData, "governorUrl");
+        handleChangeBasic(query.url, setFormData, "governorUrl");
         handleAddArray(query.blockchains, setFormData, "blockchain");
         handleChangeBasic(+query.chainId, setFormData, "chainId");
-        const savedNfts = JSON.parse(localStorage.getItem(query.governorUrl + " NFTs"));
+        const savedNfts = JSON.parse(localStorage.getItem(query.url + " NFTs"));
         if (savedNfts) {
             setNFTs(savedNfts);
         }
@@ -109,11 +109,12 @@ const CreateProposal: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton />
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={createProposalContract}>
+                        <BackButton />
                         <div className="text-highlighter items-center flex flex-col md:flex-row">
                             New Proposal for
-                            <div className={"text-highlighter text-purple capitalize md:ml-4"}>{`${formData?.governorUrl}`}</div>
+                            <div
+                                className={"text-highlighter text-purple capitalize md:ml-4"}>{`${formData?.governorUrl}`}</div>
                         </div>
                         <InputText
                             label="Title"

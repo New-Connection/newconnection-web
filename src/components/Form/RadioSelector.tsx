@@ -58,8 +58,8 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
 };
 
 export const RadioSelectorNFT = (radioSelector: IRadioSelectorNFT) => {
-    const [clickedValue, setClickValue] = useState(0);
-    console.log(clickedValue);
+    const [clickedValue, setClickValue] = useState(null);
+
     return (
         <div className={classNames(radioSelector.className, "mt-0")}>
             {radioSelector.values &&

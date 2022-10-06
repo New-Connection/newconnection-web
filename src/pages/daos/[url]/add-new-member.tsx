@@ -16,8 +16,8 @@ import {
 } from "database/interactions";
 import { useSigner } from "wagmi";
 import { useMoralisQuery } from "react-moralis";
-import { IAddMemberQuery } from "types/queryInterfaces";
 import { handleContractError } from "utils/errors";
+import { IAddMemberQuery } from "types/queryInterfaces";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IWhitelistRecord>({
@@ -43,17 +43,17 @@ const AddNewMember: NextPage = () => {
             autoFetch: false,
         }
     );
-    console.log(formData);
+
     useEffect(() => {
         console.log("fetch query");
         const query = router.query as IAddMemberQuery;
 
         handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        handleChangeBasic(query.governorUrl, setFormData, "governorUrl");
+        handleChangeBasic(query.url, setFormData, "governorUrl");
         handleChangeBasic(query.chainId, setFormData, "chainId");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
 
-        const savedNfts = JSON.parse(localStorage.getItem(query.governorUrl + " NFTs"));
+        const savedNfts = JSON.parse(localStorage.getItem(query.url + " NFTs"));
         if (savedNfts) {
             setNFTs(savedNfts);
         }
@@ -68,7 +68,7 @@ const AddNewMember: NextPage = () => {
             return;
         }
 
-        if (!validateForm(formData, ["note"])) {
+        if (!validateForm(formData, ["note", "votingTokenName"])) {
             return;
         }
 
@@ -156,11 +156,3 @@ const AddNewMember: NextPage = () => {
 };
 
 export default AddNewMember;
-
-//http://localhost:3000/daos/opti-dao/add-new-member?
-// governorAddress=0xC2Ce0B8Ada12B4d71A7EF5E769ce75C373D1760E&
-// governorUrl=opti-dao&
-// daoName=opti+dao&
-// blockchains=Optimism+Goerli&
-// tokenAddress=
-// 0xACa4227f4403dcFD2f79C58c86090084c832E614&tokenAddress=0x652dCce7C7592cF3A3067c0941525b3c4bF4A586

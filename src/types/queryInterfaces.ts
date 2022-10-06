@@ -5,7 +5,7 @@ export interface IDaoQuery extends ParsedUrlQuery {
 }
 
 export interface IChatsQuery extends ParsedUrlQuery {
-    governorUrl: string;
+    url: string;
     governorAddress: string;
     chainId: string;
 }
@@ -17,13 +17,13 @@ export interface IDetailProposalQuery extends ParsedUrlQuery {
 export interface IProposalsQuery extends ParsedUrlQuery {
     governorAddress: string;
     chainId: string;
-    governorUrl: string;
+    url: string;
 }
 
 export interface IAddMemberQuery extends ParsedUrlQuery {
     governorAddress: string;
     chainId: string;
-    governorUrl: string;
+    url: string;
     blockchains: string[];
 }
 
@@ -34,7 +34,7 @@ export interface IAddNftQuery extends ParsedUrlQuery {
 
 export interface ICreateProposalQuery extends ParsedUrlQuery {
     governorAddress: string;
-    governorUrl: string;
+    url: string;
     blockchains: string[];
     chainId: string;
 }

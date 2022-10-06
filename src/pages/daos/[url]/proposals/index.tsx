@@ -22,12 +22,12 @@ const ProposalsPage: NextPage = () => {
             const newDao = {} as IDAOPageForm;
             newDao.governorAddress = query.governorAddress;
             newDao.chainId = +query.chainId;
-            newDao.url = query.governorUrl;
+            newDao.url = query.url;
             console.log(query.governorUrl + " Proposals");
 
             setDAO(() => newDao);
 
-            const savedProposals = JSON.parse(localStorage.getItem(query.governorUrl + " Proposals"));
+            const savedProposals = JSON.parse(localStorage.getItem(query.url + " Proposals"));
             if (savedProposals) {
                 setProposals(savedProposals);
             }
@@ -60,7 +60,8 @@ const ProposalsPage: NextPage = () => {
                                                 title={proposal.name}
                                                 description={proposal.description}
                                                 shortDescription={proposal.shortDescription}
-                                                governorName={DAO?.name}
+                                                tokenName={proposal.tokenName}
+                                                // governorName={DAO?.name}
                                                 chainId={DAO?.chainId}
                                                 isActive={proposal.isActive}
                                                 forVotes={proposal.forVotes}

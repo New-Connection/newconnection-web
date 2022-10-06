@@ -243,7 +243,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                             pathname: `${url}/add-new-member`,
                                             query: {
                                                 governorAddress: DAO.governorAddress,
-                                                governorUrl: DAO.url,
                                                 blockchains: DAO.blockchain,
                                                 chainId: DAO.chainId,
                                             },
@@ -351,8 +350,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 href={{
                                     pathname: `${url}/chats`,
                                     query: {
-                                        governorUrl: DAO.url,
-                                        // governorAddress: DAO.governorAddress,
                                         chainId: DAO.chainId,
                                     },
                                 }}
@@ -411,7 +408,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 pathname: `${url}/create-proposal`,
                                 query: {
                                     governorAddress: DAO.governorAddress,
-                                    governorUrl: DAO.url,
                                     blockchains: [DAO.blockchain[0]],
                                     chainId: DAO.chainId,
                                 },
@@ -426,7 +422,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 href={{
                                     pathname: `${url}/add-new-nft`,
                                     query: {
-                                        url: url,
                                         governorAddress: DAO.governorAddress,
                                         blockchain: DAO.blockchain,
                                     },

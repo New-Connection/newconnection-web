@@ -24,7 +24,8 @@ const ChatsPage: NextPage = () => {
 
     useEffect(() => {
         const query = router.query as IChatsQuery;
-        const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.governorUrl + " NFTs"));
+
+        const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.url + " NFTs"));
         const checkNFTs = async (tokenAddresses: string[], walletAddress: string, chainId: number) => {
             const indexes = [];
             await Promise.all(
@@ -63,7 +64,8 @@ const ChatsPage: NextPage = () => {
                             <div className="flex flex-row justify-between bg-white">
                                 {/* User chat*/}
 
-                                <div className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
+                                <div
+                                    className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
                                     {NFTs &&
                                         NFTs.map((nft, index) => (
                                             <button
