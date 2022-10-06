@@ -72,7 +72,6 @@ const CreateProposal: NextPage = () => {
         confirmDialog.toggle();
 
         let proposalId;
-        console.log("0", formData.tokenAddress);
         try {
             proposalId = await createProposal(
                 formData.governorAddress,

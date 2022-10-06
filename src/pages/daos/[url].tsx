@@ -39,16 +39,19 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = a
     };
 };
 
+const INITIAL_LOADING_COUNTER = 2;
+
 const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
-    const { isInitialized } = useMoralis();
     const router = useRouter();
-    const [selectedTab, setSelectedTab] = useState<number>(0);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [loadingCounter, setLoadingCounter] = useState(INITIAL_LOADING_COUNTER);
+    const isLoaded = loadingCounter <= 0 && signerData != null;
     const [notFound, setNotFound] = useState(false);
+    const [selectedTab, setSelectedTab] = useState<number>(0);
 
     // Moralis states
+    const { isInitialized } = useMoralis();
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [DAOMoralisInstance, setDAOMoralisInstance] = useState<Moralis.Object<Moralis.Attributes>>();
     const [WhitelistMoralisInstance, setWhitelistMoralisInstance] = useState<Moralis.Object<Moralis.Attributes>[]>();
@@ -76,46 +79,22 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     });
     const { fetch: WhitelistQuery } = useMoralisQuery(
         "Whitelist",
-        (query) => query.equalTo("governorAddress", DAO?.governorAddress),
-        [DAO],
+        (query) => query.equalTo("governorUrl", url),
+        [DAO?.governorAddress],
         { autoFetch: false }
     );
     const { fetch: ProposalQuery } = useMoralisQuery(
         "Proposal",
-        (query) => query.equalTo("governorAddress", DAO?.governorAddress) && query.equalTo("chainId", DAO?.chainId),
-        [DAO],
+        (query) => query.equalTo("governorUrl", url),
+        [DAO?.governorAddress],
         {
             autoFetch: false,
         }
     );
+
     // EFFECTS
     // ----------------------------------------------------------------------
 
-    // Fetching DAO in general
-    useEffect(() => {
-        const query = router.query as IDaoQuery;
-        setDAO(JSON.parse(localStorage.getItem(query.url)));
-        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
-        setProposals(JSON.parse(localStorage.getItem(query.url + " Proposals")));
-
-        const loadingDAO = async () => {
-            const data = await fetchDAO(isInitialized, DAOsQuery);
-            if (data) {
-                setDAO(() => data.newDao);
-                // not used
-                // data.newDao.totalProposals= await getTotalProposals(DAO!.governorAddress!, DAO!.chainId!);
-                // data.newDao.totalMembers= await getNumberOfMintedTokens(DAO!.tokenAddress[0]!, DAO!.chainId!);
-                setDAOMoralisInstance(() => data.moralisInstance);
-            }
-        };
-
-        loadingDAO().catch((e) => {
-            console.log("Error when Loading DAO", e);
-            setNotFound(true);
-        });
-    }, [isInitialized]);
-
-    // Loading data
     const loadingWhitelist = async () => {
         const data = await fetchWhitelist(WhitelistQuery);
         if (data) {
@@ -124,38 +103,64 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         }
     };
     useEffect(() => {
-        if (DAO) {
-            console.log("start loading");
-            const loadingProposals = async () => {
-                const proposals = await fetchProposals(ProposalQuery);
-                if (proposals) {
-                    localStorage.setItem(DAO.url + " Proposals", JSON.stringify(proposals));
-                    setProposals(() => proposals);
-                }
-            };
+        setLoadingCounter(INITIAL_LOADING_COUNTER);
+        const query = router.query as IDaoQuery;
+        setDAO(JSON.parse(localStorage.getItem(query.url)));
+        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
+        setProposals(JSON.parse(localStorage.getItem(query.url + " Proposals")));
 
-            const loadingNFT = async () => {
-                const nftsArray = await fetchNFT(DAO);
-                if (nftsArray) {
-                    localStorage.setItem(DAO.url + " NFTs", JSON.stringify(nftsArray));
-                    setNFTs(nftsArray);
-                }
-            };
+        const loadingDAO = async () => {
+            const data = await fetchDAO(isInitialized, DAOsQuery);
+            if (data) {
+                localStorage.setItem(url, JSON.stringify(data.newDao));
+                setDAO(() => data.newDao);
+                setDAOMoralisInstance(() => data.moralisInstance);
+                return data.newDao;
+            }
+        };
 
-            const loadingTreasuryBalance = async () => {
-                const treasuryBalance = await fetchTreasuryBalance(DAO);
-                if (treasuryBalance) {
-                    setTreasuryBalance(treasuryBalance);
-                }
-            };
+        const loadingProposals = async () => {
+            const proposals = await fetchProposals(ProposalQuery);
+            if (proposals) {
+                console.log("load proposals");
+                localStorage.setItem(url + " Proposals", JSON.stringify(proposals));
+                setProposals(() => proposals);
+                setLoadingCounter((prevState) => (prevState < 0 ? INITIAL_LOADING_COUNTER : prevState - 1));
+            }
+        };
 
-            localStorage.setItem(DAO.url, JSON.stringify(DAO));
-            loadingProposals().catch(console.error);
-            loadingWhitelist().catch(console.error);
-            loadingNFT().catch(console.error);
-            loadingTreasuryBalance().catch(console.error);
-        }
-    }, [DAO]);
+        const loadingNFT = async (dao: IDAOPageForm) => {
+            const nftsArray = await fetchNFT(dao);
+            if (nftsArray) {
+                console.log("load nfts");
+                localStorage.setItem(url + " NFTs", JSON.stringify(nftsArray));
+                setNFTs(nftsArray);
+                setLoadingCounter((prevState) => (prevState < 0 ? INITIAL_LOADING_COUNTER : prevState - 1));
+            }
+        };
+
+        const loadingTreasuryBalance = async (dao: IDAOPageForm) => {
+            const treasuryBalance = await fetchTreasuryBalance(dao);
+            if (treasuryBalance) {
+                setTreasuryBalance(treasuryBalance);
+            }
+        };
+
+        loadingDAO()
+            .then((dao) => {
+                if (dao) {
+                    console.log("dao loaded");
+                    loadingWhitelist().then();
+                    loadingTreasuryBalance(dao).then();
+                    loadingProposals().then();
+                    loadingNFT(dao).then();
+                }
+            })
+            .catch((e) => {
+                console.log("Error when Loading DAO", e);
+                setNotFound(true);
+            });
+    }, [isInitialized]);
 
     // Owner check
     useEffect(() => {
@@ -169,18 +174,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
         fetchIsOwner().catch(console.error);
     }, [DAO, signerData]);
-
-    // Loaded check
-    useEffect(() => {
-        if (DAO && proposals && NFTs && signerData && !isLoaded) {
-            const fetchIsLoaded = async () => {
-                console.log("loaded");
-                setIsLoaded(true);
-            };
-
-            fetchIsLoaded().catch(console.error);
-        }
-    });
 
     // FUNCTIONS
     // ----------------------------------------------------------------------
@@ -317,7 +310,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     <a
                                         href={getChainScanner(DAO.chainId, DAO.treasuryAddress)}
                                         target={"_blank"}
-                                        className="flex hover:text-purple gap-3 items-center content-center text-black2"
+                                        className="flex hover:text-purple gap-3 pl-5 items-center content-center text-black2"
                                     >
                                         Treasury
                                         <ExternalLinkIcon className="h-6 w-5" />

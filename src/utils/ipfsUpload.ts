@@ -28,7 +28,6 @@ export const storeNFT = async (image: File) => {
 const ipfsFullPath = (path: string) => IPFS + `${path}`;
 
 const imageExists = (imageUrl: string) => {
-    console.log("exists");
     let http = new XMLHttpRequest();
     http.open("HEAD", imageUrl, false);
     http.send();
