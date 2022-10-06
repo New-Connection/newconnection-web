@@ -75,7 +75,6 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                                     query: {
                                         governorAddress: DAO.governorAddress,
                                         chainId: DAO.chainId,
-                                        governorUrl: daoUrl,
                                     },
                                 }}
                             >

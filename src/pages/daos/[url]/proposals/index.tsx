@@ -23,7 +23,6 @@ const ProposalsPage: NextPage = () => {
             newDao.governorAddress = query.governorAddress;
             newDao.chainId = +query.chainId;
             newDao.url = query.url;
-            console.log(query.governorUrl + " Proposals");
 
             setDAO(() => newDao);
 

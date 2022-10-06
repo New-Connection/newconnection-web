@@ -3,20 +3,18 @@ import { useSigner, useSwitchNetwork } from "wagmi";
 import { useDialogState } from "ariakit";
 import toast from "react-hot-toast";
 import type { GetServerSideProps, NextPage } from "next";
-import { useMoralis, useMoralisQuery } from "react-moralis";
 import Layout from "components/Layout/Layout";
 import { BackButton } from "components/Button/";
 import { Button, RadioSelector } from "components/Form";
 import { validateForm } from "utils/validate";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { IProposal, IProposalDetail } from "types/forms";
+import { IProposal, IProposalDetail, IProposalPageForm } from "types/forms";
 import { handleTextChangeAddNewMember } from "utils/handlers";
 import { castVote } from "contract-interactions/writeGovernorContract";
 import { IDetailProposalQuery } from "types/queryInterfaces";
 import { IDetailProposalProps } from "types/pagePropsInterfaces";
 import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
 import { checkCorrectNetwork } from "logic";
-import { fetchDetailProposal } from "network/fetchProposals";
 import {
     AboutProposalCard,
     InfoProposalCard,
@@ -25,6 +23,8 @@ import {
 } from "components/Cards/ProposalCard";
 import { handleContractError } from "utils/errors";
 import { MockupLoadingProposals } from "components/Mockup/Loading";
+import { useRouter } from "next/router";
+import { getProposer, proposalSnapshot } from "contract-interactions";
 
 export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetailProposalQuery> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;
@@ -41,34 +41,50 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         voteResult: undefined,
         txConfirm: "",
     });
-    const [activeStep, setActiveStep] = useState(0);
+
+    const [proposalData, setProposalData] = useState<IProposalDetail>();
+
     const { data: signerData } = useSigner();
-    const confirmDialog = useDialogState();
-    const { isInitialized } = useMoralis();
-    const [proposalData, setProposal] = useState<IProposalDetail>();
+
+    const router = useRouter();
     const { switchNetwork } = useSwitchNetwork();
 
-    const { fetch: ProposalDetailQuery } = useMoralisQuery(
-        "Proposal",
-        (query) => query.equalTo("proposalId", detailProposal),
-        [],
-        {
-            autoFetch: false,
-        }
-    );
+    const confirmDialog = useDialogState();
+    const [activeStep, setActiveStep] = useState(0);
 
     useEffect(() => {
+        const query = router.query;
+        const savedProposals: IProposalPageForm[] = JSON.parse(localStorage.getItem(query.url + " Proposals"));
+
         const loadingProposal = async () => {
-            if (isInitialized) {
-                const newProposal = await fetchDetailProposal(ProposalDetailQuery);
-                if (newProposal) {
-                    setProposal(() => newProposal);
+            if (savedProposals) {
+                const proposal: IProposalDetail = savedProposals.find((prop) => prop.proposalId === detailProposal);
+                if (proposal) {
+                    setProposalData(() => proposal);
+
+                    const startTimestamp = await proposalSnapshot(
+                        proposal.governorAddress,
+                        proposal.chainId,
+                        proposal.proposalId
+                    );
+                    const proposer = await getProposer(
+                        proposal.governorAddress,
+                        proposal.chainId,
+                        proposal.proposalId
+                    );
+
+                    console.log(proposal);
+                    setProposalData(prevState => ({
+                        ...prevState,
+                        startDateTimestamp: startTimestamp,
+                        ownerAddress: proposer
+                    }));
                 }
             }
         };
 
         loadingProposal().catch(console.error);
-    }, [isInitialized]);
+    }, [router]);
 
     // send voted
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
