@@ -41,7 +41,7 @@ const CreateNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-        ];
+            ];
     };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -62,7 +62,7 @@ const CreateNFT: NextPage = () => {
         let path;
         // IPFS UPLOAD
         try {
-            const path = await storeNFT(formData.file as File);
+            path = await storeNFT(formData.file as File);
             console.log(path);
             handleChangeBasic(path, setFormData, "ipfsAddress");
         } catch (error) {
