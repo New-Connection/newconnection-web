@@ -26,10 +26,7 @@ const ProposalsPage: NextPage = () => {
 
             setDAO(() => newDao);
 
-            const savedProposals = JSON.parse(localStorage.getItem(query.url + " Proposals"));
-            if (savedProposals) {
-                setProposals(savedProposals);
-            }
+            setProposals(JSON.parse(localStorage.getItem(query.url + " Proposals")));
         };
 
         fetchQuery();

@@ -53,10 +53,7 @@ const AddNewMember: NextPage = () => {
         handleChangeBasic(query.chainId, setFormData, "chainId");
         handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
 
-        const savedNfts = JSON.parse(localStorage.getItem(query.url + " NFTs"));
-        if (savedNfts) {
-            setNFTs(savedNfts);
-        }
+        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
     }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {

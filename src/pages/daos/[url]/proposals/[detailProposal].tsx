@@ -73,7 +73,6 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                         proposal.proposalId
                     );
 
-                    console.log(proposal);
                     setProposalData(prevState => ({
                         ...prevState,
                         startDateTimestamp: startTimestamp,

@@ -26,6 +26,7 @@ import { ButtonState } from "types/daoIntefaces";
 import { addTreasureMoralis, addTreasury, checkCorrectNetwork, contributeToTreasury, mint } from "logic/index";
 import { ContributeTreasuryDialog, CreateTreasuryDialog, DetailNftDialog } from "components/Dialog/DaoPageDialogs";
 import classNames from "classnames";
+import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
@@ -42,6 +43,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
     const { isInitialized } = useMoralis();
+    const router = useRouter();
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const [isLoaded, setIsLoaded] = useState(false);
     const [notFound, setNotFound] = useState(false);
@@ -91,6 +93,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // Fetching DAO in general
     useEffect(() => {
+        const query = router.query as IDaoQuery;
+        setDAO(JSON.parse(localStorage.getItem(query.url)));
+        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
+        setProposals(JSON.parse(localStorage.getItem(query.url + " Proposals")));
+
         const loadingDAO = async () => {
             const data = await fetchDAO(isInitialized, DAOsQuery);
             if (data) {
@@ -142,7 +149,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 }
             };
 
-            localStorage.setItem(DAO.name, JSON.stringify(DAO));
+            localStorage.setItem(DAO.url, JSON.stringify(DAO));
             loadingProposals().catch(console.error);
             loadingWhitelist().catch(console.error);
             loadingNFT().catch(console.error);

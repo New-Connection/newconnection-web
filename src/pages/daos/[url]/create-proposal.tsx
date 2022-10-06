@@ -51,10 +51,8 @@ const CreateProposal: NextPage = () => {
         handleChangeBasic(query.url, setFormData, "governorUrl");
         handleAddArray(query.blockchains, setFormData, "blockchain");
         handleChangeBasic(+query.chainId, setFormData, "chainId");
-        const savedNfts = JSON.parse(localStorage.getItem(query.url + " NFTs"));
-        if (savedNfts) {
-            setNFTs(savedNfts);
-        }
+
+        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
         // handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
     }, [router]);
 

@@ -60,12 +60,10 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                         );
                     })}
                 </ul>
-                {proposals.length > visibleProposalsLength || activeProposals.length < visibleProposalsLength ? (
+                {(proposals.length > visibleProposalsLength || activeProposals.length < visibleProposalsLength) && (
                     <div className={"flex flex-col "}>
-                        {activeProposals.length === 0 ? (
+                        {activeProposals.length === 0 && (
                             <MockupTextCard label={"No active proposals"} text={"You can view previous proposals"} />
-                        ) : (
-                            <></>
                         )}
 
                         <div className={"flex justify-center"}>
@@ -78,7 +76,8 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                                     },
                                 }}
                             >
-                                <button className="flex gap-2 bg-white text-black2 hover:underline active:text-gray2 mt-4">
+                                <button
+                                    className="flex gap-2 bg-white text-black2 hover:underline active:text-gray2 mt-4">
                                     View all proposals
                                     <div className="mt-[0.125rem]">
                                         <ArrowUpRightIcon />
@@ -87,8 +86,6 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                             </Link>
                         </div>
                     </div>
-                ) : (
-                    <></>
                 )}
             </>
         );

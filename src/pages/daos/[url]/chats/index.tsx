@@ -25,7 +25,6 @@ const ChatsPage: NextPage = () => {
     useEffect(() => {
         const query = router.query as IChatsQuery;
 
-        const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.url + " NFTs"));
         const checkNFTs = async (tokenAddresses: string[], walletAddress: string, chainId: number) => {
             const indexes = [];
             await Promise.all(
@@ -41,6 +40,7 @@ const ChatsPage: NextPage = () => {
             setIndexOpenChat(() => indexes);
         };
 
+        const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.url + " NFTs"));
         if (savedNfts) {
             setNFTs(savedNfts);
             checkNFTs(
@@ -55,8 +55,8 @@ const ChatsPage: NextPage = () => {
         <div>
             <Layout className="layout-base max-w-full">
                 <section className="relative w-full">
-                    <BackButton />
                     <form className="mx-auto flex max-w-4xl flex-col gap-4">
+                        <BackButton />
                         <div className="flex justify-between items-center">
                             <h1 className="text-highlighter">Membership chats</h1>
                         </div>
