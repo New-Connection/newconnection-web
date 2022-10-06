@@ -9,6 +9,7 @@ import { WagmiClient } from "components/Web3";
 import { MoralisProvider } from "react-moralis";
 import Script from "next/script";
 import "nprogress/nprogress.css";
+import CustomToast from "components/Toast/CustomToast";
 
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient());
@@ -40,6 +41,7 @@ function App({ Component, pageProps }: AppProps) {
                     </WagmiConfig>
                 </ThemeProvider>
             </MoralisProvider>
+            <CustomToast />
         </>
     );
 }

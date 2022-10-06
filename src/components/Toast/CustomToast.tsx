@@ -1,4 +1,5 @@
-import { Toaster } from "react-hot-toast";
+import toast, { ToastBar, Toaster } from "react-hot-toast";
+import React from "react";
 // Lib for alerts on React
 // https://react-hot-toast.com/
 // https://react-hot-toast.com/docs/styling
@@ -30,7 +31,20 @@ const CustomToast = () => {
                     duration: 10000,
                 },
             }}
-        />
+        >
+            {(t) => (
+                <ToastBar toast={t}>
+                    {({ icon, message }) => (
+                        <button onClick={() => toast.dismiss(t.id)}>
+                            <div className={"flex"}>
+                                {icon}
+                                {message}
+                            </div>
+                        </button>
+                    )}
+                </ToastBar>
+            )}
+        </Toaster>
     );
 };
 

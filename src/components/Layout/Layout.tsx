@@ -3,7 +3,6 @@ import classNames from "classnames";
 
 import Header from "./Header";
 import Footer from "./Footer";
-import CustomToast from "components/Toast/CustomToast";
 import HeadInfo from "./HeadInfo";
 
 interface ILayoutProps {
@@ -24,7 +23,6 @@ export default function Layout({ children, className, isMinHeightTurnOff = false
                     {children}
                 </main>
                 <Footer />
-                <CustomToast />
             </div>
         </>
     );
