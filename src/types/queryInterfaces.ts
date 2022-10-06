@@ -15,10 +15,9 @@ export interface IDetailProposalQuery extends ParsedUrlQuery {
 }
 
 export interface IProposalsQuery extends ParsedUrlQuery {
-    name: string;
     governorAddress: string;
     chainId: string;
-    url: string;
+    governorUrl: string;
 }
 
 export interface IAddMemberQuery extends ParsedUrlQuery {

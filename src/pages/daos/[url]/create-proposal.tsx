@@ -111,9 +111,9 @@ const CreateProposal: NextPage = () => {
                 <section className="relative w-full">
                     <BackButton />
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={createProposalContract}>
-                        <div className="text-highlighter flex flex-col md:flex-row">
+                        <div className="text-highlighter items-center flex flex-col md:flex-row">
                             New Proposal for
-                            <div className={"md:ml-4 capitalize"}>{`${formData?.governorUrl}`}</div>
+                            <div className={"text-highlighter text-purple capitalize md:ml-4"}>{`${formData?.governorUrl}`}</div>
                         </div>
                         <InputText
                             label="Title"

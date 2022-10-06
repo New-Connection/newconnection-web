@@ -73,10 +73,9 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                                 href={{
                                     pathname: `${daoUrl}/proposals/`,
                                     query: {
-                                        name: DAO.name,
                                         governorAddress: DAO.governorAddress,
                                         chainId: DAO.chainId,
-                                        url: daoUrl,
+                                        governorUrl: daoUrl,
                                     },
                                 }}
                             >
