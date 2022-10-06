@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { ICreateProposal, INFTVoting } from "types/forms";
+import { ICreateProposal, IDAOPageForm, INFTVoting } from "types/forms";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout from "components/Layout/Layout";
 import { handleAddArray, handleChangeBasic, handleTextChange } from "utils/handlers";
@@ -46,11 +46,14 @@ const CreateProposal: NextPage = () => {
 
     useEffect(() => {
         const query = router.query as ICreateProposalQuery;
+        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
 
-        handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        handleChangeBasic(query.url, setFormData, "governorUrl");
-        handleAddArray(query.blockchains, setFormData, "blockchain");
-        handleChangeBasic(+query.chainId, setFormData, "chainId");
+        if (DAO) {
+            handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
+            handleChangeBasic(DAO.url, setFormData, "governorUrl");
+            handleAddArray(DAO.blockchain, setFormData, "blockchain");
+            handleChangeBasic(+DAO.chainId, setFormData, "chainId");
+        }
 
         setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
         // handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
@@ -63,7 +66,6 @@ const CreateProposal: NextPage = () => {
             return;
         }
 
-        console.log(formData.chainId);
         if (!(await checkCorrectNetwork(signerData, formData.chainId, switchNetwork))) {
             return;
         }

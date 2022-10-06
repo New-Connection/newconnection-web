@@ -19,27 +19,21 @@ const ProposalsPage: NextPage = () => {
         const fetchQuery = () => {
             const query = router.query as IProposalsQuery;
 
-            const newDao = {} as IDAOPageForm;
-            newDao.governorAddress = query.governorAddress;
-            newDao.chainId = +query.chainId;
-            newDao.url = query.url;
-
-            setDAO(() => newDao);
-
+            setDAO(JSON.parse(localStorage.getItem(query.url)));
             setProposals(JSON.parse(localStorage.getItem(query.url + " Proposals")));
         };
 
         fetchQuery();
     }, [router]);
 
-    return proposals && (
+    return proposals && DAO && (
         <div>
             <Layout className="layout-base">
                 <section className="app-section flex h-full flex-1 flex-col gap-[50px]">
                     <BackButton />
                     <div className="text-highlighter items-center flex flex-col md:flex-row">
                         Proposals for
-                        <div className={"text-highlighter text-purple capitalize md:ml-4"}>{`${DAO?.url}`}</div>
+                        <div className={"text-highlighter text-purple capitalize md:ml-4"}>{`${DAO.url}`}</div>
                     </div>
 
                     {proposals && proposals.length !== 0 ? (
@@ -58,7 +52,7 @@ const ProposalsPage: NextPage = () => {
                                                 shortDescription={proposal.shortDescription}
                                                 tokenName={proposal.tokenName}
                                                 // governorName={DAO?.name}
-                                                chainId={DAO?.chainId}
+                                                chainId={DAO.chainId}
                                                 isActive={proposal.isActive}
                                                 forVotes={proposal.forVotes}
                                                 againstVotes={proposal.againstVotes}

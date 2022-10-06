@@ -14,7 +14,7 @@ import { useMoralis, useMoralisQuery } from "react-moralis";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
 import Layout from "components/Layout/Layout";
-import { ICreateNFT } from "types/forms";
+import { ICreateNFT, IDAOPageForm } from "types/forms";
 import {
     handleChangeBasic,
     handleImageChange,
@@ -72,8 +72,12 @@ const AddNewNFT: NextPage = () => {
 
     const fetchQuery = () => {
         const query = router.query as IAddNftQuery;
-        handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        handleChangeBasic(query.blockchain, setFormData, "blockchain");
+        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
+
+        if (DAO) {
+            handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
+            handleChangeBasic(DAO.blockchain[0], setFormData, "blockchain");
+        }
     };
 
     const calculateSupply = () => {
@@ -82,7 +86,7 @@ const AddNewNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-        ];
+            ];
     };
 
     const saveNewNFTContractAddress = async (nftTokenAddress: string) => {
@@ -165,9 +169,9 @@ const AddNewNFT: NextPage = () => {
     return (
         <div>
             <Layout className="layout-base">
-                <BackButton />
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
+                        <BackButton />
                         <h1 className="text-highlighter">Add NFT</h1>
                         <div className="w-full lg:flex">
                             <div className="lg:w-2/3 w-full">
@@ -216,20 +220,22 @@ const AddNewNFT: NextPage = () => {
                                     <div className="input-label"> NFT Supply</div>
                                 </label>
                                 <div className="grid w-full grid-cols-4 gap-4">
-                                    {getChainNames().map((chain) => (
-                                        // chain === "Polygon" ? (
-                                        <InputSupplyOfNFT
-                                            key={chain}
-                                            label={chain}
-                                            name={chain}
-                                            image={getLogoURI(chain)}
-                                            handleChange={(event) => {
-                                                handleNftSupplyChange(event, setFormData, chain, "blockchain");
-                                                fetchQuery();
-                                            }}
-                                            isDisabled={chain !== formData.blockchain}
-                                        />
-                                    ))}
+                                    {getChainNames()
+                                        // TODO: remove when few blockchains
+                                        .filter((chain) => formData.blockchain === chain)
+                                        .map((chain) => (
+                                            <InputSupplyOfNFT
+                                                key={chain}
+                                                label={chain}
+                                                name={chain}
+                                                image={getLogoURI(chain)}
+                                                handleChange={(event) => {
+                                                    handleNftSupplyChange(event, setFormData, chain, "blockchain");
+                                                    fetchQuery();
+                                                }}
+                                                isDisabled={chain !== formData.blockchain}
+                                            />
+                                        ))}
                                 </div>
                             </div>
                             <div className="lg:w-1/3 lg:ml-10">

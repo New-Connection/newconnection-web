@@ -70,10 +70,6 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
                             <Link
                                 href={{
                                     pathname: `${daoUrl}/proposals/`,
-                                    query: {
-                                        governorAddress: DAO.governorAddress,
-                                        chainId: DAO.chainId,
-                                    },
                                 }}
                             >
                                 <button

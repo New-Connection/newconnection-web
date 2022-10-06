@@ -28,6 +28,7 @@ export interface IAddMemberQuery extends ParsedUrlQuery {
 }
 
 export interface IAddNftQuery extends ParsedUrlQuery {
+    url: string;
     governorAddress: string;
     blockchain: string;
 }

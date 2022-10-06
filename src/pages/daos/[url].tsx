@@ -98,16 +98,17 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const loadingWhitelist = async () => {
         const data = await fetchWhitelist(WhitelistQuery);
         if (data) {
-            setWhitelist(data.whitelist);
-            setWhitelistMoralisInstance(data.moralisInstance);
+            setWhitelist(()=>data.whitelist);
+            setWhitelistMoralisInstance(()=>data.moralisInstance);
         }
     };
     useEffect(() => {
-        setLoadingCounter(INITIAL_LOADING_COUNTER);
         const query = router.query as IDaoQuery;
         setDAO(JSON.parse(localStorage.getItem(query.url)));
         setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
         setProposals(JSON.parse(localStorage.getItem(query.url + " Proposals")));
+
+        setLoadingCounter(INITIAL_LOADING_COUNTER);
 
         const loadingDAO = async () => {
             const data = await fetchDAO(isInitialized, DAOsQuery);
@@ -240,12 +241,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 <div className={"member-button"}>
                                     <Link
                                         href={{
-                                            pathname: `${url}/add-new-member`,
-                                            query: {
-                                                governorAddress: DAO.governorAddress,
-                                                blockchains: DAO.blockchain,
-                                                chainId: DAO.chainId,
-                                            },
+                                            pathname: `${url}/add-new-member`
                                         }}
                                     >
                                         <button
@@ -348,10 +344,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             <Link
                                 className={"dao-links-chats"}
                                 href={{
-                                    pathname: `${url}/chats`,
-                                    query: {
-                                        chainId: DAO.chainId,
-                                    },
+                                    pathname: `${url}/chats`
                                 }}
                             >
                                 <button
@@ -406,11 +399,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             isLoaded={isLoaded}
                             url={{
                                 pathname: `${url}/create-proposal`,
-                                query: {
-                                    governorAddress: DAO.governorAddress,
-                                    blockchains: [DAO.blockchain[0]],
-                                    chainId: DAO.chainId,
-                                },
                             }}
                         />
                     </div>
@@ -421,10 +409,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             <Link
                                 href={{
                                     pathname: `${url}/add-new-nft`,
-                                    query: {
-                                        governorAddress: DAO.governorAddress,
-                                        blockchain: DAO.blockchain,
-                                    },
                                 }}
                             >
                                 <button className={"secondary-button"} disabled={!isOwner}>

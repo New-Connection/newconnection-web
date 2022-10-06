@@ -6,7 +6,7 @@ import Layout from "components/Layout/Layout";
 import { Button, InputTextArea, RadioSelectorNFT } from "components/Form";
 import { BackButton } from "components/Button/";
 import { validateForm } from "utils/validate";
-import { INFTVoting, IWhitelistRecord } from "types/forms";
+import { IDAOPageForm, INFTVoting, IWhitelistRecord } from "types/forms";
 import { handleChangeBasic, handleChangeBasicArray, handleTextChangeAddNewMember } from "utils/handlers";
 import {
     getMoralisInstance,
@@ -48,10 +48,13 @@ const AddNewMember: NextPage = () => {
         console.log("fetch query");
         const query = router.query as IAddMemberQuery;
 
-        handleChangeBasic(query.governorAddress, setFormData, "governorAddress");
-        handleChangeBasic(query.url, setFormData, "governorUrl");
-        handleChangeBasic(query.chainId, setFormData, "chainId");
-        handleChangeBasicArray(query.blockchains, setFormData, "blockchainSelected");
+        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
+        if (DAO) {
+            handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
+            handleChangeBasic(DAO.url, setFormData, "governorUrl");
+            handleChangeBasic(DAO.chainId, setFormData, "chainId");
+            handleChangeBasicArray(DAO.blockchain, setFormData, "blockchainSelected");
+        }
 
         setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
     }, [router]);
@@ -89,15 +92,15 @@ const AddNewMember: NextPage = () => {
             });
             form.reset();
         } catch (error) {
-            handleContractError(error);
+            handleContractError(error, { hideToast: true });
             return;
         }
 
-        router.back();
     }
 
     const checkRequestAvailability = async (walletAddress: string) => {
         let available = false;
+        console.log("chedd");
         await whitelistFetch({
             onSuccess: (results) => {
                 if (results.filter((result) => result.get("walletAddress") === walletAddress).length === 0) {

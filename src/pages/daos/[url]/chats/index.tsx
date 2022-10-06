@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 
 import Layout from "components/Layout/Layout";
 import { BackButton } from "components/Button/";
-import { INFTVoting } from "types/forms";
+import { IDAOPageForm, INFTVoting } from "types/forms";
 import { getNumberOfTokenInOwnerAddress } from "contract-interactions/viewNftContract";
 import { IChatsQuery } from "types/queryInterfaces";
 import { LockIcon } from "components/Icons";
@@ -24,6 +24,8 @@ const ChatsPage: NextPage = () => {
 
     useEffect(() => {
         const query = router.query as IChatsQuery;
+        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
+        const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.url + " NFTs"));
 
         const checkNFTs = async (tokenAddresses: string[], walletAddress: string, chainId: number) => {
             const indexes = [];
@@ -40,13 +42,14 @@ const ChatsPage: NextPage = () => {
             setIndexOpenChat(() => indexes);
         };
 
-        const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.url + " NFTs"));
-        if (savedNfts) {
+        if (DAO && savedNfts) {
+            const chainId = DAO.chainId;
+
             setNFTs(savedNfts);
             checkNFTs(
                 savedNfts.map((NFT) => NFT.tokenAddress),
                 address,
-                +query.chainId
+                chainId
             ).catch(console.error);
         }
     }, [router, address]);
