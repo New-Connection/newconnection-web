@@ -7,24 +7,24 @@ type chainType = [
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
-    "Ethereum",
+    // "Ethereum",
+    // "Arbitrum",
+    // "Binance",
+    // "Avalanche",
+    // "Fantom",
     "Polygon",
-    "Arbitrum",
-    "Binance",
-    "Avalanche",
-    "Fantom",
     "Optimism",
     "Aurora",
 
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    "Goerli",
+    // "Goerli",
+    // "Arbitrum Goerli",
+    // "Binance Testnet",
+    // "Avalanche Testnet",
+    // "Fantom Testnet",
     "Polygon Mumbai",
-    "Arbitrum Goerli",
-    "Binance Testnet",
-    "Avalanche Testnet",
-    "Fantom Testnet",
     "Optimism Goerli",
     "Aurora Testnet"
 ];
@@ -35,85 +35,83 @@ const CHAINS_IMG: {
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
-    Ethereum: ASSETS.Ethereum,
+    // Ethereum: ASSETS.Ethereum,
+    // Arbitrum: ASSETS.Arbitrum,
+    // Binance: ASSETS.Binance,
+    // Avalanche: ASSETS.Avalanche,
+    // Fantom: ASSETS.Fantom,
     Polygon: ASSETS.Polygon,
-    Arbitrum: ASSETS.Arbitrum,
-    Binance: ASSETS.Binance,
-    Avalanche: ASSETS.Avalanche,
-    Fantom: ASSETS.Fantom,
     Optimism: ASSETS.Optimism,
     Aurora: ASSETS.Aurora,
 
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    Goerli: ASSETS.Ethereum,
+    // Goerli: ASSETS.Ethereum,
+    // "Arbitrum Goerli": ASSETS.Arbitrum,
+    // "Binance Testnet": ASSETS.Binance,
+    // "Avalanche Testnet": ASSETS.Avalanche,
+    // "Fantom Testnet": ASSETS.Fantom,
     "Polygon Mumbai": ASSETS.Polygon,
-    "Arbitrum Goerli": ASSETS.Arbitrum,
-    "Binance Testnet": ASSETS.Binance,
-    "Avalanche Testnet": ASSETS.Avalanche,
-    "Fantom Testnet": ASSETS.Fantom,
     "Optimism Goerli": ASSETS.Optimism,
     "Aurora Testnet": ASSETS.Aurora,
 };
 
 const CHAINS_BLOCKTIME: {
-    [key in chainType[number]]?: number;
+    [key in chainType[number]]: number;
 } = {
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
-    Ethereum: 12,
+    // Ethereum: 12,
+    // Arbitrum: 0.5,
+    // Binance: 3,
+    // Avalanche: 2,
+    // Fantom: 1.2,
     Polygon: 2,
-    Arbitrum: 0.5,
-    Binance: 3,
-    Avalanche: 2,
-    Fantom: 1.2,
     Optimism: 12,
     Aurora: 1.2,
 
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    Goerli: 12,
+    // Goerli: 12,
+    // "Arbitrum Goerli": 0.5,
+    // "Binance Testnet": 3,
+    // "Avalanche Testnet": 2,
+    // "Fantom Testnet": 1.2,
     "Polygon Mumbai": 5,
-    "Arbitrum Goerli": 0.5,
-    "Binance Testnet": 3,
-    "Avalanche Testnet": 2,
-    "Fantom Testnet": 1.2,
     "Optimism Goerli": 12,
     "Aurora Testnet": 1.2,
 };
 
 export const CHAINS: {
-    [key in chainType[number]]?: Chain;
+    [key in chainType[number]]: Chain;
 } = {
     //
     // TEST CHAINS
     // ----------------------------------------------------------------------
     // "Rinkeby": chain.rinkeby,
 
-    Goerli: chain.goerli,
+    // Goerli: chain.goerli,
 
-    "Polygon Mumbai": chain.polygonMumbai,
-
-    "Avalanche Testnet": {
-        id: 43113,
-        name: "Avalanche Testnet",
-        network: "Avalanche",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Avalanche",
-            symbol: "AVAX",
-        },
-        rpcUrls: {
-            default: "https://api.avax-test.network/ext/bc/C/rpc",
-        },
-        blockExplorers: {
-            default: { name: "Snowtrace", url: "https://testnet.snowtrace.io" },
-        },
-        testnet: true,
-    },
+    // "Avalanche Testnet": {
+    //     id: 43113,
+    //     name: "Avalanche Testnet",
+    //     network: "Avalanche",
+    //     nativeCurrency: {
+    //         decimals: 18,
+    //         name: "Avalanche",
+    //         symbol: "AVAX",
+    //     },
+    //     rpcUrls: {
+    //         default: "https://api.avax-test.network/ext/bc/C/rpc",
+    //     },
+    //     blockExplorers: {
+    //         default: { name: "Snowtrace", url: "https://testnet.snowtrace.io" },
+    //     },
+    //     testnet: true,
+    // },
 
     // "Binance Testnet": {
     //     id: 97,
@@ -135,24 +133,6 @@ export const CHAINS: {
 
     // "Arbitrum Testnet": chain.arbitrumGoerli,
 
-    "Optimism Goerli": {
-        id: 420,
-        name: "Optimism Goerli",
-        network: "Optimism",
-        nativeCurrency: {
-            decimals: 18,
-            name: "Ethereum",
-            symbol: "ETH",
-        },
-        rpcUrls: {
-            default: `https://optimism-goerli.infura.io/v3/${INFURA_ID}`,
-        },
-        blockExplorers: {
-            default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" },
-        },
-        testnet: true,
-    },
-
     // "Fantom Testnet": {
     //     id: 4002,
     //     name: "Fantom Testnet",
@@ -170,6 +150,26 @@ export const CHAINS: {
     //     },
     //     testnet: true
     // },
+
+    "Polygon Mumbai": chain.polygonMumbai,
+
+    "Optimism Goerli": {
+        id: 420,
+        name: "Optimism Goerli",
+        network: "Optimism",
+        nativeCurrency: {
+            decimals: 18,
+            name: "Ethereum",
+            symbol: "ETH",
+        },
+        rpcUrls: {
+            default: `https://optimism-goerli.infura.io/v3/${INFURA_ID}`,
+        },
+        blockExplorers: {
+            default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" },
+        },
+        testnet: true,
+    },
 
     "Aurora Testnet": {
         id: 1313161555,
@@ -189,30 +189,12 @@ export const CHAINS: {
         testnet: true,
     },
 
-    // "Skale Testnet": {
-    //     id: 0x2696efe5,
-    //     name: "Skale Testnet",
-    //     network: "Skale",
-    //     nativeCurrency: {
-    //         decimals: 18,
-    //         name: "Skale",
-    //         symbol: "SFUEL",
-    //     },
-    //     rpcUrls: {
-    //         default: "https://eth-online.skalenodes.com/v1/hackathon-complex-easy-naos",
-    //     },
-    //     blockExplorers: {
-    //         default: {
-    //             name: "skalescan",
-    //             url: "https://hackathon-complex-easy-naos.explorer.eth-online.skalenodes.com",
-    //         },
-    //     },
-    //     testnet: true,
-    // },
-
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
+    Polygon: chain.polygon,
+
+    Optimism: chain.optimism,
 
     Aurora: {
         id: 1313161554,
