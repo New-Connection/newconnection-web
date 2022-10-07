@@ -5,19 +5,19 @@ import toast from "react-hot-toast";
 import Layout from "components/Layout/Layout";
 import { Button, InputTextArea, RadioSelectorNFT } from "components/Form";
 import { BackButton } from "components/Button/";
-import { validateForm } from "utils/validate";
-import { IDAOPageForm, INFTVoting, IWhitelistRecord } from "types/forms";
-import { handleChangeBasic, handleChangeBasicArray, handleTextChangeAddNewMember } from "utils/handlers";
-import {
-    getMoralisInstance,
-    MoralisClassEnum,
-    saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
-} from "database/interactions";
+import { validateForm } from "utils/functions";
+import { IDAOPageForm, INFTVoting, IWhitelistRecord } from "types/pages";
+import { handleChangeBasic, handleChangeBasicArray, handleTextChangeAddNewMember } from "utils/handlers/eventHandlers";
+import { MoralisClassEnum } from "interactions/database/moralisObjects";
 import { useSigner } from "wagmi";
 import { useMoralisQuery } from "react-moralis";
-import { handleContractError } from "utils/errors";
-import { IAddMemberQuery } from "types/queryInterfaces";
+import { handleContractError } from "utils/handlers/errorHandlers";
+import { IAddMemberQuery } from "types/pageQueries";
+import {
+    getMoralisInstance,
+    saveMoralisInstance,
+    setFieldsIntoMoralisInstance,
+} from "../../../interactions/database/functions";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IWhitelistRecord>({
@@ -95,7 +95,6 @@ const AddNewMember: NextPage = () => {
             handleContractError(error, { hideToast: true });
             return;
         }
-
     }
 
     const checkRequestAvailability = async (walletAddress: string) => {

@@ -14,27 +14,26 @@ import { useMoralis, useMoralisQuery } from "react-moralis";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
 import Layout from "components/Layout/Layout";
-import { ICreateNFT, IDAOPageForm } from "types/forms";
+import { ICreateNFT, IDAOPageForm } from "types/pages";
 import {
     handleChangeBasic,
     handleImageChange,
     handleNftSupplyChange,
     handleSelectorChange,
     handleTextChange,
-} from "utils/handlers";
-import { validateForm } from "utils/validate";
+} from "utils/handlers/eventHandlers";
+import { validateForm } from "utils/functions";
 import { useDialogState } from "ariakit";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
 import { BackButton } from "components/Button/";
-import { storeNFT } from "utils/ipfsUpload";
-import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
-import { chainIds, layerzeroEndpoints } from "utils/layerzero";
-import { addToken, deployNFTContract } from "contract-interactions";
-import { IAddNftQuery } from "types/queryInterfaces";
+import { storeNFT } from "utils/api/ipfsUpload";
+import { CHAINS, getChainNames, getLogoURI } from "interactions/contract/utils/blockchains";
+import { chainIds, layerzeroEndpoints } from "interactions/contract/utils/layerzero";
+import { addToken, checkCorrectNetwork, deployNFTContract } from "interactions/contract";
+import { IAddNftQuery } from "types/pageQueries";
 import { AddNftDialog } from "components/Dialog/CreateNftDialogs";
-import { checkCorrectNetwork } from "logic";
-import { fetchDAO } from "network";
-import { handleContractError } from "utils/errors";
+import { fetchDAO } from "interactions/database";
+import { handleContractError } from "utils/handlers/errorHandlers";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -86,7 +85,7 @@ const AddNewNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-            ];
+        ];
     };
 
     const saveNewNFTContractAddress = async (nftTokenAddress: string) => {

@@ -10,7 +10,7 @@ import { Tabs } from "components/Tabs/";
 import { useIsMounted } from "hooks";
 import DAOsPage from "./daos/index";
 
-import { TabsType } from "types/tabs";
+import { TabsType } from "types/pages";
 
 const TabOne: FC = () => {
     return (

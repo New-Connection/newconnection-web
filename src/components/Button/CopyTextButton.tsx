@@ -1,4 +1,4 @@
-import { formatAddress } from "utils/address";
+import { formatAddress } from "utils/functions";
 import { CheckIcon, ClipboardCopyIcon } from "@heroicons/react/solid";
 import React, { useState } from "react";
 

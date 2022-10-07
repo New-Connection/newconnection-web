@@ -2,11 +2,10 @@ import * as React from "react";
 import ASSETS from "assets";
 import Image from "next/image";
 import classNames from "classnames";
-import { formatAddress } from "utils/address";
+import { formatAddress } from "utils/functions";
 import { BlockchainIcon } from "components/Icons/";
-import { INFTVoting } from "types/forms";
+import { ButtonState, INFTVoting } from "types/pages";
 import { DisclosureState } from "ariakit";
-import { ButtonState } from "types/daoIntefaces";
 
 interface INFTImage {
     image?: string;

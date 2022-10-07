@@ -2,7 +2,7 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/outline";
 import { DisclosureState } from "ariakit";
 import { Menu, MenuItem } from "components/NestedMenu";
 import { useIsMounted, useWindowSize } from "hooks";
-import { formatAddress } from "utils/address";
+import { formatAddress } from "utils/functions";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useTheme } from "next-themes";
 
@@ -64,7 +64,7 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
                     className="flex items-center justify-between p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 sm:hidden"
                 >
                     {mainnets.map((value) => {
-                        const { network } = chainDetails(value?.id?.toString());
+                        const { database } = chainDetails(value?.id?.toString());
                         return (
                             <MenuItem
                                 key={value.id}
@@ -72,7 +72,7 @@ export default function HeaderMenu({ walletDialog }: { walletDialog: DisclosureS
                                     <div className="flex items-center gap-2">
                                         <div className="flex h-5 w-5 items-center rounded-full">
                                             <Image
-                                                src={network?.logoURI ?? ""}
+                                                src={database?.logoURI ?? ""}
                                                 alt={"logoAlt"}
                                                 objectFit="contain"
                                                 width="20px"

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Layout from "components/Layout/Layout";
 import { Button } from "components/Form";
 import { BackButton } from "components/Button/";
-import { isBlockchainSupported } from "utils/blockchains";
+import { isBlockchainSupported } from "interactions/contract/utils/blockchains";
 import { useNetwork } from "wagmi";
 
 interface ICard {
@@ -37,7 +37,7 @@ const CreateNewDAO: NextPage = () => {
     const Card = ({ title, subtitle, buttonTitle, linkToPage, isDisabled = false }: ICard) => {
         return (
             <div className="w-full border-2 border-[#F2F4F4] rounded-lg pb-6 px-4">
-                <p className="input-label font-medium text-lg">{title}</p>
+                <p className="input-label checkbox font-medium text-lg">{title}</p>
                 <p className="pb-6">{subtitle}</p>
                 <Link href={{ pathname: linkToPage }}>
                     <a>

@@ -4,8 +4,8 @@ import { useSigner, useSwitchNetwork } from "wagmi";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
-import { ICreateDAO } from "types/forms";
-import { validateForm } from "utils/validate";
+import { ICreateDAO } from "types/pages";
+import { validateForm } from "utils/functions";
 import Layout from "components/Layout";
 import { Button, CheckboxGroup, DragAndDropImage, InputAmount, InputText, InputTextArea } from "components/Form";
 import {
@@ -15,24 +15,23 @@ import {
     handleDaoNameUrlChange,
     handleImageChange,
     handleTextChange,
-} from "utils/handlers";
-import { deployGovernorContract } from "contract-interactions/";
-import { CHAINS, getBlocksPerDay } from "utils/blockchains";
-import {
-    getMoralisInstance,
-    MoralisClassEnum,
-    saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
-} from "database/interactions";
+} from "utils/handlers/eventHandlers";
+import { checkCorrectNetwork, deployGovernorContract } from "interactions/contract/";
+import { CHAINS, getBlocksPerDay } from "interactions/contract/utils/blockchains";
+import { MoralisClassEnum } from "interactions/database/moralisObjects";
 import { useRouter } from "next/router";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { storeNFT } from "utils/ipfsUpload";
+import { storeNFT } from "utils/api/ipfsUpload";
 import { useMoralis, useMoralisQuery } from "react-moralis";
-import { ICreateDaoQuery } from "types/queryInterfaces";
+import { ICreateDaoQuery } from "types/pageQueries";
 import { CreateDaoDialog } from "components/Dialog/CreateDaoDialogs";
-import { checkCorrectNetwork } from "logic";
-import { fetchDAOs } from "network";
-import { handleContractError } from "utils/errors";
+import { fetchDAOs } from "interactions/database";
+import { handleContractError } from "utils/handlers/errorHandlers";
+import {
+    getMoralisInstance,
+    saveMoralisInstance,
+    setFieldsIntoMoralisInstance,
+} from "../interactions/database/functions";
 
 const CreateDAO: NextPage = () => {
     const router = useRouter();

@@ -1,7 +1,7 @@
 import { CustomDialog, StepperDialog } from "./base-dialogs";
 import * as React from "react";
 import { NFTImage } from "components/Cards/";
-import { getChainScanner, getTokenSymbol } from "utils/blockchains";
+import { getChainScanner, getTokenSymbol } from "interactions/contract/utils/blockchains";
 import { ExternalLinkIcon } from "@heroicons/react/solid";
 import { BlockchainIcon } from "components/Icons/";
 import Image from "next/image";

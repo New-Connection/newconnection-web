@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getLogoURI } from "utils/blockchains";
+import { getLogoURI } from "interactions/contract/utils/blockchains";
 import ASSETS from "assets";
 import * as React from "react";
 

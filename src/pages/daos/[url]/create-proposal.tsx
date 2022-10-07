@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { ICreateProposal, IDAOPageForm, INFTVoting } from "types/forms";
+import { ICreateProposal, IDAOPageForm, INFTVoting } from "types/pages";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout from "components/Layout/Layout";
-import { handleAddArray, handleChangeBasic, handleTextChange } from "utils/handlers";
+import { handleAddArray, handleChangeBasic, handleTextChange } from "utils/handlers/eventHandlers";
 import { Button, CheckboxGroup, InputText, InputTextArea, RadioSelectorNFT } from "components/Form";
 import { BackButton } from "components/Button/";
 import { useDialogState } from "ariakit";
-import { validateForm } from "utils/validate";
-import { createProposal } from "contract-interactions/writeGovernorContract";
+import { validateForm } from "utils/functions";
+import { createProposal } from "interactions/contract/basic/writeGovernorContract";
 import { useRouter } from "next/router";
 import { Signer } from "ethers";
+import { MoralisClassEnum } from "interactions/database/moralisObjects";
+import { handleNext, handleReset } from "components/Dialog/base-dialogs";
+import { ICreateProposalQuery } from "types/pageQueries";
+import { CreateProposalDialog } from "components/Dialog/CreateProposalDialogs";
+import { handleContractError } from "utils/handlers/errorHandlers";
+import { checkCorrectNetwork } from "../../../interactions/contract";
 import {
     getMoralisInstance,
-    MoralisClassEnum,
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
-} from "database/interactions";
-import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { ICreateProposalQuery } from "types/queryInterfaces";
-import { CreateProposalDialog } from "components/Dialog/CreateProposalDialogs";
-import { checkCorrectNetwork } from "logic";
-import { handleContractError } from "utils/errors";
+} from "../../../interactions/database/functions";
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
@@ -113,7 +113,8 @@ const CreateProposal: NextPage = () => {
                         <div className="text-highlighter items-center flex flex-col md:flex-row">
                             New Proposal for
                             <div
-                                className={"text-highlighter text-purple capitalize md:ml-4"}>{`${formData?.governorUrl}`}</div>
+                                className={"text-highlighter text-purple capitalize md:ml-4"}
+                            >{`${formData?.governorUrl}`}</div>
                         </div>
                         <InputText
                             label="Title"

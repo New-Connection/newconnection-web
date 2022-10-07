@@ -4,19 +4,23 @@ import { Signer } from "ethers";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
 import Layout from "components/Layout/Layout";
-import { ICreateNFT } from "types/forms";
-import { handleChangeBasic, handleImageChange, handleNftSupplyChange, handleTextChange } from "utils/handlers";
-import { validateForm } from "utils/validate";
+import { ICreateNFT } from "types/pages";
+import {
+    handleChangeBasic,
+    handleImageChange,
+    handleNftSupplyChange,
+    handleTextChange,
+} from "utils/handlers/eventHandlers";
+import { validateForm } from "utils/functions";
 import { useDialogState } from "ariakit";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { deployNFTContract } from "contract-interactions/";
+import { checkCorrectNetwork, deployNFTContract } from "interactions/contract/";
 import { BackButton } from "components/Button/";
-import { storeNFT } from "utils/ipfsUpload";
-import { CHAINS, getChainNames, getLogoURI } from "utils/blockchains";
-import { chainIds, layerzeroEndpoints } from "utils/layerzero";
+import { storeNFT } from "utils/api/ipfsUpload";
+import { CHAINS, getChainNames, getLogoURI } from "interactions/contract/utils/blockchains";
+import { chainIds, layerzeroEndpoints } from "interactions/contract/utils/layerzero";
 import { CreateNftDialog } from "components/Dialog/CreateNftDialogs";
-import { checkCorrectNetwork } from "logic";
-import { handleContractError } from "utils/errors";
+import { handleContractError } from "utils/handlers/errorHandlers";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -41,7 +45,7 @@ const CreateNFT: NextPage = () => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-            ];
+        ];
     };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {

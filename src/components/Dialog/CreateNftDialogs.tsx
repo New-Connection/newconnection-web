@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { ICreateNftDialog } from "./dialogInterfaces";
 import Link from "next/link";
-import { getChainNames } from "utils/blockchains";
+import { getChainNames } from "interactions/contract/utils/blockchains";
 import { CopyTextButton } from "components/Button/";
 
 export const AddNftDialog = ({ dialog, activeStep, formData }: ICreateNftDialog) => {

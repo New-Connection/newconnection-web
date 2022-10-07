@@ -4,7 +4,7 @@ import { Dialog, DisclosureState } from "ariakit";
 
 // OWN
 import { useIsMounted } from "hooks";
-import { formatAddress } from "utils/address";
+import { formatAddress } from "utils/functions";
 import { DialogHeader } from "components/Dialog/base-dialogs";
 
 import ASSETS from "assets/index";

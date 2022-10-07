@@ -1,6 +1,5 @@
 import { DisclosureState } from "ariakit";
-import { ICreateDAO, ICreateNFT, ICreateProposal, IDAOPageForm, INFTVoting, IProposal } from "types/forms";
-import { ButtonState } from "types/daoIntefaces";
+import { ButtonState, ICreateDAO, ICreateNFT, ICreateProposal, IDAOPageForm, INFTVoting, IProposal } from "types/pages";
 import * as React from "react";
 
 interface IDialog {

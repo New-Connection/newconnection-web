@@ -4,26 +4,30 @@ import type { GetServerSideProps, NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import Image from "next/image";
 import { Moralis } from "moralis-v1";
-import { getChainScanner } from "utils/blockchains";
+import { getChainScanner } from "interactions/contract/utils/blockchains";
 import { useMoralis, useMoralisQuery } from "react-moralis";
-import { IDAOPageForm, INFTVoting, IProposalPageForm, IWhitelistRecord } from "types/forms";
+import { ButtonState, IDAOPageForm, INFTVoting, IProposalPageForm, IWhitelistRecord } from "types/pages";
 import { ExternalLinkIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import { getGovernorOwnerAddress } from "contract-interactions/";
-import { IDaoQuery } from "types/queryInterfaces";
-import { isValidHttpUrl } from "utils/transformURL";
-import { handleChangeBasic } from "utils/handlers";
-import { fetchDAO, fetchNFT, fetchProposals, fetchTreasuryBalance, fetchWhitelist } from "network/index";
+import {
+    addTreasureMoralis,
+    addTreasury,
+    checkCorrectNetwork,
+    contributeToTreasury,
+    getGovernorOwnerAddress,
+    mint,
+} from "interactions/contract/";
+import { DAOPageProps, IDaoQuery } from "types/pageQueries";
+import { isValidHttpUrl } from "utils/functions";
+import { handleChangeBasic } from "utils/handlers/eventHandlers";
+import { fetchDAO, fetchNFT, fetchProposals, fetchTreasuryBalance, fetchWhitelist } from "interactions/database/index";
 import { BlockchainIcon, DiscordIcon, TwitterIcon, WebsiteIcon } from "components/Icons/";
 import { MockupLoadingDetailDAOPage, MockupLoadingNFT } from "components/Mockup/Loading";
 import { MockupTextCard } from "components/Mockup";
 import { NFTCardWithDialog } from "components/Cards/NFTCard";
 import { ProposalsListTab, Tabs, WhitelistTab } from "components/Tabs/";
-import { DAOPageProps } from "types/pagePropsInterfaces";
-import { ButtonState } from "types/daoIntefaces";
-import { addTreasureMoralis, addTreasury, checkCorrectNetwork, contributeToTreasury, mint } from "logic/index";
 import { ContributeTreasuryDialog, CreateTreasuryDialog, DetailNftDialog } from "components/Dialog/DaoPageDialogs";
 import classNames from "classnames";
 import { useRouter } from "next/router";
@@ -98,8 +102,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const loadingWhitelist = async () => {
         const data = await fetchWhitelist(WhitelistQuery);
         if (data) {
-            setWhitelist(()=>data.whitelist);
-            setWhitelistMoralisInstance(()=>data.moralisInstance);
+            setWhitelist(() => data.whitelist);
+            setWhitelistMoralisInstance(() => data.moralisInstance);
         }
     };
     useEffect(() => {
@@ -183,9 +187,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         console.log("deleting");
         WhitelistMoralisInstance
             ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
-                ?.destroy()
-                .then()
-                .catch(console.error)
+                  ?.destroy()
+                  .then()
+                  .catch(console.error)
             : 0;
         //  rerender
         loadingWhitelist().catch(console.error);
@@ -241,7 +245,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 <div className={"member-button"}>
                                     <Link
                                         href={{
-                                            pathname: `${url}/add-new-member`
+                                            pathname: `${url}/add-new-member`,
                                         }}
                                     >
                                         <button
@@ -344,7 +348,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                             <Link
                                 className={"dao-links-chats"}
                                 href={{
-                                    pathname: `${url}/chats`
+                                    pathname: `${url}/chats`,
                                 }}
                             >
                                 <button

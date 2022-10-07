@@ -6,11 +6,11 @@ import { useAccount } from "wagmi";
 
 import Layout from "components/Layout/Layout";
 import { BackButton } from "components/Button/";
-import { IDAOPageForm, INFTVoting } from "types/forms";
-import { getNumberOfTokenInOwnerAddress } from "contract-interactions/viewNftContract";
-import { IChatsQuery } from "types/queryInterfaces";
+import { IDAOPageForm, INFTVoting } from "types/pages";
+import { getNumberOfTokenInOwnerAddress } from "interactions/contract/basic/viewNftContract";
+import { IChatsQuery } from "types/pageQueries";
 import { LockIcon } from "components/Icons";
-import { formatAddress } from "utils/address";
+import { formatAddress } from "utils/functions";
 
 const ChatsPage: NextPage = () => {
     const router = useRouter();
@@ -67,8 +67,7 @@ const ChatsPage: NextPage = () => {
                             <div className="flex flex-row justify-between bg-white">
                                 {/* User chat*/}
 
-                                <div
-                                    className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
+                                <div className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
                                     {NFTs &&
                                         NFTs.map((nft, index) => (
                                             <button

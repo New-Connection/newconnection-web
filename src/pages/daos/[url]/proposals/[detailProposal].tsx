@@ -6,25 +6,23 @@ import type { GetServerSideProps, NextPage } from "next";
 import Layout from "components/Layout/Layout";
 import { BackButton } from "components/Button/";
 import { Button, RadioSelector } from "components/Form";
-import { validateForm } from "utils/validate";
+import { validateForm } from "utils/functions";
 import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { IProposal, IProposalDetail, IProposalPageForm } from "types/forms";
-import { handleTextChangeAddNewMember } from "utils/handlers";
-import { castVote } from "contract-interactions/writeGovernorContract";
-import { IDetailProposalQuery } from "types/queryInterfaces";
-import { IDetailProposalProps } from "types/pagePropsInterfaces";
+import { IProposal, IProposalDetail, IProposalPageForm } from "types/pages";
+import { handleTextChangeAddNewMember } from "utils/handlers/eventHandlers";
+import { castVote } from "interactions/contract/basic/writeGovernorContract";
+import { IDetailProposalProps, IDetailProposalQuery } from "types/pageQueries";
 import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
-import { checkCorrectNetwork } from "logic";
 import {
     AboutProposalCard,
     InfoProposalCard,
     ProposalActivityBadge,
     VotingResultsCard,
 } from "components/Cards/ProposalCard";
-import { handleContractError } from "utils/errors";
+import { handleContractError } from "utils/handlers/errorHandlers";
 import { MockupLoadingProposals } from "components/Mockup/Loading";
 import { useRouter } from "next/router";
-import { getProposer, proposalSnapshot } from "contract-interactions";
+import { checkCorrectNetwork, getProposer, proposalSnapshot } from "interactions/contract";
 
 export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetailProposalQuery> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;
@@ -67,16 +65,12 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                         proposal.chainId,
                         proposal.proposalId
                     );
-                    const proposer = await getProposer(
-                        proposal.governorAddress,
-                        proposal.chainId,
-                        proposal.proposalId
-                    );
+                    const proposer = await getProposer(proposal.governorAddress, proposal.chainId, proposal.proposalId);
 
-                    setProposalData(prevState => ({
+                    setProposalData((prevState) => ({
                         ...prevState,
                         startDateTimestamp: startTimestamp,
-                        ownerAddress: proposer
+                        ownerAddress: proposer,
                     }));
                 }
             }

@@ -6,11 +6,11 @@ import { useMoralis, useMoralisQuery } from "react-moralis";
 import { useNetwork } from "wagmi";
 
 import Layout from "components/Layout/Layout";
-import { IDAOPageForm } from "types/forms";
-import { getTotalProposals } from "contract-interactions/viewGovernorContract";
-import { isBlockchainSupported } from "utils/blockchains";
+import { IDAOPageForm } from "types/pages";
+import { getTotalProposals } from "interactions/contract/basic/viewGovernorContract";
+import { isBlockchainSupported } from "interactions/contract/utils/blockchains";
 import { DAOCard } from "components/Cards";
-import { fetchDAOs } from "network";
+import { fetchDAOs } from "interactions/database";
 
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
