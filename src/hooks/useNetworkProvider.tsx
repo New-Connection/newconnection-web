@@ -1,5 +1,5 @@
 import { providers } from "ethers";
-import { getChain, getTokenSymbol } from "interactions/contract/utils/blockchains";
+import { getChain, getTokenSymbol } from "interactions/contract";
 import { useNetwork } from "wagmi";
 
 export const useNetworkProvider = () => {

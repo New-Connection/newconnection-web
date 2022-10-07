@@ -5,9 +5,9 @@ import {
     getSupplyNumber,
     getSymbol,
     getTokenURI,
-} from "interactions/contract/basic/viewNftContract";
-import { IDAOPageForm, INFTVoting } from "types/pages";
-import { getIpfsImage } from "utils/api/ipfsUpload";
+} from "interactions/contract";
+import { IDAOPageForm, INFTVoting } from "types";
+import { getIpfsImage } from "utils";
 import ASSETS from "assets";
 
 async function getImage(tokenAddress: string, chainID: number) {

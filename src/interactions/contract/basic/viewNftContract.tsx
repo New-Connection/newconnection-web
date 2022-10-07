@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { GOVERNANCE_NFT_ABI } from "abis";
-import { provider } from "components/Web3";
-import { handleContractError } from "utils/handlers/errorHandlers";
+import { provider } from "components";
+import { handleContractError } from "utils";
 
 export async function getNftName(contractAddress: string, chainId: number) {
     try {

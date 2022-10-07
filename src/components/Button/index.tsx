@@ -1,2 +1,2 @@
-export { BackButton } from "./BackButton";
-export { CopyTextButton } from "./CopyTextButton";
+export * from "./BackButton";
+export * from "./CopyTextButton";

@@ -4,12 +4,9 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import { useNetwork } from "wagmi";
-
-import Layout from "components/Layout/Layout";
-import { IDAOPageForm } from "types/pages";
-import { getTotalProposals } from "interactions/contract/basic/viewGovernorContract";
-import { isBlockchainSupported } from "interactions/contract/utils/blockchains";
-import { DAOCard } from "components/Cards";
+import Layout, { DAOCard } from "components";
+import { IDAOPageForm } from "types";
+import { getTotalProposals, isBlockchainSupported } from "interactions/contract";
 import { fetchDAOs } from "interactions/database";
 
 const DAOsPage: NextPage = () => {

@@ -4,34 +4,39 @@ import { useSigner, useSwitchNetwork } from "wagmi";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
-import { ICreateDAO } from "types/pages";
-import { validateForm } from "utils/functions";
-import Layout from "components/Layout";
-import { Button, CheckboxGroup, DragAndDropImage, InputAmount, InputText, InputTextArea } from "components/Form";
+import { ICreateDAO, ICreateDaoQuery } from "types";
 import {
     handleAddArray,
     handleChangeBasic,
     handleChangeBasicSimple,
+    handleContractError,
     handleDaoNameUrlChange,
     handleImageChange,
     handleTextChange,
-} from "utils/handlers/eventHandlers";
-import { checkCorrectNetwork, deployGovernorContract } from "interactions/contract/";
-import { CHAINS, getBlocksPerDay } from "interactions/contract/utils/blockchains";
-import { MoralisClassEnum } from "interactions/database/moralisObjects";
-import { useRouter } from "next/router";
-import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { storeNFT } from "utils/api/ipfsUpload";
-import { useMoralis, useMoralisQuery } from "react-moralis";
-import { ICreateDaoQuery } from "types/pageQueries";
-import { CreateDaoDialog } from "components/Dialog/CreateDaoDialogs";
-import { fetchDAOs } from "interactions/database";
-import { handleContractError } from "utils/handlers/errorHandlers";
+    storeNFT,
+    validateForm,
+} from "utils";
+import Layout, {
+    Button,
+    CheckboxGroup,
+    CreateDaoDialog,
+    DragAndDropImage,
+    handleNext,
+    handleReset,
+    InputAmount,
+    InputText,
+    InputTextArea,
+} from "components";
+import { CHAINS, checkCorrectNetwork, deployGovernorContract, getBlocksPerDay } from "interactions/contract";
 import {
+    fetchDAOs,
     getMoralisInstance,
+    MoralisClassEnum,
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
-} from "../interactions/database/functions";
+} from "interactions/database";
+import { useRouter } from "next/router";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 
 const CreateDAO: NextPage = () => {
     const router = useRouter();

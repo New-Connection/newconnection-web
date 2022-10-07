@@ -1,5 +1,5 @@
 import { getTreasuryBalance } from "interactions/contract";
-import { IDAOPageForm } from "types/pages";
+import { IDAOPageForm } from "types";
 
 export async function fetchTreasuryBalance(DAO: IDAOPageForm) {
     const balance = DAO.treasuryAddress ? await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId) : 0;

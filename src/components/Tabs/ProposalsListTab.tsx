@@ -1,12 +1,9 @@
-import { IDAOPageForm, IProposalPageForm } from "types/pages";
+import { IDAOPageForm, IProposalPageForm } from "types";
 import Link from "next/link";
-import { ProposalCard } from "components/Cards/";
-import { MockupTextCard } from "../Mockup";
-import { MockupLoadingProposals } from "../Mockup/Loading";
+import { ArrowUpRightIcon, MockupLoadingProposals, MockupTextCard, ProposalCard } from "components";
 import * as React from "react";
 import { Moralis } from "moralis-v1";
-import { ArrowUpRightIcon } from "components/Icons";
-import { saveMoralisInstance } from "../../interactions/database/functions";
+import { saveMoralisInstance } from "interactions/database";
 
 interface IProposalListTab {
     DAOMoralisInstance: Moralis.Object<Moralis.Attributes>;
@@ -23,7 +20,7 @@ export const ProposalsListTab = ({ proposals, DAOMoralisInstance, daoUrl, DAO }:
         const isActive = DAOMoralisInstance.get("isActive");
         if ((activeProposals.length > 0 && !isActive) || (activeProposals.length === 0 && isActive)) {
             DAOMoralisInstance.set("isActive", !isActive);
-            saveMoralisInstance(DAOMoralisInstance);
+            saveMoralisInstance(DAOMoralisInstance).then();
         }
         return (
             <>

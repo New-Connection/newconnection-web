@@ -1,6 +1,6 @@
 import * as React from "react";
 import { BaseSyntheticEvent, ChangeEvent } from "react";
-import { INFTVoting } from "types/pages";
+import { INFTVoting } from "types";
 
 export interface InputTextProps {
     name: string;

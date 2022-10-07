@@ -3,26 +3,23 @@ import { useSigner, useSwitchNetwork } from "wagmi";
 import { useDialogState } from "ariakit";
 import toast from "react-hot-toast";
 import type { GetServerSideProps, NextPage } from "next";
-import Layout from "components/Layout/Layout";
-import { BackButton } from "components/Button/";
-import { Button, RadioSelector } from "components/Form";
-import { validateForm } from "utils/functions";
-import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { IProposal, IProposalDetail, IProposalPageForm } from "types/pages";
-import { handleTextChangeAddNewMember } from "utils/handlers/eventHandlers";
-import { castVote } from "interactions/contract/basic/writeGovernorContract";
-import { IDetailProposalProps, IDetailProposalQuery } from "types/pageQueries";
-import { ProposalVoteDialog } from "components/Dialog/ProposalPageDialogs";
-import {
+import Layout, {
     AboutProposalCard,
+    BackButton,
+    Button,
+    handleNext,
+    handleReset,
     InfoProposalCard,
+    MockupLoadingProposals,
     ProposalActivityBadge,
+    ProposalVoteDialog,
+    RadioSelector,
     VotingResultsCard,
-} from "components/Cards/ProposalCard";
-import { handleContractError } from "utils/handlers/errorHandlers";
-import { MockupLoadingProposals } from "components/Mockup/Loading";
+} from "components";
+import { handleContractError, handleTextChangeAddNewMember, validateForm } from "utils";
+import { IDetailProposalProps, IDetailProposalQuery, IProposal, IProposalDetail, IProposalPageForm } from "types";
+import { castVote, checkCorrectNetwork, getProposer, proposalSnapshot } from "interactions/contract";
 import { useRouter } from "next/router";
-import { checkCorrectNetwork, getProposer, proposalSnapshot } from "interactions/contract";
 
 export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetailProposalQuery> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;

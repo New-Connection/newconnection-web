@@ -1,14 +1,12 @@
 import * as React from "react";
 import { useState } from "react";
-import { formatAddress } from "utils/functions";
-import { AddToWhitelist, checkCorrectNetwork } from "interactions/contract";
+import { formatAddress, handleContractError } from "utils";
+import { AddToWhitelist, checkCorrectNetwork, getLogoURI } from "interactions/contract";
 import { Signer } from "ethers";
 import toast from "react-hot-toast";
-import { MockupTextCard } from "../Mockup";
-import { getLogoURI } from "interactions/contract/utils/blockchains";
+import { MockupTextCard } from "components";
 import { useSwitchNetwork } from "wagmi";
-import { IWhitelistRecord } from "types/pages";
-import { handleContractError } from "utils/handlers/errorHandlers";
+import { IWhitelistRecord } from "types";
 
 const renderValue = (chain: string) => {
     const image = getLogoURI(chain);

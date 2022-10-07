@@ -1,12 +1,10 @@
-import { IDAOPageForm } from "types/pages";
+import { IDAOPageForm } from "types";
 import { DisclosureState } from "ariakit";
-import { transferTreasuryOwnership } from "interactions/contract/basic/writeTreasuryContract";
-import { deployTreasuryContract } from "interactions/contract/basic/deploy";
+import { checkCorrectNetwork, deployTreasuryContract, transferTreasuryOwnership } from "interactions/contract";
 import { Signer } from "ethers";
-import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { handleContractError } from "utils/handlers/errorHandlers";
-import { checkCorrectNetwork } from "../utils/functions";
-import { saveMoralisInstance } from "../../database/functions";
+import { handleNext, handleReset } from "components";
+import { handleContractError } from "utils";
+import { saveMoralisInstance } from "interactions/database";
 
 export async function addTreasury(
     DAO: IDAOPageForm,

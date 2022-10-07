@@ -1,12 +1,9 @@
 import * as React from "react";
 import { Connector, useAccount, useConnect, useDisconnect } from "wagmi";
 import { Dialog, DisclosureState } from "ariakit";
-
-// OWN
 import { useIsMounted } from "hooks";
-import { formatAddress } from "utils/functions";
-import { DialogHeader } from "components/Dialog/base-dialogs";
-
+import { formatAddress } from "utils";
+import { DialogHeader } from "components";
 import ASSETS from "assets/index";
 
 interface Props {

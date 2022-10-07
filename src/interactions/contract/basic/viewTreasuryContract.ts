@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 import { TREASURY_ABI } from "abis";
-import { getTokenSymbol } from "interactions/contract/utils/blockchains";
-import { provider } from "components/Web3";
-import { Currency, getExchangeRate } from "utils/api/cryptocompare";
+import { getTokenSymbol } from "interactions/contract";
+import { provider } from "components";
+import { Currency, getExchangeRate } from "utils";
 
 export async function getTreasuryOwnerAddress(contractAddress: string, chainId: number) {
     let baseProvider = provider({ chainId });

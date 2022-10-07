@@ -1,9 +1,7 @@
-// Radio Selector. Using for detail-proposals
-// https://flowbite.com/docs/forms/radio/
 import { IRadioSelector, IRadioSelectorNFT } from "./types";
 import classNames from "classnames";
 import React, { useState } from "react";
-import { NFTCard } from "../Cards/NFTCard";
+import { NFTCard } from "components";
 
 export const RadioSelector = ({ name, labels, className, handleChange }: IRadioSelector) => {
     return (

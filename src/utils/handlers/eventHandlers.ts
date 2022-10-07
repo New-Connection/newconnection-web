@@ -1,5 +1,5 @@
 import { BaseSyntheticEvent, ChangeEvent, Dispatch, SetStateAction } from "react";
-import { ICreate } from "types/pages";
+import { ICreate } from "types";
 
 export const handleChangeBasic = <T>(
     value: string | boolean | number | object,

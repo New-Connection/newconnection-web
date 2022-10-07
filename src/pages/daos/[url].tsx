@@ -1,34 +1,49 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import type { GetServerSideProps, NextPage } from "next";
-import Layout from "components/Layout/Layout";
+import Layout, {
+    BlockchainIcon,
+    ContributeTreasuryDialog,
+    CreateTreasuryDialog,
+    DetailNftDialog,
+    DiscordIcon,
+    MockupLoadingDetailDAOPage,
+    MockupLoadingNFT,
+    MockupTextCard,
+    NFTCardWithDialog,
+    ProposalsListTab,
+    Tabs,
+    TwitterIcon,
+    WebsiteIcon,
+    WhitelistTab,
+} from "components";
 import Image from "next/image";
 import { Moralis } from "moralis-v1";
-import { getChainScanner } from "interactions/contract/utils/blockchains";
-import { useMoralis, useMoralisQuery } from "react-moralis";
-import { ButtonState, IDAOPageForm, INFTVoting, IProposalPageForm, IWhitelistRecord } from "types/pages";
-import { ExternalLinkIcon } from "@heroicons/react/solid";
-import Link from "next/link";
-import { useDialogState } from "ariakit";
-import { useSigner, useSwitchNetwork } from "wagmi";
 import {
     addTreasureMoralis,
     addTreasury,
     checkCorrectNetwork,
     contributeToTreasury,
+    getChainScanner,
     getGovernorOwnerAddress,
     mint,
-} from "interactions/contract/";
-import { DAOPageProps, IDaoQuery } from "types/pageQueries";
-import { isValidHttpUrl } from "utils/functions";
-import { handleChangeBasic } from "utils/handlers/eventHandlers";
-import { fetchDAO, fetchNFT, fetchProposals, fetchTreasuryBalance, fetchWhitelist } from "interactions/database/index";
-import { BlockchainIcon, DiscordIcon, TwitterIcon, WebsiteIcon } from "components/Icons/";
-import { MockupLoadingDetailDAOPage, MockupLoadingNFT } from "components/Mockup/Loading";
-import { MockupTextCard } from "components/Mockup";
-import { NFTCardWithDialog } from "components/Cards/NFTCard";
-import { ProposalsListTab, Tabs, WhitelistTab } from "components/Tabs/";
-import { ContributeTreasuryDialog, CreateTreasuryDialog, DetailNftDialog } from "components/Dialog/DaoPageDialogs";
+} from "interactions/contract";
+import { useMoralis, useMoralisQuery } from "react-moralis";
+import {
+    ButtonState,
+    DAOPageProps,
+    IDAOPageForm,
+    IDaoQuery,
+    INFTVoting,
+    IProposalPageForm,
+    IWhitelistRecord,
+} from "types";
+import { ExternalLinkIcon } from "@heroicons/react/solid";
+import Link from "next/link";
+import { useDialogState } from "ariakit";
+import { useSigner, useSwitchNetwork } from "wagmi";
+import { handleChangeBasic, isValidHttpUrl } from "utils";
+import { fetchDAO, fetchNFT, fetchProposals, fetchTreasuryBalance, fetchWhitelist } from "interactions/database";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 

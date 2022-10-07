@@ -1,8 +1,8 @@
 import { QuestionMarkCircleIcon } from "@heroicons/react/outline";
 import { DisclosureState } from "ariakit";
-import { Menu, MenuItem } from "components/NestedMenu";
+import { Menu, MenuItem } from "components";
 import { useIsMounted, useWindowSize } from "hooks";
-import { formatAddress } from "utils/functions";
+import { formatAddress } from "utils";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useTheme } from "next-themes";
 

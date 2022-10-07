@@ -1,14 +1,10 @@
-import { CustomDialog, StepperDialog } from "./base-dialogs";
+import { createTreasurySteps, CustomDialog, SpinnerLoading, StepperDialog } from "./base-dialogs";
 import * as React from "react";
-import { NFTImage } from "components/Cards/";
-import { getChainScanner, getTokenSymbol } from "interactions/contract/utils/blockchains";
+import { BlockchainIcon, CopyTextButton, InputAmount, NFTImage } from "components";
+import { getChainScanner, getTokenSymbol } from "interactions/contract";
 import { ExternalLinkIcon } from "@heroicons/react/solid";
-import { BlockchainIcon } from "components/Icons/";
 import Image from "next/image";
-import { InputAmount } from "../Form";
-import { createTreasurySteps, SpinnerLoading } from "./base-dialogs/Stepper";
 import { IContributeTreasuryDialog, ICreateTreasuryDialog, IDetainNftDialog } from "./dialogInterfaces";
-import { CopyTextButton } from "components/Button/";
 
 export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButton }: IDetainNftDialog) => {
     return (

@@ -1,4 +1,4 @@
-import { BlockchainIcon } from "components/Icons/";
+import { BlockchainIcon } from "components";
 import * as React from "react";
 
 const getLoadingStrings = (amount: number) => {

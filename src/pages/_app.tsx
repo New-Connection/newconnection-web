@@ -1,15 +1,14 @@
 import React from "react";
-import { MORALIS_APP_ID, MORALIS_SERVER_URL } from "utils/constants";
+import { MORALIS_APP_ID, MORALIS_SERVER_URL } from "utils";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "react-query"; // it makes fetching, caching, synchronizing and updating server state
 import { WagmiConfig } from "wagmi";
 import type { AppProps } from "next/app";
 import "styles/globals.css";
-import { WagmiClient } from "components/Web3";
+import { CustomToast, WagmiClient } from "components";
 import { MoralisProvider } from "react-moralis";
 import Script from "next/script";
 import "nprogress/nprogress.css";
-import CustomToast from "components/Toast/CustomToast";
 
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient());

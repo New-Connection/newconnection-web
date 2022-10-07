@@ -1,7 +1,6 @@
 import { Select, SelectArrow, SelectItem, SelectPopover, useSelectState } from "ariakit/select";
-
 import { ISelectorProps } from "./types";
-import { getChainNames, getLogoURI } from "interactions/contract/utils/blockchains";
+import { getChainNames, getLogoURI } from "interactions/contract";
 
 export const BlockchainSelector = ({ name, label, className, enabledValues, handleChange }: ISelectorProps) => {
     const select = useSelectState({

@@ -2,10 +2,8 @@ import React from "react";
 import { NextPage } from "next";
 import Link from "next/link";
 
-import Layout from "components/Layout/Layout";
-import { Button } from "components/Form";
-import { BackButton } from "components/Button/";
-import { isBlockchainSupported } from "interactions/contract/utils/blockchains";
+import Layout, { BackButton, Button } from "components";
+import { isBlockchainSupported } from "interactions/contract";
 import { useNetwork } from "wagmi";
 
 interface ICard {

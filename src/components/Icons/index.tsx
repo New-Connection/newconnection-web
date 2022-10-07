@@ -1,6 +1,6 @@
-export { LockIcon } from "./LockIcon";
-export { TwitterIcon } from "./TwitterIcon";
-export { WebsiteIcon } from "./WebsiteIcon";
-export { DiscordIcon } from "./DiscordIcon";
-export { BlockchainIcon } from "./BlockchainIcon";
-export { ArrowUpRightIcon } from "./ArrowUpRightIcon";
+export * from "./LockIcon";
+export * from "./TwitterIcon";
+export * from "./WebsiteIcon";
+export * from "./DiscordIcon";
+export * from "./BlockchainIcon";
+export * from "./ArrowUpRightIcon";

@@ -1,23 +1,8 @@
-import { timestampToDate } from "utils/functions";
-import { BlockchainIcon } from "components/Icons/";
+import { timestampToDate } from "utils";
+import { BlockchainIcon, CopyTextButton } from "components";
 import React from "react";
 import classNames from "classnames";
-import { CopyTextButton } from "../Button";
-import { IProposalDetail } from "types/pages";
-
-interface IProposalCard {
-    title: string;
-    shortDescription: string;
-    chainId?: number;
-    tokenName?: string;
-    description?: string;
-    governorName?: string;
-    blockchain?: string[];
-    isActive?: boolean;
-    forVotes?: string;
-    againstVotes?: string;
-    deadline?: number;
-}
+import { ICardProposal, IInformationCard, IProposalCard } from "./cardsInterfaces";
 
 export const ProposalCard = ({
     title,
@@ -91,12 +76,6 @@ export const ProposalActivityBadge = ({ isActive }) => {
     );
 };
 
-interface ICardProposal {
-    title: string;
-    children?: React.ReactNode;
-    className?: string;
-}
-
 const DetailProposalCard = ({ title, children, className }: ICardProposal) => {
     return (
         <div className={classNames("w-full h-64 border-2 border-gray rounded-xl mt-6 p-4", className)}>
@@ -105,10 +84,6 @@ const DetailProposalCard = ({ title, children, className }: ICardProposal) => {
         </div>
     );
 };
-
-interface IInformationCard {
-    proposalData: IProposalDetail;
-}
 
 export const AboutProposalCard = ({ proposalData }: IInformationCard) => {
     return (

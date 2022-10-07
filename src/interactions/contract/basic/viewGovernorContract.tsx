@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { GOVERNOR_ABI } from "abis";
-import { getSecondsPerBlock } from "interactions/contract/utils/blockchains";
-import { provider } from "components/Web3";
+import { getSecondsPerBlock } from "interactions/contract";
+import { provider } from "components";
 
 enum ProposalState {
     Pending,

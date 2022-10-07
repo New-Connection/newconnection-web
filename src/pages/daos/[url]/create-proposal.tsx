@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { ICreateProposal, IDAOPageForm, INFTVoting } from "types/pages";
+import { ICreateProposal, ICreateProposalQuery, IDAOPageForm, INFTVoting } from "types";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import Layout from "components/Layout/Layout";
-import { handleAddArray, handleChangeBasic, handleTextChange } from "utils/handlers/eventHandlers";
-import { Button, CheckboxGroup, InputText, InputTextArea, RadioSelectorNFT } from "components/Form";
-import { BackButton } from "components/Button/";
+import Layout, {
+    BackButton,
+    Button,
+    CheckboxGroup,
+    CreateProposalDialog,
+    handleNext,
+    handleReset,
+    InputText,
+    InputTextArea,
+    RadioSelectorNFT,
+} from "components";
+import { handleAddArray, handleChangeBasic, handleContractError, handleTextChange, validateForm } from "utils";
 import { useDialogState } from "ariakit";
-import { validateForm } from "utils/functions";
-import { createProposal } from "interactions/contract/basic/writeGovernorContract";
+import { checkCorrectNetwork, createProposal } from "interactions/contract";
 import { useRouter } from "next/router";
 import { Signer } from "ethers";
-import { MoralisClassEnum } from "interactions/database/moralisObjects";
-import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { ICreateProposalQuery } from "types/pageQueries";
-import { CreateProposalDialog } from "components/Dialog/CreateProposalDialogs";
-import { handleContractError } from "utils/handlers/errorHandlers";
-import { checkCorrectNetwork } from "../../../interactions/contract";
 import {
     getMoralisInstance,
+    MoralisClassEnum,
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
-} from "../../../interactions/database/functions";
+} from "interactions/database";
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({

@@ -2,30 +2,9 @@ import * as React from "react";
 import ASSETS from "assets";
 import Image from "next/image";
 import classNames from "classnames";
-import { formatAddress } from "utils/functions";
-import { BlockchainIcon } from "components/Icons/";
-import { ButtonState, INFTVoting } from "types/pages";
-import { DisclosureState } from "ariakit";
-
-interface INFTImage {
-    image?: string;
-    className?: string;
-    index?: number;
-}
-
-interface INFTCard {
-    nftObject: INFTVoting;
-    chain?: number | string;
-    className?: string;
-}
-
-interface INFTCardWithDialog extends INFTCard {
-    nftObject: INFTVoting;
-    setCurrentNFT?: React.Dispatch<React.SetStateAction<INFTVoting>>;
-    setButtonState?: React.Dispatch<React.SetStateAction<ButtonState>>;
-    detailNFTDialog?: DisclosureState;
-    chain: number | string;
-}
+import { formatAddress } from "utils";
+import { BlockchainIcon } from "components";
+import { INFTCard, INFTCardWithDialog, INFTImage } from "./cardsInterfaces";
 
 export const NFTImage = ({ className, image }: INFTImage) => {
     return (

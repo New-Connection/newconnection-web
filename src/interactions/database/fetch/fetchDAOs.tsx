@@ -1,7 +1,6 @@
-import { IDAOPageForm } from "types/pages";
+import { IDAOPageForm } from "types";
 import { Moralis } from "moralis-v1";
-import { handleContractError } from "utils/handlers/errorHandlers";
-import { getIpfsImage } from "utils/api/ipfsUpload";
+import { getIpfsImage, handleContractError } from "utils";
 import ASSETS from "assets";
 
 export async function fetchDAOs(isInitialized: any, DAOsQuery: Function) {

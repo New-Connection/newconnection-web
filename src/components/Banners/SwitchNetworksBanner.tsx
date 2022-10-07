@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { getChainIds } from "interactions/contract/utils/blockchains";
+import { getChainIds } from "interactions/contract";
 
 const SwitchNetworkBanner = () => {
     const chainIDs: number[] = getChainIds(); // Goerli, Mumbai, FUJI

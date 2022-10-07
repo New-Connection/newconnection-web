@@ -4,8 +4,8 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { getChains } from "interactions/contract/utils/blockchains";
-import { INFURA_ID } from "utils/constants";
+import { getChains } from "interactions/contract";
+import { INFURA_ID } from "utils";
 
 export const { chains, provider, webSocketProvider } = configureChains(getChains(), [
     infuraProvider({ priority: 0, apiKey: INFURA_ID }),

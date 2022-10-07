@@ -1,10 +1,9 @@
-import { addNFTSteps, createNFTSteps, StepperDialog } from "./base-dialogs/Stepper";
+import { addNFTSteps, CopyTextButton, createNFTSteps, StepperDialog } from "components";
 import React from "react";
 import { useRouter } from "next/router";
 import { ICreateNftDialog } from "./dialogInterfaces";
 import Link from "next/link";
-import { getChainNames } from "interactions/contract/utils/blockchains";
-import { CopyTextButton } from "components/Button/";
+import { getChainNames } from "interactions/contract";
 
 export const AddNftDialog = ({ dialog, activeStep, formData }: ICreateNftDialog) => {
     const router = useRouter();

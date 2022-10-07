@@ -2,7 +2,7 @@ import Link from "next/link";
 import { StepperDialog } from "./base-dialogs";
 import React from "react";
 import { ICreateDaoDialog } from "./dialogInterfaces";
-import { CopyTextButton } from "components/Button/";
+import { CopyTextButton } from "components";
 
 export const CreateDaoDialog = ({ dialog, formData, activeStep }: ICreateDaoDialog) => {
     return (

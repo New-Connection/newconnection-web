@@ -1,6 +1,6 @@
 import React from "react";
 
-const Logo = () => {
+export const Logo = () => {
     return (
         <div className="flex">
             <span className="text-black font-bold leading-5">
@@ -11,5 +11,3 @@ const Logo = () => {
         </div>
     );
 };
-
-export default Logo;

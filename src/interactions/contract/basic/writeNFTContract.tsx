@@ -1,6 +1,6 @@
 import { ethers, Signer } from "ethers";
 import { GOVERNANCE_NFT_ABI } from "abis";
-import { handleContractError } from "utils/handlers/errorHandlers";
+import { handleContractError } from "utils";
 
 interface IAddToWhitelist {
     addressNFT: string;

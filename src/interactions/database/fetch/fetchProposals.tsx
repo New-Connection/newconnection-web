@@ -1,10 +1,5 @@
-import { IProposalPageForm } from "types/pages";
-import {
-    isProposalActive,
-    proposalAgainstVotes,
-    proposalDeadline,
-    proposalForVotes,
-} from "interactions/contract/basic/viewGovernorContract";
+import { IProposalPageForm } from "types";
+import { isProposalActive, proposalAgainstVotes, proposalDeadline, proposalForVotes } from "interactions/contract";
 import { Moralis } from "moralis-v1";
 
 export async function fetchProposals(proposalQuery: any) {

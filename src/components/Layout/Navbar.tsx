@@ -1,11 +1,9 @@
 import Link from "next/link";
-import Logo from "components/Layout/Logo";
-import { Account, NetworksMenu, WalletSelector } from "components/Web3";
+import { Account, Logo, NetworksMenu, WalletSelector } from "components";
 import { useAccount } from "wagmi";
 import { useDialogState } from "ariakit";
 import { useRouter } from "next/router";
 import Menu from "./Menu";
-
 import { useIsMounted } from "hooks";
 
 const navigation = [

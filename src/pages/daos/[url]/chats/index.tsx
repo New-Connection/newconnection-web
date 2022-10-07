@@ -3,14 +3,10 @@ import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
-
-import Layout from "components/Layout/Layout";
-import { BackButton } from "components/Button/";
-import { IDAOPageForm, INFTVoting } from "types/pages";
-import { getNumberOfTokenInOwnerAddress } from "interactions/contract/basic/viewNftContract";
-import { IChatsQuery } from "types/pageQueries";
-import { LockIcon } from "components/Icons";
-import { formatAddress } from "utils/functions";
+import Layout, { BackButton, LockIcon } from "components";
+import { IChatsQuery, IDAOPageForm, INFTVoting } from "types";
+import { getNumberOfTokenInOwnerAddress } from "interactions/contract";
+import { formatAddress } from "utils";
 
 const ChatsPage: NextPage = () => {
     const router = useRouter();

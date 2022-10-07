@@ -1,39 +1,45 @@
 import React, { useEffect, useState } from "react";
-import {
+import Layout, {
+    AddNftDialog,
+    BackButton,
     Button,
     DragAndDropImage,
+    handleNext,
+    handleReset,
     InputAmount,
     InputSupplyOfNFT,
     InputText,
     InputTextArea,
     TypeSelector,
-} from "components/Form";
+} from "components";
 import { useRouter } from "next/router";
 import { Signer } from "ethers";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
-import Layout from "components/Layout/Layout";
-import { ICreateNFT, IDAOPageForm } from "types/pages";
+import { IAddNftQuery, ICreateNFT, IDAOPageForm } from "types";
 import {
     handleChangeBasic,
+    handleContractError,
     handleImageChange,
     handleNftSupplyChange,
     handleSelectorChange,
     handleTextChange,
-} from "utils/handlers/eventHandlers";
-import { validateForm } from "utils/functions";
+    storeNFT,
+    validateForm,
+} from "utils";
 import { useDialogState } from "ariakit";
-import { handleNext, handleReset } from "components/Dialog/base-dialogs";
-import { BackButton } from "components/Button/";
-import { storeNFT } from "utils/api/ipfsUpload";
-import { CHAINS, getChainNames, getLogoURI } from "interactions/contract/utils/blockchains";
-import { chainIds, layerzeroEndpoints } from "interactions/contract/utils/layerzero";
-import { addToken, checkCorrectNetwork, deployNFTContract } from "interactions/contract";
-import { IAddNftQuery } from "types/pageQueries";
-import { AddNftDialog } from "components/Dialog/CreateNftDialogs";
+import {
+    addToken,
+    chainIds,
+    CHAINS,
+    checkCorrectNetwork,
+    deployNFTContract,
+    getChainNames,
+    getLogoURI,
+    layerzeroEndpoints,
+} from "interactions/contract";
 import { fetchDAO } from "interactions/database";
-import { handleContractError } from "utils/handlers/errorHandlers";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({

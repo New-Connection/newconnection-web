@@ -1,14 +1,10 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import Layout from "components/Layout";
+import Layout, { BackButton, MockupLoadingProposals, ProposalCard } from "components";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { IDAOPageForm, IProposalPageForm } from "types/pages";
-import { ProposalCard } from "components/Cards/";
+import { IDAOPageForm, IProposalPageForm, IProposalsQuery } from "types";
 import { useRouter } from "next/router";
-import { BackButton } from "components/Button/";
-import { IProposalsQuery } from "types/pageQueries";
-import { MockupLoadingProposals } from "components/Mockup/Loading";
 
 const ProposalsPage: NextPage = () => {
     const [DAO, setDAO] = useState<IDAOPageForm>();

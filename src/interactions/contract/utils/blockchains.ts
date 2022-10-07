@@ -1,7 +1,7 @@
 import ASSETS from "assets";
 import { chain, Chain } from "wagmi";
 import { StaticImageData } from "next/image";
-import { INFURA_ID } from "../../../utils/constants";
+import { INFURA_ID } from "utils";
 
 type chainType = [
     //

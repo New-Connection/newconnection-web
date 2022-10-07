@@ -2,22 +2,23 @@ import React, { useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import Layout from "components/Layout/Layout";
-import { Button, InputTextArea, RadioSelectorNFT } from "components/Form";
-import { BackButton } from "components/Button/";
-import { validateForm } from "utils/functions";
-import { IDAOPageForm, INFTVoting, IWhitelistRecord } from "types/pages";
-import { handleChangeBasic, handleChangeBasicArray, handleTextChangeAddNewMember } from "utils/handlers/eventHandlers";
-import { MoralisClassEnum } from "interactions/database/moralisObjects";
-import { useSigner } from "wagmi";
-import { useMoralisQuery } from "react-moralis";
-import { handleContractError } from "utils/handlers/errorHandlers";
-import { IAddMemberQuery } from "types/pageQueries";
+import Layout, { BackButton, Button, InputTextArea, RadioSelectorNFT } from "components";
+import {
+    handleChangeBasic,
+    handleChangeBasicArray,
+    handleContractError,
+    handleTextChangeAddNewMember,
+    validateForm,
+} from "utils";
+import { IAddMemberQuery, IDAOPageForm, INFTVoting, IWhitelistRecord } from "types";
 import {
     getMoralisInstance,
+    MoralisClassEnum,
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
-} from "../../../interactions/database/functions";
+} from "interactions/database";
+import { useSigner } from "wagmi";
+import { useMoralisQuery } from "react-moralis";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IWhitelistRecord>({

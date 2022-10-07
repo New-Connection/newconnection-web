@@ -10,8 +10,6 @@ import { CheckCircleIcon } from "@heroicons/react/solid";
 import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
 
-//https://mui.com/material-ui/react-stepper/
-
 interface StepperDialogProps {
     dialog: DisclosureState;
     activeStep: number;

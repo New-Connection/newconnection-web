@@ -1,10 +1,7 @@
 import toast, { ToastBar, Toaster } from "react-hot-toast";
 import React from "react";
-// Lib for alerts on React
-// https://react-hot-toast.com/
-// https://react-hot-toast.com/docs/styling
 
-const CustomToast = () => {
+export const CustomToast = () => {
     return (
         <Toaster
             toastOptions={{
@@ -47,5 +44,3 @@ const CustomToast = () => {
         </Toaster>
     );
 };
-
-export default CustomToast;

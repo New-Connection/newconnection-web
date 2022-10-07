@@ -1,5 +1,4 @@
-import { INFURA_IPFS_AUTHORIZATION, INFURA_IPFS_GATEWAY, IPFS } from "../constants";
-import { handleContractError } from "../handlers/errorHandlers";
+import { handleContractError, INFURA_IPFS_AUTHORIZATION, INFURA_IPFS_GATEWAY, IPFS } from "utils";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 
 export const ipfs = ipfsHttpClient({

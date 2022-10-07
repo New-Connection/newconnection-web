@@ -1,5 +1,5 @@
 import { Moralis } from "moralis-v1";
-import { IWhitelistRecord } from "types/pages";
+import { IWhitelistRecord } from "types";
 
 export const fetchWhitelist = async (whitelistQuery: Function) => {
     const moralisInstance: Moralis.Object<Moralis.Attributes>[] = await whitelistQuery();

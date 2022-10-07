@@ -6,11 +6,11 @@ import { useAccount } from "wagmi";
 import Link from "next/link";
 import ASSETS from "assets/index";
 import { useDialogState } from "ariakit";
-import { Tabs } from "components/Tabs/";
+import { Tabs } from "components";
 import { useIsMounted } from "hooks";
 import DAOsPage from "./daos/index";
 
-import { TabsType } from "types/pages";
+import { TabsType } from "types";
 
 const TabOne: FC = () => {
     return (

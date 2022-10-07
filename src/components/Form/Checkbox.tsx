@@ -3,7 +3,7 @@ import { Group, GroupLabel } from "ariakit/group";
 import styles from "styles/components/Form/Checkmox.module.css";
 import { CheckboxProps } from "./types";
 import Image, { StaticImageData } from "next/image";
-import { getLogoURI } from "interactions/contract/utils/blockchains";
+import { getLogoURI } from "interactions/contract";
 import classNames from "classnames";
 
 export function CheckboxGroup({

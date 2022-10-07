@@ -1,7 +1,8 @@
-import { checkCorrectNetwork, sendEthToAddress } from "interactions/contract/utils/functions";
+import { checkCorrectNetwork, sendEthToAddress } from "interactions/contract";
 import toast from "react-hot-toast";
-import { IDAOPageForm } from "types/pages";
-import { handleContractError } from "utils/handlers/errorHandlers";
+import { IDAOPageForm } from "types";
+import { handleContractError } from "utils";
+import React from "react";
 
 export const contributeToTreasury = async (
     e: React.FormEvent<HTMLFormElement>,

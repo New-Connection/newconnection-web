@@ -1,4 +1,4 @@
-import { CRYPTOCOMPARE_API_KEY } from "../constants";
+import { CRYPTOCOMPARE_API_KEY } from "utils";
 
 export enum Currency {
     USD = "USD",

@@ -1,5 +1,5 @@
 import { useAccount } from "wagmi";
-import { formatAddress } from "utils/functions";
+import { formatAddress } from "utils";
 import * as React from "react";
 
 interface Props {

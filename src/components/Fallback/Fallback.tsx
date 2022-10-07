@@ -2,7 +2,6 @@ import { useNetworkProvider } from "hooks";
 import React from "react";
 import { BeatLoader } from "react-spinners";
 import { useAccount } from "wagmi";
-
 import text from "./errors.json";
 
 interface FallbackProps {
