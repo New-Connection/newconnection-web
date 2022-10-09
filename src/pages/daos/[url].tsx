@@ -202,9 +202,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         console.log("deleting");
         WhitelistMoralisInstance
             ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
-                  ?.destroy()
-                  .then()
-                  .catch(console.error)
+                ?.destroy()
+                .then()
+                .catch(console.error)
             : 0;
         //  rerender
         loadingWhitelist().catch(console.error);
@@ -353,7 +353,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                         Add treasury
                                     </button>
                                 ) : (
-                                    <button className="secondary-button w-full" disabled={true}>
+                                    <button className="secondary-button w-full disabled:cursor-default" disabled={true}>
                                         Treasury not added
                                     </button>
                                 )}
@@ -408,6 +408,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                             <WhitelistTab
                                                 whitelist={whitelist}
                                                 signer={signerData}
+                                                isOwner={isOwner}
                                                 chainId={DAO.chainId}
                                                 deleteFunction={deleteFromWhitelist}
                                             />
@@ -425,15 +426,17 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     <div className={"dao-nft"}>
                         <div className="flex flex-row justify-between mb-4 ">
                             <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
-                            <Link
-                                href={{
-                                    pathname: `${url}/add-new-nft`,
-                                }}
-                            >
-                                <button className={"secondary-button"} disabled={!isOwner}>
-                                    Add NFT
-                                </button>
-                            </Link>
+                            {isOwner && (
+                                <Link
+                                    href={{
+                                        pathname: `${url}/add-new-nft`,
+                                    }}
+                                >
+                                    <button className={"secondary-button"} disabled={!isOwner}>
+                                        Add NFT
+                                    </button>
+                                </Link>
+                            )}
                         </div>
                         {DAO.tokenAddress ? (
                             <div className="nft-cards-grid">
