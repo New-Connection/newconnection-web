@@ -1,9 +1,10 @@
 // IPFS MODULE
 export const IPFS = "ipfs://";
-export const INFURA_IPFS_PROJECT_ID = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID;
-export const INFURA_IPFS_PROJECT_SECRET = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET;
 export const INFURA_IPFS_AUTHORIZATION =
-    "Basic " + Buffer.from(INFURA_IPFS_PROJECT_ID + ":" + INFURA_IPFS_PROJECT_SECRET).toString("base64");
+    "Basic " +
+    Buffer.from(
+        process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID + ":" + process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET
+    ).toString("base64");
 export const INFURA_IPFS_GATEWAY = process.env.NEXT_PUBLIC_IPFS_DEDICATED_GATEWAY_SUBDOMAIN;
 
 // CryptoCompare

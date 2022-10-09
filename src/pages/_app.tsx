@@ -1,5 +1,5 @@
 import React from "react";
-import { MORALIS_APP_ID, MORALIS_SERVER_URL } from "utils";
+import { INFURA_IPFS_AUTHORIZATION, MORALIS_APP_ID, MORALIS_SERVER_URL } from "utils";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "react-query"; // it makes fetching, caching, synchronizing and updating server state
 import { WagmiConfig } from "wagmi";
@@ -9,6 +9,16 @@ import { CustomToast, WagmiClient } from "components";
 import { MoralisProvider } from "react-moralis";
 import Script from "next/script";
 import "nprogress/nprogress.css";
+import { create as ipfsHttpClient } from "ipfs-http-client";
+
+export const ipfs = ipfsHttpClient({
+    host: "ipfs.infura.io",
+    port: 5001,
+    protocol: "https",
+    headers: {
+        authorization: INFURA_IPFS_AUTHORIZATION,
+    },
+});
 
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient());

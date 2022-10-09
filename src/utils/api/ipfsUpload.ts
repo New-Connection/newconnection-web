@@ -1,14 +1,5 @@
-import { handleContractError, INFURA_IPFS_AUTHORIZATION, INFURA_IPFS_GATEWAY, IPFS } from "utils";
-import { create as ipfsHttpClient } from "ipfs-http-client";
-
-export const ipfs = ipfsHttpClient({
-    host: "ipfs.infura.io",
-    port: 5001,
-    protocol: "https",
-    headers: {
-        authorization: INFURA_IPFS_AUTHORIZATION,
-    },
-});
+import { handleContractError, INFURA_IPFS_GATEWAY, IPFS } from "utils";
+import { ipfs } from "pages/_app";
 
 export const getIpfsImage = (path: string, mockImage: string) => {
     const fullPath = INFURA_IPFS_GATEWAY + path.replace(IPFS, "");

@@ -107,9 +107,9 @@ export const handleDaoNameUrlChange = <T extends ICreate, E extends HTMLInputEle
     field: string
 ) => {
     const createUrl = (name: string): string => {
-        return name.replace(/ /g, "-");
+        return name.trim().split(/\s+/g).join("-");
     };
-
-    set((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-    handleChangeBasic(createUrl(event.target.value), set, field);
+    const url = createUrl(event.target.value);
+    set((prev) => ({ ...prev, [event.target.name]: url.replace("-", " ") }));
+    handleChangeBasic(url, set, field);
 };

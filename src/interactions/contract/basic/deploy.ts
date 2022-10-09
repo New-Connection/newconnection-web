@@ -23,8 +23,8 @@ const CreateTreasuryContract = (signer: Signer): ContractFactory => {
 export interface IConstructorGovernor {
     name: string;
     tokenAddress: string;
-    votingPeriod: number;
-    quorumPercentage: number;
+    votingPeriod: string;
+    quorumPercentage: string;
 }
 
 export async function deployGovernorContract(signer: Signer, constructor: IConstructorGovernor): Promise<Contract> {
@@ -64,7 +64,8 @@ export async function deployNFTContract(signer: Signer, constructor: IConstructo
 }
 
 // For future constructor arguments
-export interface IConstructorTreasury {}
+export interface IConstructorTreasury {
+}
 
 export async function deployTreasuryContract(signer: Signer, constructor: IConstructorTreasury): Promise<Contract> {
     const factory = CreateTreasuryContract(signer);

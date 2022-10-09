@@ -7,7 +7,7 @@ type chainType = [
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
-    // "Ethereum",
+    "Ethereum",
     // "Arbitrum",
     // "Binance",
     // "Avalanche",
@@ -30,7 +30,7 @@ type chainType = [
 ];
 
 const CHAINS_IMG: {
-    [key in chainType[number]]: StaticImageData;
+    [key in chainType[number]]?: StaticImageData;
 } = {
     //
     // MAIN CHAINS
@@ -63,7 +63,7 @@ const CHAINS_BLOCKTIME: {
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
-    // Ethereum: 12,
+    Ethereum: 12,
     // Arbitrum: 0.5,
     // Binance: 3,
     // Avalanche: 2,
@@ -86,7 +86,7 @@ const CHAINS_BLOCKTIME: {
 };
 
 export const CHAINS: {
-    [key in chainType[number]]: Chain;
+    [key in chainType[number]]?: Chain;
 } = {
     //
     // TEST CHAINS
@@ -251,9 +251,10 @@ export const getLogoURI = (chain: number | string): StaticImageData => {
 };
 
 export const getSecondsPerBlock = (chain: number | string): number => {
+    console.log(typeof chain);
     return (
         (typeof chain === "number" ? CHAINS_BLOCKTIME[getChain(chain)?.name] : CHAINS_BLOCKTIME[chain]) ||
-        CHAINS_BLOCKTIME["Goerli"]
+        CHAINS_BLOCKTIME["Ethereum"]
     );
 };
 

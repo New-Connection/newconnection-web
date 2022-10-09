@@ -80,7 +80,7 @@ const CreateNFT: NextPage = () => {
         // IPFS UPLOAD
         try {
             path = await storeNFT(formData.file as File);
-            console.log(path);
+            console.log("path " + path);
             handleChangeBasic(path, setFormData, "ipfsAddress");
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });

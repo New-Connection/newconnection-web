@@ -119,8 +119,8 @@ const CreateDAO: NextPage = () => {
             contract = await deployGovernorContract(signerData as Signer, {
                 name: formData.name,
                 tokenAddress: formData.tokenAddress[0],
-                votingPeriod: +formData.votingPeriod * getBlocksPerDay(CHAINS[formData.blockchain[0]]),
-                quorumPercentage: +formData.quorumPercentage,
+                votingPeriod: (+formData.votingPeriod * getBlocksPerDay(formData.blockchain[0])).toString(),
+                quorumPercentage: formData.quorumPercentage,
             });
             handleNext(setActiveStep);
             await contract.deployed();
