@@ -80,6 +80,7 @@ export async function getNumberOfTokenInOwnerAddress(userAddress: string, contra
         let baseProvider = provider({ chainId });
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         const balance = await nft.balanceOf(userAddress);
+        console.log(balance.toString());
         return balance.toString(); // 0 if you don't have tokens
     } catch (e) {
         handleContractError(e);

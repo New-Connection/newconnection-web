@@ -5,18 +5,19 @@ import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import Layout, { BackButton, LockIcon } from "components";
 import { IChatsQuery, IDAOPageForm, INFTVoting } from "types";
-import { getNumberOfTokenInOwnerAddress } from "interactions/contract";
 import { formatAddress } from "utils";
+import { getNumberOfTokenInOwnerAddress } from "interactions/contract";
 
 const ChatsPage: NextPage = () => {
     const router = useRouter();
     const { address } = useAccount();
 
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
+    const [ownedTokenAddresses, setOwnedTokenAddresses] = useState([]);
 
-    const [chatActiveIndex, setChatActive] = useState(null);
+    const [activeChat, setActiveChat] = useState(null);
     const [isChatOpen, setChatOpen] = useState(false);
-    const [indexOfOpenChatsForUser, setIndexOpenChat] = useState([]);
+    console.log(ownedTokenAddresses);
 
     useEffect(() => {
         const query = router.query as IChatsQuery;
@@ -24,18 +25,15 @@ const ChatsPage: NextPage = () => {
         const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.url + " NFTs"));
 
         const checkNFTs = async (tokenAddresses: string[], walletAddress: string, chainId: number) => {
-            const indexes = [];
+            const newTokenAddresses = [];
             await Promise.all(
-                tokenAddresses.map(async (token, index) => {
-                    const numberOfTokens = +(await getNumberOfTokenInOwnerAddress(walletAddress, token, chainId));
-                    console.log("Number of tokens", numberOfTokens);
-                    if (numberOfTokens > 0) {
-                        indexes.push(index);
+                tokenAddresses.map(async (token) => {
+                    if (+(await getNumberOfTokenInOwnerAddress(walletAddress, token, chainId)) > 0) {
+                        newTokenAddresses.push(token);
                     }
                 })
             );
-            console.log("indexes:  " + indexes);
-            setIndexOpenChat(() => indexes);
+            setOwnedTokenAddresses(() => newTokenAddresses);
         };
 
         if (DAO && savedNfts) {
@@ -63,30 +61,31 @@ const ChatsPage: NextPage = () => {
                             <div className="flex flex-row justify-between bg-white">
                                 {/* User chat*/}
 
-                                <div className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
+                                <div
+                                    className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
                                     {NFTs &&
                                         NFTs.map((nft, index) => (
                                             <button
                                                 className={
-                                                    chatActiveIndex === index
-                                                        ? "flex flex-row py-4 px-2 justify-center items-center border-l-4 border-purple"
-                                                        : "flex flex-row py-4 px-2 justify-center items-center cursor-pointer disabled:cursor-not-allowed"
+                                                    activeChat === nft.tokenAddress
+                                                        ? "chat-button border-l-4 border-purple"
+                                                        : "chat-button cursor-pointer disabled:cursor-not-allowed disabled:text-gray2"
                                                 }
                                                 key={index}
                                                 type={"button"}
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    setChatActive(index);
+                                                    setActiveChat(() => nft.tokenAddress);
                                                     setChatOpen(true);
-                                                    console.log("Index", index);
+                                                    console.log("address", nft.tokenAddress);
                                                 }}
-                                                disabled={!indexOfOpenChatsForUser.includes(index)}
+                                                disabled={!ownedTokenAddresses.includes(nft.tokenAddress)}
                                             >
                                                 <div className="w-full">
                                                     <div className="text-lg font-semibold">{nft.title}</div>
-                                                    <span className="text-gray-500">DAO members</span>
+                                                    {/*<span className="text-gray-500">DAO members</span>*/}
                                                 </div>
-                                                {!indexOfOpenChatsForUser.includes(index) && <LockIcon />}
+                                                {!ownedTokenAddresses.includes(nft.tokenAddress) && <LockIcon />}
                                             </button>
                                         ))}
                                 </div>
@@ -97,12 +96,12 @@ const ChatsPage: NextPage = () => {
                                     <div className="w-full flex flex-col justify-between h-[calc(100vh-190px-165px)]">
                                         <iframe
                                             src={`https://newconnection.click/${
-                                                NFTs.map((NFT) => NFT.tokenAddress)[chatActiveIndex]
+                                                NFTs.map((NFT) => NFT.tokenAddress)[activeChat]
                                             }/${formatAddress(address)}`}
                                             width="100"
                                             height="100"
                                             className="w-full h-full"
-                                        ></iframe>
+                                        />
                                     </div>
                                 ) : (
                                     <div className="w-full px-5 flex flex-col justify-between">
