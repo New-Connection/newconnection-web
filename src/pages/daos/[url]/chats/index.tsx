@@ -17,7 +17,6 @@ const ChatsPage: NextPage = () => {
 
     const [activeChat, setActiveChat] = useState(null);
     const [isChatOpen, setChatOpen] = useState(false);
-    console.log(ownedTokenAddresses);
 
     useEffect(() => {
         const query = router.query as IChatsQuery;
@@ -33,6 +32,7 @@ const ChatsPage: NextPage = () => {
                     }
                 })
             );
+            console.log("owned NFTs " + newTokenAddresses);
             setOwnedTokenAddresses(() => newTokenAddresses);
         };
 
@@ -77,7 +77,6 @@ const ChatsPage: NextPage = () => {
                                                     e.preventDefault();
                                                     setActiveChat(() => nft.tokenAddress);
                                                     setChatOpen(true);
-                                                    console.log("address", nft.tokenAddress);
                                                 }}
                                                 disabled={!ownedTokenAddresses.includes(nft.tokenAddress)}
                                             >
