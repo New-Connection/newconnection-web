@@ -2,23 +2,26 @@ import { Moralis } from "moralis-v1";
 import toast from "react-hot-toast";
 import { useMoralisQuery } from "react-moralis";
 import {
-    DaoMoralisObject,
+    DaoMoralisClass,
+    MemberMoralisClass,
     MoralisClassEnum,
-    ProposalMoralisObject,
-    UserMoralisObject,
-    WhitelistMoralisObject,
+    NftMoralisClass,
+    ProposalMoralisClass,
+    WhitelistMoralisClass,
 } from "./moralisObjects";
 
-export const getMoralisInstance = (moralisClass: MoralisClassEnum) => {
+export const getMoralisInstance = (moralisClass: MoralisClassEnum): Moralis.Object => {
     switch (moralisClass) {
         case MoralisClassEnum.DAO:
-            return new DaoMoralisObject();
+            return new DaoMoralisClass();
         case MoralisClassEnum.PROPOSAL:
-            return new ProposalMoralisObject();
-        case MoralisClassEnum.USER:
-            return new UserMoralisObject();
+            return new ProposalMoralisClass();
+        case MoralisClassEnum.MEMBER:
+            return new MemberMoralisClass();
         case MoralisClassEnum.WHITELIST:
-            return new WhitelistMoralisObject();
+            return new WhitelistMoralisClass();
+        case MoralisClassEnum.NFT:
+            return new NftMoralisClass();
     }
 };
 export const saveMoralisInstance = async <T extends Moralis.Object>(moralisInstance: T) => {

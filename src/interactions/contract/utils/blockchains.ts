@@ -251,7 +251,6 @@ export const getLogoURI = (chain: number | string): StaticImageData => {
 };
 
 export const getSecondsPerBlock = (chain: number | string): number => {
-    console.log(typeof chain);
     return (
         (typeof chain === "number" ? CHAINS_BLOCKTIME[getChain(chain)?.name] : CHAINS_BLOCKTIME[chain]) ||
         CHAINS_BLOCKTIME["Ethereum"]

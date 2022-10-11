@@ -28,7 +28,7 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
             <div className="lg:flex md:flex xl:flex justify-between">
                 <div className="flex-wrap relatives">
                     {tabs.map((tab) => (
-                        <button
+                        typeof tab === "object" && <button
                             className={
                                 selectedTab === tab.index
                                     ? "border-b-2 border-solid w-36 border-[#6858CB] pb-4 text-purple"

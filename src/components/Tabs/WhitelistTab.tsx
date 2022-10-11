@@ -16,14 +16,41 @@ const renderValue = (chain: string) => {
 interface IWhitelistTab {
     whitelist: IWhitelistRecord[];
     signer: Signer;
+    isLoaded: boolean;
     isOwner: boolean;
     chainId: number;
     deleteFunction: Function;
 }
 
-export const WhitelistTab = ({ whitelist, signer, isOwner, chainId, deleteFunction }: IWhitelistTab) => {
+export const WhitelistTab = ({ whitelist, signer, isOwner, isLoaded, chainId, deleteFunction }: IWhitelistTab) => {
     const [click, setClick] = useState(false);
     const { switchNetwork } = useSwitchNetwork();
+
+    const addToWhitelist = async (walletAddress: string, votingTokenAddress: string) => {
+        if (!(await checkCorrectNetwork(signer, chainId, switchNetwork))) {
+            return;
+        }
+
+        setClick(true);
+        console.log("voting token " + votingTokenAddress);
+        const status = await AddToWhitelist({
+            addressNFT: votingTokenAddress,
+            walletAddress: walletAddress,
+            signer: signer,
+        });
+
+        try {
+            if (status) {
+                await deleteFunction(walletAddress);
+
+                toast.success("Wallet added to Whitelist");
+            }
+        } catch (e) {
+            handleContractError(e);
+        }
+
+        setClick(false);
+    };
 
     return whitelist && whitelist.length !== 0 ? (
         <div className="w-full justify-between space-y-5 gap-5">
@@ -52,33 +79,11 @@ export const WhitelistTab = ({ whitelist, signer, isOwner, chainId, deleteFuncti
                         </div>
                         <p className="w-1/4 text-sm line-clamp-3 text-center">{note}</p>
 
-                        {isOwner && (
+                        {isOwner && isLoaded && (
                             <button
                                 className="w-1/4 settings-button py-2 px-4 bg-white border-gray2 border-2 btn-state"
                                 onClick={async () => {
-                                    if (!(await checkCorrectNetwork(signer, chainId, switchNetwork))) {
-                                        return;
-                                    }
-
-                                    setClick(true);
-                                    try {
-                                        console.log(votingTokenAddress);
-                                        const status = await AddToWhitelist({
-                                            addressNFT: votingTokenAddress,
-                                            walletAddress: walletAddress,
-                                            signer: signer,
-                                        });
-
-                                        status
-                                            ? toast.success("Wallet added to Whitelist")
-                                            : toast.error("Only owner of DAO can add a new members");
-                                        setClick(false);
-
-                                        deleteFunction(walletAddress);
-                                    } catch (error) {
-                                        handleContractError(error);
-                                    }
-                                    setClick(false);
+                                    await addToWhitelist(walletAddress, votingTokenAddress);
                                 }}
                                 disabled={click}
                             >
@@ -92,9 +97,9 @@ export const WhitelistTab = ({ whitelist, signer, isOwner, chainId, deleteFuncti
     ) : (
         <div className="text-center">
             <MockupTextCard
-                label={"No members here yet"}
+                label={"No whitelist requests here yet"}
                 text={
-                    "You can join DAO click to become member" +
+                    "You can send a request to join the DAO by clicking the become a member button" +
                     "then click the button “Add new proposals” and initiate a proposals"
                 }
             />

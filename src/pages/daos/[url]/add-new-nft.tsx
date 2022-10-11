@@ -39,7 +39,7 @@ import {
     getLogoURI,
     layerzeroEndpoints,
 } from "interactions/contract";
-import { fetchDAO } from "interactions/database";
+import { fetchDAO, getMoralisInstance, MoralisClassEnum, saveMoralisInstance } from "interactions/database";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -85,24 +85,6 @@ const AddNewNFT: NextPage = () => {
         }
     };
 
-    const calculateSupply = () => {
-        return formData[
-            getChainNames().find((chain) => {
-                const supply = formData[chain];
-                return supply !== 0 && supply !== "" && supply !== undefined;
-            })
-        ];
-    };
-
-    const saveNewNFTContractAddress = async (nftTokenAddress: string) => {
-        console.log("nft token address", nftTokenAddress);
-        const { moralisInstance } = await fetchDAO(isInitialized, DaoQuery);
-        if (moralisInstance && nftTokenAddress) {
-            moralisInstance.addUnique("tokenAddress", nftTokenAddress);
-            await moralisInstance.save();
-        }
-    };
-
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -110,6 +92,7 @@ const AddNewNFT: NextPage = () => {
             return;
         }
 
+        const chainId = CHAINS[formData.blockchain].id;
         if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))) {
             return;
         }
@@ -117,23 +100,39 @@ const AddNewNFT: NextPage = () => {
         handleReset(setActiveStep);
         confirmDialog.toggle();
 
-        let path;
+        const calculateSupply = () => {
+            return formData[
+                getChainNames().find((chain) => {
+                    const supply = formData[chain];
+                    return supply !== 0 && supply !== "" && supply !== undefined;
+                })
+                ];
+        };
+
+        const saveToDatabase = async (nftTokenAddress: string) => {
+            console.log("nft token address", nftTokenAddress);
+            const { moralisInstance } = await fetchDAO(isInitialized, DaoQuery);
+            if (moralisInstance && nftTokenAddress) {
+                moralisInstance.addUnique("tokenAddress", nftTokenAddress);
+                await moralisInstance.save();
+
+                const nftInstance = getMoralisInstance(MoralisClassEnum.NFT);
+                nftInstance.set("tokenAddress", nftTokenAddress);
+                nftInstance.set("chainId", chainId);
+                nftInstance.set("governorAddress", formData.governorAddress);
+                await saveMoralisInstance(nftInstance);
+            }
+        };
+
         try {
-            path = await storeNFT(formData.file as File);
+            const path = await storeNFT(formData.file as File);
             console.log(path);
             handleChangeBasic(path, setFormData, "ipfsAddress");
-        } catch (error) {
-            handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
-            return;
-        }
 
-        let contract;
-        try {
             const chainId = await signerData.getChainId();
             const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
-            contract = await deployNFTContract(signerData as Signer, {
+            const contract = await deployNFTContract(signerData as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
                 price: formData.price.toString(),
@@ -156,14 +155,8 @@ const AddNewNFT: NextPage = () => {
             handleNext(setActiveStep);
 
             handleChangeBasic(contract.address, setFormData, "contractAddress");
-            await saveNewNFTContractAddress(contract.address);
+            await saveToDatabase(contract.address);
             handleNext(setActiveStep);
-        } catch (error) {
-            handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
-            return;
-        }
-        try {
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);

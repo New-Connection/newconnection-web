@@ -52,15 +52,6 @@ const CreateNFT: NextPage = () => {
 
     const { switchNetwork } = useSwitchNetwork();
 
-    const calculateSupply = () => {
-        return formData[
-            getChainNames().find((chain) => {
-                const supply = formData[chain];
-                return supply !== 0 && supply !== "" && supply !== undefined;
-            })
-        ];
-    };
-
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -73,23 +64,25 @@ const CreateNFT: NextPage = () => {
         }
 
         handleReset(setActiveStep);
+
         // SHOW DIALOG
         confirmDialog.toggle();
 
-        let path;
-        // IPFS UPLOAD
+        const calculateSupply = () => {
+            return formData[
+                getChainNames().find((chain) => {
+                    const supply = formData[chain];
+                    return supply !== 0 && supply !== "" && supply !== undefined;
+                })
+                ];
+        };
+
+
         try {
-            path = await storeNFT(formData.file as File);
+            const path = await storeNFT(formData.file as File);
             console.log("path " + path);
             handleChangeBasic(path, setFormData, "ipfsAddress");
-        } catch (error) {
-            handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
-            return;
-        }
 
-        // UPLOAD NFT CONTRACT
-        try {
             const chainId = await signerData.getChainId();
             const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
@@ -112,7 +105,6 @@ const CreateNFT: NextPage = () => {
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
-            return;
         }
     }
 

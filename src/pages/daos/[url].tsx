@@ -7,6 +7,7 @@ import Layout, {
     CreateTreasuryDialog,
     DetailNftDialog,
     DiscordIcon,
+    MembersListTab,
     MockupLoadingDetailDAOPage,
     MockupLoadingNFT,
     MockupTextCard,
@@ -34,6 +35,7 @@ import {
     DAOPageProps,
     IDAOPageForm,
     IDaoQuery,
+    IMember,
     INFTVoting,
     IProposalPageForm,
     IWhitelistRecord,
@@ -43,7 +45,14 @@ import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { handleChangeBasic, isValidHttpUrl } from "utils";
-import { fetchDAO, fetchNFT, fetchProposals, fetchTreasuryBalance, fetchWhitelist } from "interactions/database";
+import {
+    fetchDAO,
+    fetchMembers,
+    fetchNFT,
+    fetchProposals,
+    fetchTreasuryBalance,
+    fetchWhitelist,
+} from "interactions/database";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 
@@ -78,6 +87,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
+    const [members, setMembers] = useState(new Map<string, IMember>());
 
     // NFT section
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
@@ -117,6 +127,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const loadingWhitelist = async () => {
         const data = await fetchWhitelist(WhitelistQuery);
         if (data) {
+            console.log("load whitelist");
             setWhitelist(() => data.whitelist);
             setWhitelistMoralisInstance(() => data.moralisInstance);
         }
@@ -166,6 +177,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             }
         };
 
+        const loadingMembers = async (dao: IDAOPageForm) => {
+            const newMembers = await fetchMembers(dao);
+            if (newMembers) {
+                setMembers(() => newMembers);
+            }
+        };
+
         loadingDAO()
             .then((dao) => {
                 if (dao) {
@@ -174,6 +192,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     loadingTreasuryBalance(dao).then();
                     loadingProposals().then();
                     loadingNFT(dao).then();
+                    loadingMembers(dao).then();
                 }
             })
             .catch((e) => {
@@ -203,11 +222,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         WhitelistMoralisInstance
             ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
                 ?.destroy()
-                .then()
+                .then(() => loadingWhitelist().catch(console.error))
                 .catch(console.error)
             : 0;
-        //  rerender
-        loadingWhitelist().catch(console.error);
     };
 
     const addTreasuryAndSave = async () => {
@@ -401,12 +418,20 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     },
                                 },
                                 {
-                                    label: "Whitelist",
+                                    label: "Members",
                                     index: 1,
+                                    Component: () => {
+                                        return <MembersListTab members={members} nfts={NFTs} />;
+                                    },
+                                },
+                                isOwner && {
+                                    label: "Whitelist",
+                                    index: 2,
                                     Component: () => {
                                         return (
                                             <WhitelistTab
                                                 whitelist={whitelist}
+                                                isLoaded={isLoaded}
                                                 signer={signerData}
                                                 isOwner={isOwner}
                                                 chainId={DAO.chainId}
@@ -426,7 +451,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     <div className={"dao-nft"}>
                         <div className="flex flex-row justify-between mb-4 ">
                             <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
-                            {isOwner && (
+                            {isOwner && isLoaded && (
                                 <Link
                                     href={{
                                         pathname: `${url}/add-new-nft`,

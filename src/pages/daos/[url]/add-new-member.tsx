@@ -3,13 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Layout, { BackButton, Button, InputTextArea, RadioSelectorNFT } from "components";
-import {
-    handleChangeBasic,
-    handleChangeBasicArray,
-    handleContractError,
-    handleTextChangeAddNewMember,
-    validateForm,
-} from "utils";
+import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, validateForm, } from "utils";
 import { IAddMemberQuery, IDAOPageForm, INFTVoting, IWhitelistRecord } from "types";
 import {
     getMoralisInstance,
@@ -54,7 +48,7 @@ const AddNewMember: NextPage = () => {
             handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
             handleChangeBasic(DAO.url, setFormData, "governorUrl");
             handleChangeBasic(DAO.chainId, setFormData, "chainId");
-            handleChangeBasicArray(DAO.blockchain, setFormData, "blockchainSelected");
+            handleChangeBasic(DAO.blockchain, setFormData, "blockchainSelected");
         }
 
         setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
@@ -100,7 +94,6 @@ const AddNewMember: NextPage = () => {
 
     const checkRequestAvailability = async (walletAddress: string) => {
         let available = false;
-        console.log("chedd");
         await whitelistFetch({
             onSuccess: (results) => {
                 if (results.filter((result) => result.get("walletAddress") === walletAddress).length === 0) {

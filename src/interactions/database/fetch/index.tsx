@@ -4,3 +4,4 @@ export * from "./fetchData";
 export * from "./fetchNFT";
 export * from "./fetchProposals";
 export * from "./fetchWhitelist";
+export * from "./fetchMembers";

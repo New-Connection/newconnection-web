@@ -9,8 +9,9 @@ interface IAddToWhitelist {
 }
 
 export async function AddToWhitelist({ addressNFT, walletAddress, signer }: IAddToWhitelist) {
-    const erc721_rw = new ethers.Contract(addressNFT, GOVERNANCE_NFT_ABI, signer);
+    let erc721_rw;
     try {
+        erc721_rw = new ethers.Contract(addressNFT, GOVERNANCE_NFT_ABI, signer);
         const tx = await erc721_rw.setAllowList([walletAddress], 1);
         await tx.wait();
         console.log("Transaction add to WL", tx);
@@ -31,13 +32,13 @@ export async function mintReserveAndDelegation(contractAddress: string, signer: 
     const erc20_rw = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, signer);
     const tx = await erc20_rw.reserve(1);
     await tx.wait();
+
     const address = await signer.getAddress();
     const delegateTx = await erc20_rw.delegate(address);
     console.log(tx);
-    console.log(delegateTx);
     console.log("Tx hash", tx.hash);
 
-    return tx;
+    return delegateTx;
     // const supply = await erc20_rw.totalSupply();
     // console.log(supply);
 }
@@ -46,9 +47,13 @@ export async function mintNFT(contractAddress: string, signer: Signer) {
     const erc20_rw = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, signer);
     const tx = await erc20_rw.mint();
     await tx.wait();
+
     const address = await signer.getAddress();
     const delegateTx = await erc20_rw.delegate(address);
     await delegateTx.wait();
+
     console.log(tx);
     console.log("Tx hash", tx.hash);
+
+    return delegateTx;
 }

@@ -115,4 +115,11 @@ export type TabsType = {
     Component: React.FC;
 }[];
 
+export interface IMember {
+    address: string;
+    tokens: Set<string>;
+    role?: string;
+    votingPower?: string;
+}
+
 export type ButtonState = "Mint" | "Loading" | "Success" | "Error";

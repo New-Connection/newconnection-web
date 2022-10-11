@@ -91,6 +91,8 @@ const CreateDAO: NextPage = () => {
             return;
         }
 
+        const chainId = CHAINS[formData.blockchain[0]].id;
+        handleChangeBasic(chainId, setFormData, "chainId");
         if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain[0]].id, switchNetwork))) {
             return;
         }
@@ -98,25 +100,38 @@ const CreateDAO: NextPage = () => {
         handleReset(setActiveStep);
         confirmDialog.toggle();
 
-        let profileImagePath;
-        let coverImagePath;
+        const saveToDatabase = async (
+            daoAddress: string,
+            profileImagePath: string,
+            coverImagePath: string,
+            tokenAddress: string
+        ) => {
+            const daoInstance = getMoralisInstance(MoralisClassEnum.DAO);
+            setFieldsIntoMoralisInstance(daoInstance, formData);
+            console.log("Contract Address for Moralis", daoAddress);
+            daoInstance.set("governorAddress", daoAddress);
+            daoInstance.set("chainId", chainId);
+            daoInstance.set("profileImage", profileImagePath);
+            daoInstance.set("coverImage", coverImagePath);
+            await saveMoralisInstance(daoInstance);
+
+            const nftInstance = getMoralisInstance(MoralisClassEnum.NFT);
+            nftInstance.set("tokenAddress", tokenAddress);
+            nftInstance.set("chainId", chainId);
+            nftInstance.set("governorAddress", daoAddress);
+            await saveMoralisInstance(nftInstance);
+        };
+
         try {
-            profileImagePath = await storeNFT(formData.profileImage as File);
+            const profileImagePath = await storeNFT(formData.profileImage as File);
             console.log(profileImagePath);
             handleChangeBasic(profileImagePath, setFormData, "profileImage");
 
-            coverImagePath = await storeNFT(formData.coverImage as File);
+            const coverImagePath = await storeNFT(formData.coverImage as File);
             console.log(coverImagePath);
             handleChangeBasic(coverImagePath, setFormData, "coverImage");
-        } catch (error) {
-            handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
-            return;
-        }
 
-        let contract;
-        try {
-            contract = await deployGovernorContract(signerData as Signer, {
+            const contract = await deployGovernorContract(signerData as Signer, {
                 name: formData.name,
                 tokenAddress: formData.tokenAddress[0],
                 votingPeriod: (+formData.votingPeriod * getBlocksPerDay(formData.blockchain[0])).toString(),
@@ -127,28 +142,11 @@ const CreateDAO: NextPage = () => {
             handleNext(setActiveStep);
             handleNext(setActiveStep);
             handleChangeBasic(contract.address, setFormData, "governorAddress");
+
+            await saveToDatabase(contract.address, profileImagePath, coverImagePath, formData.tokenAddress[0]);
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);
-            return;
-        }
-
-        const chainId = await signerData.getChainId();
-        handleChangeBasic(chainId, setFormData, "chainId");
-
-        try {
-            const moralisDao = getMoralisInstance(MoralisClassEnum.DAO);
-            setFieldsIntoMoralisInstance(moralisDao, formData);
-            console.log("Contract Address for Moralis", contract.address);
-            // use state not update immediately
-            moralisDao.set("governorAddress", contract.address);
-            moralisDao.set("chainId", chainId);
-            moralisDao.set("profileImage", profileImagePath);
-            moralisDao.set("coverImage", coverImagePath);
-            await saveMoralisInstance(moralisDao);
-        } catch (error) {
-            handleContractError(error, { dialog: confirmDialog });
-            return;
         }
     };
 
