@@ -77,7 +77,6 @@ const CreateNFT: NextPage = () => {
                 ];
         };
 
-
         try {
             const path = await storeNFT(formData.file as File);
             console.log("path " + path);

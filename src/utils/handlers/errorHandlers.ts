@@ -17,8 +17,8 @@ export const handleContractError = (error, option?: IErrorHandlerOptions) => {
         message = error.error?.message?.includes("reverted")
             ? error.error.message
             : error.error.data?.message?.includes("reverted")
-            ? error.error.data.message
-            : "Execution reverted";
+                ? error.error.data.message
+                : "Execution reverted";
     } else {
         message = "Something went wrong";
     }

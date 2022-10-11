@@ -146,7 +146,7 @@ const AddNewNFT: NextPage = () => {
             handleNext(setActiveStep);
 
             handleChangeBasic(contract.address, setFormData, "contractAddress");
-            isInitialized && await saveToDatabase(contract.address);
+            isInitialized && (await saveToDatabase(contract.address));
             handleNext(setActiveStep);
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });

@@ -11,8 +11,17 @@ const renderImage = (nfts: INFTVoting[], memberTokens: Set<string>) => {
     return (
         <div className={"flex"}>
             {nfts.map((nft) => {
-                return memberTokens.has(nft.tokenAddress) &&
-                    <img key={nft.tokenAddress} src={nft.image} alt="" aria-hidden className="h-6 w-6 rounded-full" />;
+                return (
+                    memberTokens.has(nft.tokenAddress) && (
+                        <img
+                            key={nft.tokenAddress}
+                            src={nft.image}
+                            alt=""
+                            aria-hidden
+                            className="h-6 w-6 rounded-full"
+                        />
+                    )
+                );
             })}
         </div>
     );

@@ -74,8 +74,8 @@
         @apply rounded-full border-purple border-2 py-2 px-3 font-normal text-purple disabled:cursor-not-allowed hover:border-btnHover hover:text-btnHover active:bg-btnActive active:text-white;
     }
 
-    .chat-button{
-        @apply flex flex-row py-4 px-2 justify-center items-center
+    .chat-button {
+        @apply flex flex-row py-4 px-2 justify-center items-center;
     }
 
     .text-highlighter {

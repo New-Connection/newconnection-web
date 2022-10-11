@@ -8,9 +8,12 @@ export const ipfsClient = create({
     port: 5001,
     protocol: "https",
     headers: {
-        authorization: "Basic " +
+        authorization:
+            "Basic " +
             Buffer.from(
-                process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID + ":" + process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET
+                process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID +
+                ":" +
+                process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET
             ).toString("base64"),
     },
 });

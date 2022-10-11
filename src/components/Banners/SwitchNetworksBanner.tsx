@@ -22,7 +22,8 @@ const SwitchNetworkBanner = () => {
                     ,{" "}
                     <button className="hover:text-gray hover:underline" onClick={() => switchNetwork(chainIDs[2])}>
                         Avalanche Fuji
-                    </button>{" "}
+                    </button>
+                    {" "}
                     or{" "}
                     <button className="hover:text-gray hover:underline" onClick={() => switchNetwork(chainIDs[1])}>
                         Polygon Mumbai

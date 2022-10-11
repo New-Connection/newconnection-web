@@ -31,8 +31,8 @@ export const Fallback = ({ isLoading, isError, noData, type, supressWalletConnec
             defaultMessage = !accountData
                 ? text[type].connectWallet
                 : unsupported
-                ? text[type].networkNotSupported
-                : null;
+                    ? text[type].networkNotSupported
+                    : null;
             break;
         case "createNFT":
             errorMessage = text[type].error;
@@ -40,8 +40,8 @@ export const Fallback = ({ isLoading, isError, noData, type, supressWalletConnec
             defaultMessage = !accountData
                 ? text[type].connectWallet
                 : unsupported
-                ? text[type].networkNotSupported
-                : null;
+                    ? text[type].networkNotSupported
+                    : null;
             break;
     }
 
@@ -61,7 +61,8 @@ export const Fallback = ({ isLoading, isError, noData, type, supressWalletConnec
 
 export function FallbackContainer({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex min-h-[3.5rem] w-full items-center justify-center break-all rounded border border-dashed border-[#626262] px-3 text-xs font-semibold">
+        <div
+            className="flex min-h-[3.5rem] w-full items-center justify-center break-all rounded border border-dashed border-[#626262] px-3 text-xs font-semibold">
             {children}
         </div>
     );

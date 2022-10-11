@@ -5,7 +5,7 @@ export enum MoralisClassEnum {
     PROPOSAL = "Proposal",
     MEMBER = "Member",
     WHITELIST = "Whitelist",
-    NFT = "NFT"
+    NFT = "NFT",
 }
 
 export const DaoMoralisClass = Moralis.Object.extend(MoralisClassEnum.DAO);

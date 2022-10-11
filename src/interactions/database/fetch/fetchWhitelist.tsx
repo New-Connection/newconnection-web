@@ -7,7 +7,7 @@ export const fetchWhitelist = async (governorUrl: string, options?: fetchOptions
     whitelistQuery.equalTo("governorUrl", governorUrl);
 
     if (options) {
-        Object.keys(options).forEach(key => {
+        Object.keys(options).forEach((key) => {
             whitelistQuery.equalTo(key, options[key]);
         });
     }

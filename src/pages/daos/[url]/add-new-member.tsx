@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Layout, { BackButton, Button, InputTextArea, RadioSelectorNFT } from "components";
-import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, validateForm, } from "utils";
+import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, validateForm } from "utils";
 import { IAddMemberQuery, IDAOPageForm, INFTVoting, IWhitelistRecord } from "types";
 import {
     fetchWhitelist,
@@ -83,8 +83,8 @@ const AddNewMember: NextPage = () => {
 
     const checkRequestAvailability = async (walletAddress: string) => {
         const data = await fetchWhitelist(formData.governorUrl, {
-            "votingTokenAddress": formData.votingTokenAddress,
-            "walletAddress": walletAddress
+            votingTokenAddress: formData.votingTokenAddress,
+            walletAddress: walletAddress,
         });
         return !data || data.whitelist.length === 0;
     };

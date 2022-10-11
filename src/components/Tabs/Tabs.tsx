@@ -27,24 +27,27 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
         <div>
             <div className="lg:flex md:flex xl:flex justify-between">
                 <div className="flex-wrap relatives">
-                    {tabs.map((tab) => (
-                        typeof tab === "object" && <button
-                            className={
-                                selectedTab === tab.index
-                                    ? "border-b-2 border-solid w-36 border-[#6858CB] pb-4 text-purple"
-                                    : "border-b-2 border-solid w-36 border-transparent pb-4 focus:border-[#6858CB] focus:text-[#6858CB] hover:border-[#6858CB] hover:text-[#6858CB]"
-                            }
-                            onClick={() => onClick(tab.index)}
-                            key={tab.index}
-                            type="button"
-                            aria-selected={selectedTab === tab.index}
-                            aria-controls={`tabpanel-${tab.index}`}
-                            tabIndex={selectedTab === tab.index ? 0 : -1}
-                            id={`btn-${tab.index}`}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
+                    {tabs.map(
+                        (tab) =>
+                            typeof tab === "object" && (
+                                <button
+                                    className={
+                                        selectedTab === tab.index
+                                            ? "border-b-2 border-solid w-36 border-[#6858CB] pb-4 text-purple"
+                                            : "border-b-2 border-solid w-36 border-transparent pb-4 focus:border-[#6858CB] focus:text-[#6858CB] hover:border-[#6858CB] hover:text-[#6858CB]"
+                                    }
+                                    onClick={() => onClick(tab.index)}
+                                    key={tab.index}
+                                    type="button"
+                                    aria-selected={selectedTab === tab.index}
+                                    aria-controls={`tabpanel-${tab.index}`}
+                                    tabIndex={selectedTab === tab.index ? 0 : -1}
+                                    id={`btn-${tab.index}`}
+                                >
+                                    {tab.label}
+                                </button>
+                            )
+                    )}
                 </div>
                 <div className={classNames("add-prop-button mt-4 md:mt-0", selectedTab === 0 ? "block" : "hidden")}>
                     <Link href={url}>

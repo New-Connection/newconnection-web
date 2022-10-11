@@ -73,7 +73,7 @@ const CreateDAO: NextPage = () => {
         console.log(formData);
 
         const checkUrlAvailability = async (url) => {
-            const { newDao } = isInitialized && await fetchDAO(url);
+            const { newDao } = isInitialized && (await fetchDAO(url));
             console.log(newDao);
             return !newDao;
         };

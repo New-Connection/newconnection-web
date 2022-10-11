@@ -35,7 +35,8 @@ const DAOsPage: NextPage = () => {
             }
         };
 
-        isInitialized && loadindDAOs().catch((e) => {
+        isInitialized &&
+        loadindDAOs().catch((e) => {
             console.log("Error when loading DAOs", e);
         });
     }, [isInitialized]);

@@ -1,7 +1,7 @@
 import React from "react";
 import { MORALIS_APP_ID, MORALIS_SERVER_URL } from "utils";
 import { ThemeProvider } from "next-themes";
-import { QueryClient, QueryClientProvider } from "react-query"; // it makes fetching, caching, synchronizing and updating server state
+import { QueryClient, QueryClientProvider } from "react-query";
 import { WagmiConfig } from "wagmi";
 import "styles/globals.css";
 import { CustomToast, WagmiClient } from "components";
