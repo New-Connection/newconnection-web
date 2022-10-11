@@ -106,11 +106,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     // ----------------------------------------------------------------------
 
     const loadingWhitelist = async () => {
-        const data = await fetchWhitelist(url);
-        if (data) {
+        const { whitelist, moralisInstance } = await fetchWhitelist(url);
+        if (whitelist && moralisInstance) {
             console.log("load whitelist");
-            setWhitelist(() => data.whitelist);
-            setWhitelistMoralisInstance(() => data.moralisInstance);
+            setWhitelist(() => whitelist);
+            setWhitelistMoralisInstance(() => moralisInstance);
         }
     };
     useEffect(() => {
@@ -122,12 +122,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         setLoadingCounter(INITIAL_LOADING_COUNTER);
 
         const loadingDAO = async () => {
-            const data = await fetchDAO(url);
-            if (data) {
-                localStorage.setItem(url, JSON.stringify(data.newDao));
-                setDAO(() => data.newDao);
-                setDAOMoralisInstance(() => data.moralisInstance);
-                return data.newDao;
+            const { newDao, moralisInstance } = await fetchDAO(url);
+            if (newDao && moralisInstance) {
+                console.log(newDao);
+                localStorage.setItem(url, JSON.stringify(newDao));
+                setDAO(() => newDao);
+                setDAOMoralisInstance(() => moralisInstance);
+                return newDao;
             }
         };
 
@@ -175,6 +176,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     loadingProposals().then();
                     loadingNFT(dao).then();
                     loadingMembers(dao).then();
+                } else {
+                    setNotFound(true);
                 }
             })
             .catch((e) => {
