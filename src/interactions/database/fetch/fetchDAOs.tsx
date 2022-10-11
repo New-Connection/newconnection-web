@@ -9,7 +9,6 @@ export async function fetchDAOs() {
     daosQuery.includeAll();
 
     const daosInstance = await daosQuery.find();
-    console.log(daosInstance);
     if (!daosInstance) {
         return;
     }

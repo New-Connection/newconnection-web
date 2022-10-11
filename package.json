@@ -46,7 +46,6 @@
     "ipfs-http-client": "^58.0.1",
     "js-cookie": "^3.0.1",
     "magic-sdk": "^8.1.1",
-    "moralis": "^1.9.1",
     "moralis-v1": "^1.11.0",
     "next": "^12.1.6",
     "next-themes": "^0.2.0",

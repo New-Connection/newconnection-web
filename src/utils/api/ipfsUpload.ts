@@ -1,5 +1,4 @@
-import { handleContractError, INFURA_IPFS_GATEWAY, IPFS } from "utils";
-import { ipfs } from "pages/_app";
+import { handleContractError, INFURA_IPFS_GATEWAY, IPFS, ipfsClient } from "utils";
 
 export const getIpfsImage = (path: string, mockImage: string) => {
     const fullPath = INFURA_IPFS_GATEWAY + path.replace(IPFS, "");
@@ -8,7 +7,7 @@ export const getIpfsImage = (path: string, mockImage: string) => {
 
 export const storeNFT = async (image: File) => {
     try {
-        const result = await ipfs.add(image);
+        const result = await ipfsClient.add(image);
         return ipfsFullPath(result.path);
     } catch (error) {
         handleContractError(error);
