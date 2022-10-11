@@ -29,14 +29,14 @@ import Layout, {
 } from "components";
 import { CHAINS, checkCorrectNetwork, deployGovernorContract, getBlocksPerDay } from "interactions/contract";
 import {
-    fetchDAOs,
+    fetchDAO,
     getMoralisInstance,
     MoralisClassEnum,
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
 } from "interactions/database";
 import { useRouter } from "next/router";
-import { useMoralis, useMoralisQuery } from "react-moralis";
+import { useMoralis } from "react-moralis";
 
 const CreateDAO: NextPage = () => {
     const router = useRouter();
@@ -62,15 +62,6 @@ const CreateDAO: NextPage = () => {
     const { switchNetwork } = useSwitchNetwork();
     const { isInitialized } = useMoralis();
 
-    const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.equalTo("url", formData.url), [formData.url], {
-        autoFetch: false,
-    });
-
-    const checkUrlAvailability = async () => {
-        const results = await fetchDAOs(isInitialized, DAOsQuery);
-        return results && results.length === 0;
-    };
-
     useEffect(() => {
         const query = router.query as ICreateDaoQuery;
         handleChangeBasicSimple(query.tokenAddress, setFormData, "tokenAddress");
@@ -81,11 +72,17 @@ const CreateDAO: NextPage = () => {
         e.preventDefault();
         console.log(formData);
 
+        const checkUrlAvailability = async (url) => {
+            const { newDao } = isInitialized && await fetchDAO(url);
+            console.log(newDao);
+            return !newDao;
+        };
+
         if (!validateForm(formData)) {
             return;
         }
 
-        const isUrlAvailable = await checkUrlAvailability();
+        const isUrlAvailable = await checkUrlAvailability(formData.url);
         if (!isUrlAvailable) {
             toast.error("Name unavailable");
             return;

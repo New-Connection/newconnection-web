@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useMoralis, useMoralisQuery } from "react-moralis";
+import { useMoralis } from "react-moralis";
 import { useNetwork } from "wagmi";
 import Layout, { DAOCard } from "components";
 import { IDAOPageForm } from "types";
@@ -13,10 +13,6 @@ const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
     const { chain } = useNetwork();
     const { isInitialized } = useMoralis();
-
-    const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
-        autoFetch: false,
-    });
 
     const loadingLargeData = async (DAOsList: IDAOPageForm[]) => {
         const newDAOs = await Promise.all(
@@ -32,14 +28,14 @@ const DAOsPage: NextPage = () => {
 
     useEffect(() => {
         const loadindDAOs = async () => {
-            const listOfDAOs = await fetchDAOs(isInitialized, DAOsQuery);
+            const listOfDAOs = await fetchDAOs();
             if (listOfDAOs) {
                 setDAOs(listOfDAOs);
                 loadingLargeData(listOfDAOs).then();
             }
         };
 
-        loadindDAOs().catch((e) => {
+        isInitialized && loadindDAOs().catch((e) => {
             console.log("Error when loading DAOs", e);
         });
     }, [isInitialized]);

@@ -29,7 +29,7 @@ import {
     getGovernorOwnerAddress,
     mint,
 } from "interactions/contract";
-import { useMoralis, useMoralisQuery } from "react-moralis";
+import { useMoralis } from "react-moralis";
 import {
     ButtonState,
     DAOPageProps,
@@ -102,30 +102,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const createTreasuryDialog = useDialogState();
     const contributeTreasuryDialog = useDialogState();
 
-    // Moralis queries
-    const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.equalTo("url", url), [], {
-        autoFetch: false,
-    });
-    const { fetch: WhitelistQuery } = useMoralisQuery(
-        "Whitelist",
-        (query) => query.equalTo("governorUrl", url),
-        [DAO?.governorAddress],
-        { autoFetch: false }
-    );
-    const { fetch: ProposalQuery } = useMoralisQuery(
-        "Proposal",
-        (query) => query.equalTo("governorUrl", url),
-        [DAO?.governorAddress],
-        {
-            autoFetch: false,
-        }
-    );
-
     // EFFECTS
     // ----------------------------------------------------------------------
 
     const loadingWhitelist = async () => {
-        const data = await fetchWhitelist(WhitelistQuery);
+        const data = await fetchWhitelist(url);
         if (data) {
             console.log("load whitelist");
             setWhitelist(() => data.whitelist);
@@ -141,7 +122,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         setLoadingCounter(INITIAL_LOADING_COUNTER);
 
         const loadingDAO = async () => {
-            const data = await fetchDAO(isInitialized, DAOsQuery);
+            const data = await fetchDAO(url);
             if (data) {
                 localStorage.setItem(url, JSON.stringify(data.newDao));
                 setDAO(() => data.newDao);
@@ -151,7 +132,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         };
 
         const loadingProposals = async () => {
-            const proposals = await fetchProposals(ProposalQuery);
+            const proposals = await fetchProposals(url);
             if (proposals) {
                 console.log("load proposals");
                 localStorage.setItem(url + " Proposals", JSON.stringify(proposals));
@@ -184,6 +165,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             }
         };
 
+        isInitialized &&
         loadingDAO()
             .then((dao) => {
                 if (dao) {

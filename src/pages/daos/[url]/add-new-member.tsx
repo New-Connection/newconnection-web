@@ -6,13 +6,13 @@ import Layout, { BackButton, Button, InputTextArea, RadioSelectorNFT } from "com
 import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, validateForm, } from "utils";
 import { IAddMemberQuery, IDAOPageForm, INFTVoting, IWhitelistRecord } from "types";
 import {
+    fetchWhitelist,
     getMoralisInstance,
     MoralisClassEnum,
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
 } from "interactions/database";
 import { useSigner } from "wagmi";
-import { useMoralisQuery } from "react-moralis";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IWhitelistRecord>({
@@ -27,17 +27,6 @@ const AddNewMember: NextPage = () => {
     const router = useRouter();
     const { data: signer_data } = useSigner();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
-
-    const { fetch: whitelistFetch } = useMoralisQuery(
-        "Whitelist",
-        (query) =>
-            query.equalTo("governorAddress", formData.governorAddress) &&
-            query.equalTo("votingTokenAddress", formData.votingTokenAddress),
-        [formData.governorAddress, formData.votingTokenAddress, signer_data],
-        {
-            autoFetch: false,
-        }
-    );
 
     useEffect(() => {
         console.log("fetch query");
@@ -93,19 +82,11 @@ const AddNewMember: NextPage = () => {
     }
 
     const checkRequestAvailability = async (walletAddress: string) => {
-        let available = false;
-        await whitelistFetch({
-            onSuccess: (results) => {
-                if (results.filter((result) => result.get("walletAddress") === walletAddress).length === 0) {
-                    console.log("available=true");
-                    available = true;
-                }
-            },
-            onError: (e) => {
-                console.log("error" + e);
-            },
+        const data = await fetchWhitelist(formData.governorUrl, {
+            "votingTokenAddress": formData.votingTokenAddress,
+            "walletAddress": walletAddress
         });
-        return available;
+        return !data || data.whitelist.length === 0;
     };
 
     return (

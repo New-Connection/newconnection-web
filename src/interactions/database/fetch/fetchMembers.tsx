@@ -17,7 +17,7 @@ export async function fetchMembers(DAO: IDAOPageForm) {
         const holders: string[] = instance.get("holders");
         const tokenAddress = instance.get("tokenAddress");
 
-        holders.forEach((holderAddress) => {
+        holders && holders.forEach((holderAddress) => {
             members.has(holderAddress)
                 ? members.get(holderAddress).tokens.add(tokenAddress)
                 : members.set(holderAddress, {

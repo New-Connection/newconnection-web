@@ -1,6 +1,5 @@
 import { Moralis } from "moralis-v1";
 import toast from "react-hot-toast";
-import { useMoralisQuery } from "react-moralis";
 import {
     DaoMoralisClass,
     MemberMoralisClass,
@@ -42,15 +41,4 @@ export const setFieldsIntoMoralisInstance = <T extends Moralis.Object>(
     for (const dataKey in data) {
         moralisInstance.set(dataKey, data[dataKey]);
     }
-};
-export const getAllMoralisObjects = (className: string) => {
-    const result = useMoralisQuery(
-        className,
-        // (query) => query.equalTo("ownerName", "Aegon"),
-        (query) => query.notEqualTo("objectId", ""),
-        [],
-        { autoFetch: false }
-    );
-
-    return result.fetch({ onSuccess: (results) => console.log(results) });
 };

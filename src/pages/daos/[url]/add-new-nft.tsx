@@ -14,7 +14,7 @@ import Layout, {
 } from "components";
 import { useRouter } from "next/router";
 import { Signer } from "ethers";
-import { useMoralis, useMoralisQuery } from "react-moralis";
+import { useMoralis } from "react-moralis";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
 import { IAddNftQuery, ICreateNFT, IDAOPageForm } from "types";
@@ -62,15 +62,6 @@ const AddNewNFT: NextPage = () => {
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
 
-    const { fetch: DaoQuery } = useMoralisQuery(
-        "DAO",
-        (query) => query.equalTo("governorAddress", formData.governorAddress),
-        [formData.governorAddress],
-        {
-            autoFetch: false,
-        }
-    );
-
     useEffect(() => {
         fetchQuery();
     }, [router]);
@@ -111,7 +102,7 @@ const AddNewNFT: NextPage = () => {
 
         const saveToDatabase = async (nftTokenAddress: string) => {
             console.log("nft token address", nftTokenAddress);
-            const { moralisInstance } = await fetchDAO(isInitialized, DaoQuery);
+            const { moralisInstance } = await fetchDAO(formData.governorAddress);
             if (moralisInstance && nftTokenAddress) {
                 moralisInstance.addUnique("tokenAddress", nftTokenAddress);
                 await moralisInstance.save();
@@ -155,7 +146,7 @@ const AddNewNFT: NextPage = () => {
             handleNext(setActiveStep);
 
             handleChangeBasic(contract.address, setFormData, "contractAddress");
-            await saveToDatabase(contract.address);
+            isInitialized && await saveToDatabase(contract.address);
             handleNext(setActiveStep);
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
