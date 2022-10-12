@@ -12,7 +12,7 @@ import {
     saveMoralisInstance,
     setFieldsIntoMoralisInstance,
 } from "interactions/database";
-import { useSigner } from "wagmi";
+import { useAccount, useSigner } from "wagmi";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IWhitelistRecord>({
@@ -25,7 +25,8 @@ const AddNewMember: NextPage = () => {
         note: "",
     });
     const router = useRouter();
-    const { data: signer_data } = useSigner();
+    const { data: signerData } = useSigner();
+    const { address: signerAddress } = useAccount();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
 
     useEffect(() => {
@@ -47,7 +48,7 @@ const AddNewMember: NextPage = () => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
 
-        if (!signer_data) {
+        if (!signerData) {
             toast.error("Please connect wallet");
             return;
         }
@@ -55,8 +56,6 @@ const AddNewMember: NextPage = () => {
         if (!validateForm(formData, ["note", "votingTokenName"])) {
             return;
         }
-
-        const signerAddress = await signer_data.getAddress();
 
         if (!(await checkTokenRequestAvailable(signerAddress, formData.governorUrl, formData.votingTokenAddress))) {
             toast.error(`You already send request for token: ${formData.votingTokenName}`);

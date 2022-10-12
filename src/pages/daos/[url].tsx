@@ -43,7 +43,7 @@ import {
 import { LinkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
-import { useSigner, useSwitchNetwork } from "wagmi";
+import { useAccount, useSigner, useSwitchNetwork } from "wagmi";
 import { handleChangeBasic, isValidHttpUrl } from "utils";
 import {
     fetchDAO,
@@ -71,6 +71,7 @@ const INITIAL_LOADING_COUNTER = 2;
 
 const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const { data: signerData } = useSigner();
+    const { address: signerAddress } = useAccount();
     const { switchNetwork } = useSwitchNetwork();
     const router = useRouter();
     const [loadingCounter, setLoadingCounter] = useState(INITIAL_LOADING_COUNTER);
@@ -143,7 +144,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         };
 
         const loadingNFT = async (dao: IDAOPageForm) => {
-            const nftsArray = await fetchNFT(dao, signerData && await signerData.getAddress());
+            const nftsArray = await fetchNFT(dao, signerAddress);
             if (nftsArray) {
                 console.log("load nfts");
                 localStorage.setItem(url + " NFTs", JSON.stringify(nftsArray));
@@ -191,7 +192,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         const fetchIsOwner = async () => {
             DAO &&
             signerData &&
-            (await signerData.getAddress()) === (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+            (signerAddress) === (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
                 ? setIsOwner(true)
                 : setIsOwner(false);
         };
