@@ -20,6 +20,7 @@ export const DragAndDropImage = ({
     const [file, setFile] = useState<File | null>(null);
     const [error, setError] = useState<boolean>(false);
     const [errorMessages, setErrorMessages] = useState<string | undefined>();
+    const [preview, setPreview] = useState("");
 
     const onTypeError = (err = 1) => {
         setErrorMessages(err.toString());
@@ -32,6 +33,7 @@ export const DragAndDropImage = ({
     const localHandleChange = (file: File) => {
         setFile(file);
         setError(false);
+        setPreview(() => URL.createObjectURL(file));
     };
     return (
         <div className={className}>
@@ -63,9 +65,13 @@ export const DragAndDropImage = ({
                     ) : (
                         <>
                             {file ? (
-                                <div>
-                                    <p className="text-purple mt-1">File is accepted.</p>
-                                    <p>File name: {file?.name} ✅</p>
+                                <div className={"flex flex-col h-full justify-between w-full p-3"}>
+                                    <div className={"w-full h-full overflow-hidden relative"}>
+                                        <Image src={preview} layout={"fill"} /></div>
+                                    <div>
+                                        <p className="text-purple mt-1">File is accepted ✅</p>
+                                        <p className={" truncate"}>File name: {file?.name}</p>
+                                    </div>
                                 </div>
                             ) : (
                                 <>
