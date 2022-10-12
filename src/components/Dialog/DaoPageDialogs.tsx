@@ -2,7 +2,7 @@ import { createTreasurySteps, CustomDialog, SpinnerLoading, StepperDialog } from
 import * as React from "react";
 import { BlockchainIcon, CopyTextButton, InputAmount, NFTImage } from "components";
 import { getChainScanner, getTokenSymbol } from "interactions/contract";
-import { ExternalLinkIcon } from "@heroicons/react/solid";
+import { LinkIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import { IContributeTreasuryDialog, ICreateTreasuryDialog, IDetainNftDialog } from "./dialogInterfaces";
 
@@ -19,7 +19,7 @@ export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButt
                         className="hover:text-purple flex justify-center"
                     >
                         Smart Contract
-                        <ExternalLinkIcon className="h-6 w-5" />
+                        <LinkIcon className="h-6 w-5" />
                     </a>
 
                     <button

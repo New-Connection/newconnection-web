@@ -40,7 +40,7 @@ import {
     IProposalPageForm,
     IWhitelistRecord,
 } from "types";
-import { ExternalLinkIcon } from "@heroicons/react/solid";
+import { LinkIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { useSigner, useSwitchNetwork } from "wagmi";
@@ -282,7 +282,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                         className="hover:text-purple dao-about-button items-center"
                                     >
                                         About
-                                        <ExternalLinkIcon className="h-3.5 w-3.5" />
+                                        <LinkIcon className="h-3.5 w-3.5" />
                                     </a>
                                     <div className="dao-about-button items-center">
                                         Blockchain
@@ -330,7 +330,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                         className="flex hover:text-purple gap-3 pl-5 items-center content-center text-black2"
                                     >
                                         Treasury
-                                        <ExternalLinkIcon className="h-6 w-5" />
+                                        <LinkIcon className="h-6 w-5" />
                                     </a>
                                 </div>
                                 <p className={"text-2xl font-medium"}>$ {treasuryBalance}</p>

@@ -1,5 +1,5 @@
 import { DialogHeading } from "ariakit";
-import { XIcon } from "@heroicons/react/solid";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 
 export const DialogHeader = ({ title, dialog }) => {
     return (
@@ -7,7 +7,7 @@ export const DialogHeader = ({ title, dialog }) => {
             <span>{title}</span>
             <button className="absolute top-[18px] right-4 rounded hover:bg-neutral-200" onClick={dialog.toggle}>
                 <span className="sr-only">Close</span>
-                <XIcon className="h-5 w-5" />
+                <XMarkIcon className="h-5 w-5" />
             </button>
         </DialogHeading>
     );

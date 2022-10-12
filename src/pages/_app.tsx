@@ -7,7 +7,6 @@ import "styles/globals.css";
 import { CustomToast, WagmiClient } from "components";
 import { MoralisProvider } from "react-moralis";
 import Script from "next/script";
-import "nprogress/nprogress.css";
 import { AppProps } from "next/app";
 
 function App({ Component, pageProps }: AppProps) {

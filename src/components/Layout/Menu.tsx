@@ -1,4 +1,4 @@
-import { QuestionMarkCircleIcon } from "@heroicons/react/outline";
+import { QuestionMarkCircleIcon } from "@heroicons/react/20/solid/";
 import { DisclosureState } from "ariakit";
 import { Menu, MenuItem } from "components";
 import { useIsMounted, useWindowSize } from "hooks";

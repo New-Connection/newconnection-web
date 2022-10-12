@@ -16,7 +16,7 @@ export const checkCorrectNetwork = async (signerData, chainID: number, switchNet
         return false;
     }
     if ((await signerData.getChainId()) !== chainID) {
-        toast.error("Please switch database");
+        toast.error("Please switch network");
         switchNetwork(chainID);
         return false;
     }

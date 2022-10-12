@@ -9,7 +9,7 @@ import {
     SelectSeparator,
     useSelectState,
 } from "ariakit/select";
-import { ChevronDownIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import Image from "next/image";
 import ASSETS from "assets/index";

@@ -1,5 +1,5 @@
 import { formatAddress } from "utils";
-import { CheckIcon, ClipboardCopyIcon } from "@heroicons/react/solid";
+import { CheckIcon, ClipboardIcon } from "@heroicons/react/20/solid";
 import React, { useState } from "react";
 
 export const CopyTextButton = ({ copyText }) => {
@@ -17,7 +17,7 @@ export const CopyTextButton = ({ copyText }) => {
     return (
         <div className={"flex text-lightGray hover:text-gray5 hover:cursor-pointer"} onClick={handleClick}>
             {formatAddress(copyText)}
-            {isCopied ? <CheckIcon className="h-6 w-5" /> : <ClipboardCopyIcon className="h-6 w-5" />}
+            {isCopied ? <CheckIcon className="h-6 w-5" /> : <ClipboardIcon className="h-6 w-5" />}
         </div>
     );
 };
