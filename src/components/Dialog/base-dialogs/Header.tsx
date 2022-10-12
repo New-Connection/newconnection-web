@@ -1,5 +1,5 @@
 import { DialogHeading } from "ariakit";
-import { XMarkIcon } from "@heroicons/react/20/solid";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 export const DialogHeader = ({ title, dialog }) => {
     return (

@@ -9,13 +9,14 @@ import {
 import { IDAOPageForm, INFTVoting } from "types";
 import { getIpfsImage } from "utils";
 import ASSETS from "assets";
+import { checkTokenRequestAvailable } from "../utils";
 
 async function getImage(tokenAddress: string, chainID: number) {
     const nftTokenUri: string = await getTokenURI(tokenAddress, chainID);
     return getIpfsImage(nftTokenUri, ASSETS.daoNFTMock.src);
 }
 
-export async function fetchNFT(DAO: IDAOPageForm) {
+export async function fetchNFT(DAO: IDAOPageForm, signerAddress?: string) {
     const nftsArray: INFTVoting[] = await Promise.all(
         DAO!.tokenAddress!.map(async (tokenAddress) => {
             const nft: INFTVoting = {
@@ -27,6 +28,8 @@ export async function fetchNFT(DAO: IDAOPageForm) {
                 totalMinted: await getNumberOfMintedTokens(tokenAddress, DAO.chainId),
                 tokenAddress: tokenAddress,
             };
+            signerAddress &&
+                (nft.tokenRequested = !(await checkTokenRequestAvailable(signerAddress, DAO.url, tokenAddress)));
             return nft;
         })
     );

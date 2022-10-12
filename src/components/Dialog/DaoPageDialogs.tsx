@@ -2,7 +2,7 @@ import { createTreasurySteps, CustomDialog, SpinnerLoading, StepperDialog } from
 import * as React from "react";
 import { BlockchainIcon, CopyTextButton, InputAmount, NFTImage } from "components";
 import { getChainScanner, getTokenSymbol } from "interactions/contract";
-import { LinkIcon } from "@heroicons/react/20/solid";
+import { LinkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { IContributeTreasuryDialog, ICreateTreasuryDialog, IDetainNftDialog } from "./dialogInterfaces";
 

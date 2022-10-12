@@ -40,7 +40,7 @@ import {
     IProposalPageForm,
     IWhitelistRecord,
 } from "types";
-import { LinkIcon } from "@heroicons/react/20/solid";
+import { LinkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { useSigner, useSwitchNetwork } from "wagmi";
@@ -143,7 +143,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         };
 
         const loadingNFT = async (dao: IDAOPageForm) => {
-            const nftsArray = await fetchNFT(dao);
+            const nftsArray = await fetchNFT(dao, signerData && await signerData.getAddress());
             if (nftsArray) {
                 console.log("load nfts");
                 localStorage.setItem(url + " NFTs", JSON.stringify(nftsArray));

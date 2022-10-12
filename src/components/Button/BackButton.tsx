@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ArrowLeftIcon } from "@heroicons/react/20/solid";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 
 export const BackButton = () => {

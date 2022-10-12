@@ -6,7 +6,7 @@ import Layout, { BackButton, Button, InputTextArea, RadioSelectorNFT } from "com
 import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, validateForm } from "utils";
 import { IAddMemberQuery, IDAOPageForm, INFTVoting, IWhitelistRecord } from "types";
 import {
-    fetchWhitelist,
+    checkTokenRequestAvailable,
     getMoralisInstance,
     MoralisClassEnum,
     saveMoralisInstance,
@@ -58,7 +58,7 @@ const AddNewMember: NextPage = () => {
 
         const signerAddress = await signer_data.getAddress();
 
-        if (!(await checkRequestAvailability(signerAddress))) {
+        if (!(await checkTokenRequestAvailable(signerAddress, formData.governorUrl, formData.votingTokenAddress))) {
             toast.error(`You already send request for token: ${formData.votingTokenName}`);
             return;
         }
@@ -80,14 +80,6 @@ const AddNewMember: NextPage = () => {
             return;
         }
     }
-
-    const checkRequestAvailability = async (walletAddress: string) => {
-        const data = await fetchWhitelist(formData.governorUrl, {
-            votingTokenAddress: formData.votingTokenAddress,
-            walletAddress: walletAddress,
-        });
-        return !data || data.whitelist.length === 0;
-    };
 
     return (
         <div>

@@ -1,5 +1,5 @@
 import { formatAddress } from "utils";
-import { CheckIcon, ClipboardIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 
 export const CopyTextButton = ({ copyText }) => {
