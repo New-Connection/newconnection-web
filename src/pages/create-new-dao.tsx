@@ -14,21 +14,6 @@ interface ICard {
     isDisabled?: boolean;
 }
 
-const CardText = {
-    addNFTtoDAO: {
-        title: "Existing NFT collection (Comming Soon)",
-        subtitle: "Add NFT smart contract if you have an existing collection",
-        buttonTitle: "Add a created NFT",
-        linkToPage: "/create-nft",
-    },
-    createNFT: {
-        title: "New NFT collection",
-        subtitle: "If you don't have any NFT collections created, you can mint them here",
-        buttonTitle: "Mint NFT",
-        linkToPage: "/create-nft",
-    },
-};
-
 const CreateNewDAO: NextPage = () => {
     const { chain } = useNetwork();
 
