@@ -9,7 +9,7 @@ import {
 import { IDAOPageForm, INFTVoting } from "types";
 import { getIpfsImage } from "utils";
 import ASSETS from "assets";
-import { checkTokenRequestAvailable } from "../utils";
+import { checkTokenRequestAvailable } from "interactions/database";
 
 async function getImage(tokenAddress: string, chainID: number) {
     const nftTokenUri: string = await getTokenURI(tokenAddress, chainID);

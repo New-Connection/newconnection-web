@@ -185,7 +185,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 console.log("Error when Loading DAO", e);
                 setNotFound(true);
             });
-    }, [isInitialized]);
+    }, [isInitialized, signerData]);
 
     // Owner check
     useEffect(() => {
