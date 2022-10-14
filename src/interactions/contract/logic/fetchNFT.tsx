@@ -9,7 +9,7 @@ import {
 import { IDAOPageForm, INFTVoting } from "types";
 import { getIpfsImage } from "utils";
 import ASSETS from "assets";
-import { checkTokenRequestAvailable } from "interactions/database";
+import { whitelistRequestExists } from "interactions/database";
 
 async function getImage(tokenAddress: string, chainID: number) {
     const nftTokenUri: string = await getTokenURI(tokenAddress, chainID);
@@ -29,7 +29,7 @@ export async function fetchNFT(DAO: IDAOPageForm, signerAddress?: string) {
                 tokenAddress: tokenAddress,
             };
             signerAddress &&
-                (nft.tokenRequested = !(await checkTokenRequestAvailable(signerAddress, DAO.url, tokenAddress)));
+            (nft.tokenRequested = (await whitelistRequestExists(DAO.url, signerAddress, tokenAddress)));
             return nft;
         })
     );

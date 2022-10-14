@@ -18,12 +18,7 @@ import { useDialogState } from "ariakit";
 import { checkCorrectNetwork, createProposal } from "interactions/contract";
 import { useRouter } from "next/router";
 import { Signer } from "ethers";
-import {
-    getMoralisInstance,
-    MoralisClassEnum,
-    saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
-} from "interactions/database";
+import { saveNewProposal, } from "interactions/database";
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
@@ -83,8 +78,7 @@ const CreateProposal: NextPage = () => {
                 formData.name,
                 formData.tokenAddress
             );
-            handleNext(setActiveStep);
-            handleNext(setActiveStep);
+            handleNext(setActiveStep, 2);
             handleChangeBasic(proposalId, setFormData, "proposalId");
             handleNext(setActiveStep);
         } catch (error) {
@@ -94,12 +88,13 @@ const CreateProposal: NextPage = () => {
 
         try {
             const chainId = await signerData.getChainId();
-            handleChangeBasic(chainId.toString(), setFormData, "chainId");
-            const moralisProposal = getMoralisInstance(MoralisClassEnum.PROPOSAL);
-            setFieldsIntoMoralisInstance(moralisProposal, formData);
-            moralisProposal.set("proposalId", proposalId);
-            moralisProposal.set("chainId", chainId);
-            await saveMoralisInstance(moralisProposal);
+            const proposal: ICreateProposal = {
+                ...formData,
+                chainId: chainId,
+                proposalId: proposalId,
+            };
+
+            await saveNewProposal(proposal);
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
             return;

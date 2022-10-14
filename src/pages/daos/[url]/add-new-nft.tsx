@@ -14,7 +14,6 @@ import Layout, {
 } from "components";
 import { useRouter } from "next/router";
 import { Signer } from "ethers";
-import { useMoralis } from "react-moralis";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import { NextPage } from "next";
 import { IAddNftQuery, ICreateNFT, IDAOPageForm } from "types";
@@ -39,7 +38,7 @@ import {
     getLogoURI,
     layerzeroEndpoints,
 } from "interactions/contract";
-import { fetchDAO, getMoralisInstance, MoralisClassEnum, saveMoralisInstance } from "interactions/database";
+import { addValueToDaoArray } from "interactions/database";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -53,12 +52,12 @@ const AddNewNFT: NextPage = () => {
         governorAddress: "",
         ipfsAddress: "",
         blockchain: "",
+        governorUrl: "",
     });
 
     const router = useRouter();
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
-    const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
     const [activeStep, setActiveStep] = useState(0);
 
@@ -72,8 +71,18 @@ const AddNewNFT: NextPage = () => {
 
         if (DAO) {
             handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
+            handleChangeBasic(DAO.url, setFormData, "governorUrl");
             handleChangeBasic(DAO.blockchain[0], setFormData, "blockchain");
         }
+    };
+
+    const calculateSupply = () => {
+        return formData[
+            getChainNames().find((chain) => {
+                const supply = formData[chain];
+                return supply !== 0 && supply !== "" && supply !== undefined;
+            })
+            ];
     };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -84,36 +93,12 @@ const AddNewNFT: NextPage = () => {
         }
 
         const chainId = CHAINS[formData.blockchain].id;
-        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))) {
+        if (!(await checkCorrectNetwork(signerData, chainId, switchNetwork))) {
             return;
         }
 
         handleReset(setActiveStep);
         confirmDialog.toggle();
-
-        const calculateSupply = () => {
-            return formData[
-                getChainNames().find((chain) => {
-                    const supply = formData[chain];
-                    return supply !== 0 && supply !== "" && supply !== undefined;
-                })
-                ];
-        };
-
-        const saveToDatabase = async (nftTokenAddress: string) => {
-            console.log("nft token address", nftTokenAddress);
-            const { moralisInstance } = await fetchDAO(formData.governorAddress);
-            if (moralisInstance && nftTokenAddress) {
-                moralisInstance.addUnique("tokenAddress", nftTokenAddress);
-                await moralisInstance.save();
-
-                const nftInstance = getMoralisInstance(MoralisClassEnum.NFT);
-                nftInstance.set("tokenAddress", nftTokenAddress);
-                nftInstance.set("chainId", chainId);
-                nftInstance.set("governorAddress", formData.governorAddress);
-                await saveMoralisInstance(nftInstance);
-            }
-        };
 
         try {
             const path = await storeNFT(formData.file as File);
@@ -146,7 +131,9 @@ const AddNewNFT: NextPage = () => {
             handleNext(setActiveStep);
 
             handleChangeBasic(contract.address, setFormData, "contractAddress");
-            isInitialized && (await saveToDatabase(contract.address));
+
+            await addValueToDaoArray(formData.governorUrl, "tokenAddress", contract.address);
+
             handleNext(setActiveStep);
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });

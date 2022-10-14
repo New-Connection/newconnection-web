@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 import Layout, { BackButton, LockIcon } from "components";
 import { IChatsQuery, IDAOPageForm, INFTVoting } from "types";
 import { formatAddress } from "utils";
-import { getNumberOfTokenInOwnerAddress } from "interactions/contract";
+import { checkTokensOwnership } from "interactions/contract";
 
 const ChatsPage: NextPage = () => {
     const router = useRouter();
@@ -23,24 +23,20 @@ const ChatsPage: NextPage = () => {
         const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
         const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.url + " NFTs"));
 
-        const checkNFTs = async (tokenAddresses: string[], walletAddress: string, chainId: number) => {
-            const newTokenAddresses = [];
-            await Promise.all(
-                tokenAddresses.map(async (token) => {
-                    if (+(await getNumberOfTokenInOwnerAddress(walletAddress, token, chainId)) > 0) {
-                        newTokenAddresses.push(token);
-                    }
-                })
-            );
-            console.log("owned NFTs " + newTokenAddresses);
-            setOwnedTokenAddresses(() => newTokenAddresses);
-        };
+        //todo remove
+
 
         if (DAO && savedNfts) {
             const chainId = DAO.chainId;
 
             setNFTs(savedNfts);
-            checkNFTs(
+            checkTokensOwnership(
+                savedNfts.map((NFT) => NFT.tokenAddress),
+                address,
+                chainId
+            ).then(value => setOwnedTokenAddresses(value.tokens));
+
+            checkTokensOwnership(
                 savedNfts.map((NFT) => NFT.tokenAddress),
                 address,
                 chainId

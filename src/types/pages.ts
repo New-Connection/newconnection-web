@@ -30,7 +30,6 @@ export interface IDAOPageForm extends ICreateDAO {
     totalMembers?: number;
     totalProposals?: number;
     activeProposals?: number;
-    nftImage?: any;
     isActive?: boolean;
     treasuryAddress?: string;
 }
@@ -45,7 +44,8 @@ export interface IBlockchains {
     Optimism?: number;
 }
 
-export interface ICreateNFT extends ICreate, IBlockchains {
+export interface ICreateNFT extends ICreate {
+    governorUrl?: string;
     file: object;
     symbol: string;
     price: number;
@@ -96,7 +96,7 @@ export interface INFTVoting {
     price?: string;
     totalSupply?: string;
     totalMinted?: string;
-    tokenRequested?:boolean;
+    tokenRequested?: boolean;
 }
 
 export interface IWhitelistRecord {
@@ -117,10 +117,11 @@ export type TabsType = {
 }[];
 
 export interface IMember {
-    address: string;
-    tokens: Set<string>;
-    role?: string;
-    votingPower?: string;
+    governorUrl: string;
+    memberAddress: string;
+    memberTokens: string[];
+    role: string;
+    votingPower?: number;
 }
 
 export type ButtonState = "Mint" | "Loading" | "Success" | "Error";

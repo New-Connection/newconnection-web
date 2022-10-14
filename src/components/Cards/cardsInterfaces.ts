@@ -1,4 +1,4 @@
-import { ButtonState, INFTVoting, IProposalDetail } from "types";
+import { ButtonState, IDAOPageForm, INFTVoting, IProposalDetail } from "types";
 import * as React from "react";
 import { DisclosureState } from "ariakit";
 
@@ -44,4 +44,9 @@ export interface ICardProposal {
 
 export interface IInformationCard {
     proposalData: IProposalDetail;
+}
+
+export interface IDAOCard {
+    daoObject: IDAOPageForm;
+    lastElement: any;
 }

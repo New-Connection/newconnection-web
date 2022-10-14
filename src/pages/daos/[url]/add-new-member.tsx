@@ -5,13 +5,7 @@ import toast from "react-hot-toast";
 import Layout, { BackButton, Button, InputTextArea, RadioSelectorNFT } from "components";
 import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, validateForm } from "utils";
 import { IAddMemberQuery, IDAOPageForm, INFTVoting, IWhitelistRecord } from "types";
-import {
-    checkTokenRequestAvailable,
-    getMoralisInstance,
-    MoralisClassEnum,
-    saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
-} from "interactions/database";
+import { saveWhitelistRequest, whitelistRequestExists, } from "interactions/database";
 import { useAccount, useSigner } from "wagmi";
 
 const AddNewMember: NextPage = () => {
@@ -57,17 +51,13 @@ const AddNewMember: NextPage = () => {
             return;
         }
 
-        if (!(await checkTokenRequestAvailable(signerAddress, formData.governorUrl, formData.votingTokenAddress))) {
+        if (await whitelistRequestExists(formData.governorUrl, signerAddress, formData.votingTokenAddress)) {
             toast.error(`You already send request for token: ${formData.votingTokenName}`);
             return;
         }
 
         try {
-            const moralisInstance = getMoralisInstance(MoralisClassEnum.WHITELIST);
-            setFieldsIntoMoralisInstance(moralisInstance, formData);
-            moralisInstance.set("walletAddress", signerAddress);
-
-            await saveMoralisInstance(moralisInstance);
+            await saveWhitelistRequest({ ...formData, walletAddress: signerAddress });
             toast.success("Your request was saved", {
                 duration: 4000,
                 className: "bg-red",

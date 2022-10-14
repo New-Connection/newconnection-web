@@ -19,17 +19,18 @@ import Layout, {
     WhitelistTab,
 } from "components";
 import Image from "next/image";
-import { Moralis } from "moralis-v1";
 import {
-    addTreasureMoralis,
+    AddToWhitelist,
     addTreasury,
     checkCorrectNetwork,
+    checkTokensOwnership,
     contributeToTreasury,
+    fetchNFT,
+    fetchTreasuryBalance,
     getChainScanner,
     getGovernorOwnerAddress,
     mint,
 } from "interactions/contract";
-import { useMoralis } from "react-moralis";
 import {
     ButtonState,
     DAOPageProps,
@@ -44,17 +45,19 @@ import { LinkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { useAccount, useSigner, useSwitchNetwork } from "wagmi";
-import { handleChangeBasic, isValidHttpUrl } from "utils";
+import { handleChangeBasic, handleContractError, isValidHttpUrl } from "utils";
 import {
-    fetchDAO,
-    fetchMembers,
-    fetchNFT,
-    fetchProposals,
-    fetchTreasuryBalance,
-    fetchWhitelist,
+    addValueToDao,
+    deleteWhitelistRecord,
+    getAllMembers,
+    getAllProposals,
+    getDao,
+    getWhitelist,
+    saveMember,
 } from "interactions/database";
 import classNames from "classnames";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
@@ -79,16 +82,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const [notFound, setNotFound] = useState(false);
     const [selectedTab, setSelectedTab] = useState<number>(0);
 
-    // Moralis states
-    const { isInitialized } = useMoralis();
     const [DAO, setDAO] = useState<IDAOPageForm>();
-    const [DAOMoralisInstance, setDAOMoralisInstance] = useState<Moralis.Object<Moralis.Attributes>>();
-    const [WhitelistMoralisInstance, setWhitelistMoralisInstance] = useState<Moralis.Object<Moralis.Attributes>[]>();
     const [whitelist, setWhitelist] = useState<IWhitelistRecord[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
+    const [ownedTokenAddresses, setOwnedTokenAddresses] = useState([]);
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
-    const [members, setMembers] = useState(new Map<string, IMember>());
+    const [members, setMembers] = useState<IMember[]>();
 
     // NFT section
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
@@ -105,13 +105,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // EFFECTS
     // ----------------------------------------------------------------------
-
     const loadingWhitelist = async () => {
-        const { whitelist, moralisInstance } = await fetchWhitelist(url);
-        if (whitelist && moralisInstance) {
+        const whitelist = await getWhitelist(url);
+        if (whitelist) {
             console.log("load whitelist");
             setWhitelist(() => whitelist);
-            setWhitelistMoralisInstance(() => moralisInstance);
         }
     };
     useEffect(() => {
@@ -123,18 +121,16 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         setLoadingCounter(INITIAL_LOADING_COUNTER);
 
         const loadingDAO = async () => {
-            const { newDao, moralisInstance } = await fetchDAO(url);
-            if (newDao && moralisInstance) {
-                console.log(newDao);
+            const newDao = await getDao(url);
+            if (newDao) {
                 localStorage.setItem(url, JSON.stringify(newDao));
                 setDAO(() => newDao);
-                setDAOMoralisInstance(() => moralisInstance);
                 return newDao;
             }
         };
 
         const loadingProposals = async () => {
-            const proposals = await fetchProposals(url);
+            const proposals = await getAllProposals(url);
             if (proposals) {
                 console.log("load proposals");
                 localStorage.setItem(url + " Proposals", JSON.stringify(proposals));
@@ -150,6 +146,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 localStorage.setItem(url + " NFTs", JSON.stringify(nftsArray));
                 setNFTs(nftsArray);
                 setLoadingCounter((prevState) => (prevState < 0 ? INITIAL_LOADING_COUNTER : prevState - 1));
+                return nftsArray;
             }
         };
 
@@ -160,14 +157,35 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             }
         };
 
-        const loadingMembers = async (dao: IDAOPageForm) => {
-            const newMembers = await fetchMembers(dao);
+        const loadingMembers = async () => {
+            const newMembers = await getAllMembers(url);
             if (newMembers) {
                 setMembers(() => newMembers);
             }
         };
 
-        isInitialized &&
+        const checkNfts = async (nfts, dao: IDAOPageForm) => {
+            const { tokens, votingPower } = await checkTokensOwnership(
+                nfts.map((nft) => nft.tokenAddress),
+                signerAddress,
+                dao.chainId
+            );
+            if (tokens.length > 0) {
+                console.log("check tokens " + tokens);
+                setOwnedTokenAddresses(tokens);
+
+                const member: IMember = {
+                    memberAddress: signerAddress,
+                    governorUrl: url,
+                    memberTokens: [...tokens],
+                    role: "Member",
+                    votingPower: votingPower,
+                };
+
+                await saveMember(member);
+            }
+        };
+
         loadingDAO()
             .then((dao) => {
                 if (dao) {
@@ -175,8 +193,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     loadingWhitelist().then();
                     loadingTreasuryBalance(dao).then();
                     loadingProposals().then();
-                    loadingNFT(dao).then();
-                    loadingMembers(dao).then();
+                    loadingNFT(dao).then((nfts) => nfts && signerAddress && checkNfts(nfts, dao));
+                    loadingMembers().then();
                 } else {
                     setNotFound(true);
                 }
@@ -185,14 +203,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 console.log("Error when Loading DAO", e);
                 setNotFound(true);
             });
-    }, [isInitialized, signerData]);
+    }, [signerAddress]);
 
     // Owner check
     useEffect(() => {
         const fetchIsOwner = async () => {
-            DAO &&
-            signerData &&
-            (signerAddress) === (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
+            DAO && signerData && signerAddress === (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
                 ? setIsOwner(true)
                 : setIsOwner(false);
         };
@@ -202,16 +218,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // FUNCTIONS
     // ----------------------------------------------------------------------
-
-    const deleteFromWhitelist = async (walletAddress: string) => {
-        console.log("deleting");
-        WhitelistMoralisInstance
-            ? WhitelistMoralisInstance.find((wl) => wl.get("walletAddress") === walletAddress)
-                ?.destroy()
-                .then(() => loadingWhitelist().catch(console.error))
-                .catch(console.error)
-            : 0;
-    };
 
     const addTreasuryAndSave = async () => {
         const treasuryAddress = await addTreasury(
@@ -223,8 +229,31 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         );
         if (treasuryAddress) {
             handleChangeBasic(treasuryAddress, setDAO, "treasuryAddress");
-            console.log("moralis save", treasuryAddress);
-            await addTreasureMoralis(DAOMoralisInstance, treasuryAddress, createTreasuryDialog);
+            console.log("db save", treasuryAddress);
+            await addValueToDao(url, "treasuryAddress", treasuryAddress);
+        }
+    };
+
+    const addToWhitelist = async (walletAddress: string, votingTokenAddress: string) => {
+        if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
+            return;
+        }
+
+        console.log("voting token " + votingTokenAddress);
+        const status = await AddToWhitelist({
+            addressNFT: votingTokenAddress,
+            walletAddress: walletAddress,
+            signer: signerData,
+        });
+
+        try {
+            if (status) {
+                await deleteWhitelistRecord(DAO.url, walletAddress, votingTokenAddress);
+                loadingWhitelist().then();
+                toast.success("Wallet added to Whitelist");
+            }
+        } catch (e) {
+            handleContractError(e);
         }
     };
 
@@ -395,10 +424,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     Component: () => {
                                         return (
                                             <ProposalsListTab
-                                                DAOMoralisInstance={DAOMoralisInstance}
+                                                // DAOMoralisInstance={DAOMoralisInstance}
                                                 DAO={DAO}
                                                 proposals={proposals}
-                                                daoUrl={url}
                                             />
                                         );
                                     },
@@ -416,12 +444,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     Component: () => {
                                         return (
                                             <WhitelistTab
+                                                governorUrl={url}
                                                 whitelist={whitelist}
                                                 isLoaded={isLoaded}
                                                 signer={signerData}
                                                 isOwner={isOwner}
                                                 chainId={DAO.chainId}
-                                                deleteFunction={deleteFromWhitelist}
+                                                addToWhitelist={addToWhitelist}
                                             />
                                         );
                                     },

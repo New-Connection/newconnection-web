@@ -4,7 +4,6 @@ import { checkCorrectNetwork, deployTreasuryContract, transferTreasuryOwnership 
 import { Signer } from "ethers";
 import { handleNext, handleReset } from "components";
 import { handleContractError } from "utils";
-import { saveMoralisInstance } from "interactions/database";
 
 export async function addTreasury(
     DAO: IDAOPageForm,
@@ -40,18 +39,6 @@ export async function addTreasury(
     } catch (error) {
         handleContractError(error, { dialog: treasuryDialog });
         handleReset(setCreateTreasuryStep);
-        return;
-    }
-}
-
-export async function addTreasureMoralis(DAOMoralisInstance, treasuryAddress: string, treasuryDialog: DisclosureState) {
-    try {
-        if (DAOMoralisInstance) {
-            DAOMoralisInstance.set("treasuryAddress", treasuryAddress);
-            await saveMoralisInstance(DAOMoralisInstance);
-        }
-    } catch (error) {
-        handleContractError(error, { dialog: treasuryDialog });
         return;
     }
 }

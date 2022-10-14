@@ -4,7 +4,7 @@ import { useSigner, useSwitchNetwork } from "wagmi";
 import toast from "react-hot-toast";
 import { useDialogState } from "ariakit";
 import { Signer } from "ethers";
-import { ICreateDAO, ICreateDaoQuery } from "types";
+import { ICreateDAO, ICreateDaoQuery, IMember } from "types";
 import {
     handleAddArray,
     handleChangeBasic,
@@ -28,15 +28,8 @@ import Layout, {
     InputTextArea,
 } from "components";
 import { CHAINS, checkCorrectNetwork, deployGovernorContract, getBlocksPerDay } from "interactions/contract";
-import {
-    fetchDAO,
-    getMoralisInstance,
-    MoralisClassEnum,
-    saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
-} from "interactions/database";
+import { checkUrlAvailability, saveMember, saveNewDao } from "interactions/database";
 import { useRouter } from "next/router";
-import { useMoralis } from "react-moralis";
 
 const CreateDAO: NextPage = () => {
     const router = useRouter();
@@ -60,7 +53,6 @@ const CreateDAO: NextPage = () => {
     const [activeStep, setActiveStep] = useState(0);
 
     const { switchNetwork } = useSwitchNetwork();
-    const { isInitialized } = useMoralis();
 
     useEffect(() => {
         const query = router.query as ICreateDaoQuery;
@@ -72,61 +64,28 @@ const CreateDAO: NextPage = () => {
         e.preventDefault();
         console.log(formData);
 
-        const checkUrlAvailability = async (url) => {
-            const { newDao } = isInitialized && (await fetchDAO(url));
-            console.log(newDao);
-            return !newDao;
-        };
-
         if (!validateForm(formData)) {
             return;
         }
 
-        const isUrlAvailable = await checkUrlAvailability(formData.url);
-        if (!isUrlAvailable) {
+        if (!(await checkUrlAvailability(formData.url))) {
             toast.error("Name unavailable");
             return;
         }
 
         const chainId = CHAINS[formData.blockchain[0]].id;
-        handleChangeBasic(chainId, setFormData, "chainId");
-        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain[0]].id, switchNetwork))) {
+        if (!(await checkCorrectNetwork(signerData, chainId, switchNetwork))) {
             return;
         }
 
         handleReset(setActiveStep);
         confirmDialog.toggle();
 
-        const saveToDatabase = async (
-            daoAddress: string,
-            profileImagePath: string,
-            coverImagePath: string,
-            tokenAddress: string
-        ) => {
-            const daoInstance = getMoralisInstance(MoralisClassEnum.DAO);
-            setFieldsIntoMoralisInstance(daoInstance, formData);
-            console.log("Contract Address for Moralis", daoAddress);
-            daoInstance.set("governorAddress", daoAddress);
-            daoInstance.set("chainId", chainId);
-            daoInstance.set("profileImage", profileImagePath);
-            daoInstance.set("coverImage", coverImagePath);
-            await saveMoralisInstance(daoInstance);
-
-            const nftInstance = getMoralisInstance(MoralisClassEnum.NFT);
-            nftInstance.set("tokenAddress", tokenAddress);
-            nftInstance.set("chainId", chainId);
-            nftInstance.set("governorAddress", daoAddress);
-            await saveMoralisInstance(nftInstance);
-        };
-
         try {
             const profileImagePath = await storeNFT(formData.profileImage as File);
             console.log(profileImagePath);
-            handleChangeBasic(profileImagePath, setFormData, "profileImage");
-
             const coverImagePath = await storeNFT(formData.coverImage as File);
             console.log(coverImagePath);
-            handleChangeBasic(coverImagePath, setFormData, "coverImage");
 
             const contract = await deployGovernorContract(signerData as Signer, {
                 name: formData.name,
@@ -136,11 +95,25 @@ const CreateDAO: NextPage = () => {
             });
             handleNext(setActiveStep);
             await contract.deployed();
-            handleNext(setActiveStep);
-            handleNext(setActiveStep);
+            handleNext(setActiveStep, 2);
             handleChangeBasic(contract.address, setFormData, "governorAddress");
 
-            await saveToDatabase(contract.address, profileImagePath, coverImagePath, formData.tokenAddress[0]);
+            await saveNewDao({
+                ...formData,
+                chainId: chainId,
+                profileImage: profileImagePath,
+                coverImage: coverImagePath,
+                governorAddress: contract.address,
+            } as ICreateDAO);
+
+            const address = await signerData.getAddress();
+
+            await saveMember({
+                memberAddress: address,
+                governorUrl: formData.url,
+                memberTokens: [],
+                role: "Admin",
+            } as IMember);
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
             handleReset(setActiveStep);

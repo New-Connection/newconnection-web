@@ -1,3 +1,2 @@
-export * from "./fetch";
-export * from "./basic";
-export * from "./utils";
+export * from "./config";
+export * from "./functions";

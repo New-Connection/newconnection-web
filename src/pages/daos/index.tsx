@@ -2,17 +2,15 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useMoralis } from "react-moralis";
 import { useNetwork } from "wagmi";
 import Layout, { DAOCard } from "components";
 import { IDAOPageForm } from "types";
 import { getTotalProposals, isBlockchainSupported } from "interactions/contract";
-import { fetchDAOs } from "interactions/database";
+import { getAllDaos } from "interactions/database";
 
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
     const { chain } = useNetwork();
-    const { isInitialized } = useMoralis();
 
     const loadingLargeData = async (DAOsList: IDAOPageForm[]) => {
         const newDAOs = await Promise.all(
@@ -28,18 +26,17 @@ const DAOsPage: NextPage = () => {
 
     useEffect(() => {
         const loadindDAOs = async () => {
-            const listOfDAOs = await fetchDAOs();
+            const listOfDAOs = await getAllDaos();
             if (listOfDAOs) {
                 setDAOs(listOfDAOs);
                 loadingLargeData(listOfDAOs).then();
             }
         };
 
-        isInitialized &&
         loadindDAOs().catch((e) => {
             console.log("Error when loading DAOs", e);
         });
-    }, [isInitialized]);
+    }, []);
 
     const CreateDAOButton = () => {
         return (

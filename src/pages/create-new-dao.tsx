@@ -37,8 +37,8 @@ const CreateNewDAO: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton />
                     <form className="mx-auto flex max-w-4xl flex-col gap-4">
+                        <BackButton />
                         <h1 className="text-highlighter">Create new DAO</h1>
                         <p className="input-label text-lg font-medium">NFT smart contract</p>
                         <p className="pb-4">

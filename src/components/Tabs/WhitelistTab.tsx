@@ -1,11 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
-import { formatAddress, handleContractError } from "utils";
-import { AddToWhitelist, checkCorrectNetwork, getLogoURI } from "interactions/contract";
+import { formatAddress } from "utils";
+import { getLogoURI } from "interactions/contract";
 import { Signer } from "ethers";
-import toast from "react-hot-toast";
 import { MockupTextCard } from "components";
-import { useSwitchNetwork } from "wagmi";
 import { IWhitelistRecord } from "types";
 
 const renderValue = (chain: string) => {
@@ -19,38 +17,12 @@ interface IWhitelistTab {
     isLoaded: boolean;
     isOwner: boolean;
     chainId: number;
-    deleteFunction: Function;
+    governorUrl: string;
+    addToWhitelist: Function;
 }
 
-export const WhitelistTab = ({ whitelist, signer, isOwner, isLoaded, chainId, deleteFunction }: IWhitelistTab) => {
+export const WhitelistTab = ({ whitelist, isOwner, isLoaded, addToWhitelist, }: IWhitelistTab) => {
     const [click, setClick] = useState(false);
-    const { switchNetwork } = useSwitchNetwork();
-
-    const addToWhitelist = async (walletAddress: string, votingTokenAddress: string) => {
-        if (!(await checkCorrectNetwork(signer, chainId, switchNetwork))) {
-            return;
-        }
-
-        setClick(true);
-        console.log("voting token " + votingTokenAddress);
-        const status = await AddToWhitelist({
-            addressNFT: votingTokenAddress,
-            walletAddress: walletAddress,
-            signer: signer,
-        });
-
-        try {
-            if (status) {
-                await deleteFunction(walletAddress);
-
-                toast.success("Wallet added to Whitelist");
-            }
-        } catch (e) {
-            handleContractError(e);
-        }
-
-        setClick(false);
-    };
 
     return whitelist && whitelist.length !== 0 ? (
         <div className="w-full justify-between space-y-5 gap-5">
@@ -83,7 +55,9 @@ export const WhitelistTab = ({ whitelist, signer, isOwner, isLoaded, chainId, de
                             <button
                                 className="w-1/4 settings-button py-2 px-4 bg-white border-gray2 border-2 btn-state"
                                 onClick={async () => {
+                                    setClick(true);
                                     await addToWhitelist(walletAddress, votingTokenAddress);
+                                    setClick(false);
                                 }}
                                 disabled={click}
                             >

@@ -1,11 +1,9 @@
 import React from "react";
-import { MORALIS_APP_ID, MORALIS_SERVER_URL } from "utils";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { WagmiConfig } from "wagmi";
 import "styles/globals.css";
 import { CustomToast, WagmiClient } from "components";
-import { MoralisProvider } from "react-moralis";
 import Script from "next/script";
 import { AppProps } from "next/app";
 
@@ -30,15 +28,13 @@ function App({ Component, pageProps }: AppProps) {
                 `}
             </Script>
 
-            <MoralisProvider appId={MORALIS_APP_ID!} serverUrl={MORALIS_SERVER_URL!}>
-                <ThemeProvider defaultTheme="system" attribute="class">
-                    <WagmiConfig client={WagmiClient}>
-                        <QueryClientProvider client={queryClient}>
-                            <Component {...pageProps} />
-                        </QueryClientProvider>
-                    </WagmiConfig>
-                </ThemeProvider>
-            </MoralisProvider>
+            <ThemeProvider defaultTheme="system" attribute="class">
+                <WagmiConfig client={WagmiClient}>
+                    <QueryClientProvider client={queryClient}>
+                        <Component {...pageProps} />
+                    </QueryClientProvider>
+                </WagmiConfig>
+            </ThemeProvider>
             <CustomToast />
         </>
     );
