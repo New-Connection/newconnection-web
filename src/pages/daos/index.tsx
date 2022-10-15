@@ -11,6 +11,11 @@ import { getAllDaos } from "interactions/database";
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
     const { chain } = useNetwork();
+    const [isChainSupported, setIsChainSupported] = useState(false);
+
+    useEffect(() => {
+        setIsChainSupported(() => isBlockchainSupported(chain));
+    }, [chain]);
 
     const loadingLargeData = async (DAOsList: IDAOPageForm[]) => {
         const newDAOs = await Promise.all(
@@ -41,7 +46,7 @@ const DAOsPage: NextPage = () => {
     const CreateDAOButton = () => {
         return (
             <Link href="./create-new-dao">
-                <button className="secondary-button h-10 disabled:bg-gray" disabled={!isBlockchainSupported(chain)}>
+                <button className="secondary-button h-10 disabled:bg-gray" disabled={!isChainSupported}>
                     Create DAO
                 </button>
             </Link>
