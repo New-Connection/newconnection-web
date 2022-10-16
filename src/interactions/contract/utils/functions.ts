@@ -18,8 +18,12 @@ export const checkCorrectNetwork = async (signerData, chainID: number, switchNet
         return false;
     }
     if ((await signerData.getChainId()) !== chainID) {
-        toast.error("Please switch network");
-        switchNetwork(chainID);
+        if (switchNetwork) {
+            toast.error("Please switch network");
+            switchNetwork(chainID);
+        } else {
+            toast.error("Your wallet does not support switching networks");
+        }
         return false;
     }
     return true;
