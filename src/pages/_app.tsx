@@ -2,11 +2,10 @@ import { useState } from "react";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { WagmiConfig } from "wagmi";
-import { CustomToast, wagmiClient } from "components";
+import { chains, CustomToast, wagmiClient } from "components";
 import Script from "next/script";
 import { AppProps } from "next/app";
 import { lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { getChains } from "interactions/contract";
 import "@rainbow-me/rainbowkit/styles.css";
 import "styles/globals.css";
 
@@ -45,7 +44,7 @@ function App({ Component, pageProps }: AppProps) {
                             appName: "New Connection",
                             learnMoreUrl: "https://www.newconnection.xyz/"
                         }}
-                        chains={getChains()}
+                        chains={chains}
                     >
                         <QueryClientProvider client={queryClient}>
                             <Component {...pageProps} />
