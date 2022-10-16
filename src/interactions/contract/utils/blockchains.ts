@@ -79,66 +79,6 @@ const CHAINS_BLOCKTIME: {
 };
 
 const CHAINS: Chain[] = [
-    // "Rinkeby": chain.rinkeby,
-
-    // Goerli: chain.goerli,
-
-    // "Avalanche Testnet": {
-    //     id: 43113,
-    //     name: "Avalanche Testnet",
-    //     database: "Avalanche",
-    //     nativeCurrency: {
-    //         decimals: 18,
-    //         name: "Avalanche",
-    //         symbol: "AVAX",
-    //     },
-    //     rpcUrls: {
-    //         default: "https://api.avax-test.network/ext/bc/C/rpc",
-    //     },
-    //     blockExplorers: {
-    //         default: { name: "Snowtrace", url: "https://testnet.snowtrace.io" },
-    //     },
-    //     testnet: true,
-    // },
-
-    // "Binance Testnet": {
-    //     id: 97,
-    //     name: "Binance Testnet",
-    //     database: "Binance",
-    //     nativeCurrency: {
-    //         decimals: 18,
-    //         name: "BSC",
-    //         symbol: "BNB"
-    //     },
-    //     rpcUrls: {
-    //         default: "https://data-seed-prebsc-1-s1.binance.org:8545"
-    //     },
-    //     blockExplorers: {
-    //         default: { name: "bscscan", url: "https://testnet.bscscan.com" }
-    //     },
-    //     testnet: true
-    // },
-
-    // "Arbitrum Testnet": chain.arbitrumGoerli,
-
-    // "Fantom Testnet": {
-    //     id: 4002,
-    //     name: "Fantom Testnet",
-    //     database: "Fantom",
-    //     nativeCurrency: {
-    //         decimals: 18,
-    //         name: "Fantom",
-    //         symbol: "FTM"
-    //     },
-    //     rpcUrls: {
-    //         default: "https://rpc.testnet.fantom.network/"
-    //     },
-    //     blockExplorers: {
-    //         default: { name: "ftmscan", url: "https://testnet.ftmscan.com" }
-    //     },
-    //     testnet: true
-    // },
-
     // TEST CHAINS
     // ----------------------------------------------------------------------
     chain.polygonMumbai,
@@ -182,6 +122,8 @@ const CHAINS: Chain[] = [
 
     // MAIN CHAINS
     // ----------------------------------------------------------------------
+    chain.mainnet,
+
     chain.polygon,
 
     chain.optimism,
@@ -218,7 +160,7 @@ export const getChain = (chain: number | string): Chain =>
 export const getChainScanner = (chainId: number | undefined, address: string | undefined): string =>
     chainId && address ? `${getChain(chainId).blockExplorers.default.url}/address/${address}` : "";
 
-export const getTokenSymbol = (chainId: number) => getChain(chainId).nativeCurrency.symbol;
+export const getTokenSymbol = (chainId: number) => getChain(chainId)?.nativeCurrency?.symbol || "ETH";
 
 export const isBlockchainSupported = (chain: { id }) => (chain ? getChainIds().includes(chain.id) : false);
 
