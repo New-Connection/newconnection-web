@@ -27,9 +27,9 @@ import {
 import { useDialogState } from "ariakit";
 import {
     chainIds,
-    CHAINS,
     checkCorrectNetwork,
     deployNFTContract,
+    getChain,
     getChainNames,
     getLogoURI,
     layerzeroEndpoints,
@@ -59,7 +59,7 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))) {
+        if (!(await checkCorrectNetwork(signerData, getChain(formData.blockchain).id, switchNetwork))) {
             return;
         }
 

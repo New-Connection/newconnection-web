@@ -1,14 +1,17 @@
-import React from "react";
+import { useState } from "react";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { WagmiConfig } from "wagmi";
-import "styles/globals.css";
-import { CustomToast, WagmiClient } from "components";
+import { CustomToast, wagmiClient } from "components";
 import Script from "next/script";
 import { AppProps } from "next/app";
+import { lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { getChains } from "interactions/contract";
+import "@rainbow-me/rainbowkit/styles.css";
+import "styles/globals.css";
 
 function App({ Component, pageProps }: AppProps) {
-    const [queryClient] = React.useState(() => new QueryClient());
+    const [queryClient] = useState(() => new QueryClient());
 
     return (
         <>
@@ -29,10 +32,25 @@ function App({ Component, pageProps }: AppProps) {
             </Script>
 
             <ThemeProvider defaultTheme="system" attribute="class">
-                <WagmiConfig client={WagmiClient}>
-                    <QueryClientProvider client={queryClient}>
-                        <Component {...pageProps} />
-                    </QueryClientProvider>
+                <WagmiConfig client={wagmiClient}>
+                    <RainbowKitProvider
+                        modalSize="compact"
+                        theme={lightTheme({
+                            accentColor: "#7343DF",
+                            accentColorForeground: "white",
+                            borderRadius: "large",
+                            overlayBlur: "small"
+                        })}
+                        appInfo={{
+                            appName: "New Connection",
+                            learnMoreUrl: "https://www.newconnection.xyz/"
+                        }}
+                        chains={getChains()}
+                    >
+                        <QueryClientProvider client={queryClient}>
+                            <Component {...pageProps} />
+                        </QueryClientProvider>
+                    </RainbowKitProvider>
                 </WagmiConfig>
             </ThemeProvider>
             <CustomToast />

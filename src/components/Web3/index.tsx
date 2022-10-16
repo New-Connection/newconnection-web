@@ -1,4 +1,2 @@
-export { WalletSelector } from "./WalletSelector";
-export { WagmiClient, provider } from "./WagmiClient";
-export { NetworksMenu } from "./NetworksMenu";
+export * from "./WagmiClient";
 export { Account } from "./Account";

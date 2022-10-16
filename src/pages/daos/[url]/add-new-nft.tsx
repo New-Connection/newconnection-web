@@ -31,9 +31,9 @@ import { useDialogState } from "ariakit";
 import {
     addToken,
     chainIds,
-    CHAINS,
     checkCorrectNetwork,
     deployNFTContract,
+    getChain,
     getChainNames,
     getLogoURI,
     layerzeroEndpoints,
@@ -92,7 +92,7 @@ const AddNewNFT: NextPage = () => {
             return;
         }
 
-        const chainId = CHAINS[formData.blockchain].id;
+        const chainId = getChain(formData.blockchain).id;
         if (!(await checkCorrectNetwork(signerData, chainId, switchNetwork))) {
             return;
         }

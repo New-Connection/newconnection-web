@@ -27,7 +27,7 @@ import Layout, {
     InputText,
     InputTextArea,
 } from "components";
-import { CHAINS, checkCorrectNetwork, deployGovernorContract, getBlocksPerDay } from "interactions/contract";
+import { checkCorrectNetwork, deployGovernorContract, getBlocksPerDay, getChain } from "interactions/contract";
 import { checkUrlAvailability, saveMember, saveNewDao } from "interactions/database";
 import { useRouter } from "next/router";
 
@@ -73,7 +73,7 @@ const CreateDAO: NextPage = () => {
             return;
         }
 
-        const chainId = CHAINS[formData.blockchain[0]].id;
+        const chainId = getChain(formData.blockchain[0]).id;
         if (!(await checkCorrectNetwork(signerData, chainId, switchNetwork))) {
             return;
         }

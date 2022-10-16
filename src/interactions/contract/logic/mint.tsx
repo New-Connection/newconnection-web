@@ -7,7 +7,7 @@ export const mint = async (
     tokenAddress: string,
     DAO: IDAOPageForm,
     signerData,
-    switchNetwork,
+    switchNetwork: Function,
     setButtonState,
     isOwner: boolean
 ) => {

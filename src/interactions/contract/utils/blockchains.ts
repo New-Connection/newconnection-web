@@ -1,37 +1,31 @@
 import ASSETS from "assets";
-import { chain, Chain } from "wagmi";
+import { chain } from "wagmi";
 import { StaticImageData } from "next/image";
 import { INFURA_ID } from "utils";
+import { Chain } from "@rainbow-me/rainbowkit";
 
-type chainType = [
-    //
+enum ChainEnum {
     // MAIN CHAINS
     // ----------------------------------------------------------------------
-    "Ethereum",
-    // "Arbitrum",
-    // "Binance",
-    // "Avalanche",
-    // "Fantom",
-    "Polygon",
-    "Optimism",
-    "Aurora",
+    ETH = "Ethereum",
+    POL = "Polygon",
+    OPT = "Optimism",
+    AUR = "Aurora",
 
-    //
     // TEST CHAINS
     // ----------------------------------------------------------------------
-    // "Goerli",
-    // "Arbitrum Goerli",
-    // "Binance Testnet",
-    // "Avalanche Testnet",
-    // "Fantom Testnet",
-    "Polygon Mumbai",
-    "Optimism Goerli",
-    "Aurora Testnet"
-];
+    POL_TEST = "Polygon Mumbai",
+    OPT_TEST = "Optimism Goerli",
+    AUR_TEST = "Aurora Testnet",
+}
+
+type chainType = `${ChainEnum}`;
 
 const CHAINS_IMG: {
-    [key in chainType[number]]?: StaticImageData;
+    [key in chainType]: StaticImageData;
 } = {
+    Ethereum: ASSETS.Ethereum,
+
     //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
@@ -44,9 +38,9 @@ const CHAINS_IMG: {
     Optimism: ASSETS.Optimism,
     Aurora: ASSETS.Aurora,
 
-    //
     // TEST CHAINS
     // ----------------------------------------------------------------------
+
     // Goerli: ASSETS.Ethereum,
     // "Arbitrum Goerli": ASSETS.Arbitrum,
     // "Binance Testnet": ASSETS.Binance,
@@ -58,9 +52,8 @@ const CHAINS_IMG: {
 };
 
 const CHAINS_BLOCKTIME: {
-    [key in chainType[number]]: number;
+    [key in chainType]: number;
 } = {
-    //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
     Ethereum: 12,
@@ -85,12 +78,7 @@ const CHAINS_BLOCKTIME: {
     "Aurora Testnet": 1.2,
 };
 
-export const CHAINS: {
-    [key in chainType[number]]?: Chain;
-} = {
-    //
-    // TEST CHAINS
-    // ----------------------------------------------------------------------
+const CHAINS: Chain[] = [
     // "Rinkeby": chain.rinkeby,
 
     // Goerli: chain.goerli,
@@ -151,9 +139,11 @@ export const CHAINS: {
     //     testnet: true
     // },
 
-    "Polygon Mumbai": chain.polygonMumbai,
+    // TEST CHAINS
+    // ----------------------------------------------------------------------
+    chain.polygonMumbai,
 
-    "Optimism Goerli": {
+    {
         id: 420,
         name: "Optimism Goerli",
         network: "Optimism",
@@ -171,10 +161,11 @@ export const CHAINS: {
         testnet: true,
     },
 
-    "Aurora Testnet": {
+    {
         id: 1313161555,
         name: "Aurora Testnet",
         network: "Aurora",
+        iconUrl: ASSETS.Aurora.src,
         nativeCurrency: {
             decimals: 18,
             name: "Ethereum",
@@ -189,17 +180,17 @@ export const CHAINS: {
         testnet: true,
     },
 
-    //
     // MAIN CHAINS
     // ----------------------------------------------------------------------
-    Polygon: chain.polygon,
+    chain.polygon,
 
-    Optimism: chain.optimism,
+    chain.optimism,
 
-    Aurora: {
+    {
         id: 1313161554,
         name: "Aurora",
         network: "Aurora",
+        iconUrl: ASSETS.Aurora.src,
         nativeCurrency: {
             decimals: 18,
             name: "Ethereum",
@@ -213,50 +204,29 @@ export const CHAINS: {
         },
         testnet: false,
     },
-};
+];
 
-export const getChains = (): Chain[] => {
-    return Object.values(CHAINS);
-};
+export const getChains = (): Chain[] => CHAINS;
 
-export const getChainIds = () => {
-    return getChains().map((chain) => chain.id);
-};
+export const getChainIds = (): number[] => getChains().map((chain) => chain.id);
 
-export const getChainNames = () => {
-    return getChains().map((chain) => chain.name);
-};
+export const getChainNames = (): string[] => getChains().map((chain) => chain.name);
 
-export const getChain = (chainId: number): Chain => {
-    return getChains().find((chain) => chain.id === chainId);
-};
+export const getChain = (chain: number | string): Chain =>
+    typeof chain === "number" ? getChains().find((c) => c.id === chain) : getChains().find((c) => c.name === chain);
 
-export function getChainScanner(chainId: number | undefined, address: string | undefined) {
-    return chainId && address ? `${getChain(chainId).blockExplorers.default.url}/address/${address}` : "";
-}
+export const getChainScanner = (chainId: number | undefined, address: string | undefined): string =>
+    chainId && address ? `${getChain(chainId).blockExplorers.default.url}/address/${address}` : "";
 
-export const getTokenSymbol = (chainId: number) => {
-    return getChain(chainId).nativeCurrency.symbol;
-};
+export const getTokenSymbol = (chainId: number) => getChain(chainId).nativeCurrency.symbol;
 
-export const isBlockchainSupported = (chain: { id }) => {
-    return chain ? getChainIds().includes(chain.id) : false;
-};
+export const isBlockchainSupported = (chain: { id }) => (chain ? getChainIds().includes(chain.id) : false);
 
-export const getLogoURI = (chain: number | string): StaticImageData => {
-    return (
-        (typeof chain === "number" ? CHAINS_IMG[getChain(chain)?.name]?.src : CHAINS_IMG[chain]) ||
-        CHAINS_IMG["Ethereum"]
-    );
-};
+export const getLogoURI = (chain: number | string): StaticImageData =>
+    (typeof chain === "number" ? CHAINS_IMG[getChain(chain)?.name]?.src : CHAINS_IMG[chain]) || CHAINS_IMG["Ethereum"];
 
-export const getSecondsPerBlock = (chain: number | string): number => {
-    return (
-        (typeof chain === "number" ? CHAINS_BLOCKTIME[getChain(chain)?.name] : CHAINS_BLOCKTIME[chain]) ||
-        CHAINS_BLOCKTIME["Ethereum"]
-    );
-};
+export const getSecondsPerBlock = (chain: number | string): number =>
+    (typeof chain === "number" ? CHAINS_BLOCKTIME[getChain(chain)?.name] : CHAINS_BLOCKTIME[chain]) ||
+    CHAINS_BLOCKTIME["Ethereum"];
 
-export const getBlocksPerDay = (chain: number | string): number => {
-    return (60 * 60 * 24) / getSecondsPerBlock(chain);
-};
+export const getBlocksPerDay = (chain: number | string): number => (60 * 60 * 24) / getSecondsPerBlock(chain);
