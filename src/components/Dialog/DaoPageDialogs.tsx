@@ -78,7 +78,7 @@ export const ContributeTreasuryDialog = ({
     contributeToTreasuryButton,
 }: IContributeTreasuryDialog) => {
     return (
-        <CustomDialog dialog={dialog} className="items-center text-center">
+        <CustomDialog dialog={dialog} className="">
             <div className={"flex items-center gap-2"}>
                 <Image src={DAO.profileImage} height={"50px"} width={"50px"} className="rounded-xl" />
                 <div>
@@ -101,21 +101,23 @@ export const ContributeTreasuryDialog = ({
                     step={0.0001}
                     max={10}
                 />
-                {!sending ? (
-                    <button
-                        disabled={+contributeAmount === 0}
-                        className="secondary-button h-12 mt-4 mb-2 gradient-btn-color transition delay-150 hover:reverse-gradient-btn-color"
-                    >
-                        Send
-                    </button>
-                ) : (
-                    <div className={"flex mt-4 gap-2"}>
-                        <div className={"w-7"}>
-                            <SpinnerLoading />
+                <div className={"flex justify-center"}>
+                    {!sending ? (
+                        <button
+                            disabled={+contributeAmount === 0}
+                            className="secondary-button h-12 mt-4 mb-2 gradient-btn-color transition delay-150 hover:reverse-gradient-btn-color"
+                        >
+                            Send
+                        </button>
+                    ) : (
+                        <div className={"flex mt-4 gap-2"}>
+                            <div className={"w-7"}>
+                                <SpinnerLoading />
+                            </div>
+                            <div className="text-xl text-base-content">Waiting confirmation from blockchain</div>
                         </div>
-                        <div className="text-xl text-base-content">Waiting confirmation from blockchain</div>
-                    </div>
-                )}
+                    )}
+                </div>
             </form>
         </CustomDialog>
     );

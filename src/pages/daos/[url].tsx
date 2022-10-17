@@ -56,8 +56,8 @@ import {
     saveMember,
 } from "interactions/database";
 import classNames from "classnames";
-import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import { useBoolean, useCounter, useLocalStorage } from "usehooks-ts";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
     const { url } = context.params as IDaoQuery;
@@ -70,38 +70,46 @@ export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = a
     };
 };
 
-const INITIAL_LOADING_COUNTER = 2;
+const LOADING_COUNTER = 2;
 
 const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     const { data: signerData } = useSigner();
     const { address: signerAddress } = useAccount();
     const { switchNetwork } = useSwitchNetwork();
-    const router = useRouter();
-    const [loadingCounter, setLoadingCounter] = useState(INITIAL_LOADING_COUNTER);
-    const isLoaded = loadingCounter <= 0 && signerData != null;
-    const [notFound, setNotFound] = useState(false);
-    const [selectedTab, setSelectedTab] = useState<number>(0);
+    const { count: loadingCounter, increment: incrementLoadingCounter, reset: resetLoadingCounter } = useCounter(0);
+    const isLoaded = loadingCounter >= LOADING_COUNTER && signerData != null;
+    const { value: notFound, setTrue: setNotFound } = useBoolean(false);
+    const { count: selectedTab, setCount: setSelectedTab } = useCounter(0);
 
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [whitelist, setWhitelist] = useState<IWhitelistRecord[]>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
-    const [ownedTokenAddresses, setOwnedTokenAddresses] = useState([]);
-    const [NFTs, setNFTs] = useState<INFTVoting[]>();
-    const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
     const [members, setMembers] = useState<IMember[]>();
 
     // NFT section
+    const [NFTs, setNFTs] = useState<INFTVoting[]>();
+    const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
+    const [ownedTokenAddresses, setOwnedTokenAddresses] = useState([]);
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
     const detailNFTDialog = useDialogState();
 
     // Treasury section
-    const [isOwner, setIsOwner] = useState(false);
+    const { value: isOwner, setTrue: setOwnerTrue, setFalse: setOwnerFalse } = useBoolean(false);
     const [treasuryBalance, setTreasuryBalance] = useState("0");
-    const [createTreasuryStep, setCreateTreasuryStep] = useState(0);
+    const {
+        count: createTreasuryStep,
+        increment: incrementCreateTreasuryStep,
+        reset: resetCreateTreasuryStep,
+    } = useCounter(0);
     const [contributeAmount, setContributeAmount] = useState("0");
-    const [sending, setSending] = useState(false);
+    const { value: sending, setValue: setSending } = useBoolean(false);
     const createTreasuryDialog = useDialogState();
     const contributeTreasuryDialog = useDialogState();
+
+    // Local storage
+    const [storageDao, setStorageDao] = useLocalStorage(url, null);
+    const [storageNFTs, setStorageNFTs] = useLocalStorage(`${url} NFTs`, null);
+    const [storageProposals, setStorageProposals] = useLocalStorage(`${url} Proposals`, null);
 
     // EFFECTS
     // ----------------------------------------------------------------------
@@ -113,18 +121,17 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         }
     };
     useEffect(() => {
-        const query = router.query as IDaoQuery;
-        setDAO(JSON.parse(localStorage.getItem(query.url)));
-        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
-        setProposals(JSON.parse(localStorage.getItem(query.url + " Proposals")));
+        setDAO(storageDao);
+        setNFTs(storageNFTs);
+        setProposals(storageProposals);
 
-        setLoadingCounter(INITIAL_LOADING_COUNTER);
+        resetLoadingCounter();
 
         const loadingDAO = async () => {
             const newDao = await getDao(url);
             if (newDao) {
-                localStorage.setItem(url, JSON.stringify(newDao));
-                setDAO(() => newDao);
+                setDAO(newDao);
+                setStorageDao(newDao);
                 return newDao;
             }
         };
@@ -133,9 +140,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             const proposals = await getAllProposals(url);
             if (proposals) {
                 console.log("load proposals");
-                localStorage.setItem(url + " Proposals", JSON.stringify(proposals));
-                setProposals(() => proposals);
-                setLoadingCounter((prevState) => (prevState < 0 ? INITIAL_LOADING_COUNTER : prevState - 1));
+                setProposals(proposals);
+                setStorageProposals(proposals);
+                incrementLoadingCounter();
             }
         };
 
@@ -143,9 +150,9 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             const nftsArray = await fetchNFT(dao, signerAddress);
             if (nftsArray) {
                 console.log("load nfts");
-                localStorage.setItem(url + " NFTs", JSON.stringify(nftsArray));
                 setNFTs(nftsArray);
-                setLoadingCounter((prevState) => (prevState < 0 ? INITIAL_LOADING_COUNTER : prevState - 1));
+                setStorageNFTs(nftsArray);
+                incrementLoadingCounter();
                 return nftsArray;
             }
         };
@@ -196,12 +203,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     loadingNFT(dao).then((nfts) => nfts && signerAddress && checkNfts(nfts, dao));
                     loadingMembers().then();
                 } else {
-                    setNotFound(true);
+                    setNotFound();
                 }
             })
             .catch((e) => {
                 console.log("Error when Loading DAO", e);
-                setNotFound(true);
+                setNotFound();
             });
     }, [signerAddress]);
 
@@ -209,8 +216,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     useEffect(() => {
         const fetchIsOwner = async () => {
             DAO && signerData && signerAddress === (await getGovernorOwnerAddress(DAO.governorAddress, DAO.chainId))
-                ? setIsOwner(true)
-                : setIsOwner(false);
+                ? setOwnerTrue()
+                : setOwnerFalse();
         };
 
         fetchIsOwner().catch(console.error);
@@ -224,7 +231,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             DAO,
             createTreasuryDialog,
             signerData,
-            setCreateTreasuryStep,
+            incrementCreateTreasuryStep,
+            resetCreateTreasuryStep,
             switchNetwork
         );
         if (treasuryAddress) {
@@ -285,7 +293,12 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     <div className="dao-header flex flex-col md:flex-row items-center -mt-10">
                         <div className="avatar">
                             <div className="w-32 rounded-full">
-                                <Image src={DAO.profileImage} height={"175px"} width={"175px"} className="rounded-full" />
+                                <Image
+                                    src={DAO.profileImage}
+                                    height={"175px"}
+                                    width={"175px"}
+                                    className="rounded-full"
+                                />
                             </div>
                         </div>
                         <div className={"info flex flex-col w-full gap-8 md:ml-6"}>
@@ -299,10 +312,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                             pathname: `${url}/add-new-member`,
                                         }}
                                     >
-                                        <button
-                                            className={"secondary-button"}
-                                            disabled={!isLoaded}
-                                        >
+                                        <button className={"secondary-button"} disabled={!isLoaded}>
                                             Become a member
                                         </button>
                                     </Link>

@@ -7,8 +7,6 @@ import Layout, {
     Button,
     CheckboxGroup,
     CreateProposalDialog,
-    handleNext,
-    handleReset,
     InputText,
     InputTextArea,
     RadioSelectorNFT,
@@ -19,6 +17,7 @@ import { checkCorrectNetwork, createProposal } from "interactions/contract";
 import { useRouter } from "next/router";
 import { Signer } from "ethers";
 import { saveNewProposal, } from "interactions/database";
+import { useCounter, useReadLocalStorage } from "usehooks-ts";
 
 const CreateProposal: NextPage = () => {
     const [formData, setFormData] = useState<ICreateProposal>({
@@ -33,17 +32,20 @@ const CreateProposal: NextPage = () => {
         blockchain: [],
         // enabledBlockchains: []
     });
-    const router = useRouter();
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
 
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const confirmDialog = useDialogState();
-    const [activeStep, setActiveStep] = useState(0);
+    const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
+
+    const router = useRouter();
+    const url = (router.query as ICreateProposalQuery).url;
+    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
+    const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
 
     useEffect(() => {
-        const query = router.query as ICreateProposalQuery;
-        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
+        const DAO: IDAOPageForm = storageDao;
 
         if (DAO) {
             handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
@@ -52,8 +54,7 @@ const CreateProposal: NextPage = () => {
             handleChangeBasic(+DAO.chainId, setFormData, "chainId");
         }
 
-        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
-        // handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
+        setNFTs(storageNFTs);
     }, [router]);
 
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
@@ -67,7 +68,7 @@ const CreateProposal: NextPage = () => {
             return;
         }
 
-        handleReset(setActiveStep);
+        resetActiveStep();
         confirmDialog.toggle();
 
         let proposalId;
@@ -78,9 +79,10 @@ const CreateProposal: NextPage = () => {
                 formData.name,
                 formData.tokenAddress
             );
-            handleNext(setActiveStep, 2);
+            incrementActiveStep();
+            incrementActiveStep();
             handleChangeBasic(proposalId, setFormData, "proposalId");
-            handleNext(setActiveStep);
+            incrementActiveStep();
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
             return;

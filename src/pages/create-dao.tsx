@@ -21,8 +21,6 @@ import Layout, {
     CheckboxGroup,
     CreateDaoDialog,
     DragAndDropImage,
-    handleNext,
-    handleReset,
     InputAmount,
     InputText,
     InputTextArea,
@@ -30,6 +28,7 @@ import Layout, {
 import { checkCorrectNetwork, deployGovernorContract, getBlocksPerDay, getChain } from "interactions/contract";
 import { checkUrlAvailability, saveMember, saveNewDao } from "interactions/database";
 import { useRouter } from "next/router";
+import { useCounter } from "usehooks-ts";
 
 const CreateDAO: NextPage = () => {
     const router = useRouter();
@@ -50,7 +49,7 @@ const CreateDAO: NextPage = () => {
 
     const { data: signerData } = useSigner();
     const confirmDialog = useDialogState();
-    const [activeStep, setActiveStep] = useState(0);
+    const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
 
     const { switchNetwork } = useSwitchNetwork();
 
@@ -78,7 +77,7 @@ const CreateDAO: NextPage = () => {
             return;
         }
 
-        handleReset(setActiveStep);
+        resetActiveStep();
         confirmDialog.toggle();
 
         try {
@@ -93,9 +92,10 @@ const CreateDAO: NextPage = () => {
                 votingPeriod: (+formData.votingPeriod * getBlocksPerDay(formData.blockchain[0])).toString(),
                 quorumPercentage: formData.quorumPercentage,
             });
-            handleNext(setActiveStep);
+            incrementActiveStep();
             await contract.deployed();
-            handleNext(setActiveStep, 2);
+            incrementActiveStep();
+            incrementActiveStep();
             handleChangeBasic(contract.address, setFormData, "governorAddress");
 
             await saveNewDao({
@@ -116,7 +116,7 @@ const CreateDAO: NextPage = () => {
             } as IMember);
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
+            resetActiveStep();
         }
     };
 

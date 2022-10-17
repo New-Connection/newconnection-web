@@ -7,9 +7,9 @@ import Layout, { BackButton, LockIcon } from "components";
 import { IChatsQuery, IDAOPageForm, INFTVoting } from "types";
 import { formatAddress } from "utils";
 import { checkTokensOwnership } from "interactions/contract";
+import { useReadLocalStorage } from "usehooks-ts";
 
 const ChatsPage: NextPage = () => {
-    const router = useRouter();
     const { address } = useAccount();
 
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
@@ -18,13 +18,14 @@ const ChatsPage: NextPage = () => {
     const [activeChat, setActiveChat] = useState(null);
     const [isChatOpen, setChatOpen] = useState(false);
 
+    const router = useRouter();
+    const url = (router.query as IChatsQuery).url;
+    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
+    const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
+
     useEffect(() => {
-        const query = router.query as IChatsQuery;
-        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
-        const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.url + " NFTs"));
-
-        //todo remove
-
+        const DAO: IDAOPageForm = storageDao;
+        const savedNfts: INFTVoting[] = storageNFTs;
 
         if (DAO && savedNfts) {
             const chainId = DAO.chainId;

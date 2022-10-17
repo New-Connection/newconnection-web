@@ -4,8 +4,6 @@ import Layout, {
     Button,
     CreateNftDialog,
     DragAndDropImage,
-    handleNext,
-    handleReset,
     InputAmount,
     InputSupplyOfNFT,
     InputText,
@@ -34,6 +32,7 @@ import {
     getLogoURI,
     layerzeroEndpoints,
 } from "interactions/contract";
+import { useCounter } from "usehooks-ts";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -48,7 +47,7 @@ const CreateNFT: NextPage = () => {
     });
     const { data: signerData } = useSigner();
     const confirmDialog = useDialogState();
-    const [activeStep, setActiveStep] = useState(0);
+    const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
 
     const { switchNetwork } = useSwitchNetwork();
 
@@ -63,7 +62,7 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        handleReset(setActiveStep);
+        resetActiveStep();
 
         // SHOW DIALOG
         confirmDialog.toggle();
@@ -95,15 +94,15 @@ const CreateNFT: NextPage = () => {
                 startMintId: 0,
                 endMintId: calculateSupply(),
             });
-            handleNext(setActiveStep);
+            incrementActiveStep();
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            handleNext(setActiveStep);
-            handleNext(setActiveStep);
+            incrementActiveStep();
+            incrementActiveStep();
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
+            resetActiveStep();
         }
     }
 

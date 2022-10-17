@@ -2,8 +2,8 @@ import { IDAOPageForm, IProposalPageForm } from "types";
 import Link from "next/link";
 import { ArrowUpRightIcon, MockupLoadingProposals, MockupTextCard, ProposalCard } from "components";
 import * as React from "react";
-import { useEffect } from "react";
 import { addValueToDao } from "interactions/database";
+import { useTimeout } from "usehooks-ts";
 
 interface IProposalListTab {
     DAO: IDAOPageForm;
@@ -15,15 +15,7 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
     let activeProposals: IProposalPageForm[];
     proposals && (activeProposals = proposals.filter((proposals) => proposals.isActive));
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            activeProposals && addValueToDao(DAO.url, "isActive", activeProposals.length !== 0).then();
-        }, 1500);
-
-        return () => {
-            clearTimeout(timeout);
-        };
-    });
+    useTimeout(() => activeProposals && addValueToDao(DAO.url, "isActive", activeProposals.length !== 0).then(), 1500);
 
     return proposals && proposals.length > 0 ? (
         <>
@@ -72,8 +64,7 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
                                 pathname: `${DAO.url}/proposals/`,
                             }}
                         >
-                            <button
-                                className="flex gap-2 btn-link mt-4">
+                            <button className="flex gap-2 btn-link mt-4">
                                 View all proposals
                                 <div className="mt-[0.125rem]">
                                     <ArrowUpRightIcon />

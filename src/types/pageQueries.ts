@@ -9,6 +9,7 @@ export interface DAOPageProps {
 }
 
 export interface IDetailProposalQuery extends ParsedUrlQuery {
+    url: string;
     detailProposal: string;
 }
 

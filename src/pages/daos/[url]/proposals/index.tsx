@@ -5,21 +5,20 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { IDAOPageForm, IProposalPageForm, IProposalsQuery } from "types";
 import { useRouter } from "next/router";
+import { useReadLocalStorage } from "usehooks-ts";
 
 const ProposalsPage: NextPage = () => {
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
     const router = useRouter();
 
+    const url = (router.query as IProposalsQuery).url;
+    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
+    const storageProposals = useReadLocalStorage<IProposalPageForm[]>(`${url} Proposals`);
+
     useEffect(() => {
-        const fetchQuery = () => {
-            const query = router.query as IProposalsQuery;
-
-            setDAO(JSON.parse(localStorage.getItem(query.url)));
-            setProposals(JSON.parse(localStorage.getItem(query.url + " Proposals")));
-        };
-
-        fetchQuery();
+        setDAO(storageDao);
+        setProposals(storageProposals);
     }, [router]);
 
     return (

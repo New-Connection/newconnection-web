@@ -7,10 +7,10 @@ import Link from "next/link";
 import ASSETS from "assets/index";
 import { useDialogState } from "ariakit";
 import { Tabs } from "components";
-import { useIsMounted } from "hooks";
 import DAOsPage from "./daos/index";
 
 import { TabsType } from "types";
+import { useIsMounted } from "usehooks-ts";
 
 const TabOne: FC = () => {
     return (
@@ -114,7 +114,8 @@ const Home: NextPage = () => {
                 </div>
                 <div className="text-center my-32">
                     <p>No proposals here</p>
-                    <p className="text-base-content/50">You should first join a DAO or create a new DAO to add a proposal</p>
+                    <p className="text-base-content/50">You should first join a DAO or create a new DAO to add a
+                        proposal</p>
                 </div>
             </div>
         );
@@ -139,7 +140,8 @@ const Home: NextPage = () => {
                 </div>
                 <div className="text-center my-32">
                     <p>No NFTs here</p>
-                    <p className="text-base-content/50">You should first join a DAO and get NFT from its administrator</p>
+                    <p className="text-base-content/50">You should first join a DAO and get NFT from its
+                        administrator</p>
                 </div>
             </>
         );

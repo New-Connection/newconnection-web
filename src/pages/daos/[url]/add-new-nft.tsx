@@ -4,8 +4,6 @@ import Layout, {
     BackButton,
     Button,
     DragAndDropImage,
-    handleNext,
-    handleReset,
     InputAmount,
     InputSupplyOfNFT,
     InputText,
@@ -39,6 +37,7 @@ import {
     layerzeroEndpoints,
 } from "interactions/contract";
 import { addValueToDaoArray } from "interactions/database";
+import { useCounter, useReadLocalStorage } from "usehooks-ts";
 
 const AddNewNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -55,19 +54,21 @@ const AddNewNFT: NextPage = () => {
         governorUrl: "",
     });
 
-    const router = useRouter();
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
     const confirmDialog = useDialogState();
-    const [activeStep, setActiveStep] = useState(0);
+    const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
+
+    const router = useRouter();
+    const url = (router.query as IAddNftQuery).url;
+    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
 
     useEffect(() => {
         fetchQuery();
     }, [router]);
 
     const fetchQuery = () => {
-        const query = router.query as IAddNftQuery;
-        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
+        const DAO: IDAOPageForm = storageDao;
 
         if (DAO) {
             handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
@@ -97,7 +98,7 @@ const AddNewNFT: NextPage = () => {
             return;
         }
 
-        handleReset(setActiveStep);
+        resetActiveStep();
         confirmDialog.toggle();
 
         try {
@@ -118,26 +119,26 @@ const AddNewNFT: NextPage = () => {
                 startMintId: 0,
                 endMintId: calculateSupply(),
             });
-            handleNext(setActiveStep);
+            incrementActiveStep();
 
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            handleNext(setActiveStep);
+            incrementActiveStep();
 
             const addTx = await addToken(formData.governorAddress, signerData, contract.address);
-            handleNext(setActiveStep);
+            incrementActiveStep();
 
             await addTx.wait();
-            handleNext(setActiveStep);
+            incrementActiveStep();
 
             handleChangeBasic(contract.address, setFormData, "contractAddress");
 
             await addValueToDaoArray(formData.governorUrl, "tokenAddress", contract.address);
 
-            handleNext(setActiveStep);
+            incrementActiveStep();
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
+            resetActiveStep();
             return;
         }
     }

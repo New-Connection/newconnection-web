@@ -7,6 +7,7 @@ import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, v
 import { IAddMemberQuery, IDAOPageForm, INFTVoting, IWhitelistRecord } from "types";
 import { saveWhitelistRequest, whitelistRequestExists, } from "interactions/database";
 import { useAccount, useSigner } from "wagmi";
+import { useReadLocalStorage } from "usehooks-ts";
 
 const AddNewMember: NextPage = () => {
     const [formData, setFormData] = useState<IWhitelistRecord>({
@@ -18,16 +19,19 @@ const AddNewMember: NextPage = () => {
         blockchainSelected: [],
         note: "",
     });
-    const router = useRouter();
     const { data: signerData } = useSigner();
     const { address: signerAddress } = useAccount();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
 
+    const router = useRouter();
+    const url = (router.query as IAddMemberQuery).url;
+    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
+    const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
+
     useEffect(() => {
         console.log("fetch query");
-        const query = router.query as IAddMemberQuery;
 
-        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
+        const DAO: IDAOPageForm = storageDao;
         if (DAO) {
             handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
             handleChangeBasic(DAO.url, setFormData, "governorUrl");
@@ -35,7 +39,7 @@ const AddNewMember: NextPage = () => {
             handleChangeBasic(DAO.blockchain, setFormData, "blockchainSelected");
         }
 
-        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
+        setNFTs(storageNFTs);
     }, [router]);
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
