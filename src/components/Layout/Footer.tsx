@@ -3,7 +3,7 @@ import { DiscordIcon, TwitterIcon } from "components";
 
 const Footer = () => {
     return (
-        <footer className="absolute bottom-0 w-full h-16 sm:h-24 border-t-2 border-primary rounded-2xl pt-4">
+        <footer className="absolute bottom-0 w-full h-16 sm:h-24 border-t-2 border-primary/80 rounded-2xl pt-4">
             <div className="max-w-screen-xl pb-6 px-4 mx-auto sm:px-6 lg:px-8">
                 <div className="sm:flex sm:items-center sm:justify-between sm:space-y-2">
                     <div className="flex mt-4 text-sm text-center items-center lg:text-center lg:mt-0 space-x-8">
