@@ -132,6 +132,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         const loadingProposals = async () => {
             const proposals = await getAllProposals(url);
             if (proposals) {
+                console.log(proposals);
                 console.log("load proposals");
                 localStorage.setItem(url + " Proposals", JSON.stringify(proposals));
                 setProposals(() => proposals);
@@ -234,23 +235,25 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         }
     };
 
-    const addToWhitelist = async (walletAddress: string, votingTokenAddress: string) => {
-        if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
-            return;
+    const addToWhitelist = async (walletAddress: string, votingTokenAddress: string, isRejected: boolean = false) => {
+        let status;
+        if (!isRejected) {
+            if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
+                return;
+            }
+
+            console.log("voting token " + votingTokenAddress);
+            status = await AddToWhitelist({
+                addressNFT: votingTokenAddress,
+                walletAddress: walletAddress,
+                signer: signerData,
+            });
         }
-
-        console.log("voting token " + votingTokenAddress);
-        const status = await AddToWhitelist({
-            addressNFT: votingTokenAddress,
-            walletAddress: walletAddress,
-            signer: signerData,
-        });
-
         try {
-            if (status) {
+            if (status || isRejected) {
                 await deleteWhitelistRecord(DAO.url, walletAddress, votingTokenAddress);
                 loadingWhitelist().then();
-                toast.success("Wallet added to Whitelist");
+                isRejected ? toast.success("Whitelist request refected") : toast.success("Wallet added to Whitelist");
             }
         } catch (e) {
             handleContractError(e);
@@ -296,7 +299,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                         }}
                                     >
                                         <button
-                                            className={"secondary-button disabled:bg-gray disabled:hover:bg-gray"}
+                                            className={"secondary-button"}
                                             disabled={!isLoaded}
                                         >
                                             Become a member
@@ -309,7 +312,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     <a
                                         href={DAO.scanURL}
                                         target={"_blank"}
-                                        className="hover:text-purple dao-about-button items-center"
+                                        className="hover:text-primary dao-about-button items-center"
                                     >
                                         About
                                         <LinkIcon className="h-3.5 w-3.5" />
@@ -322,14 +325,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 <div className={"links flex gap-5"}>
                                     {DAO.discordURL && (
                                         <a href={isValidHttpUrl(DAO.discordURL)} target={"_blank"}>
-                                            <div className="bg-gray rounded-full h-9 w-9 grid place-items-center">
+                                            <div className="bg-base-200 rounded-full h-9 w-9 grid place-items-center">
                                                 <DiscordIcon width="19" height="20" />
                                             </div>
                                         </a>
                                     )}
                                     {DAO.twitterURL && (
                                         <a href={isValidHttpUrl(DAO.twitterURL)} target={"_blank"}>
-                                            <div className="bg-gray rounded-full h-9 w-9 grid place-items-center">
+                                            <div className="bg-base-200 rounded-full h-9 w-9 grid place-items-center">
                                                 <TwitterIcon width="18" height="20" />
                                             </div>
                                         </a>
@@ -337,7 +340,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
                                     {DAO.websiteURL && (
                                         <a href={isValidHttpUrl(DAO.websiteURL)} target="_blank">
-                                            <div className="bg-gray rounded-full h-9 w-9 grid place-items-center">
+                                            <div className="bg-base-200 rounded-full h-9 w-9 grid place-items-center">
                                                 <WebsiteIcon width="19" height="20" />
                                             </div>
                                         </a>
@@ -350,14 +353,14 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         {DAO.treasuryAddress ? (
                             <div
                                 className={
-                                    "flex flex-col justify-between border-2 text-center border-lightGray rounded-2xl h-52 p-3 md:w-4/5"
+                                    "flex flex-col justify-between border-2 text-center border-base-300 rounded-2xl h-52 p-3 md:w-4/5"
                                 }
                             >
-                                <div className={"flex justify-center text-2xl text-gray5 pt-3"}>
+                                <div className={"flex justify-center text-2xl pt-3"}>
                                     <a
                                         href={getChainScanner(DAO.chainId, DAO.treasuryAddress)}
                                         target={"_blank"}
-                                        className="flex hover:text-purple gap-3 pl-5 items-center content-center text-black2"
+                                        className="flex hover:text-primary gap-3 pl-5 items-center content-center text-base-content"
                                     >
                                         Treasury
                                         <LinkIcon className="h-6 w-5" />
@@ -366,7 +369,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 <p className={"text-2xl font-medium"}>$ {treasuryBalance}</p>
                                 <div className={"pb-3"}>
                                     <button
-                                        className="form-submit-button border-none text-gray3 hover:underline active:text-gray2"
+                                        className="form-submit-button"
                                         onClick={async () => {
                                             if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
                                                 return;
@@ -385,7 +388,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                         Add treasury
                                     </button>
                                 ) : (
-                                    <button className="secondary-button w-full disabled:cursor-default" disabled={true}>
+                                    <button className="secondary-button" disabled={true}>
                                         Treasury not added
                                     </button>
                                 )}
@@ -402,7 +405,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     className={classNames(
                                         isLoaded
                                             ? "secondary-button gradient-btn-color hover:bg-gradient-to-tl w-full"
-                                            : "secondary-button bg-gray hover:bg-gray h-full w-full",
+                                            : "secondary-button h-full w-full",
                                         DAO.treasuryAddress && "rounded-2xl h-full"
                                     )}
                                     disabled={!isLoaded}
@@ -465,7 +468,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
                     <div className={"dao-nft"}>
                         <div className="flex flex-row justify-between mb-4 ">
-                            <h3 className="text-black font-normal text-2xl">Membership NFTs</h3>
+                            <h3 className="text-base-content font-normal text-2xl">Membership NFTs</h3>
                             {isOwner && isLoaded && (
                                 <Link
                                     href={{
@@ -536,7 +539,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         </div>
     ) : (
         <div>
-            <div className="cover h-48 w-full relative justify-center bg-gray animate-pulse"></div>
+            <div className="cover h-48 w-full relative justify-center bg-base-200 animate-pulse"></div>
             <Layout className="layout-base">
                 <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
                     {notFound ? (

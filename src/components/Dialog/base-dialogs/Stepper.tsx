@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
+import { useDarkMode } from "usehooks-ts";
 
 interface StepperDialogProps {
     dialog: DisclosureState;
@@ -23,7 +24,7 @@ export const SpinnerLoading = () => {
     return (
         <div role="status">
             <svg
-                className="inline mr-2 w-7 h-7 animate-spin text-gray-600 fill-purple"
+                className="inline mr-2 w-7 h-7 animate-spin text-base-300 fill-primary"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -137,8 +138,11 @@ export const StepperDialog = ({
     if (!steps) {
         steps = defaultSteps;
     }
+    const { isDarkMode } = useDarkMode();
+
     return (
         <Dialog
+            data-theme={isDarkMode ? "night" : "light"}
             state={dialog}
             className={classNames("dialog", className)}
             hideOnInteractOutside={isClose}
@@ -155,23 +159,23 @@ export const StepperDialog = ({
                                         <div className={"w-7"}>
                                             <SpinnerLoading />
                                         </div>
-                                        <div className="text-xl text-black">{step.label}</div>
+                                        <div className="text-xl text-base-content">{step.label}</div>
                                     </>
                                 ) : index > activeStep - 1 ? (
                                     //steps for next messages
                                     <>
                                         <div className={"w-7"}>
-                                            <CheckCircleIcon className="h-7 w-7 fill-gray3" />
+                                            <CheckCircleIcon className="h-7 w-7 fill-base-200" />
                                         </div>
-                                        <div className="text-xl text-gray3">{step.label}</div>
+                                        <div className="text-xl text-base-content/50">{step.label}</div>
                                     </>
                                 ) : (
                                     //steps for previous messages
                                     <>
                                         <div className={"w-7"}>
-                                            <CheckCircleIcon className="h-7 w-7 stroke-1 fill-purple" />
+                                            <CheckCircleIcon className="h-7 w-7 stroke-1 fill-primary" />
                                         </div>
-                                        <div className="text-xl text-black2">{step.label}</div>
+                                        <div className="text-xl text-base-content">{step.label}</div>
                                     </>
                                 )}
                             </div>

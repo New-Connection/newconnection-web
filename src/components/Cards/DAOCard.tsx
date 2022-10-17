@@ -9,8 +9,8 @@ export const DAOCard = ({ daoObject, lastElement }: IDAOCard) => {
         <Link href={`/daos/${daoObject.url}`}>
             <div
                 className={classNames(
-                    "flex justify-between w-full h-50 p-3 border-gray cursor-pointer active:bg-gray",
-                    lastElement ? "border-none" : "border-b"
+                    "flex justify-between w-full h-50 p-3 rounded-2xl bg-base-200 cursor-pointer active:bg-base-300",
+                    lastElement ? "border-none" : "border-b border-base-300"
                 )}
             >
                 <div className="flex gap-6 md:w-10/12 pt-3 pb-3">
@@ -30,10 +30,10 @@ export const DAOCard = ({ daoObject, lastElement }: IDAOCard) => {
                         <div className="w-full">
                             <div
                                 className="lg:text-lg text-base uppercase font-medium cursor-pointer">{daoObject.name}</div>
-                            <div className="text-gray-500 line-clamp-2">{daoObject.description}</div>
+                            <div className="text-base-content/50 line-clamp-2">{daoObject.description}</div>
                         </div>
 
-                        <p className={"text-gray2 text-sm cursor-pointer hover:text-gray3 active:text-gray2"}>
+                        <p className={"text-base-content/50 text-sm cursor-pointer hover:text-base-content/25 active:text-base-content/50"}>
                             View more
                         </p>
                     </div>
@@ -43,17 +43,17 @@ export const DAOCard = ({ daoObject, lastElement }: IDAOCard) => {
                     {daoObject.isActive ? (
                         <span className="badge-active">Active voting now</span>
                     ) : (
-                        <span className="badge-active text-black ">No active voting</span>
+                        <span className="badge-non-active">No active voting</span>
                     )}
                     <div className={"flex flex-col gap-3 mt-4"}>
                         <div className={"flex justify-between"}>
-                            <p className={"text-gray2"}>Proposals:</p>
+                            <p className={"text-base-content/50"}>Proposals:</p>
                             <div>
                                 {daoObject.totalProposals ? (
                                     daoObject.totalProposals || "0"
                                 ) : (
                                     //MOCK UP FOR LOADING
-                                    <div className="bg-gray2 text-gray2 animate-pulse rounded-md">000</div>
+                                    <div className="bg-base-200 text-base-content/50 animate-pulse rounded-md">000</div>
                                 )}
                             </div>
                         </div>

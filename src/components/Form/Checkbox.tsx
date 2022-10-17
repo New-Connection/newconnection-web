@@ -19,7 +19,7 @@ export function CheckboxGroup({
     return (
         <Group>
             <GroupLabel className="input-label">{label}</GroupLabel>
-            {description && <div className="input-label text-xs text-gray-500 mb-2">{description}</div>}
+            {description && <div className="input-label text-xs text-base-content/50 mb-2">{description}</div>}
             <div className="flex flex-row gap-6 flex-wrap">
                 {values.map((value) => {
                     if (enabledValues) {

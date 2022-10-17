@@ -31,18 +31,18 @@ const ProposalsPage: NextPage = () => {
                         <BackButton />
                         <div className="text-highlighter items-center flex flex-col md:flex-row">
                             Proposals for
-                            <div className={"text-highlighter text-purple capitalize md:ml-4"}>{`${DAO.url}`}</div>
+                            <div className={"text-highlighter text-primary capitalize md:ml-4"}>{`${DAO.url}`}</div>
                         </div>
 
                         {proposals && proposals.length !== 0 ? (
-                            <ul>
+                            <ul className={"mt-4 flex flex-col gap-4"}>
                                 {proposals.map((proposal) => {
                                     const proposalId = proposal.proposalId;
                                     return (
                                         <Link href={`../${DAO.url}/proposals/${proposalId}`} key={proposalId}>
                                             <li
                                                 key={proposalId}
-                                                className="border-b-2 border-gray cursor-pointer active:bg-gray"
+                                                className="rounded-2xl last:pb-0 bg-base-200 cursor-pointer active:bg-base-300"
                                             >
                                                 <ProposalCard
                                                     title={proposal.name}

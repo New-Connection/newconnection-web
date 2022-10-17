@@ -110,7 +110,7 @@ const CreateProposal: NextPage = () => {
                         <div className="text-highlighter items-center flex flex-col md:flex-row">
                             New Proposal for
                             <div
-                                className={"text-highlighter text-purple capitalize md:ml-4"}
+                                className={"text-highlighter text-primary capitalize md:ml-4"}
                             >{`${formData?.governorUrl}`}</div>
                         </div>
                         <InputText

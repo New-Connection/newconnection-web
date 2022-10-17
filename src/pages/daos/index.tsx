@@ -46,7 +46,7 @@ const DAOsPage: NextPage = () => {
     const CreateDAOButton = () => {
         return (
             <Link href="./create-new-dao">
-                <button className="secondary-button h-10 disabled:bg-gray" disabled={!isChainSupported}>
+                <button className="secondary-button h-10" disabled={!isChainSupported}>
                     Create DAO
                 </button>
             </Link>
@@ -64,7 +64,7 @@ const DAOsPage: NextPage = () => {
                             <CreateDAOButton />
                         </div>
                         {/* LIST OF DAOs */}
-                        <ul>
+                        <ul className={'flex flex-col gap-4'}>
                             {DAOs &&
                                 DAOs.map((dao, index) => (
                                     <DAOCard key={index} daoObject={dao} lastElement={!(index !== DAOs.length - 1)} />

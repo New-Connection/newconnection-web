@@ -58,10 +58,10 @@ export const DragAndDropImage = ({
                     justify-center content-center items-center text-center
                     h-60 
                     border-dashed rounded-md border-2 
-                    border-[#F2F4F4] hover:border-[#6858CB] focus:text-white"
+                    border-base-300 hover:border-primary focus:text-base-content"
                 >
                     {error ? (
-                        <p className="text-red mt-1">Error: {errorMessages}</p>
+                        <p className="text-error mt-1">Error: {errorMessages}</p>
                     ) : (
                         <>
                             {file ? (
@@ -69,14 +69,14 @@ export const DragAndDropImage = ({
                                     <div className={"w-full h-full overflow-hidden relative"}>
                                         <Image src={preview} layout={"fill"} /></div>
                                     <div>
-                                        <p className="text-purple mt-1">File is accepted ✅</p>
-                                        <p className={" truncate"}>File name: {file?.name}</p>
+                                        <p className="text-primary mt-1">File is accepted ✅</p>
+                                        <p className={"truncate"}>File name: {file?.name}</p>
                                     </div>
                                 </div>
                             ) : (
                                 <>
                                     <Image src={ASSETS.imageIcon} width={"50"} height={"50"} />
-                                    <p className="text-gray2 mt-6 text-sm px-4">PNG, JPEG and JPG accept. Max 1mb.</p>
+                                    <p className="text-base-content/50 mt-6 text-sm px-4">PNG, JPEG and JPG accept. Max 1mb.</p>
                                 </>
                             )}
                         </>

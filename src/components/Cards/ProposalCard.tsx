@@ -17,7 +17,7 @@ export const ProposalCard = ({
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
     return (
-        <div className="h-56 py-5 justify-between">
+        <div className="justify-between p-4">
             <div className="flex justify-between pb-6">
                 <p className="font-medium text-xl">{title}</p>
                 <div>
@@ -36,7 +36,7 @@ export const ProposalCard = ({
                     <p className="w-full h-24 font-normal line-clamp-3">{shortDescription}</p>
                     <div className="flex gap-5">
                         <div className="flex gap-5">
-                            <p className="text-gray3">For</p>
+                            <p className="text-base-content/50">For</p>
                             <p className="font-medium">{tokenName}</p>
                         </div>
                         <BlockchainIcon chain={chainId} />
@@ -45,18 +45,18 @@ export const ProposalCard = ({
 
                 <div className="hidden md:flex gap-10 items-left justify-between pt-1">
                     <div className="text-center">
-                        <div className="relative px-5 py-3 text-black">
+                        <div className="relative px-5 py-3 text-base-content">
                             <p className="text-2xl font-light">{forV}</p>
                             <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-success rounded-full text-xs text-base-content/20"></span>
                         </div>
                         <p>{"In favor"}</p>
                     </div>
                     <div className="text-center">
-                        <div className="relative px-5 py-3 text-black">
+                        <div className="relative px-5 py-3 text-base-content">
                             <p className="text-2xl font-light">{againstV}</p>
                             <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-error rounded-full text-xs text-base-content"></span>
                         </div>
                         <p>{"Against"}</p>
                     </div>
@@ -70,9 +70,9 @@ export const ProposalActivityBadge = ({ isActive }) => {
     return (
         <div>
             {isActive ? (
-                <p className="text-green bg-gray px-5 py-0.5 rounded-full">Active</p>
+                <p className="text-success bg-base-300 px-5 py-0.5 rounded-full">Active</p>
             ) : (
-                <p className="text-red bg-gray px-5 py-0.5 rounded-full">Closed</p>
+                <p className="text-error bg-base-300 px-5 py-0.5 rounded-full">Closed</p>
             )}
         </div>
     );
@@ -80,8 +80,8 @@ export const ProposalActivityBadge = ({ isActive }) => {
 
 const DetailProposalCard = ({ title, children, className }: ICardProposal) => {
     return (
-        <div className={classNames("w-full h-64 border-2 border-gray rounded-xl mt-6 p-4", className)}>
-            <p className="text-purple mb-4 text-lg">{title}</p>
+        <div className={classNames("w-full h-64 border-2 border-base-300 rounded-xl mt-6 p-4", className)}>
+            <p className="text-primary mb-4 text-lg">{title}</p>
             <div>{children}</div>
         </div>
     );
@@ -99,7 +99,7 @@ export const InfoProposalCard = ({ proposalData }: IInformationCard) => {
     const InfoRow = ({ name, value }) => {
         return (
             <div className={"flex justify-between"}>
-                <div className={"text-gray2"}>{name}</div>
+                <div className={"text-base-content/50"}>{name}</div>
                 <div>{value}</div>
             </div>
         );
@@ -123,18 +123,18 @@ export const VotingResultsCard = ({ proposalData }: IInformationCard) => {
         <DetailProposalCard title="Voting Results" className="lg:w-1/3 w-full">
             <div className="flex gap-10 justify-around pt-1">
                 <div className="text-center">
-                    <div className="relative px-5 py-3 text-black">
+                    <div className="relative px-5 py-3 text-base-content">
                         <p className="text-2xl font-light">{proposalData.forVotes}</p>
                         <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-success rounded-full text-xs"></span>
                     </div>
                     <p>{"In favor"}</p>
                 </div>
                 <div className="text-center">
-                    <div className="relative px-5 py-3 text-black">
+                    <div className="relative px-5 py-3 text-base-content">
                         <p className="text-2xl font-light">{proposalData.againstVotes}</p>
                         <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-error rounded-full text-xs"></span>
                     </div>
                     <p>{"Against"}</p>
                 </div>

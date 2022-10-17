@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { Logo } from "components";
-import { useAccount } from "wagmi";
-import { useRouter } from "next/router";
-import { useIsMounted } from "hooks";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useDarkMode } from "usehooks-ts";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
     { id: 0, title: "Home", path: "/" },
@@ -12,11 +11,7 @@ const navigation = [
 ];
 
 const Navbar = () => {
-    const { isConnected } = useAccount();
-
-    // const walletDailog = useDialogState(); // For pop-up with wallets
-    const router = useRouter();
-    const isMounted = useIsMounted();
+    const { isDarkMode, toggle } = useDarkMode();
 
     return (
         <>
@@ -27,8 +22,13 @@ const Navbar = () => {
                 </div>
             </Link>
 
-            <ConnectButton accountStatus="address" />
+            <div className={"flex gap-3"}>
+                <ConnectButton accountStatus="address" />
 
+                <button className="btn btn-sm btn-circle btn-outline btn-primary" onClick={toggle}>
+                    {isDarkMode ? <MoonIcon className={"h-5 w-5"} /> : <SunIcon className={"h-5 w-5"} />}
+                </button>
+            </div>
         </>
     );
 };

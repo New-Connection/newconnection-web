@@ -17,7 +17,7 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            addValueToDao(DAO.url, "isActive", activeProposals.length !== 0).then();
+            activeProposals && addValueToDao(DAO.url, "isActive", activeProposals.length !== 0).then();
         }, 1500);
 
         return () => {
@@ -27,7 +27,7 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
 
     return proposals && proposals.length > 0 ? (
         <>
-            <ul>
+            <ul className={"mt-4 flex flex-col gap-4"}>
                 {activeProposals.slice(0, visibleProposalsLength).map((proposal) => {
                     const proposalId = proposal.proposalId;
                     const name = proposal.name;
@@ -42,7 +42,7 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
                         <Link href={`${DAO.url}/proposals/${proposalId}`} key={proposalId}>
                             <li
                                 key={proposalId}
-                                className="border-b-2 mb-4 last:pb-0 border-gray cursor-pointer active:bg-gray"
+                                className="rounded-2xl last:pb-0 bg-base-200 cursor-pointer active:bg-base-300"
                             >
                                 <ProposalCard
                                     title={name}
@@ -72,7 +72,8 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
                                 pathname: `${DAO.url}/proposals/`,
                             }}
                         >
-                            <button className="flex gap-2 bg-white text-black2 hover:underline active:text-gray2 mt-4">
+                            <button
+                                className="flex gap-2 btn-link mt-4">
                                 View all proposals
                                 <div className="mt-[0.125rem]">
                                     <ArrowUpRightIcon />

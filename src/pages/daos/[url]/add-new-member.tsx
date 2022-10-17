@@ -78,7 +78,7 @@ const AddNewMember: NextPage = () => {
                         <BackButton />
                         <div className={"flex flex-col md:flex-row"}>
                             <h1 className="text-highlighter">Become a member of</h1>
-                            <h1 className="text-highlighter text-purple capitalize md:ml-4">{formData.governorUrl}</h1>
+                            <h1 className="text-highlighter text-primary capitalize md:ml-4">{formData.governorUrl}</h1>
                         </div>
                         <label>
                             <div className="input-label">Choose voting token</div>

@@ -48,7 +48,7 @@ export function NFTCardWithDialog({
                         <ClockIcon
                             width={"40px"}
                             height={"40px"}
-                            className={"bg-gray3 opacity-70 rounded-lg absolute mt-2 ml-2"}
+                            className={"bg-base-200 opacity-60 rounded-lg absolute mt-2 ml-2"}
                         />
                     </Tooltip>
                 )}
@@ -64,22 +64,22 @@ export const NFTCard = ({ nftObject, chain, className = "nft-card" }: INFTCard) 
             <div className="flex-shrink-0">
                 <img className="h-72 w-full object-cover" src={nftObject.image} alt="" />
             </div>
-            <div className="flex flex-1 flex-col justify-between bg-white px-6 pt-2 pb-6">
+            <div className="flex flex-1 flex-col justify-between bg-base-100 px-6 pt-2 pb-6">
                 <div className="flex-1">
                     <div className="mt-1 flex justify-between">
-                        <p className="text-base font-medium text-black mt-1">{nftObject.title}</p>
+                        <p className="text-base font-medium text-base-content mt-1">{nftObject.title}</p>
                         {/* TODO: Pass variable how many minted NFT and how many left */}
-                        <p className="text-base font-medium ml-4 mt-1 text-gray2">
+                        <p className="text-base font-medium ml-4 mt-1 text-base-content/50">
                             {nftObject.totalMinted}/{nftObject.totalSupply}
                         </p>
                     </div>
                 </div>
                 <div className="mt-[0.75rem] flex items-center justify-between">
                     <div className="flex-shrink-0">
-                        <p className="text-sm font-normal text-black">{formatAddress(nftObject.tokenAddress)}</p>
+                        <p className="text-sm font-normal text-base-content">{formatAddress(nftObject.tokenAddress)}</p>
                     </div>
                     <div className="ml-3 flex gap-2">
-                        <p className="text-sm font-normal text-purple">{nftObject.price}</p>
+                        <p className="text-sm font-normal text-primary">{nftObject.price}</p>
                         <BlockchainIcon chain={chain} />
                     </div>
                 </div>

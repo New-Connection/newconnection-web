@@ -9,60 +9,60 @@ import { IContributeTreasuryDialog, ICreateTreasuryDialog, IDetainNftDialog } fr
 export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButton }: IDetainNftDialog) => {
     return (
         <CustomDialog dialog={dialog} className="h-full items-center text-center">
-            {currentNFT ? (
+            {currentNFT && (
                 <>
                     <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image} />
-                    <div className="mt-4 text-black">{`${currentNFT.title}`}</div>
+                    <div className="mt-4 text-base-content">{`${currentNFT.title}`}</div>
                     <a
                         href={getChainScanner(DAO.chainId, currentNFT.tokenAddress)}
                         target={"_blank"}
-                        className="hover:text-purple flex justify-center"
+                        className="hover:text-primary flex justify-center"
                     >
                         Smart Contract
                         <LinkIcon className="h-6 w-5" />
                     </a>
 
-                    <button
-                        className={`secondary-button w-1/2 h-12 mt-4 mb-6 
-                            ${buttonState === "Success" ? "bg-green" : ""} 
-                            ${buttonState === "Error" ? "bg-red" : ""}`}
-                        onClick={mintButton}
-                    >
-                        {buttonState}
-                    </button>
+                    <div className={"flex justify-center"}>
+                        <button
+                            className={`secondary-button w-1/2 h-12 mt-4 mb-6 justify-center
+                            ${buttonState === "Success" && "bg-success"} 
+                            ${buttonState === "Error" && "bg-error"}`}
+                            onClick={mintButton}
+                        >
+                            {buttonState}
+                        </button>
+                    </div>
 
-                    <p className="w-full mt-8 text-start text-black">Details</p>
+                    <p className="w-full mt-8 text-start text-base-content">Details</p>
                     <ul className="py-6 w-full divide-y divide-slate-200">
                         <li className="flex py-4 justify-between">
-                            <p className="font-light text-gray2">{"Type"}</p>
-                            <p className="font-normal text-black">{currentNFT.type}</p>
+                            <p className="font-light text-base-content/50">{"Type"}</p>
+                            <p className="font-normal text-base-content">{currentNFT.type}</p>
                         </li>
                         <li className="flex py-4 justify-between">
-                            <p className="font-light text-gray2">{"Price"}</p>
-                            <p className="font-normal text-black">{currentNFT.price}</p>
+                            <p className="font-light text-base-content/50">{"Price"}</p>
+                            <p className="font-normal text-base-content">{currentNFT.price}</p>
                         </li>
                         <li className="flex py-4 justify-between">
-                            <p className="font-light text-gray2">{"Supply"}</p>
-                            <p className="font-normal text-black">
+                            <p className="font-light text-base-content/50">{"Supply"}</p>
+                            <p className="font-normal text-base-content">
                                 {currentNFT.totalMinted}/{currentNFT.totalSupply}
                             </p>
                         </li>
                         <li className="flex py-4 justify-between">
-                            <p className="font-light text-gray2 mr-4">{"Address"}</p>
-                            <div className="font-normal text-black">
+                            <p className="font-light text-base-content/50 mr-4">{"Address"}</p>
+                            <div className="font-normal text-base-content">
                                 <CopyTextButton copyText={currentNFT.tokenAddress} />
                             </div>
                         </li>
                         <li className="flex py-4 justify-between">
-                            <p className="font-light text-gray2">{"Blockchain"}</p>
-                            <div className="font-normal text-black">
+                            <p className="font-light text-base-content/50">{"Blockchain"}</p>
+                            <div className="font-normal text-base-content">
                                 <BlockchainIcon chain={DAO.blockchain[0]} />
                             </div>
                         </li>
                     </ul>
                 </>
-            ) : (
-                <></>
             )}
         </CustomDialog>
     );
@@ -113,7 +113,7 @@ export const ContributeTreasuryDialog = ({
                         <div className={"w-7"}>
                             <SpinnerLoading />
                         </div>
-                        <div className="text-xl text-black">Waiting confirmation from blockchain</div>
+                        <div className="text-xl text-base-content">Waiting confirmation from blockchain</div>
                     </div>
                 )}
             </form>

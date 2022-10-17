@@ -1,7 +1,5 @@
 .header {
-    @apply flex top-0 z-50 fixed w-full items-center justify-between gap-10  text-base;
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(5px);
+    @apply flex top-0 z-50 fixed w-full rounded-b-2xl items-center justify-between gap-10 text-base-content backdrop-blur-md;
     padding-inline: clamp(0.5rem, 2.5vw, 2rem);
     padding-block: clamp(1rem, 2.5vh, 2rem);
 }
@@ -10,14 +8,6 @@
     @apply flex flex-shrink-0 items-center justify-between gap-[0.625rem] text-base cursor-pointer;
 }
 
-.navMenuButton {
-    @apply mr-8 hidden text-slate-500 hover:text-btnHover active:text-btnActive lg:inline-block;
-}
-
-.navButtonActive {
-    @apply text-purple border-b-2;
-}
-
 .wallet {
-    @apply rounded-2xl border bg-white py-2 px-4 font-medium text-[#6858CB] hidden md:block;
+    @apply rounded-2xl border bg-base-100 py-2 px-4 font-medium text-[#6858CB] hidden md:block;
 }

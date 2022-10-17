@@ -53,19 +53,19 @@ const ChatsPage: NextPage = () => {
                         <div className="flex justify-between items-center">
                             <h1 className="text-highlighter">Membership chats</h1>
                         </div>
-                        <div className="container mx-auto rounded-lg border-t border-[#ccc]">
-                            <div className="flex flex-row justify-between bg-white">
+                        <div className="container mx-auto rounded-lg border-t border-base-300">
+                            <div className="flex flex-row justify-between bg-base-100">
                                 {/* User chat*/}
 
                                 <div
-                                    className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
+                                    className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-base-300 pb-4">
                                     {NFTs &&
                                         NFTs.map((nft, index) => (
                                             <button
                                                 className={
                                                     activeChat === nft.tokenAddress
-                                                        ? "chat-button border-l-4 border-purple"
-                                                        : "chat-button cursor-pointer disabled:cursor-not-allowed disabled:text-gray2"
+                                                        ? "chat-button border-l-4 border-primary"
+                                                        : "chat-button cursor-pointer disabled:cursor-not-allowed disabled:text-base-content/50"
                                                 }
                                                 key={index}
                                                 type={"button"}
@@ -78,7 +78,7 @@ const ChatsPage: NextPage = () => {
                                             >
                                                 <div className="w-full">
                                                     <div className="text-lg font-semibold">{nft.title}</div>
-                                                    {/*<span className="text-gray-500">DAO members</span>*/}
+                                                    {/*<span className="text-base-content/50">DAO members</span>*/}
                                                 </div>
                                                 {!ownedTokenAddresses.includes(nft.tokenAddress) && <LockIcon />}
                                             </button>

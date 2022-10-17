@@ -87,7 +87,7 @@ const Home: NextPage = () => {
         return (
             <div className="w-full mt-10 flex justify-center items-center">
                 <button>
-                    <p className="align-middle text-gray-400">View all DAOs</p>
+                    <p className="align-middle text-base-content/50">View all DAOs</p>
                 </button>
             </div>
         );
@@ -110,11 +110,11 @@ const Home: NextPage = () => {
             <div className="my-24">
                 <div className="flex my-20 gap-2">
                     <p className="text-lg font-bold">My Proposal</p>
-                    <p className="text-lg font-bold  text-gray-400">0</p>
+                    <p className="text-lg font-bold  text-base-content/50">0</p>
                 </div>
                 <div className="text-center my-32">
                     <p>No proposals here</p>
-                    <p className="text-gray-400">You should first join a DAO or create a new DAO to add a proposal</p>
+                    <p className="text-base-content/50">You should first join a DAO or create a new DAO to add a proposal</p>
                 </div>
             </div>
         );
@@ -135,11 +135,11 @@ const Home: NextPage = () => {
             <>
                 <div className="flex mt-16 mb-6 gap-2">
                     <p className="text-lg font-bold">My NFTs</p>
-                    <p className="text-lg font-bold  text-gray-400">0</p>
+                    <p className="text-lg font-bold  text-base-content/50">0</p>
                 </div>
                 <div className="text-center my-32">
                     <p>No NFTs here</p>
-                    <p className="text-gray-400">You should first join a DAO and get NFT from its administrator</p>
+                    <p className="text-base-content/50">You should first join a DAO and get NFT from its administrator</p>
                 </div>
             </>
         );
