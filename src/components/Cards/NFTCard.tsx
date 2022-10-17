@@ -6,7 +6,6 @@ import { formatAddress } from "utils";
 import { BlockchainIcon } from "components";
 import { INFTCard, INFTCardWithDialog, INFTImage } from "./cardsInterfaces";
 import { ClockIcon } from "@heroicons/react/24/outline";
-import { Tooltip } from "@mui/material";
 
 export const NFTImage = ({ className, image }: INFTImage) => {
     return (
@@ -40,17 +39,16 @@ export function NFTCardWithDialog({
                 }}
             >
                 {nftObject.tokenRequested && (
-                    <Tooltip
-                        title={"Waiting for the confirmation from the DAO's admin"}
-                        componentsProps={{ tooltip: { style: { textAlign: "center" } } }}
-                        arrow={true}
+                    <div
+                        className="flex tooltip tooltip-bottom absolute"
+                        data-tip="Waiting for the confirmation from the DAO's admin"
                     >
                         <ClockIcon
                             width={"40px"}
                             height={"40px"}
-                            className={"bg-base-200 opacity-60 rounded-lg absolute mt-2 ml-2"}
+                            className={"bg-base-200 opacity-60 rounded-lg mt-2 ml-2"}
                         />
-                    </Tooltip>
+                    </div>
                 )}
                 <NFTCard nftObject={nftObject} chain={chain} />
             </button>

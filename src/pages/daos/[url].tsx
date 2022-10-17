@@ -284,8 +284,10 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             <Layout className="layout-base">
                 <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
                     <div className="dao-header flex flex-col md:flex-row items-center -mt-10">
-                        <div className={"logo"}>
-                            <Image src={DAO.profileImage} height={"175px"} width={"175px"} className="rounded-full" />
+                        <div className="avatar">
+                            <div className="w-32 rounded-full">
+                                <Image src={DAO.profileImage} height={"175px"} width={"175px"} className="rounded-full" />
+                            </div>
                         </div>
                         <div className={"info flex flex-col w-full gap-8 md:ml-6"}>
                             <div className={"info-row-1 flex flex-col md:flex-row justify-between items-center"}>
