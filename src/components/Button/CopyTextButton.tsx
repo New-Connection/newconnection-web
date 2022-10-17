@@ -1,16 +1,18 @@
 import { formatAddress } from "utils";
 import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React from "react";
+import { useBoolean, useCopyToClipboard } from "usehooks-ts";
 
 export const CopyTextButton = ({ copyText }) => {
-    const [isCopied, setIsCopied] = useState(false);
+    const { value: isCopied, setTrue, setFalse } = useBoolean();
+    const [, copy] = useCopyToClipboard();
 
     const handleClick = () => {
-        setIsCopied(true);
-        navigator.clipboard.writeText(copyText).then().catch();
+        setTrue();
+        copy(copyText).then();
 
         setTimeout(() => {
-            setIsCopied(false);
+            setFalse();
         }, 500);
     };
 
