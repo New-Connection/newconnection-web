@@ -2,7 +2,7 @@ import { timestampToDate } from "utils";
 import { BlockchainIcon, CopyTextButton } from "components";
 import React from "react";
 import classNames from "classnames";
-import { ICardProposal, IInformationCard, IProposalCard } from "./cardsInterfaces";
+import { ICardProposal, IInformationCard, IProposalCard, IVotingCounter } from "./cardsInterfaces";
 
 export const ProposalCard = ({
     title,
@@ -44,22 +44,8 @@ export const ProposalCard = ({
                 </div>
 
                 <div className="hidden md:flex gap-10 items-left justify-between pt-1">
-                    <div className="text-center">
-                        <div className="relative px-5 py-3 text-base-content">
-                            <p className="text-2xl font-light">{forV}</p>
-                            <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-success rounded-full text-xs text-base-content/20"></span>
-                        </div>
-                        <p>{"In favor"}</p>
-                    </div>
-                    <div className="text-center">
-                        <div className="relative px-5 py-3 text-base-content">
-                            <p className="text-2xl font-light">{againstV}</p>
-                            <span
-                                className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-error rounded-full text-xs text-base-content"></span>
-                        </div>
-                        <p>{"Against"}</p>
-                    </div>
+                    <VotingCounter counter={forV.toString()} option={"For"} />
+                    <VotingCounter counter={againstV.toString()} option={"Against"} />
                 </div>
             </div>
         </div>
@@ -122,23 +108,28 @@ export const VotingResultsCard = ({ proposalData }: IInformationCard) => {
     return (
         <DetailProposalCard title="Voting Results" className="lg:w-1/3 w-full">
             <div className="flex gap-10 justify-around pt-1">
-                <div className="text-center">
-                    <div className="relative px-5 py-3 text-base-content">
-                        <p className="text-2xl font-light">{proposalData.forVotes}</p>
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-success rounded-full text-xs"></span>
-                    </div>
-                    <p>{"In favor"}</p>
-                </div>
-                <div className="text-center">
-                    <div className="relative px-5 py-3 text-base-content">
-                        <p className="text-2xl font-light">{proposalData.againstVotes}</p>
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-error rounded-full text-xs"></span>
-                    </div>
-                    <p>{"Against"}</p>
-                </div>
+                <VotingCounter counter={proposalData.forVotes} option={"For"} />
+                <VotingCounter counter={proposalData.againstVotes} option={"Against"} />
             </div>
         </DetailProposalCard>
+    );
+};
+
+export const VotingCounter = ({ counter, option }: IVotingCounter) => {
+    return (
+        <div className="text-center">
+            <div className="indicator relative px-5 py-3 text-base-content">
+                <p className="text-2xl font-light">
+                    {counter}
+                </p>
+                <span
+                    className={classNames(
+                        "indicator-item badge badge-xs",
+                        option === "Against" ? "badge-error" : "badge-success"
+                    )}
+                ></span>
+            </div>
+            <p>{option}</p>
+        </div>
     );
 };

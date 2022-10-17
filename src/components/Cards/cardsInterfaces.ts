@@ -46,6 +46,11 @@ export interface IInformationCard {
     proposalData: IProposalDetail;
 }
 
+export interface IVotingCounter {
+    counter: string,
+    option: "Against" | "For";
+}
+
 export interface IDAOCard {
     daoObject: IDAOPageForm;
     lastElement: any;

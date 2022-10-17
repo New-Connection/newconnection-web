@@ -132,7 +132,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         const loadingProposals = async () => {
             const proposals = await getAllProposals(url);
             if (proposals) {
-                console.log(proposals);
                 console.log("load proposals");
                 localStorage.setItem(url + " Proposals", JSON.stringify(proposals));
                 setProposals(() => proposals);

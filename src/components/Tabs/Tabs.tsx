@@ -33,8 +33,8 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
                                 <button
                                     className={
                                         selectedTab === tab.index
-                                            ? "border-b-2 border-solid w-36 border-primary pb-4 text-primary"
-                                            : "border-b-2 border-solid w-36 border-transparent pb-4 focus:border-[#6858CB] focus:text-[#6858CB] hover:border-[#6858CB] hover:text-[#6858CB]"
+                                            ? "border-b-2 border-solid w-36 border-primary pb-4 text-primary/80"
+                                            : "border-b-2 border-solid w-36 border-transparent pb-4 focus:border-primary/50 focus:text-primary/50 hover:border-primary/50 hover:text-primary/50"
                                     }
                                     onClick={() => onClick(tab.index)}
                                     key={tab.index}
