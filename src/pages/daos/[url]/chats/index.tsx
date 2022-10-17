@@ -30,17 +30,11 @@ const ChatsPage: NextPage = () => {
             const chainId = DAO.chainId;
 
             setNFTs(savedNfts);
-            checkTokensOwnership(
+            address && checkTokensOwnership(
                 savedNfts.map((NFT) => NFT.tokenAddress),
                 address,
                 chainId
             ).then(value => setOwnedTokenAddresses(value.tokens));
-
-            checkTokensOwnership(
-                savedNfts.map((NFT) => NFT.tokenAddress),
-                address,
-                chainId
-            ).catch(console.error);
         }
     }, [router, address]);
 
