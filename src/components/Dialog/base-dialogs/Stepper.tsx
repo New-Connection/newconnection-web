@@ -10,6 +10,7 @@ import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
 import { useDarkMode } from "usehooks-ts";
+import { DARK_THEME, LIGHT_THEME } from "utils";
 
 interface StepperDialogProps {
     dialog: DisclosureState;
@@ -142,7 +143,7 @@ export const StepperDialog = ({
 
     return (
         <Dialog
-            data-theme={isDarkMode ? "night" : "light"}
+            data-theme={isDarkMode ? DARK_THEME : LIGHT_THEME}
             state={dialog}
             className={classNames("dialog", className)}
             hideOnInteractOutside={isClose}

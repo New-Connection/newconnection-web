@@ -17,7 +17,8 @@ export const ipfsClient = create({
             ).toString("base64"),
     },
 });
-
+export const DARK_THEME = "dark";
+export const LIGHT_THEME = "light";
 // CryptoCompare
 export const CRYPTOCOMPARE_API_KEY = process.env.NEXT_PUBLIC_CRYPTOCOMPARE_API_KEY;
 

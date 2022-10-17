@@ -8,13 +8,14 @@ import { darkTheme, lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowki
 import "@rainbow-me/rainbowkit/styles.css";
 import "styles/globals.css";
 import { useDarkMode } from "usehooks-ts";
+import { DARK_THEME, LIGHT_THEME } from "utils";
 
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = useState(() => new QueryClient());
     const { isDarkMode } = useDarkMode(false);
 
     return (
-        <div data-theme={isDarkMode ? "night" : "light"}>
+        <div data-theme={isDarkMode ? DARK_THEME : LIGHT_THEME}>
             <Script
                 strategy="lazyOnload"
                 src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
@@ -37,17 +38,17 @@ function App({ Component, pageProps }: AppProps) {
                     theme={
                         isDarkMode
                             ? darkTheme({
-                                  accentColor: "#38bdf8",
-                                  accentColorForeground: "white",
-                                  borderRadius: "large",
-                                  overlayBlur: "small",
-                              })
+                                accentColor: "#38bdf8",
+                                accentColorForeground: "white",
+                                borderRadius: "large",
+                                overlayBlur: "small",
+                            })
                             : lightTheme({
-                                  accentColor: "#570df8",
-                                  accentColorForeground: "white",
-                                  borderRadius: "large",
-                                  overlayBlur: "small",
-                              })
+                                accentColor: "#570df8",
+                                accentColorForeground: "white",
+                                borderRadius: "large",
+                                overlayBlur: "small",
+                            })
                     }
                     appInfo={{
                         appName: "New Connection",
