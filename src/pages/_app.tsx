@@ -38,15 +38,11 @@ function App({ Component, pageProps }: AppProps) {
                     theme={
                         isDarkMode
                             ? darkTheme({
-                                accentColor: "#38bdf8",
-                                accentColorForeground: "white",
-                                borderRadius: "large",
+                                accentColor: "#661AE6",
                                 overlayBlur: "small",
                             })
                             : lightTheme({
                                 accentColor: "#570df8",
-                                accentColorForeground: "white",
-                                borderRadius: "large",
                                 overlayBlur: "small",
                             })
                     }
