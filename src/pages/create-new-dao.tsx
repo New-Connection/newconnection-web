@@ -19,12 +19,12 @@ const CreateNewDAO: NextPage = () => {
 
     const Card = ({ title, subtitle, buttonTitle, linkToPage, isDisabled = false }: ICard) => {
         return (
-            <div className="flex flex-col justify-between w-full border-2 border-base-300 rounded-lg pb-6 px-4">
+            <div className="grid grid-flow-row border-2 border-base-300 rounded-lg py-4 px-4 gap-4">
                 <p className="input-label font-medium text-lg">{title}</p>
                 <p className="pb-6">{subtitle}</p>
                 <Link href={{ pathname: linkToPage }}>
                     <a>
-                        <Button type={"button"} className="btn-primary mt-5 mb-5 py-4 border-2 w-full" disabled={isDisabled}>
+                        <Button type={"button"} className="btn-primary py-4 border-2 w-full" disabled={isDisabled}>
                             {buttonTitle}
                         </Button>
                     </a>
