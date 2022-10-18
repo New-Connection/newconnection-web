@@ -164,8 +164,8 @@ export const InputSupplyOfNFT = ({
                     onChange={handleChange}
                     {...props}
                 />
-                <div className="flex absolute inset-y-3.5 right-2  pointer-events-none">
-                    <Image src={image as StaticImageData} height="25" width="25" />
+                <div className="flex absolute w-6 h-6 inset-y-3 right-2  pointer-events-none">
+                    <Image src={image as StaticImageData} />
                 </div>
             </div>
         </div>
