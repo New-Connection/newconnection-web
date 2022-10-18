@@ -1,9 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
-import { formatAddress } from "utils";
 import { getLogoURI } from "interactions/contract";
 import { Signer } from "ethers";
-import { MockupTextCard } from "components";
+import { CopyTextButton, MockupTextCard } from "components";
 import { IWhitelistRecord } from "types";
 
 const renderValue = (chain: string) => {
@@ -15,25 +14,22 @@ interface IWhitelistTab {
     whitelist: IWhitelistRecord[];
     signer: Signer;
     isLoaded: boolean;
-    isOwner: boolean;
     chainId: number;
     governorUrl: string;
     addToWhitelist: Function;
 }
 
-export const WhitelistTab = ({ whitelist, isOwner, isLoaded, addToWhitelist }: IWhitelistTab) => {
+export const WhitelistTab = ({ whitelist, isLoaded, addToWhitelist }: IWhitelistTab) => {
     const [click, setClick] = useState(false);
 
     return whitelist && whitelist.length !== 0 ? (
-        <div className="flex flex-col w-full gap-4 ">
-            <div className="flex text-base-content/50 pb-4 pt-0">
-                <div className="flex w-2/4">
-                    <div className="w-1/3">Wallet Address</div>
-                    <div className="w-1/3">Blockchain</div>
-                    <div className="w-1/3">NFT</div>
-                </div>
-                <p className="w-1/4">Notes</p>
-                {isOwner && <p className="w-1/4 text-center">Action</p>}
+        <div className="grid grid-flow-row gap-4">
+            <div className="grid grid-cols-7 px-4 py-2 text-base-content/50">
+                <div>Wallet Address</div>
+                <div className={"justify-self-center"}>Blockchain</div>
+                <div className={"justify-self-center"}>NFT</div>
+                <p className={"col-span-2 justify-self-center"}>Notes</p>
+                <p className={"col-span-2 justify-self-end mr-20"}>Action</p>
             </div>
 
             {whitelist.map((wl, index) => {
@@ -43,18 +39,17 @@ export const WhitelistTab = ({ whitelist, isOwner, isLoaded, addToWhitelist }: I
                 const note = wl.note;
                 const blockchainSelected = wl.blockchainSelected;
                 return (
-                    <div className="flex w-full items-center px-4 py-2 bg-base-200 rounded-2xl" key={index}>
-                        <div className="flex w-2/4">
-                            <div className="w-1/3">{formatAddress(walletAddress)}</div>
-                            <div className="w-1/3 pl-7">{renderValue(blockchainSelected[0])}</div>
-                            <div className="w-1/3">{votingTokenName}</div>
-                        </div>
-                        <p className="w-1/4 text-sm line-clamp-3 text-center">{note}</p>
+                    <div className="grid grid-cols-7 items-center px-4 py-2 bg-base-200 rounded-2xl"
+                         key={index}>
+                        <div>{<CopyTextButton copyText={walletAddress} />}</div>
+                        <div className={"justify-self-center"}>{renderValue(blockchainSelected[0])}</div>
+                        <div className={"justify-self-center"}>{votingTokenName}</div>
+                        <p className="col-span-2 text-sm line-clamp-3 text-center justify-self-center">{note}</p>
 
-                        {isOwner && isLoaded && (
-                            <div className={"flex justify-around w-1/4"}>
+                        {isLoaded && (
+                            <div className={"col-span-2 justify-self-end grid grid-cols-2 gap-4"}>
                                 <button
-                                    className="border-2 btn-success btn-sm rounded-full"
+                                    className="w-20 border-2 btn-success btn-sm rounded-full"
                                     onClick={async () => {
                                         setClick(true);
                                         await addToWhitelist(walletAddress, votingTokenAddress);
@@ -65,7 +60,7 @@ export const WhitelistTab = ({ whitelist, isOwner, isLoaded, addToWhitelist }: I
                                     {click ? "Loading..." : "Add"}
                                 </button>
                                 <button
-                                    className="border-2 btn-error btn-sm rounded-full"
+                                    className="w-20 border-2 btn-error btn-sm rounded-full"
                                     onClick={async () => {
                                         await addToWhitelist(walletAddress, votingTokenAddress, true);
                                     }}

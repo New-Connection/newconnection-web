@@ -41,7 +41,6 @@ const ProposalsPage: NextPage = () => {
                                         <Link href={`../${DAO.url}/proposals/${proposalId}`} key={proposalId}>
                                             <li
                                                 key={proposalId}
-                                                className="rounded-2xl last:pb-0 bg-base-200 cursor-pointer active:bg-base-300"
                                             >
                                                 <ProposalCard
                                                     title={proposal.name}

@@ -12,7 +12,7 @@ import { DARK_THEME, LIGHT_THEME } from "utils";
 
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = useState(() => new QueryClient());
-    const { isDarkMode } = useDarkMode(false);
+    const { isDarkMode } = useDarkMode();
 
     return (
         <div data-theme={isDarkMode ? DARK_THEME : LIGHT_THEME}>
