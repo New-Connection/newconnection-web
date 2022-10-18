@@ -1,10 +1,8 @@
 import { Checkbox } from "ariakit/checkbox";
 import { Group, GroupLabel } from "ariakit/group";
-import styles from "styles/components/Form/Checkmox.module.css";
 import { CheckboxProps } from "./types";
 import Image, { StaticImageData } from "next/image";
 import { getLogoURI } from "interactions/contract";
-import classNames from "classnames";
 
 export function CheckboxGroup({
     label,
@@ -18,7 +16,7 @@ export function CheckboxGroup({
 
     return (
         <Group>
-            <GroupLabel className="input-label">{label}</GroupLabel>
+            <GroupLabel className="label input-label">{label}</GroupLabel>
             {description && <div className="input-label text-xs text-base-content/50 mb-2">{description}</div>}
             <div className="flex flex-row gap-6 flex-wrap">
                 {values.map((value) => {
@@ -27,24 +25,23 @@ export function CheckboxGroup({
                     }
 
                     return (
-                        <label key={value.toUpperCase()} className={"disabled:cursor-not-allowed"}>
+                        <label key={value.toUpperCase()}>
                             <Checkbox
                                 as="div"
                                 value={value}
-                                className={classNames(styles.checkbox)}
+                                className={"checkbox-field"}
                                 onChange={handleChange}
                                 disabled={isDisabled}
                             >
+
                                 {value}
-                                {images ? (
+                                {images && (
                                     <Image
                                         src={getLogoURI(value) as StaticImageData}
                                         height="25"
                                         width="25"
                                         layout="fixed"
                                     />
-                                ) : (
-                                    <></>
                                 )}
                             </Checkbox>
                         </label>

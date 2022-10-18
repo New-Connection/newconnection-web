@@ -126,14 +126,60 @@ const CreateDAO: NextPage = () => {
                 <section className="relative w-full">
                     <form className="mx-auto flex flex-col max-w-4xl gap-4" onSubmit={onSubmit}>
                         <h1 className="text-highlighter">Create DAO</h1>
-                        <InputText
-                            label="DAO Name"
-                            name="name"
-                            placeholder="Unique DAO name"
-                            labelTitle="Unique DAO name"
-                            maxLength={30}
-                            handleChange={(event) => handleDaoNameUrlChange(event, setFormData, "url")}
-                        />
+                        <div className={"grid grid-cols-3"}>
+                            <div className={"grid grid-rows-2"}>
+                                <InputText
+                                    label="DAO Name"
+                                    name="name"
+                                    className={"max-w-2xl"}
+                                    placeholder="Unique DAO name"
+                                    labelTitle="Unique DAO name"
+                                    maxLength={30}
+                                    handleChange={(event) => handleDaoNameUrlChange(event, setFormData, "url")}
+                                />
+                                <InputText
+                                    label="DAO Goals"
+                                    name="goals"
+                                    className={"max-w-2xl"}
+                                    placeholder="Сlear DAO goals"
+                                    labelTitle="Сlear DAO goals"
+                                    maxLength={100}
+                                    handleChange={(event) => handleTextChange(event, setFormData)}
+                                />
+                            </div>
+                            <div className={"flex col-span-2"}>
+                                <div className="divider divider-horizontal" />
+                                <InputTextArea
+                                    name={"description"}
+                                    label={"DAO Description"}
+                                    placeholder={"A description about the DAO and what it does"}
+                                    height={"h-full"}
+                                    className={"max-w-2xl"}
+                                    maxLength={2000}
+                                    handleChange={(event) => handleTextChange(event, setFormData)}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-flow-row-dense grid-cols-3">
+                            <DragAndDropImage
+                                height={"h-48"}
+                                label="Profile Image"
+                                name="profileImage"
+                                handleChange={(file) => handleImageChange(file, setFormData, "profileImage")}
+                            />
+
+                            <div className={"flex col-span-2"}>
+                                <div className="divider divider-horizontal" />
+                                <DragAndDropImage
+                                    label="Cover Image"
+                                    name="coverImage"
+                                    height={"h-48"}
+                                    handleChange={(file) => handleImageChange(file, setFormData, "coverImage")}
+                                />
+                            </div>
+                        </div>
+
                         <InputText
                             label="NFT Address"
                             name="tokenAddress"
@@ -142,31 +188,18 @@ const CreateDAO: NextPage = () => {
                             pattern={"^0x[a-fA-F0-9]{40}$"}
                             value={formData.tokenAddress[0]}
                             disabled={true}
+                            className={"max-w-lg"}
                             // handleChange={(event) => handleTextChange(event, setFormData)}
                         />
-                        <InputText
-                            label="DAO Goals"
-                            name="goals"
-                            placeholder="Сlear DAO goals"
-                            labelTitle="Сlear DAO goals"
-                            maxLength={100}
-                            handleChange={(event) => handleTextChange(event, setFormData)}
-                        />
-                        <InputTextArea
-                            name={"description"}
-                            label={"DAO Description"}
-                            placeholder={"A description about the DAO and what it does"}
-                            // isRequired
-                            maxLength={2000}
-                            handleChange={(event) => handleTextChange(event, setFormData)}
-                        />
-                        <div className="flex justify-between">
+
+                        <div className="flex justify-between mb-4">
                             <InputAmount
                                 label="Voting Period"
                                 name="votingPeriod"
                                 className="w-2/5"
+                                measure={"Days"}
                                 labelTitle="Length of period during which people can cast their vote."
-                                placeholder="Voting period in days(1-7 days)"
+                                placeholder="1-7 days"
                                 min={1}
                                 max={7}
                                 handleChange={(event) => handleTextChange(event, setFormData)}
@@ -174,26 +207,13 @@ const CreateDAO: NextPage = () => {
                             <InputAmount
                                 label={"Quorum Percentage"}
                                 name="quorumPercentage"
+                                measure={"%"}
                                 className={"w-2/5"}
                                 labelTitle="Quorum percentage required for a proposal to pass."
-                                placeholder="Quorum percentage (1-100)%"
+                                placeholder="4 (recommended)"
                                 min={1}
                                 max={100}
                                 handleChange={(event) => handleTextChange(event, setFormData)}
-                            />
-                        </div>
-                        <div className="flex flex-row">
-                            <DragAndDropImage
-                                label="Profile Image"
-                                name="profileImage"
-                                className="w-1/3 mr-10"
-                                handleChange={(file) => handleImageChange(file, setFormData, "profileImage")}
-                            />
-                            <DragAndDropImage
-                                label="Cover Image"
-                                name="coverImage"
-                                className="w-2/3"
-                                handleChange={(file) => handleImageChange(file, setFormData, "coverImage")}
                             />
                         </div>
                         <CheckboxGroup
@@ -241,7 +261,7 @@ const CreateDAO: NextPage = () => {
                             />
                         </div>
 
-                        <Button className="mt-5 nav-button">Create Contract</Button>
+                        <Button className="mt-5 w-2/3 self-center">Create Contract</Button>
                     </form>
                 </section>
 

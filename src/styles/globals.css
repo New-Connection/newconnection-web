@@ -37,6 +37,12 @@
         @apply app-section mx-auto mt-14 flex w-full flex-col items-center space-y-6 pb-8 bg-base-100;
     }
 
+    .header {
+        @apply flex top-0 z-50 fixed w-full rounded-b-2xl items-center justify-between gap-10 text-base-content backdrop-blur-md;
+        padding-inline: clamp(0.5rem, 2.5vw, 2rem);
+        padding-block: clamp(1rem, 2.5vh, 2rem);
+    }
+
     .shadow-1 {
         @apply shadow-[0px_3px_7px_rgba(0,0,0,0.12)];
     }
@@ -87,7 +93,7 @@
     }
 
     .input-label {
-        @apply text-base-content mb-4 mr-2 mt-6;
+        @apply label-text text-base
     }
 
     .dao-label {
@@ -111,7 +117,17 @@
     }
 
     .input-field {
-        @apply input-selector focus:border-primary placeholder:text-base-content/50
+        @apply input bg-base-200 mb-4 placeholder:text-base-content/50
+    }
+
+    .checkbox-field {
+        @apply flex h-12 w-48 cursor-pointer items-center justify-center gap-1 bg-base-200 rounded px-4 hover:bg-primary-focus hover:text-base-100
+    }
+
+    .checkbox-field:checked,
+    .checkbox-field[checked="true"],
+    .checkbox-field[aria-checked=true] {
+        @apply bg-primary text-base-100
     }
 
     .nft-cards-grid {

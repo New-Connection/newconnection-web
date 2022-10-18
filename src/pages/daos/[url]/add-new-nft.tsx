@@ -150,27 +150,28 @@ const AddNewNFT: NextPage = () => {
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <BackButton />
                         <h1 className="text-highlighter">Add NFT</h1>
-                        <div className="w-full lg:flex">
-                            <div className="lg:w-2/3 w-full">
+                        <div className="grid grid-cols-2">
+                            <div className={"grid grid-flow-row"}>
                                 <InputText
                                     label="Name"
                                     name="name"
+                                    className={"max-w-2xl"}
                                     placeholder="NFT Name"
                                     handleChange={(event) => handleTextChange(event, setFormData)}
                                 />
                                 <InputTextArea
                                     label="Description"
                                     name="description"
+                                    className={"max-w-2xl"}
                                     placeholder="A short description about NFT collection(Max. 250 words)"
                                     maxLength={2000}
                                     handleChange={(event) => handleTextChange(event, setFormData)}
                                 />
-                                <div className="flex justify-between gap-10">
+                                <div className="grid grid-cols-2 gap-4">
                                     <TypeSelector
                                         label="Membership type"
                                         name="NFTtype"
                                         handleChange={(event) => handleSelectorChange(event, setFormData, "NFTtype")}
-                                        className="w-1/2 mt-6"
                                     />
                                     <InputText
                                         label="Symbol"
@@ -179,51 +180,55 @@ const AddNewNFT: NextPage = () => {
                                         handleChange={(event) => {
                                             handleTextChange(event, setFormData);
                                         }}
-                                        className="w-1/2"
                                     />
                                 </div>
-
-                                <InputAmount
-                                    label="Price"
-                                    placeholder="Price in ETH"
-                                    name="price"
-                                    handleChange={(event) => handleTextChange(event, setFormData)}
-                                    className="w-full"
-                                    min={0}
-                                    step={0.0001}
-                                    max={10}
-                                />
-                                <label>
-                                    <div className="input-label"> NFT Supply</div>
-                                </label>
-                                <div className="grid w-full grid-cols-4 gap-4">
-                                    {getChainNames()
-                                        // TODO: remove when few blockchains
-                                        .filter((chain) => formData.blockchain === chain)
-                                        .map((chain) => (
-                                            <InputSupplyOfNFT
-                                                key={chain}
-                                                label={chain}
-                                                name={chain}
-                                                image={getLogoURI(chain)}
-                                                handleChange={(event) => {
-                                                    handleNftSupplyChange(event, setFormData, chain, "blockchain");
-                                                    fetchQuery();
-                                                }}
-                                                isDisabled={chain !== formData.blockchain}
-                                            />
-                                        ))}
-                                </div>
                             </div>
-                            <div className="lg:w-1/3 lg:ml-10">
+                            <div className="flex">
+                                <div className="divider divider-horizontal" />
                                 <DragAndDropImage
+                                    height={"h-32"}
                                     label="Image"
                                     name="file"
                                     handleChange={(file) => handleImageChange(file, setFormData, "file")}
                                 />
                             </div>
                         </div>
-                        <Button className="mt-5 w-2/3">Create Contract</Button>
+
+
+                        <div className={"mb-4"}>
+                            <InputAmount
+                                label="Price"
+                                placeholder="Price in ETH"
+                                name="price"
+                                handleChange={(event) => handleTextChange(event, setFormData)}
+                                className="w-full"
+                                min={0}
+                                step={0.0001}
+                                max={10}
+                            />
+                        </div>
+                        <label className={"label"}>
+                            <div className="input-label"> NFT Supply</div>
+                        </label>
+                        <div className="grid w-full grid-cols-4 gap-4">
+                            {getChainNames()
+                                // TODO: remove when few blockchains
+                                .filter((chain) => formData.blockchain === chain)
+                                .map((chain) => (
+                                    <InputSupplyOfNFT
+                                        key={chain}
+                                        label={chain}
+                                        name={chain}
+                                        image={getLogoURI(chain)}
+                                        handleChange={(event) => {
+                                            handleNftSupplyChange(event, setFormData, chain, "blockchain");
+                                            fetchQuery();
+                                        }}
+                                        isDisabled={chain !== formData.blockchain}
+                                    />
+                                ))}
+                        </div>
+                        <Button className="mt-5 w-2/3 self-center">Create Contract</Button>
                     </form>
                 </section>
 

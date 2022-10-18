@@ -1,5 +1,6 @@
 import { Select, SelectArrow, SelectItem, SelectPopover, useSelectState } from "ariakit/select";
 import { ISelectorProps } from "./types";
+import React from "react";
 
 const types = ["Member", "Design", "VC"];
 
@@ -13,13 +14,15 @@ export const TypeSelector = ({ name, label, className, handleChange }: ISelector
 
     return (
         <div className={className}>
-            <span className="input-label">{label}</span>
-            <div className="flex flex-col mt-4">
+            <label className="label">
+                <span className="input-label">{label}</span>
+            </label>
+            <div className="form-control ">
                 <Select
                     state={select}
                     name={name}
                     className={
-                        "input-selector btn-state flex cursor-default items-center whitespace-nowrap px-4 text-base justify-between gap-3"
+                        "input input-selector flex cursor-default items-center whitespace-nowrap px-4 text-base justify-between gap-3"
                     }
                 >
                     <div>{select.value}</div>

@@ -6,6 +6,7 @@ export interface InputTextProps {
     name: string;
     label: string;
     value?: string;
+    height?: string;
     labelTitle?: string;
     isRequired?: boolean;
     disabled?: boolean;
@@ -21,6 +22,7 @@ export interface InputAmountProps {
     label?: string;
     labelTitle?: string;
     isRequired?: boolean;
+    measure?: string;
     className?: string;
     handleChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     placeholder?: string;
@@ -66,6 +68,7 @@ export interface IRadioSelectorNFT {
 export interface IDragAndDropProps {
     name: string;
     label: string;
+    height: string;
     className?: string;
     handleChange: (file: File) => void;
     hoverTitle?: string;
