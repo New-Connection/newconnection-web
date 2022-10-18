@@ -26,15 +26,15 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
     return (
         <div>
             <div className="lg:flex md:flex xl:flex justify-between">
-                <div className="flex-wrap relatives">
+                <div className="tabs">
                     {tabs.map(
                         (tab) =>
                             typeof tab === "object" && (
                                 <button
                                     className={
                                         selectedTab === tab.index
-                                            ? "border-b-2 border-solid w-36 border-primary pb-4 text-primary/80"
-                                            : "border-b-2 border-solid w-36 border-transparent pb-4 focus:border-primary/50 focus:text-primary/50 hover:border-primary/50 hover:text-primary/50"
+                                            ? "tab tab-lg tab-bordered border-primary   w-36  pb-4 text-primary/80"
+                                            : "tab tab-lg tab-bordered border-transparent  w-36  pb-4 focus:border-primary/50 focus:text-primary/50 hover:border-primary/50 hover:text-primary/50"
                                     }
                                     onClick={() => onClick(tab.index)}
                                     key={tab.index}
