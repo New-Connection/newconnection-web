@@ -21,8 +21,8 @@ export default function Layout({ children, className, isMinHeightTurnOff = false
                 <main className={classNames("flex-1 pb-36 mt-[6.5em]", className)} {...props}>
                     {children}
                 </main>
-                <Footer />
             </div>
+            <Footer />
         </>
     );
 }

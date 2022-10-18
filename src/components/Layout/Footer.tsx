@@ -4,7 +4,7 @@ import { DiscordIcon, TwitterIcon } from "components";
 const Footer = () => {
     return (
         <footer
-            className="footer footer-center h-20 grid-flow-row md:grid-flow-col py-4 px-8 border-t-2 border-primary/80 rounded-2xl">
+            className="footer footer-center grid-flow-row md:grid-flow-col py-4 px-8 border-t-2 border-primary/80 rounded-2xl">
             <div className="grid md:grid-flow-col md:justify-self-start gap-10">
                 <div className="flex justify-center sm:justify-start bg-base-300 rounded-2xl p-2">
                     <p className="text-sm">contact@newconnection.xyz</p>
