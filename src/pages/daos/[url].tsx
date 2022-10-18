@@ -462,7 +462,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                                 whitelist={whitelist}
                                                 isLoaded={isLoaded}
                                                 signer={signerData}
-                                                isOwner={isOwner}
                                                 chainId={DAO.chainId}
                                                 addToWhitelist={addToWhitelist}
                                             />
