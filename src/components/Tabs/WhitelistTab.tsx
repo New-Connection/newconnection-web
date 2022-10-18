@@ -47,9 +47,9 @@ export const WhitelistTab = ({ whitelist, isLoaded, addToWhitelist }: IWhitelist
                         <p className="col-span-2 text-sm line-clamp-3 text-center justify-self-center">{note}</p>
 
                         {isLoaded && (
-                            <div className={"col-span-2 justify-self-end grid grid-cols-2 gap-4"}>
+                            <div className={"col-span-2 btn-group justify-self-end"}>
                                 <button
-                                    className="w-20 border-2 btn-success btn-sm rounded-full"
+                                    className="btn btn-sm bg-success border-base-200"
                                     onClick={async () => {
                                         setClick(true);
                                         await addToWhitelist(walletAddress, votingTokenAddress);
@@ -60,7 +60,7 @@ export const WhitelistTab = ({ whitelist, isLoaded, addToWhitelist }: IWhitelist
                                     {click ? "Loading..." : "Add"}
                                 </button>
                                 <button
-                                    className="w-20 border-2 btn-error btn-sm rounded-full"
+                                    className="btn btn-sm bg-error border-base-200"
                                     onClick={async () => {
                                         await addToWhitelist(walletAddress, votingTokenAddress, true);
                                     }}
