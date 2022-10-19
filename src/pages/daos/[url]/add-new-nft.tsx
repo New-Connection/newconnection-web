@@ -186,7 +186,7 @@ const AddNewNFT: NextPage = () => {
                             <div className="flex">
                                 <div className="divider divider-horizontal" />
                                 <DragAndDropImage
-                                    height={"h-32"}
+                                    height={"h-full"}
                                     label="Image"
                                     name="file"
                                     handleChange={(file) => handleImageChange(file, setFormData, "file")}
