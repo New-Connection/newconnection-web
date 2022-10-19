@@ -7,12 +7,16 @@ import { AppProps } from "next/app";
 import { darkTheme, lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import "styles/globals.css";
-import { useDarkMode } from "usehooks-ts";
+import { useDarkMode, useEffectOnce } from "usehooks-ts";
 import { DARK_THEME, LIGHT_THEME } from "utils";
 
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = useState(() => new QueryClient());
-    const { isDarkMode } = useDarkMode();
+    const { isDarkMode, disable } = useDarkMode();
+
+    useEffectOnce(() => {
+        disable();
+    });
 
     return (
         <div data-theme={isDarkMode ? DARK_THEME : LIGHT_THEME}>
