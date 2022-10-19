@@ -139,7 +139,7 @@ export const StepperDialog = ({
                 <ul className="steps steps-vertical gap-6">
                     {steps.map((step, index) => {
                         return (
-                            <li>
+                            <li key={index}>
                                 <div
                                     className={classNames(
                                         "flex gap-4 text-xl text-base-content text-left items-center"

@@ -39,7 +39,7 @@ export const MembersListTab = ({ members, nfts }: IMembersListTab) => {
             </div>
 
             {members.map((member) => (
-                <div className="grid grid-cols-4 w-full px-4 py-2 bg-base-200 rounded-2xl">
+                <div key={member.memberAddress} className="grid grid-cols-4 w-full px-4 py-2 bg-base-200 rounded-2xl">
                     <div>{<CopyTextButton copyText={member.memberAddress} />}</div>
                     <div className={"justify-self-center"}>{renderImage(nfts, member.memberTokens)}</div>
                     <div className={"justify-self-center"}>{member.role}</div>
