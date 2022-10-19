@@ -2,13 +2,7 @@ import * as React from "react";
 import { DisclosureState } from "ariakit";
 import { Dialog } from "ariakit/dialog";
 import classNames from "classnames";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepContent from "@mui/material/StepContent";
-import Typography from "@mui/material/Typography";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
-import { styled } from "@mui/material/styles";
 import { useDarkMode } from "usehooks-ts";
 import { DARK_THEME, LIGHT_THEME } from "utils";
 
@@ -25,7 +19,7 @@ export const SpinnerLoading = () => {
     return (
         <div role="status">
             <svg
-                className="inline mr-2 w-7 h-7 animate-spin text-base-300 fill-primary"
+                className="inline w-7 h-7 animate-spin text-base-300 fill-primary"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -120,14 +114,6 @@ export const createTreasurySteps = [
     },
 ];
 
-const ColorlibConnector = styled(StepConnector)(({}) => ({
-    [`& .${stepConnectorClasses.line}`]: {
-        height: 3,
-        border: 0,
-        borderRadius: 1,
-    },
-}));
-
 export const StepperDialog = ({
     dialog,
     className,
@@ -150,43 +136,30 @@ export const StepperDialog = ({
             hideOnEscape={isClose}
         >
             <div className="h-full m-10">
-                <Stepper activeStep={activeStep} orientation="vertical" connector={<ColorlibConnector />}>
-                    {steps.map((step, index) => (
-                        <Step key={index}>
-                            <div className="flex gap-2">
-                                {index === activeStep ? (
-                                    //step for rn active message
-                                    <>
-                                        <div className={"w-7"}>
+                <ul className="steps steps-vertical gap-6">
+                    {steps.map((step, index) => {
+                        return (
+                            <li>
+                                <div
+                                    className={classNames(
+                                        "flex gap-4 text-xl text-base-content text-left items-center"
+                                    )}
+                                >
+                                    <div className={"w-7"}>
+                                        {index == activeStep ? (
                                             <SpinnerLoading />
-                                        </div>
-                                        <div className="text-xl text-base-content">{step.label}</div>
-                                    </>
-                                ) : index > activeStep - 1 ? (
-                                    //steps for next messages
-                                    <>
-                                        <div className={"w-7"}>
+                                        ) : index > activeStep - 1 ? (
                                             <CheckCircleIcon className="h-7 w-7 fill-base-200" />
-                                        </div>
-                                        <div className="text-xl text-base-content/50">{step.label}</div>
-                                    </>
-                                ) : (
-                                    //steps for previous messages
-                                    <>
-                                        <div className={"w-7"}>
+                                        ) : (
                                             <CheckCircleIcon className="h-7 w-7 stroke-1 fill-primary" />
-                                        </div>
-                                        <div className="text-xl text-base-content">{step.label}</div>
-                                    </>
-                                )}
-                            </div>
-                            <StepContent>
-                                <Typography>{step.description}</Typography>
-                            </StepContent>
-                        </Step>
-                    ))}
-                </Stepper>
-
+                                        )}
+                                    </div>
+                                    {step.label}
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ul>
                 {
                     //final step and children
                     activeStep === steps.length && <div className="p-3">{children}</div>
