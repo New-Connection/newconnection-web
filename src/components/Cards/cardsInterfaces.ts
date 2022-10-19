@@ -16,6 +16,7 @@ export interface INFTCard {
 
 export interface INFTCardWithDialog extends INFTCard {
     nftObject: INFTVoting;
+    isLoaded: boolean;
     setCurrentNFT?: React.Dispatch<React.SetStateAction<INFTVoting>>;
     setButtonState?: React.Dispatch<React.SetStateAction<ButtonState>>;
     detailNFTDialog?: DisclosureState;

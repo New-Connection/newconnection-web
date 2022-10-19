@@ -24,6 +24,7 @@ export const NFTImage = ({ className, image }: INFTImage) => {
 
 export function NFTCardWithDialog({
     nftObject,
+    isLoaded,
     setCurrentNFT,
     setButtonState,
     detailNFTDialog,
@@ -33,9 +34,11 @@ export function NFTCardWithDialog({
         <div>
             <button
                 onClick={() => {
-                    setButtonState("Mint");
-                    setCurrentNFT(nftObject);
-                    detailNFTDialog.toggle();
+                    if (isLoaded) {
+                        setButtonState("Mint");
+                        setCurrentNFT(nftObject);
+                        detailNFTDialog.toggle();
+                    }
                 }}
             >
                 {nftObject.tokenRequested && (
@@ -50,7 +53,10 @@ export function NFTCardWithDialog({
                         />
                     </div>
                 )}
-                <NFTCard nftObject={nftObject} chain={chain} />
+
+                <div className={!isLoaded && "blur-sm"}>
+                    <NFTCard nftObject={nftObject} chain={chain} />
+                </div>
             </button>
         </div>
     );

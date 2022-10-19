@@ -496,6 +496,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 {NFTs ? (
                                     NFTs.map((nft, index) => (
                                         <NFTCardWithDialog
+                                            isLoaded={isLoaded}
                                             nftObject={nft}
                                             setButtonState={setButtonState}
                                             setCurrentNFT={setCurrentNFT}
