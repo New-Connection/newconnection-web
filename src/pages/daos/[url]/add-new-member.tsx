@@ -106,7 +106,7 @@ const AddNewMember: NextPage = () => {
                             maxLength={2000}
                             handleChange={(event) => handleTextChangeAddNewMember(event, setFormData)}
                         />
-                        <Button className="mt-5 w-full">Send a request</Button>
+                        <Button className="mt-5 w-2/3 self-center">Send a request</Button>
                     </form>
                 </section>
             </Layout>
