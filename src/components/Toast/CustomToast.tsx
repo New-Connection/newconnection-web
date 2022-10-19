@@ -3,40 +3,22 @@ import React from "react";
 
 export const CustomToast = () => {
     return (
-        <Toaster
-            toastOptions={{
-                success: {
-                    style: {
-                        background: "#D7A1F9",
-                        color: "white",
-                    },
-                },
-                error: {
-                    style: {
-                        background: "#f27575",
-                        color: "white",
-                    },
-                },
-                loading: {
-                    style: {
-                        background: "#84a8ed",
-                        color: "white",
-                    },
-                },
-                custom: {
-                    position: "top-right",
-                    duration: 10000,
-                },
-            }}
-        >
+        <Toaster>
             {(t) => (
-                <ToastBar toast={t}>
+                <ToastBar
+                    toast={t}
+                    style={{
+                        padding: 0,
+                        margin: 0,
+                    }}
+                >
                     {({ icon, message }) => (
-                        <button onClick={() => toast.dismiss(t.id)}>
-                            <div className={"flex"}>
-                                {icon}
-                                {message}
-                            </div>
+                        <button
+                            className={"bg-primary/25 p-2 rounded-lg  flex items-center"}
+                            onClick={() => toast.dismiss(t.id)}
+                        >
+                            {icon}
+                            {message}
                         </button>
                     )}
                 </ToastBar>
