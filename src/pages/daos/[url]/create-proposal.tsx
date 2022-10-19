@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import type { NextPage } from "next";
-import { ICreateProposal, ICreateProposalQuery, IDAOPageForm, INFTVoting } from "types";
+import { GetServerSideProps } from "next";
+import { ICreateProposal, IDAOPageForm, INFTVoting, IQuery } from "types";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout, {
     BackButton,
@@ -14,12 +15,15 @@ import Layout, {
 import { handleAddArray, handleChangeBasic, handleContractError, handleTextChange, validateForm } from "utils";
 import { useDialogState } from "ariakit";
 import { checkCorrectNetwork, createProposal } from "interactions/contract";
-import { useRouter } from "next/router";
 import { Signer } from "ethers";
 import { saveNewProposal, } from "interactions/database";
-import { useCounter, useReadLocalStorage } from "usehooks-ts";
+import { useCounter, useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 
-const CreateProposal: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const CreateProposal: NextPage<IQuery> = ({ url }) => {
     const [formData, setFormData] = useState<ICreateProposal>({
         governorAddress: "",
         governorUrl: "",
@@ -39,12 +43,10 @@ const CreateProposal: NextPage = () => {
     const confirmDialog = useDialogState();
     const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
 
-    const router = useRouter();
-    const url = (router.query as ICreateProposalQuery).url;
     const storageDao = useReadLocalStorage<IDAOPageForm>(url);
     const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
 
-    useEffect(() => {
+    useEffectOnce(() => {
         const DAO: IDAOPageForm = storageDao;
 
         if (DAO) {
@@ -55,7 +57,7 @@ const CreateProposal: NextPage = () => {
         }
 
         setNFTs(storageNFTs);
-    }, [router]);
+    });
 
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();

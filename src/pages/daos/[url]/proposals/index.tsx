@@ -1,25 +1,26 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import Layout, { BackButton, MockupLoadingProposals, ProposalCard } from "components";
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { IDAOPageForm, IProposalPageForm, IProposalsQuery } from "types";
-import { useRouter } from "next/router";
-import { useReadLocalStorage } from "usehooks-ts";
+import { useState } from "react";
+import { IDAOPageForm, IProposalPageForm, IQuery } from "types";
+import { useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 
-const ProposalsPage: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const ProposalsPage: NextPage<IQuery> = ({ url }) => {
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
-    const router = useRouter();
 
-    const url = (router.query as IProposalsQuery).url;
     const storageDao = useReadLocalStorage<IDAOPageForm>(url);
     const storageProposals = useReadLocalStorage<IProposalPageForm[]>(`${url} Proposals`);
 
-    useEffect(() => {
+    useEffectOnce(() => {
         setDAO(storageDao);
         setProposals(storageProposals);
-    }, [router]);
+    });
 
     return (
         proposals &&

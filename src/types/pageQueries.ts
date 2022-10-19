@@ -1,5 +1,9 @@
 import { ParsedUrlQuery } from "querystring";
 
+export interface IQuery {
+    url: string;
+}
+
 export interface IDaoQuery extends ParsedUrlQuery {
     url: string;
 }

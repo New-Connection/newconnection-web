@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { GetServerSideProps, NextPage } from "next";
 import toast from "react-hot-toast";
 import Layout, { BackButton, Button, InputTextArea, RadioSelectorNFT } from "components";
 import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, validateForm } from "utils";
-import { IAddMemberQuery, IDAOPageForm, INFTVoting, IWhitelistRecord } from "types";
+import { IDAOPageForm, INFTVoting, IQuery, IWhitelistRecord } from "types";
 import { saveWhitelistRequest, whitelistRequestExists, } from "interactions/database";
 import { useAccount, useSigner } from "wagmi";
-import { useReadLocalStorage } from "usehooks-ts";
+import { useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 
-const AddNewMember: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const AddNewMember: NextPage<IQuery> = ({ url }) => {
     const [formData, setFormData] = useState<IWhitelistRecord>({
         governorAddress: "",
         governorUrl: "",
@@ -23,12 +26,10 @@ const AddNewMember: NextPage = () => {
     const { address: signerAddress } = useAccount();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
 
-    const router = useRouter();
-    const url = (router.query as IAddMemberQuery).url;
     const storageDao = useReadLocalStorage<IDAOPageForm>(url);
     const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
 
-    useEffect(() => {
+    useEffectOnce(() => {
         console.log("fetch query");
 
         const DAO: IDAOPageForm = storageDao;
@@ -40,7 +41,7 @@ const AddNewMember: NextPage = () => {
         }
 
         setNFTs(storageNFTs);
-    }, [router]);
+    });
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -84,7 +85,7 @@ const AddNewMember: NextPage = () => {
                             <h1 className="text-highlighter">Become a member of</h1>
                             <h1 className="text-highlighter text-primary capitalize md:ml-4">{formData.governorUrl}</h1>
                         </div>
-                        <label>
+                        <label className={"label"}>
                             <div className="input-label">Choose voting token</div>
                         </label>
                         {NFTs && (

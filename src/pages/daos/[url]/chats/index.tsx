@@ -1,15 +1,19 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
 import { useAccount } from "wagmi";
 import Layout, { BackButton, LockIcon } from "components";
-import { IChatsQuery, IDAOPageForm, INFTVoting } from "types";
+import { IDAOPageForm, INFTVoting, IQuery } from "types";
 import { formatAddress } from "utils";
 import { checkTokensOwnership } from "interactions/contract";
 import { useReadLocalStorage } from "usehooks-ts";
 
-const ChatsPage: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const ChatsPage: NextPage<IQuery> = ({ url }) => {
     const { address } = useAccount();
 
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
@@ -18,15 +22,13 @@ const ChatsPage: NextPage = () => {
     const [activeChat, setActiveChat] = useState(null);
     const [isChatOpen, setChatOpen] = useState(false);
 
-    const router = useRouter();
-    const url = (router.query as IChatsQuery).url;
     const storageDao = useReadLocalStorage<IDAOPageForm>(url);
     const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
 
     useEffect(() => {
         const DAO: IDAOPageForm = storageDao;
         const savedNfts: INFTVoting[] = storageNFTs;
-
+        console.log("fetch");
         if (DAO && savedNfts) {
             const chainId = DAO.chainId;
 
@@ -37,7 +39,7 @@ const ChatsPage: NextPage = () => {
                 chainId
             ).then(value => setOwnedTokenAddresses(value.tokens));
         }
-    }, [router, address]);
+    }, [address]);
 
     return (
         <div>

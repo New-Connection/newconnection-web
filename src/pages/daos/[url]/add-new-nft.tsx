@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Layout, {
     AddNftDialog,
     BackButton,
@@ -10,10 +10,9 @@ import Layout, {
     InputTextArea,
     TypeSelector,
 } from "components";
-import { useRouter } from "next/router";
 import { Signer } from "ethers";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { IAddNftQuery, ICreateNFT, IDAOPageForm } from "types";
 import {
     handleChangeBasic,
@@ -37,9 +36,13 @@ import {
     layerzeroEndpoints,
 } from "interactions/contract";
 import { addValueToDaoArray } from "interactions/database";
-import { useCounter, useReadLocalStorage } from "usehooks-ts";
+import { useCounter, useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 
-const AddNewNFT: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const AddNewNFT: NextPage<IAddNftQuery> = ({ url }) => {
     const [formData, setFormData] = useState<ICreateNFT>({
         name: "",
         description: "",
@@ -59,13 +62,11 @@ const AddNewNFT: NextPage = () => {
     const confirmDialog = useDialogState();
     const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
 
-    const router = useRouter();
-    const url = (router.query as IAddNftQuery).url;
     const storageDao = useReadLocalStorage<IDAOPageForm>(url);
 
-    useEffect(() => {
+    useEffectOnce(() => {
         fetchQuery();
-    }, [router]);
+    });
 
     const fetchQuery = () => {
         const DAO: IDAOPageForm = storageDao;
@@ -193,7 +194,6 @@ const AddNewNFT: NextPage = () => {
                                 />
                             </div>
                         </div>
-
 
                         <div className={"mb-4"}>
                             <InputAmount
