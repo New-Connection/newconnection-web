@@ -2,9 +2,11 @@ import { IMember } from "types";
 import { doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { membersCollection } from "interactions/database";
 
+const getMemberKey = (governorUrl: string, memberAddress) => `${governorUrl}:${memberAddress}`;
+
 export const saveMember = async (member: IMember) => {
     try {
-        const key = `${member.governorUrl}:${member.memberAddress}`;
+        const key = getMemberKey(member.governorUrl, member.memberAddress);
         const docSnap = await getDoc(doc(membersCollection, key));
 
         if (docSnap.exists()) {
@@ -25,10 +27,10 @@ export const saveMember = async (member: IMember) => {
     }
 };
 
-export const getAllMembers = async (url: string) => {
+export const getAllMembers = async (governorUrl: string) => {
     const members: IMember[] = [];
 
-    const q = query(membersCollection, where("governorUrl", "==", url));
+    const q = query(membersCollection, where("governorUrl", "==", governorUrl));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
@@ -37,4 +39,13 @@ export const getAllMembers = async (url: string) => {
     });
 
     return members;
+};
+
+export const getMember = async (governorUrl: string, memberAddress: string) => {
+    const key = getMemberKey(governorUrl, memberAddress);
+    const docSnap = await getDoc(doc(membersCollection, key));
+
+    if (docSnap.exists()) {
+        return docSnap.data() as IMember;
+    }
 };
