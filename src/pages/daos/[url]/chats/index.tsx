@@ -4,10 +4,10 @@ import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import { useAccount } from "wagmi";
 import Layout, { BackButton, LockIcon } from "components";
-import { IDAOPageForm, INFTVoting, IQuery } from "types";
+import { INFTVoting, IQuery } from "types";
 import { formatAddress } from "utils";
-import { checkTokensOwnership } from "interactions/contract";
 import { useReadLocalStorage } from "usehooks-ts";
+import { getMember } from "interactions/database";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
     props: context.params,
@@ -22,22 +22,14 @@ const ChatsPage: NextPage<IQuery> = ({ url }) => {
     const [activeChat, setActiveChat] = useState(null);
     const [isChatOpen, setChatOpen] = useState(false);
 
-    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
     const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
 
     useEffect(() => {
-        const DAO: IDAOPageForm = storageDao;
         const savedNfts: INFTVoting[] = storageNFTs;
         console.log("fetch");
-        if (DAO && savedNfts) {
-            const chainId = DAO.chainId;
-
+        if (savedNfts) {
             setNFTs(savedNfts);
-            address && checkTokensOwnership(
-                savedNfts.map((NFT) => NFT.tokenAddress),
-                address,
-                chainId
-            ).then(value => setOwnedTokenAddresses(value.tokens));
+            getMember(url, address).then(member => setOwnedTokenAddresses(member.memberTokens));
         }
     }, [address]);
 
