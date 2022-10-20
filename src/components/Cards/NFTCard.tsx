@@ -68,7 +68,7 @@ export const NFTCard = ({ nftObject, chain, className = "nft-card" }: INFTCard) 
             <div className="flex-shrink-0">
                 <img className="h-72 w-full object-cover" src={nftObject.image} alt="" />
             </div>
-            <div className="flex flex-1 flex-col justify-between bg-base-100 px-6 pt-2 pb-6">
+            <div className="flex flex-1 flex-col justify-between bg-base-200 px-6 pt-2 pb-6">
                 <div className="flex-1">
                     <div className="mt-1 flex justify-between">
                         <p className="text-base font-medium text-base-content mt-1">{nftObject.title}</p>

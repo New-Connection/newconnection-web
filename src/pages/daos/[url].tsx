@@ -364,7 +364,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         {DAO.treasuryAddress ? (
                             <div
                                 className={
-                                    "flex flex-col justify-between border-2 text-center border-base-300 rounded-2xl h-52 p-3 md:w-4/5"
+                                    "flex flex-col justify-between border-2 text-center bg-base-200 border-base-300 rounded-2xl h-52 p-3 md:w-4/5"
                                 }
                             >
                                 <div className={"flex justify-center text-2xl pt-3"}>
