@@ -2,9 +2,12 @@ import { deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from "firebase/
 import { whitelistCollection } from "interactions/database";
 import { IWhitelistRecord } from "types";
 
+const getWhitelistKey = (governorUrl: string, walletAddress: string, votingTokenAddress: string) =>
+    `${governorUrl}:${walletAddress}:${votingTokenAddress}`;
+
 export const saveWhitelistRequest = async (request: IWhitelistRecord) => {
     try {
-        const key = `${request.governorUrl}:${request.walletAddress}:${request.votingTokenAddress}`;
+        const key = getWhitelistKey(request.governorUrl, request.walletAddress, request.votingTokenAddress);
         await setDoc(doc(whitelistCollection, key), request);
         console.log("token requested");
     } catch (e) {
@@ -12,7 +15,11 @@ export const saveWhitelistRequest = async (request: IWhitelistRecord) => {
     }
 };
 
-export const whitelistRequestExists = async (governorUrl: string, walletAddress: string, votingTokenAddress: string) => {
+export const whitelistRequestExists = async (
+    governorUrl: string,
+    walletAddress: string,
+    votingTokenAddress: string
+) => {
     const key = `${governorUrl}:${walletAddress}:${votingTokenAddress}`;
     const docSnap = await getDoc(doc(whitelistCollection, key));
     return docSnap.exists();
@@ -33,6 +40,6 @@ export const getWhitelist = async (url: string) => {
 };
 
 export const deleteWhitelistRecord = async (governorUrl: string, walletAddress: string, votingTokenAddress: string) => {
-    const key = `${governorUrl}:${walletAddress}:${votingTokenAddress}`;
+    const key = getWhitelistKey(governorUrl, walletAddress, votingTokenAddress);
     await deleteDoc(doc(whitelistCollection, key));
 };
