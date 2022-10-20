@@ -96,7 +96,10 @@ export interface INFTVoting {
     price?: string;
     totalSupply?: string;
     totalMinted?: string;
-    tokenRequested?: boolean;
+
+    tokenRequestedByMember?: boolean;
+    tokenRequestApproved?: boolean;
+    tokenMintedByMember?: number;
 }
 
 export interface IWhitelistRecord {

@@ -1,68 +1,80 @@
 import { createTreasurySteps, CustomDialog, SpinnerLoading, StepperDialog } from "./base-dialogs";
 import * as React from "react";
-import { BlockchainIcon, CopyTextButton, InputAmount, NFTImage } from "components";
+import { BlockchainIcon, CopyTextButton, DetailNftListItem, InputAmount, NFTImage } from "components";
 import { getChainScanner, getTokenSymbol } from "interactions/contract";
 import { LinkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { IContributeTreasuryDialog, ICreateTreasuryDialog, IDetainNftDialog } from "./dialogInterfaces";
+import Link from "next/link";
+import classNames from "classnames";
 
 export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButton }: IDetainNftDialog) => {
     return (
-        <CustomDialog dialog={dialog} className="h-full items-center text-center">
+        <CustomDialog dialog={dialog} className="h-full bg-base-100 items-center text-center">
             {currentNFT && (
-                <>
+                <div className={"grid grid-flow-row gap-4"}>
                     <NFTImage className="rounded-lg h-14 w-14" image={currentNFT.image} />
-                    <div className="mt-4 text-base-content">{`${currentNFT.title}`}</div>
+                    <div className="text-base-content text-xl">{`${currentNFT.title}`}</div>
                     <a
                         href={getChainScanner(DAO.chainId, currentNFT.tokenAddress)}
                         target={"_blank"}
-                        className="hover:text-primary flex justify-center"
+                        className="hover:text-primary flex justify-center gap-2"
                     >
                         Smart Contract
                         <LinkIcon className="h-6 w-5" />
                     </a>
 
-                    <div className={"flex justify-center"}>
-                        <button
-                            className={`secondary-button w-1/2 h-12 mt-4 mb-6 justify-center
-                            ${buttonState === "Success" && "bg-success"} 
-                            ${buttonState === "Error" && "bg-error"}`}
-                            onClick={mintButton}
-                        >
-                            {buttonState}
-                        </button>
+                    <div className={"flex justify-center h-12"}>
+                        {currentNFT.tokenRequestApproved ? (
+                            <button
+                                className={classNames(
+                                    "secondary-button",
+                                    buttonState === "Success" && "bg-success",
+                                    buttonState === "Error" && "bg-error"
+                                )}
+                                onClick={mintButton}
+                            >
+                                {buttonState}
+                            </button>
+                        ) : currentNFT.tokenRequestedByMember ? (
+                            <button className={"secondary-button disabled:bg-base-300"} disabled>
+                                Confirmation awaited
+                            </button>
+                        ) : (
+                            <Link
+                                href={{
+                                    pathname: `${DAO.url}/add-new-member`,
+                                }}
+                            >
+                                <button className={"secondary-button"}>Send request</button>
+                            </Link>
+                        )}
                     </div>
 
-                    <p className="w-full mt-8 text-start text-base-content">Details</p>
-                    <ul className="py-6 w-full divide-y divide-slate-200">
-                        <li className="flex py-4 justify-between">
-                            <p className="font-light text-base-content/50">{"Type"}</p>
-                            <p className="font-normal text-base-content">{currentNFT.type}</p>
-                        </li>
-                        <li className="flex py-4 justify-between">
-                            <p className="font-light text-base-content/50">{"Price"}</p>
-                            <p className="font-normal text-base-content">{currentNFT.price}</p>
-                        </li>
-                        <li className="flex py-4 justify-between">
-                            <p className="font-light text-base-content/50">{"Supply"}</p>
-                            <p className="font-normal text-base-content">
-                                {currentNFT.totalMinted}/{currentNFT.totalSupply}
-                            </p>
-                        </li>
-                        <li className="flex py-4 justify-between">
-                            <p className="font-light text-base-content/50 mr-4">{"Address"}</p>
-                            <div className="font-normal text-base-content">
-                                <CopyTextButton copyText={currentNFT.tokenAddress} />
-                            </div>
-                        </li>
-                        <li className="flex py-4 justify-between">
-                            <p className="font-light text-base-content/50">{"Blockchain"}</p>
-                            <div className="font-normal text-base-content">
-                                <BlockchainIcon chain={DAO.blockchain[0]} />
-                            </div>
-                        </li>
+                    <p className="w-full text-xl text-start text-base-content">Details</p>
+                    <ul className="w-full divide-y divide-slate-200">
+                        {currentNFT.tokenMintedByMember > 0 && (
+                            <li className="flex py-4 justify-between">
+                                <div className="font-normal text-primary/75">{"Balance"}</div>
+                                <div className="font-normal text-primary/50">{currentNFT.tokenMintedByMember}</div>
+                            </li>
+                        )}
+                        <DetailNftListItem property={"Type"} value={currentNFT.type} />
+                        <DetailNftListItem property={"Price"} value={currentNFT.price} />
+                        <DetailNftListItem
+                            property={"Supply"}
+                            value={`${currentNFT.totalMinted}/${currentNFT.totalSupply}`}
+                        />
+                        <DetailNftListItem
+                            property={"Address"}
+                            value={<CopyTextButton copyText={currentNFT.tokenAddress} />}
+                        />
+                        <DetailNftListItem
+                            property={"Blockchain"}
+                            value={<BlockchainIcon chain={DAO.blockchain[0]} />}
+                        />
                     </ul>
-                </>
+                </div>
             )}
         </CustomDialog>
     );

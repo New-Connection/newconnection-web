@@ -41,7 +41,7 @@ export function NFTCardWithDialog({
                     }
                 }}
             >
-                {nftObject.tokenRequested && (
+                {nftObject.tokenRequestedByMember && (
                     <div
                         className="flex tooltip tooltip-bottom absolute"
                         data-tip="Waiting for the confirmation from the DAO's admin"
@@ -89,5 +89,16 @@ export const NFTCard = ({ nftObject, chain, className = "nft-card" }: INFTCard) 
                 </div>
             </div>
         </div>
+    );
+};
+
+export const DetailNftListItem = ({ property, value }) => {
+    return (
+        <li className="flex py-4 justify-between">
+            <div className="font-light text-base-content/50">{property}</div>
+            <div className="font-normal text-base-content">
+                {value}
+            </div>
+        </li>
     );
 };

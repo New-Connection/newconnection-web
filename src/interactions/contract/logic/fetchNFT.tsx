@@ -1,6 +1,8 @@
 import {
     getNftName,
+    getNumAvailableToMint,
     getNumberOfMintedTokens,
+    getNumberOfTokenInOwnerAddress,
     getPrice,
     getSupplyNumber,
     getSymbol,
@@ -28,8 +30,11 @@ export async function fetchNFT(DAO: IDAOPageForm, signerAddress?: string) {
                 totalMinted: await getNumberOfMintedTokens(tokenAddress, DAO.chainId),
                 tokenAddress: tokenAddress,
             };
-            signerAddress &&
-            (nft.tokenRequested = (await whitelistRequestExists(DAO.url, signerAddress, tokenAddress)));
+            if (signerAddress) {
+                nft.tokenRequestedByMember = await whitelistRequestExists(DAO.url, signerAddress, tokenAddress);
+                nft.tokenMintedByMember = +(await getNumberOfTokenInOwnerAddress(signerAddress, tokenAddress, DAO.chainId));
+                nft.tokenRequestApproved = +(await getNumAvailableToMint(signerAddress, tokenAddress, DAO.chainId)) > 0;
+            }
             return nft;
         })
     );

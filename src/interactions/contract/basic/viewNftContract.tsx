@@ -69,7 +69,8 @@ export async function getNumAvailableToMint(userAddress: string, contractAddress
     try {
         let baseProvider = provider({ chainId });
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
-        return await nft.numAvailableToMint(userAddress);
+        const available = await nft.numAvailableToMint(userAddress);
+        return available.toString();
     } catch (e) {
         handleContractError(e);
     }

@@ -7,7 +7,6 @@ import Layout, { BackButton, LockIcon } from "components";
 import { INFTVoting, IQuery } from "types";
 import { formatAddress } from "utils";
 import { useReadLocalStorage } from "usehooks-ts";
-import { getMember } from "interactions/database";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
     props: context.params,
@@ -17,7 +16,6 @@ const ChatsPage: NextPage<IQuery> = ({ url }) => {
     const { address } = useAccount();
 
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
-    const [ownedTokenAddresses, setOwnedTokenAddresses] = useState([]);
 
     const [activeChat, setActiveChat] = useState(null);
     const [isChatOpen, setChatOpen] = useState(false);
@@ -25,12 +23,8 @@ const ChatsPage: NextPage<IQuery> = ({ url }) => {
     const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
 
     useEffect(() => {
-        const savedNfts: INFTVoting[] = storageNFTs;
         console.log("fetch");
-        if (savedNfts) {
-            setNFTs(savedNfts);
-            getMember(url, address).then(member => setOwnedTokenAddresses(member.memberTokens));
-        }
+        storageNFTs && setNFTs(storageNFTs);
     }, [address]);
 
     return (
@@ -63,13 +57,13 @@ const ChatsPage: NextPage<IQuery> = ({ url }) => {
                                                     setActiveChat(() => nft.tokenAddress);
                                                     setChatOpen(true);
                                                 }}
-                                                disabled={!ownedTokenAddresses.includes(nft.tokenAddress)}
+                                                disabled={nft.tokenMintedByMember <= 0}
                                             >
                                                 <div className="w-full">
                                                     <div className="text-lg font-semibold">{nft.title}</div>
                                                     {/*<span className="text-base-content/50">DAO members</span>*/}
                                                 </div>
-                                                {!ownedTokenAddresses.includes(nft.tokenAddress) && <LockIcon />}
+                                                {nft.tokenMintedByMember <= 0 && <LockIcon />}
                                             </button>
                                         ))}
                                 </div>

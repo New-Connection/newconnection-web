@@ -23,7 +23,6 @@ import {
     AddToWhitelist,
     addTreasury,
     checkCorrectNetwork,
-    checkTokensOwnership,
     contributeToTreasury,
     fetchNFT,
     fetchTreasuryBalance,
@@ -89,7 +88,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     // NFT section
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const [currentNFT, setCurrentNFT] = useState<INFTVoting>();
-    const [ownedTokenAddresses, setOwnedTokenAddresses] = useState([]);
     const [buttonState, setButtonState] = useState<ButtonState>("Mint");
     const detailNFTDialog = useDialogState();
 
@@ -152,7 +150,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 console.log("load nfts");
                 setNFTs(nftsArray);
                 setStorageNFTs(nftsArray);
-                incrementLoadingCounter();
                 return nftsArray;
             }
         };
@@ -171,26 +168,29 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
             }
         };
 
-        const checkNfts = async (nfts, dao: IDAOPageForm) => {
-            const { tokens, votingPower } = await checkTokensOwnership(
-                nfts.map((nft) => nft.tokenAddress),
-                signerAddress,
-                dao.chainId
-            );
-            if (tokens.length > 0) {
-                console.log("check tokens " + tokens);
-                setOwnedTokenAddresses(tokens);
+        const updateMember = async (nfts: INFTVoting[]) => {
+            const tokens: string[] = [];
+            let votingPower = 0;
 
-                const member: IMember = {
-                    memberAddress: signerAddress,
-                    governorUrl: url,
-                    memberTokens: [...tokens],
-                    role: "Member",
-                    votingPower: votingPower,
-                };
+            nfts.forEach((nft) => {
+                const votePower = nft.tokenMintedByMember;
+                if (votePower > 0) {
+                    tokens.push(nft.tokenAddress);
+                    votingPower += votePower;
+                }
+            });
 
-                await saveMember(member);
-            }
+            const member: IMember = {
+                memberAddress: signerAddress,
+                governorUrl: url,
+                memberTokens: [...tokens],
+                role: "Member",
+                votingPower: votingPower,
+            };
+
+            await saveMember(member);
+
+            incrementLoadingCounter();
         };
 
         loadingDAO()
@@ -200,7 +200,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     loadingWhitelist().then();
                     loadingTreasuryBalance(dao).then();
                     loadingProposals().then();
-                    loadingNFT(dao).then((nfts) => nfts && signerAddress && checkNfts(nfts, dao));
+                    loadingNFT(dao).then((nfts) => nfts && signerAddress && updateMember(nfts));
                     loadingMembers().then();
                 } else {
                     setNotFound();
@@ -225,7 +225,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // FUNCTIONS
     // ----------------------------------------------------------------------
-
+    console.log(NFTs);
     const addTreasuryAndSave = async () => {
         const treasuryAddress = await addTreasury(
             DAO,
