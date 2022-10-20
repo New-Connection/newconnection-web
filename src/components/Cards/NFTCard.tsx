@@ -54,7 +54,7 @@ export function NFTCardWithDialog({
                     </div>
                 )}
 
-                <div className={!isLoaded && "blur-sm"}>
+                <div className={!isLoaded ? "blur-sm" : undefined}>
                     <NFTCard nftObject={nftObject} chain={chain} />
                 </div>
             </button>
