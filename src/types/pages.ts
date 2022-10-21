@@ -111,6 +111,8 @@ export interface IWhitelistRecord {
     votingTokenAddress?: string;
     note?: string;
     blockchainSelected?: string[];
+
+    tokenRequestedByMember?: boolean;
 }
 
 export type TabsType = {

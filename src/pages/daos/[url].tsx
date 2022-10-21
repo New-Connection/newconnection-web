@@ -225,7 +225,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     // FUNCTIONS
     // ----------------------------------------------------------------------
-    console.log(NFTs);
     const addTreasuryAndSave = async () => {
         const treasuryAddress = await addTreasury(
             DAO,
@@ -268,7 +267,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     };
 
     const mintButton = async () => {
-        await mint(currentNFT.tokenAddress, DAO, signerData, switchNetwork, setButtonState, isOwner);
+        await mint(currentNFT, DAO, signerData, switchNetwork, setButtonState, isOwner);
     };
 
     const contributeToTreasuryButton = async (e: React.FormEvent<HTMLFormElement>) => {

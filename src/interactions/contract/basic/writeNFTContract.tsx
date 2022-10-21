@@ -43,9 +43,9 @@ export async function mintReserveAndDelegation(contractAddress: string, signer: 
     // console.log(supply);
 }
 
-export async function mintNFT(contractAddress: string, signer: Signer) {
+export async function mintNFT(contractAddress: string, signer: Signer, price: string) {
     const erc20_rw = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, signer);
-    const tx = await erc20_rw.mint();
+    const tx = await erc20_rw.mint({ value: ethers.utils.parseEther(price) });
     await tx.wait();
 
     const address = await signer.getAddress();

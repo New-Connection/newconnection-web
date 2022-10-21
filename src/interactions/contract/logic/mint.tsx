@@ -1,10 +1,10 @@
 import { checkCorrectNetwork, mintNFT, mintReserveAndDelegation } from "interactions/contract";
 import toast from "react-hot-toast";
-import { IDAOPageForm } from "types";
+import { IDAOPageForm, INFTVoting } from "types";
 import { handleContractError } from "utils";
 
 export const mint = async (
-    tokenAddress: string,
+    nft: INFTVoting,
     DAO: IDAOPageForm,
     signerData,
     switchNetwork: Function,
@@ -20,8 +20,8 @@ export const mint = async (
     setButtonState("Loading");
     try {
         const tx = isOwner
-            ? await mintReserveAndDelegation(tokenAddress, signerData)
-            : await mintNFT(tokenAddress, signerData);
+            ? await mintReserveAndDelegation(nft.tokenAddress, signerData)
+            : await mintNFT(nft.tokenAddress, signerData, nft.price);
         if (tx.blockNumber) {
             toast.success(`DONE ✅ successful mint!`);
         }
