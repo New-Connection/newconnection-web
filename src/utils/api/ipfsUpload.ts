@@ -1,7 +1,7 @@
 import { handleContractError, INFURA_IPFS_GATEWAY, IPFS, ipfsClient } from "utils";
 
 export const getIpfsImage = (path: string, mockImage: string) => {
-    const fullPath = INFURA_IPFS_GATEWAY + path.replace(IPFS, "");
+    const fullPath = INFURA_IPFS_GATEWAY + path?.replace(IPFS, "");
     return imageExists(fullPath) ? fullPath : mockImage;
 };
 

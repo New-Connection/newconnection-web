@@ -62,7 +62,7 @@ export function NFTCardWithDialog({
     );
 }
 
-export const NFTCard = ({ nftObject, chain, className = "nft-card" }: INFTCard) => {
+export const NFTCard = ({ nftObject, className = "nft-card" }: INFTCard) => {
     return (
         <div className={className}>
             <div className="flex-shrink-0">
@@ -84,7 +84,7 @@ export const NFTCard = ({ nftObject, chain, className = "nft-card" }: INFTCard) 
                     </div>
                     <div className="ml-3 flex gap-2">
                         <p className="text-sm font-normal text-primary">{nftObject.price}</p>
-                        <BlockchainIcon chain={chain} />
+                        <BlockchainIcon chain={nftObject.chainId} />
                     </div>
                 </div>
             </div>
@@ -96,9 +96,7 @@ export const DetailNftListItem = ({ property, value }) => {
     return (
         <li className="flex py-4 justify-between">
             <div className="font-light text-base-content/50">{property}</div>
-            <div className="font-normal text-base-content">
-                {value}
-            </div>
+            <div className="font-normal text-base-content">{value}</div>
         </li>
     );
 };

@@ -1,14 +1,12 @@
 import { doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import { ICreateDAO, IDAOPageForm } from "types";
+import { ICreateDAO, IDAOPageForm, IMember } from "types";
 import { getChainScanner } from "interactions/contract";
 import { getIpfsImage } from "utils";
 import ASSETS from "assets";
 import { daosCollection } from "interactions/database";
 
-export const checkUrlAvailability = async (url) => {
-    const docSnap = await getDoc(doc(daosCollection, url));
-    return !docSnap.exists();
-};
+// WRITE
+// ----------------------------------------------------------------------
 
 export const saveNewDao = async (dao: ICreateDAO) => {
     console.log(dao);
@@ -51,6 +49,14 @@ export const addValueToDao = async (daoUrl: string, key: string, value: any) => 
     }
 };
 
+// READ
+// ----------------------------------------------------------------------
+
+export const checkUrlAvailability = async (url) => {
+    const docSnap = await getDoc(doc(daosCollection, url));
+    return !docSnap.exists();
+};
+
 export const getDao = async (url: string) => {
     const docSnap = await getDoc(doc(daosCollection, url));
     if (docSnap.exists()) {
@@ -74,4 +80,12 @@ export const getAllDaos = async () => {
         daos.push(dao);
     });
     return daos;
+};
+
+export const getDaosForMember = async (memberRecords: IMember[]) => {
+    const daos: Promise<IDAOPageForm>[] = [];
+
+    memberRecords.map((record) => record.governorUrl).forEach((url) => daos.push(getDao(url)));
+
+    return await Promise.all(daos);
 };

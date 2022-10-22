@@ -84,6 +84,10 @@
         @apply rounded-full border-2 py-2 px-3 font-normal btn-primary
     }
 
+    .form-neutral-button {
+        @apply rounded-full border-2 py-2 px-3 font-normal btn-ghost border-primary hover:border-primary
+    }
+
     .chat-button {
         @apply flex flex-row py-4 px-2 justify-center items-center;
     }

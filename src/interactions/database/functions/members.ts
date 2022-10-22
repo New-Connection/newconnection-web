@@ -27,7 +27,7 @@ export const saveMember = async (member: IMember) => {
     }
 };
 
-export const getAllMembers = async (governorUrl: string) => {
+export const getAllMembersForDao = async (governorUrl: string) => {
     const members: IMember[] = [];
 
     const q = query(membersCollection, where("governorUrl", "==", governorUrl));
@@ -41,11 +41,25 @@ export const getAllMembers = async (governorUrl: string) => {
     return members;
 };
 
-export const getMember = async (governorUrl: string, memberAddress: string) => {
+export const getMemberForDao = async (governorUrl: string, memberAddress: string) => {
     const key = getMemberKey(governorUrl, memberAddress);
     const docSnap = await getDoc(doc(membersCollection, key));
 
     if (docSnap.exists()) {
         return docSnap.data() as IMember;
     }
+};
+
+export const getAllMemberRecords = async (memberAddress: string) => {
+    const members: IMember[] = [];
+
+    const q = query(membersCollection, where("memberAddress", "==", memberAddress));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+        const member = doc.data() as IMember;
+        members.push(member);
+    });
+
+    return members;
 };

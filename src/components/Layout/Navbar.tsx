@@ -3,23 +3,35 @@ import { Logo, MoonIcon, SunIcon } from "components";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useDarkMode } from "usehooks-ts";
 
-const navigation = [
-    { id: 0, title: "Home", path: "/" },
-    { id: 1, title: "DAOs", path: "/daos" },
-    { id: 2, title: "Proposals", path: "/proposals" },
-];
-
 const Navbar = () => {
     const { toggle } = useDarkMode();
 
     return (
         <>
-            <Link href="/" passHref>
-                <div className="cursor-pointer">
-                    <span className="sr-only">Navigate to Home Page</span>
-                    <Logo />
+            <div className={"w-1/2 grid grid-flow-col"}>
+                <div>
+                    <Link href="/home" passHref>
+                        <button className="btn-ghost p-1 rounded-xl text-left">
+                            <span className="sr-only">Navigate to Home Page</span>
+                            <Logo />
+                        </button>
+                    </Link>
                 </div>
-            </Link>
+
+                <div className={"grid grid-flow-col "}>
+                    <Link href="/home" passHref>
+                        <button className="btn-ghost p-1 rounded-xl text-center">
+                            <span className={"font-bold"}>Home</span>
+                        </button>
+                    </Link>
+
+                    <Link href="/daos" passHref>
+                        <button className="btn-ghost p-1 rounded-xl text-center">
+                            <span className={"font-bold"}>Rooms</span>
+                        </button>
+                    </Link>
+                </div>
+            </div>
 
             <div className={"flex gap-3"}>
                 <ConnectButton accountStatus="address" />

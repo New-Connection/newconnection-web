@@ -89,6 +89,7 @@ export interface IProposal {
 }
 
 export interface INFTVoting {
+    chainId: number;
     title?: string;
     type?: string;
     image?: string;
@@ -123,6 +124,7 @@ export type TabsType = {
 
 export interface IMember {
     governorUrl: string;
+    chainId: number;
     memberAddress: string;
     memberTokens: string[];
     role: string;

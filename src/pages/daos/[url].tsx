@@ -48,7 +48,7 @@ import { handleChangeBasic, handleContractError, isValidHttpUrl } from "utils";
 import {
     addValueToDao,
     deleteWhitelistRecord,
-    getAllMembers,
+    getAllMembersForDao,
     getAllProposals,
     getDao,
     getWhitelist,
@@ -162,13 +162,13 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         };
 
         const loadingMembers = async () => {
-            const newMembers = await getAllMembers(url);
+            const newMembers = await getAllMembersForDao(url);
             if (newMembers) {
                 setMembers(() => newMembers);
             }
         };
 
-        const updateMember = async (nfts: INFTVoting[]) => {
+        const updateMember = async (nfts: INFTVoting[], dao: IDAOPageForm) => {
             const tokens: string[] = [];
             let votingPower = 0;
 
@@ -182,6 +182,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
             const member: IMember = {
                 memberAddress: signerAddress,
+                chainId: dao.chainId,
                 governorUrl: url,
                 memberTokens: [...tokens],
                 role: "Member",
@@ -200,7 +201,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                     loadingWhitelist().then();
                     loadingTreasuryBalance(dao).then();
                     loadingProposals().then();
-                    loadingNFT(dao).then((nfts) => nfts && signerAddress && updateMember(nfts));
+                    loadingNFT(dao).then((nfts) => nfts && signerAddress && updateMember(nfts, dao));
                     loadingMembers().then();
                 } else {
                     setNotFound();
