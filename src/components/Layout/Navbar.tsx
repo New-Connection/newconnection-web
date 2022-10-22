@@ -11,7 +11,7 @@ const Navbar = () => {
             <div className={"w-1/2 grid grid-flow-col"}>
                 <div>
                     <Link href="/home" passHref>
-                        <button className="btn-ghost p-1 rounded-xl text-left">
+                        <button className="p-1 text-left">
                             <span className="sr-only">Navigate to Home Page</span>
                             <Logo />
                         </button>
@@ -34,7 +34,7 @@ const Navbar = () => {
             </div>
 
             <div className={"flex gap-3"}>
-                <ConnectButton accountStatus="address" />
+                <ConnectButton accountStatus="address" label="Sign in" showBalance={false} />
 
                 <label className="swap swap-rotate text-xs">
                     <input type="checkbox" onClick={toggle} />

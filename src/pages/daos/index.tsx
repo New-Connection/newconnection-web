@@ -47,7 +47,7 @@ const DAOsPage: NextPage = () => {
         return (
             <Link href="./create-new-dao">
                 <button className="secondary-button h-10" disabled={!isChainSupported}>
-                    Create DAO
+                    Create Room
                 </button>
             </Link>
         );
@@ -60,11 +60,11 @@ const DAOsPage: NextPage = () => {
                     <form className="mx-auto flex max-w-5xl flex-col gap-4">
                         {/* HIGHLIGHTS AND CREATE DAO BUTTON */}
                         <div className="flex justify-between items-center">
-                            <h1 className="text-highlighter">DAOs</h1>
+                            <h1 className="text-highlighter">Rooms</h1>
                             <CreateDAOButton />
                         </div>
                         {/* LIST OF DAOs */}
-                        <ul className={'flex flex-col gap-6'}>
+                        <ul className={"flex flex-col gap-6"}>
                             {DAOs &&
                                 DAOs.map((dao, index) => (
                                     <DAOCard key={index} daoObject={dao} lastElement={!(index !== DAOs.length - 1)} />

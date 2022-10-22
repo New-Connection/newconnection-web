@@ -4,11 +4,40 @@ import { WagmiConfig } from "wagmi";
 import { chains, CustomToast, wagmiClient } from "components";
 import Script from "next/script";
 import { AppProps } from "next/app";
-import { darkTheme, lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { darkTheme, lightTheme, RainbowKitProvider, Theme } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import "styles/globals.css";
 import { useBoolean, useDarkMode } from "usehooks-ts";
 import { DARK_THEME, LIGHT_THEME } from "utils";
+import merge from "lodash.merge";
+
+const myLightTheme = merge(lightTheme(), {
+    colors: {
+        accentColor: "#804DF2",
+    },
+    shadows: {
+        connectButton: "none",
+        dialog: "none",
+        profileDetailsAction: "none",
+        selectedOption: "none",
+        selectedWallet: "none",
+        walletLogo: "none",
+    },
+} as Theme);
+
+const myDarkTheme = merge(darkTheme(), {
+    colors: {
+        accentColor: "#7b3fe4",
+    },
+    shadows: {
+        connectButton: "none",
+        dialog: "none",
+        profileDetailsAction: "none",
+        selectedOption: "none",
+        selectedWallet: "none",
+        walletLogo: "none",
+    },
+} as Theme);
 
 function App({ Component, pageProps }: AppProps) {
     const [queryClient] = useState(() => new QueryClient());
@@ -40,17 +69,7 @@ function App({ Component, pageProps }: AppProps) {
             <WagmiConfig client={wagmiClient}>
                 <RainbowKitProvider
                     modalSize="compact"
-                    theme={
-                        isDarkTheme
-                            ? darkTheme({
-                                  accentColor: "#661AE6",
-                                  overlayBlur: "small",
-                              })
-                            : lightTheme({
-                                  accentColor: "#570df8",
-                                  overlayBlur: "small",
-                              })
-                    }
+                    theme={isDarkTheme ? myDarkTheme : myLightTheme}
                     appInfo={{
                         appName: "New Connection",
                         learnMoreUrl: "https://www.newconnection.xyz/",
