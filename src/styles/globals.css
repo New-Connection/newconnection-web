@@ -135,7 +135,7 @@
     }
 
     .nft-cards-grid {
-        @apply place-items-center mt-8 grid gap-10 md:max-w-none md:grid-cols-2 md:gap-20 lg:gap-24 lg:max-w-none lg:grid-cols-3;
+        @apply place-items-center mt-8 grid md:grid-cols-2 lg:grid-cols-3;
     }
 
     .nft-card {
