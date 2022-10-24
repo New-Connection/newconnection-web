@@ -14,7 +14,31 @@ import merge from "lodash.merge";
 const myLightTheme = merge(lightTheme(), {
     colors: {
         accentColor: "#804DF2",
+        connectButtonBackground: "none",
+        connectButtonInnerBackground: "none",
+        // generalBorderDim: "none",
+        modalBackground: "#ffffff",
+
+        selectedOptionBorder: "...",
+        closeButton: "...",
+        closeButtonBackground: "...",
+        profileAction: "...",
+        profileActionHover: "...",
+        profileForeground: "...",
+
+        generalBorder: "...",
+        generalBorderDim: "...",
+
+        // menuItemBackground: "...",
+        // downloadBottomCardBackground: "...",
+        // downloadTopCardBackground: "...",
+        // error: "...",
+        // modalText: "...",
+        // modalTextDim: "...",
+        // modalTextSecondary: "...",
+        // standby: "...",
     },
+
     shadows: {
         connectButton: "none",
         dialog: "none",
@@ -28,6 +52,17 @@ const myLightTheme = merge(lightTheme(), {
 const myDarkTheme = merge(darkTheme(), {
     colors: {
         accentColor: "#7b3fe4",
+        closeButton: "#ffffff",
+        connectButtonBackground: "none",
+        connectButtonInnerBackground: "none",
+        generalBorderDim: "0",
+
+        selectedOptionBorder: "...",
+        closeButtonBackground: "...",
+        profileAction: "...",
+        profileActionHover: "...",
+        profileForeground: "...",
+        generalBorder: "...",
     },
     shadows: {
         connectButton: "none",

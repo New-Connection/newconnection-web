@@ -9,8 +9,8 @@ export const DAOCard = ({ daoObject, lastElement }: IDAOCard) => {
         <Link href={`/daos/${daoObject.url}`}>
             <div
                 className={classNames(
-                    "flex justify-between w-full h-50 p-3 rounded-2xl bg-base-200 cursor-pointer active:bg-base-300",
-                    lastElement ? "border-none" : "border-b border-base-300"
+                    "flex justify-between w-full h-50 p-3 cursor-pointer active:bg-base-300 pb-7",
+                    lastElement ? "border-none" : "border-b"
                 )}
             >
                 <div className="flex gap-6 md:w-10/12 pt-3 pb-3">
@@ -28,12 +28,17 @@ export const DAOCard = ({ daoObject, lastElement }: IDAOCard) => {
                     </div>
                     <div className="w-5/6 grid grid-cols-1 content-between">
                         <div className="w-full">
-                            <div
-                                className="lg:text-lg text-base uppercase font-medium cursor-pointer">{daoObject.name}</div>
+                            <div className="lg:text-lg text-base uppercase font-medium cursor-pointer">
+                                {daoObject.name}
+                            </div>
                             <div className="text-base-content/50 line-clamp-2">{daoObject.description}</div>
                         </div>
 
-                        <p className={"text-base-content/50 text-sm cursor-pointer hover:text-base-content/25 active:text-base-content/50"}>
+                        <p
+                            className={
+                                "text-base-content/50 text-sm cursor-pointer hover:text-base-content/25 active:text-base-content/50"
+                            }
+                        >
                             View more
                         </p>
                     </div>

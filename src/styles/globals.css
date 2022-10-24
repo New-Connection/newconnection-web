@@ -81,11 +81,11 @@
     }
 
     .form-submit-button {
-        @apply rounded-full border-2 py-2 px-3 font-normal btn-primary
+        @apply rounded-full border-2 py-2 px-3 font-normal btn-primary;
     }
 
     .form-neutral-button {
-        @apply rounded-full border-2 py-2 px-3 font-normal btn-ghost border-primary hover:border-primary
+        @apply rounded-full border-2 py-2 px-3 font-normal btn-ghost border-primary hover:border-primary;
     }
 
     .chat-button {
@@ -97,7 +97,7 @@
     }
 
     .input-label {
-        @apply label-text text-base
+        @apply label-text text-base;
     }
 
     .dao-label {
@@ -121,17 +121,17 @@
     }
 
     .input-field {
-        @apply input bg-base-200 mb-4 placeholder:text-base-content/50
+        @apply input bg-base-200 mb-4 placeholder:text-base-content/50;
     }
 
     .checkbox-field {
-        @apply flex h-12 w-48 cursor-pointer items-center justify-center gap-1 bg-base-200 rounded px-4 hover:bg-primary-focus hover:text-base-100
+        @apply flex h-12 w-48 cursor-pointer items-center justify-center gap-1 bg-base-200 rounded px-4 hover:bg-primary-focus hover:text-base-100;
     }
 
     .checkbox-field:checked,
     .checkbox-field[checked="true"],
-    .checkbox-field[aria-checked=true] {
-        @apply bg-primary text-base-100
+    .checkbox-field[aria-checked="true"] {
+        @apply bg-primary text-base-100;
     }
 
     .nft-cards-grid {
@@ -198,6 +198,14 @@
             margin-left: 2rem;
         }
     }
+}
+/* Web3AUTH */
+#w3a-modal {
+    z-index: 100;
+}
+/* RainbowKit Wallet */
+[data-rk] ._9pm4ki3 {
+    z-index: 50;
 }
 
 @layer utilities {
