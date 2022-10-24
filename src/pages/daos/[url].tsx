@@ -180,16 +180,18 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                 }
             });
 
-            const member: IMember = {
-                memberAddress: signerAddress,
-                chainId: dao.chainId,
-                governorUrl: url,
-                memberTokens: [...tokens],
-                role: "Member",
-                votingPower: votingPower,
-            };
+            if (votingPower > 0) {
+                const member: IMember = {
+                    memberAddress: signerAddress,
+                    chainId: dao.chainId,
+                    governorUrl: url,
+                    memberTokens: [...tokens],
+                    role: "Member",
+                    votingPower: votingPower,
+                };
 
-            await saveMember(member);
+                await saveMember(member);
+            }
 
             incrementLoadingCounter();
         };
