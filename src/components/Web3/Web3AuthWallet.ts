@@ -21,7 +21,8 @@ export const web3AuthWallet = ({ chains }: IWalletOptions): Wallet => ({
                 socialLoginConfig: { mfaLevel: "default" },
                 enableLogging: false,
                 clientId: "BONXAIAsHEXSHuEpA5kGei87cF8CXcvZIyRQuVgveMEEatHhJe7MeQTWcsq-kylSTBRuYiJkdu3fZcG4fv-O8OI",
-                network: "testnet",
+                network: "mainnet",
+                chainId: '0x89',
                 uiConfig: {
                     appLogo: ASSETS.discord.src,
                     loginMethodsOrder: ["twitter", "google", "facebook"]
