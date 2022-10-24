@@ -10,13 +10,14 @@ export interface IWalletOptions {
 
 export const web3AuthWallet = ({ chains }: IWalletOptions): Wallet => ({
     id: "web3auth",
-    name: "Web3Auth",
+    name: "Google, Twitter or Facebook",
     iconUrl: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
     iconBackground: "#fff",
-
+    
     createConnector: () => {
         const connector = new Web3AuthConnector({
             chains: chains,
+        
             options: {
                 socialLoginConfig: { mfaLevel: "default" },
                 enableLogging: false,
@@ -24,9 +25,10 @@ export const web3AuthWallet = ({ chains }: IWalletOptions): Wallet => ({
                 network: "mainnet",
                 chainId: '0x89',
                 uiConfig: {
-                    appLogo: ASSETS.discord.src,
-                    loginMethodsOrder: ["twitter", "google", "facebook"]
+                    appLogo: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
+                    loginMethodsOrder: [ "google", "twitter", "facebook"]
                 }
+                
             },
         });
         return {
