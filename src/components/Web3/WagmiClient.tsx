@@ -24,7 +24,7 @@ export const { chains, provider, webSocketProvider } = configureChains(getChains
 const connectors = connectorsForWallets([
     {
         groupName: "Social networks",
-        wallets: [web3AuthWallet({ chains: [chain.mainnet] })],
+        wallets: [web3AuthWallet({ chains })],
     },
     {
         groupName: "Web3.0 Wallets",
