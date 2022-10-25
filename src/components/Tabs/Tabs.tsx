@@ -51,16 +51,13 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
                 </div>
                 <div className={classNames("add-prop-button mt-4 md:mt-0", selectedTab === 0 ? "block" : "hidden")}>
                     <Link href={url}>
-                        <button
-                            className={"secondary-button"}
-                            disabled={!isLoaded}
-                        >
+                        <button className={"secondary-button"} disabled={!isLoaded}>
                             Add new proposal
                         </button>
                     </Link>
                 </div>
             </div>
-            <div id={`tabpanel-${selectedTab}`} className="w-full py-2 px-2">
+            <div id={`tabpanel-${selectedTab}`} className="w-full py-2 px-2 min-h-[28rem]">
                 {Panel && <Panel.Component index={selectedTab} />}
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { ButtonState, IDAOPageForm, INFTVoting, IProposalDetail } from "types";
+import { ButtonState, IDAOPageForm, IMember, INFTVoting, IProposalDetail, IWhitelistRecord } from "types";
 import * as React from "react";
 import { DisclosureState } from "ariakit";
 
@@ -48,11 +48,22 @@ export interface IInformationCard {
 }
 
 export interface IVotingCounter {
-    counter: string,
+    counter: string;
     option: "Against" | "For";
 }
 
 export interface IDAOCard {
     daoObject: IDAOPageForm;
     lastElement: any;
+}
+
+export interface IWhitelistRecordCard {
+    record: IWhitelistRecord;
+    isLoaded: boolean;
+    handleWhitelistRecord: (record: IWhitelistRecord, isRejected: boolean) => Promise<void>;
+}
+
+export interface IMemberCard {
+    member: IMember;
+    nfts: INFTVoting[];
 }
