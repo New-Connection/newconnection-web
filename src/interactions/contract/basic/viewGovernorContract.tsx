@@ -3,7 +3,7 @@ import { GOVERNOR_ABI } from "abis";
 import { getSecondsPerBlock } from "interactions/contract";
 import { provider } from "components";
 
-enum ProposalState {
+export enum ProposalState {
     Pending,
     Active,
     Canceled,
@@ -38,11 +38,10 @@ export async function getTotalProposals(contractAddress: string, chainId: number
     return (await governor.getTotalProposals()).toString();
 }
 
-export async function isProposalActive(contractAddress: string, chainId: number, proposalId: string) {
+export async function getProposalState(contractAddress: string, chainId: number, proposalId: string) {
     let baseProvider = provider({ chainId });
     const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, baseProvider);
-    const proposalState = await governor.state(proposalId);
-    return proposalState == ProposalState.Active;
+    return await governor.state(proposalId);
 }
 
 export async function proposalDeadline(contractAddress: string, chainId: number, proposalId: string) {
