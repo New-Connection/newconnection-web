@@ -1,7 +1,7 @@
 import { ICreateProposal, IProposalPageForm } from "types";
 import { addDoc, DocumentData, getDocs, query, where } from "firebase/firestore";
 import { proposalsCollection } from "interactions/database";
-import { isProposalActive, proposalAgainstVotes, proposalDeadline, proposalForVotes } from "interactions/contract";
+import { getProposalState, proposalAgainstVotes, proposalDeadline, proposalForVotes } from "interactions/contract";
 
 export const saveNewProposal = async (proposal: ICreateProposal) => {
     try {
@@ -19,7 +19,7 @@ const fetchContractData = async (doc: DocumentData) => {
     const chainId = proposal.chainId;
     const proposalId = proposal.proposalId;
 
-    proposal.isActive = await isProposalActive(governorAddress, chainId, proposalId);
+    proposal.proposalState = await getProposalState(governorAddress, chainId, proposalId);
     proposal.forVotes = await proposalForVotes(governorAddress, chainId, proposalId);
     proposal.againstVotes = await proposalAgainstVotes(governorAddress, chainId, proposalId);
     proposal.endDateTimestamp = await proposalDeadline(governorAddress, chainId, proposalId);

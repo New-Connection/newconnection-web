@@ -31,7 +31,7 @@ export interface IProposalCard {
     description?: string;
     governorName?: string;
     blockchain?: string[];
-    isActive?: boolean;
+    proposalState?: number;
     forVotes?: string;
     againstVotes?: string;
     deadline?: number;

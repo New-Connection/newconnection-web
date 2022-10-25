@@ -40,9 +40,7 @@ const ProposalsPage: NextPage<IQuery> = ({ url }) => {
                                     const proposalId = proposal.proposalId;
                                     return (
                                         <Link href={`../${DAO.url}/proposals/${proposalId}`} key={proposalId}>
-                                            <li
-                                                key={proposalId}
-                                            >
+                                            <li key={proposalId}>
                                                 <ProposalCard
                                                     title={proposal.name}
                                                     description={proposal.description}
@@ -50,7 +48,7 @@ const ProposalsPage: NextPage<IQuery> = ({ url }) => {
                                                     tokenName={proposal.tokenName}
                                                     // governorName={DAO?.name}
                                                     chainId={DAO.chainId}
-                                                    isActive={proposal.isActive}
+                                                    proposalState={proposal.proposalState}
                                                     forVotes={proposal.forVotes}
                                                     againstVotes={proposal.againstVotes}
                                                     deadline={proposal.endDateTimestamp}

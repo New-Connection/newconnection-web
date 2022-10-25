@@ -6,7 +6,6 @@ import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout, {
     BackButton,
     Button,
-    CheckboxGroup,
     CreateProposalDialog,
     InputText,
     InputTextArea,
@@ -16,7 +15,7 @@ import { handleAddArray, handleChangeBasic, handleContractError, handleTextChang
 import { useDialogState } from "ariakit";
 import { checkCorrectNetwork, createProposal } from "interactions/contract";
 import { Signer } from "ethers";
-import { saveNewProposal, } from "interactions/database";
+import { saveNewProposal } from "interactions/database";
 import { useCounter, useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
@@ -140,17 +139,7 @@ const CreateProposal: NextPage<IQuery> = ({ url }) => {
                             handleChange={(event) => handleTextChange(event, setFormData)}
                             isRequired
                         />
-                        <CheckboxGroup
-                            label="Proposal Blockchain"
-                            images={true}
-                            values={formData.blockchain}
-                            // description="You can choose one or more blockchains"
-                            // values={[...getChainNames()]}
-                            // enabledValues={formData.enabledBlockchains}
-                            // handleChange={(event) =>
-                            //     handleCheckboxChange(event, formData, setFormData, "blockchain")
-                            // }
-                        />
+
                         <div className={"input-label"}>Choose voting token</div>
                         {NFTs && (
                             <RadioSelectorNFT

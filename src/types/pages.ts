@@ -72,7 +72,7 @@ export interface ICreateProposal extends ICreate {
 }
 
 export interface IProposalPageForm extends ICreateProposal {
-    isActive?: boolean;
+    proposalState?: number;
     forVotes?: string;
     againstVotes?: string;
     endDateTimestamp?: number;
