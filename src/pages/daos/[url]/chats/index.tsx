@@ -7,6 +7,7 @@ import Layout, { BackButton, LockIcon } from "components";
 import { INFTVoting, IQuery } from "types";
 import { formatAddress } from "utils";
 import { useReadLocalStorage } from "usehooks-ts";
+import classnames from "classnames";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
     props: context.params,
@@ -40,16 +41,16 @@ const ChatsPage: NextPage<IQuery> = ({ url }) => {
                             <div className="flex flex-row justify-between bg-base-100">
                                 {/* User chat*/}
 
-                                <div
-                                    className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-base-300 pb-4">
+                                <div className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-base-300 pb-4">
                                     {NFTs &&
                                         NFTs.map((nft, index) => (
                                             <button
-                                                className={
+                                                className={classnames(
+                                                    "flex flex-row py-4 px-2 justify-center items-center",
                                                     activeChat === nft.tokenAddress
-                                                        ? "chat-button border-l-4 border-primary"
-                                                        : "chat-button cursor-pointer disabled:cursor-not-allowed disabled:text-base-content/50"
-                                                }
+                                                        ? "border-l-4 border-primary"
+                                                        : "cursor-pointer disabled:cursor-not-allowed disabled:text-base-content/50"
+                                                )}
                                                 key={index}
                                                 type={"button"}
                                                 onClick={(e) => {

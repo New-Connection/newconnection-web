@@ -17,7 +17,7 @@ export const ProposalCard = ({
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
     return (
-        <div className="rounded-2xl bg-base-200 cursor-pointer active:bg-base-300 justify-between py-4 px-6">
+        <div className="rounded-2xl bg-base-300 cursor-pointer active:bg-base-300 justify-between py-4 px-6">
             <div className="flex justify-between pb-6">
                 <p className="font-medium text-xl">{title}</p>
                 <div>
@@ -56,9 +56,9 @@ export const ProposalActivityBadge = ({ isActive }) => {
     return (
         <div>
             {isActive ? (
-                <p className="text-success bg-base-300 px-5 py-0.5 rounded-full">Active</p>
+                <p className="badge-active mr-0 px-5 py-0.5 rounded-full">Active</p>
             ) : (
-                <p className="text-error bg-base-300 px-5 py-0.5 rounded-full">Closed</p>
+                <p className="badge-non-active mr-0 px-5 py-0.5 rounded-full">Closed</p>
             )}
         </div>
     );
@@ -119,9 +119,7 @@ export const VotingCounter = ({ counter, option }: IVotingCounter) => {
     return (
         <div className="text-center">
             <div className="indicator relative px-5 py-3 text-base-content">
-                <p className="text-2xl font-light">
-                    {counter}
-                </p>
+                <p className="text-2xl font-light">{counter}</p>
                 <span
                     className={classNames(
                         "indicator-item badge badge-xs",

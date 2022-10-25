@@ -28,7 +28,7 @@ export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButt
                         {currentNFT.tokenRequestApproved ? (
                             <button
                                 className={classNames(
-                                    "secondary-button",
+                                    "main-button",
                                     buttonState === "Success" && "bg-success",
                                     buttonState === "Error" && "bg-error"
                                 )}
@@ -37,7 +37,7 @@ export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButt
                                 {buttonState}
                             </button>
                         ) : currentNFT.tokenRequestedByMember ? (
-                            <button className={"secondary-button disabled:bg-base-300"} disabled>
+                            <button className={"main-button disabled:bg-base-300"} disabled>
                                 Confirmation awaited
                             </button>
                         ) : (
@@ -46,7 +46,7 @@ export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButt
                                     pathname: `${DAO.url}/add-new-member`,
                                 }}
                             >
-                                <button className={"secondary-button"}>Send request</button>
+                                <button className={"main-button"}>Send request</button>
                             </Link>
                         )}
                     </div>
@@ -115,14 +115,11 @@ export const ContributeTreasuryDialog = ({
                 />
                 <div className={"flex justify-center"}>
                     {!sending ? (
-                        <button
-                            disabled={+contributeAmount === 0}
-                            className="secondary-button h-12 mt-4 mb-2 gradient-btn-color transition delay-150 hover:reverse-gradient-btn-color"
-                        >
+                        <button disabled={+contributeAmount === 0} className="main-button h-12 mt-4 mb-2">
                             Send
                         </button>
                     ) : (
-                        <div className={"flex mt-4 gap-2"}>
+                        <div className={"flex mt-6 gap-2"}>
                             <div className={"w-7"}>
                                 <SpinnerLoading />
                             </div>
@@ -144,7 +141,7 @@ export const CreateTreasuryDialog = ({ dialog, DAO, createTreasuryStep }: ICreat
                 <CopyTextButton copyText={DAO.treasuryAddress} />
             </div>
             <button
-                className="form-submit-button"
+                className="dialog-button"
                 onClick={() => {
                     dialog.toggle();
                 }}

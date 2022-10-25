@@ -14,7 +14,7 @@ export const CreateDaoDialog = ({ dialog, formData, activeStep }: ICreateDaoDial
             </div>
             <Link href={`/daos/${formData.url}`}>
                 <button
-                    className="form-submit-button"
+                    className="dialog-button"
                     onClick={() => {
                         dialog.toggle();
                     }}

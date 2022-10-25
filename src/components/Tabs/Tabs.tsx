@@ -33,8 +33,8 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
                                 <button
                                     className={
                                         selectedTab === tab.index
-                                            ? "tab tab-lg tab-bordered border-primary   w-36  pb-4 text-primary/80"
-                                            : "tab tab-lg tab-bordered border-transparent  w-36  pb-4 focus:border-primary/50 focus:text-primary/50 hover:border-primary/50 hover:text-primary/50"
+                                            ? "tab tab-lg tab-bordered border-primary w-36 pb-4 text-gray-400"
+                                            : "tab tab-lg tab-bordered border-transparent w-36 pb-4 text-gray-400 focus:border-primary/50 hover:border-primary/50 hover:text-gray-400"
                                     }
                                     onClick={() => onClick(tab.index)}
                                     key={tab.index}
@@ -51,10 +51,7 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
                 </div>
                 <div className={classNames("add-prop-button mt-4 md:mt-0", selectedTab === 0 ? "block" : "hidden")}>
                     <Link href={url}>
-                        <button
-                            className={"secondary-button"}
-                            disabled={!isLoaded}
-                        >
+                        <button className={"main-button"} disabled={!isLoaded}>
                             Add new proposal
                         </button>
                     </Link>

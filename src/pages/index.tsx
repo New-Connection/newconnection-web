@@ -75,7 +75,7 @@ const Home: NextPage = () => {
                 <div className="flex justify-between my-7">
                     <p className="font-bold text-xl">{title}</p>
                     <Link href="./create-new-dao">
-                        <button className="secondary-button">Create DAO</button>
+                        <button className="main-button">Create DAO</button>
                     </Link>
                 </div>
                 {isFirstTime ? <p>We suggest you take a look at DAO or create your own</p> : <></>}
@@ -114,8 +114,9 @@ const Home: NextPage = () => {
                 </div>
                 <div className="text-center my-32">
                     <p>No proposals here</p>
-                    <p className="text-base-content/50">You should first join a DAO or create a new DAO to add a
-                        proposal</p>
+                    <p className="text-base-content/50">
+                        You should first join a DAO or create a new DAO to add a proposal
+                    </p>
                 </div>
             </div>
         );
@@ -140,8 +141,9 @@ const Home: NextPage = () => {
                 </div>
                 <div className="text-center my-32">
                     <p>No NFTs here</p>
-                    <p className="text-base-content/50">You should first join a DAO and get NFT from its
-                        administrator</p>
+                    <p className="text-base-content/50">
+                        You should first join a DAO and get NFT from its administrator
+                    </p>
                 </div>
             </>
         );

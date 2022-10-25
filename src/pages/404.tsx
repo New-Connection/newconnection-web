@@ -14,7 +14,7 @@ const Page404: NextPage = () => {
                         <h1 className="text-highlighter">{"We couldn't find this page :("}</h1>
                         <div className="flex items-center justify-center">
                             <Link href="/">
-                                <Button className="mt-10 lg:w-1/3 w-full h-14 secondary-button">Back to home</Button>
+                                <Button className="mt-10 lg:w-1/3 w-full h-14 main-button">Back to home</Button>
                             </Link>
                         </div>
                     </div>

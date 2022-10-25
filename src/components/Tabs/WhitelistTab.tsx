@@ -39,8 +39,7 @@ export const WhitelistTab = ({ whitelist, isLoaded, addToWhitelist }: IWhitelist
                 const note = wl.note;
                 const blockchainSelected = wl.blockchainSelected;
                 return (
-                    <div className="grid grid-cols-7 items-center px-4 py-2 bg-base-200 rounded-2xl"
-                         key={index}>
+                    <div className="grid grid-cols-7 items-center px-4 py-2 bg-base-300 rounded-2xl" key={index}>
                         <div>{<CopyTextButton copyText={walletAddress} />}</div>
                         <div className={"justify-self-center"}>{renderValue(blockchainSelected[0])}</div>
                         <div className={"justify-self-center"}>{votingTokenName}</div>

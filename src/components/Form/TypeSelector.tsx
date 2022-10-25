@@ -33,11 +33,11 @@ export const TypeSelector = ({ name, label, className, handleChange }: ISelector
                     className="input-selector flex flex-col overflow-auto overscroll-contain pt-4 pb-4 data-focus-visible focus-visible:ring focus:outline-none text-slate-500"
                 >
                     {types.map((type) => (
-                        <label key={type.toUpperCase()} className="input-label-selector">
+                        <label key={type.toUpperCase()} className="text-base text-base-content">
                             <SelectItem
                                 key={type}
                                 value={type}
-                                className="input-selector btn-state border-0 flex cursor-default scroll-m-2 items-center py-3"
+                                className="input-selector btn-primary border-0 flex cursor-default scroll-m-2 items-center py-3"
                                 setValueOnClick={handleChange}
                             >
                                 {type}
