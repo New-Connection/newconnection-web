@@ -31,7 +31,7 @@ export interface IProposalCard {
     description?: string;
     governorName?: string;
     blockchain?: string[];
-    isActive?: boolean;
+    proposalState?: number;
     forVotes?: string;
     againstVotes?: string;
     deadline?: number;
@@ -48,7 +48,7 @@ export interface IInformationCard {
 }
 
 export interface IVotingCounter {
-    counter: string,
+    counter: string;
     option: "Against" | "For";
 }
 
