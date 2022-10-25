@@ -416,7 +416,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 <button
                                     className={classNames(
                                         isLoaded
-                                            ? "main-button border-none gradient-btn-color hover:bg-gradient-to-tl w-full"
+                                            ? "btn-gradient main-button w-full border-none"
                                             : "main-button h-full w-full",
                                         DAO.treasuryAddress && "rounded-2xl h-full"
                                     )}
