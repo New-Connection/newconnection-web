@@ -103,7 +103,7 @@ export const InputTextArea = ({
                 <span className="input-label">{label}</span>
             </label>
             <textarea
-                className={classNames("textarea input-field", height ? height : "h-28")}
+                className={classNames("textarea input-field resize-none", height ? height : "h-28")}
                 name={name}
                 required={isRequired}
                 autoComplete="off"
