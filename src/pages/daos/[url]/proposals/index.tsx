@@ -1,26 +1,26 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import Layout, { BackButton, MockupLoadingProposals, ProposalCard } from "components";
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { IDAOPageForm, IProposalPageForm, IProposalsQuery } from "types";
-import { useRouter } from "next/router";
+import { useState } from "react";
+import { IDAOPageForm, IProposalPageForm, IQuery } from "types";
+import { useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 
-const ProposalsPage: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const ProposalsPage: NextPage<IQuery> = ({ url }) => {
     const [DAO, setDAO] = useState<IDAOPageForm>();
     const [proposals, setProposals] = useState<IProposalPageForm[]>();
-    const router = useRouter();
 
-    useEffect(() => {
-        const fetchQuery = () => {
-            const query = router.query as IProposalsQuery;
+    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
+    const storageProposals = useReadLocalStorage<IProposalPageForm[]>(`${url} Proposals`);
 
-            setDAO(JSON.parse(localStorage.getItem(query.url)));
-            setProposals(JSON.parse(localStorage.getItem(query.url + " Proposals")));
-        };
-
-        fetchQuery();
-    }, [router]);
+    useEffectOnce(() => {
+        setDAO(storageDao);
+        setProposals(storageProposals);
+    });
 
     return (
         proposals &&
@@ -31,19 +31,16 @@ const ProposalsPage: NextPage = () => {
                         <BackButton />
                         <div className="text-highlighter items-center flex flex-col md:flex-row">
                             Proposals for
-                            <div className={"text-highlighter text-purple capitalize md:ml-4"}>{`${DAO.url}`}</div>
+                            <div className={"text-highlighter text-primary capitalize md:ml-4"}>{`${DAO.url}`}</div>
                         </div>
 
                         {proposals && proposals.length !== 0 ? (
-                            <ul>
+                            <ul className={"mt-4 flex flex-col gap-4"}>
                                 {proposals.map((proposal) => {
                                     const proposalId = proposal.proposalId;
                                     return (
                                         <Link href={`../${DAO.url}/proposals/${proposalId}`} key={proposalId}>
-                                            <li
-                                                key={proposalId}
-                                                className="border-b-2 border-gray cursor-pointer active:bg-gray"
-                                            >
+                                            <li key={proposalId}>
                                                 <ProposalCard
                                                     title={proposal.name}
                                                     description={proposal.description}
@@ -51,7 +48,7 @@ const ProposalsPage: NextPage = () => {
                                                     tokenName={proposal.tokenName}
                                                     // governorName={DAO?.name}
                                                     chainId={DAO.chainId}
-                                                    isActive={proposal.isActive}
+                                                    proposalState={proposal.proposalState}
                                                     forVotes={proposal.forVotes}
                                                     againstVotes={proposal.againstVotes}
                                                     deadline={proposal.endDateTimestamp}

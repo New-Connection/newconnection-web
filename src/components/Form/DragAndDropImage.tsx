@@ -3,11 +3,10 @@ import ASSETS from "assets/index";
 import Image from "next/image";
 import { IDragAndDropProps } from "./types";
 import { useState } from "react";
+import classNames from "classnames";
 
 const fileTypes = ["JPEG", "PNG", "JPG"];
 
-// Maybe change the next time: https://react-dropzone.js.org/
-// Tutorial: https://blog.openreplay.com/create-a-drag-and-drop-zone-in-react-with-react-dropzone
 export const DragAndDropImage = ({
     label,
     name,
@@ -15,11 +14,13 @@ export const DragAndDropImage = ({
     multipleFiles = false,
     hoverTitle = "Drag and drop file here",
     handleChange,
+    height,
     ...props
 }: IDragAndDropProps) => {
     const [file, setFile] = useState<File | null>(null);
     const [error, setError] = useState<boolean>(false);
     const [errorMessages, setErrorMessages] = useState<string | undefined>();
+    const [preview, setPreview] = useState("");
 
     const onTypeError = (err = 1) => {
         setErrorMessages(err.toString());
@@ -32,10 +33,13 @@ export const DragAndDropImage = ({
     const localHandleChange = (file: File) => {
         setFile(file);
         setError(false);
+        setPreview(() => URL.createObjectURL(file));
     };
     return (
-        <div className={className}>
-            <div className="input-label">{label}</div>
+        <div className={classNames(className, "h-full w-full")}>
+            <label className="label">
+                <span className="input-label">{label}</span>
+            </label>
             <FileUploader
                 hoverTitle={hoverTitle}
                 multiple={multipleFiles}
@@ -52,26 +56,34 @@ export const DragAndDropImage = ({
                 {...props}
             >
                 <div
-                    className="flex flex-col 
-                    justify-center content-center items-center text-center
-                    h-60 
-                    border-dashed rounded-md border-2 
-                    border-[#F2F4F4] hover:border-[#6858CB] focus:text-white"
+                    className={classNames(
+                        "flex flex-col max-h-80 text-center border-dashed rounded-md border-2 justify-center border-base-200 hover:border-primary focus:text-base-content",
+                        height
+                    )}
                 >
                     {error ? (
-                        <p className="text-red mt-1">Error: {errorMessages}</p>
+                        <p className="text-error mt-1">Error: {errorMessages}</p>
                     ) : (
                         <>
                             {file ? (
-                                <div>
-                                    <p className="text-purple mt-1">File is accepted.</p>
-                                    <p>File name: {file?.name} ✅</p>
+                                <div className={"flex flex-col h-full w-full p-3"}>
+                                    <div className={"w-full h-full overflow-hidden relative"}>
+                                        <Image src={preview} layout={"fill"} />
+                                    </div>
+                                    <div>
+                                        <p className="text-primary mt-1">File is accepted ✅</p>
+                                        <p className={"truncate"}>File name: {file?.name}</p>
+                                    </div>
                                 </div>
                             ) : (
-                                <>
-                                    <Image src={ASSETS.imageIcon} width={"50"} height={"50"} />
-                                    <p className="text-gray2 mt-6 text-sm px-4">PNG, JPEG and JPG accept. Max 1mb.</p>
-                                </>
+                                <div className={"flex flex-col"}>
+                                    <div>
+                                        <Image src={ASSETS.imageIcon} width={"50"} height={"50"} />
+                                    </div>
+                                    <p className="text-base-content/50 mt-6 text-sm px-4">
+                                        PNG, JPEG and JPG accept. Max 1mb.
+                                    </p>
+                                </div>
                             )}
                         </>
                     )}

@@ -1,3 +1,2 @@
-export * from "./fetch";
-export * from "./moralisObjects";
+export * from "./config";
 export * from "./functions";

@@ -1,23 +1,28 @@
 import { formatAddress } from "utils";
-import { CheckIcon, ClipboardCopyIcon } from "@heroicons/react/solid";
-import React, { useState } from "react";
+import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
+import React from "react";
+import { useBoolean, useCopyToClipboard } from "usehooks-ts";
 
 export const CopyTextButton = ({ copyText }) => {
-    const [isCopied, setIsCopied] = useState(false);
+    const { value: isCopied, setTrue, setFalse } = useBoolean();
+    const [, copy] = useCopyToClipboard();
 
     const handleClick = () => {
-        setIsCopied(true);
-        navigator.clipboard.writeText(copyText).then().catch();
+        setTrue();
+        copy(copyText).then();
 
         setTimeout(() => {
-            setIsCopied(false);
+            setFalse();
         }, 500);
     };
 
     return (
-        <div className={"flex text-lightGray hover:text-gray5 hover:cursor-pointer"} onClick={handleClick}>
+        <div
+            className={"flex text-base-content items-center hover:text-base-content/50 hover:cursor-pointer"}
+            onClick={handleClick}
+        >
             {formatAddress(copyText)}
-            {isCopied ? <CheckIcon className="h-6 w-5" /> : <ClipboardCopyIcon className="h-6 w-5" />}
+            {isCopied ? <CheckIcon className="h-6" /> : <ClipboardIcon className="h-6" />}
         </div>
     );
 };

@@ -7,8 +7,6 @@ import Layout, {
     AboutProposalCard,
     BackButton,
     Button,
-    handleNext,
-    handleReset,
     InfoProposalCard,
     MockupLoadingProposals,
     ProposalActivityBadge,
@@ -20,6 +18,7 @@ import { handleContractError, handleTextChangeAddNewMember, validateForm } from 
 import { IDetailProposalProps, IDetailProposalQuery, IProposal, IProposalDetail, IProposalPageForm } from "types";
 import { castVote, checkCorrectNetwork, getProposer, proposalSnapshot } from "interactions/contract";
 import { useRouter } from "next/router";
+import { useCounter, useReadLocalStorage } from "usehooks-ts";
 
 export const getServerSideProps: GetServerSideProps<IDetailProposalProps, IDetailProposalQuery> = async (context) => {
     const { detailProposal } = context.params as IDetailProposalQuery;
@@ -36,20 +35,18 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         voteResult: undefined,
         txConfirm: "",
     });
-
-    const [proposalData, setProposalData] = useState<IProposalDetail>();
-
     const { data: signerData } = useSigner();
+    const { switchNetwork } = useSwitchNetwork();
+    const [proposalData, setProposalData] = useState<IProposalDetail>();
+    const confirmDialog = useDialogState();
+    const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
 
     const router = useRouter();
-    const { switchNetwork } = useSwitchNetwork();
-
-    const confirmDialog = useDialogState();
-    const [activeStep, setActiveStep] = useState(0);
+    const url = (router.query as IDetailProposalQuery).url;
+    const storageProposals = useReadLocalStorage<IProposalPageForm[]>(`${url} Proposals`);
 
     useEffect(() => {
-        const query = router.query;
-        const savedProposals: IProposalPageForm[] = JSON.parse(localStorage.getItem(query.url + " Proposals"));
+        const savedProposals: IProposalPageForm[] = storageProposals;
 
         const loadingProposal = async () => {
             if (savedProposals) {
@@ -87,7 +84,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         if (!validateForm(formData, ["name", "txConfirm"])) {
             return;
         }
-        handleReset(setActiveStep);
+        resetActiveStep();
         confirmDialog.toggle();
         try {
             const tx = await castVote(proposalData!.governorAddress, signerData, detailProposal, formData!.voteResult);
@@ -96,7 +93,9 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         } catch (e: any) {
             handleContractError(e, { dialog: confirmDialog });
         }
-        handleNext(setActiveStep, 3);
+        incrementActiveStep();
+        incrementActiveStep();
+        incrementActiveStep();
     }
 
     return proposalData ? (
@@ -107,7 +106,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                         <BackButton />
                         <div className="flex justify-between">
                             <h1 className="text-highlighter capitalize w-1/2">{proposalData.name}</h1>
-                            <ProposalActivityBadge isActive={proposalData.isActive} />
+                            <ProposalActivityBadge isActive={proposalData.proposalState} />
                         </div>
                         <p className="pb-4">{proposalData.shortDescription}</p>
                         <div className="flex gap-6 pb-10">

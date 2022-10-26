@@ -1,8 +1,15 @@
 import React from "react";
+import classNames from "classnames";
 
-export const TwitterIcon = ({ width = "23", height = "20", fill = "none" }) => {
+export const TwitterIcon = ({ width = "23", height = "20", className = "" }) => {
     return (
-        <svg width={width} height={height} viewBox="0 0 23 20" fill={fill} xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            height={height}
+            viewBox="0 0 23 20"
+            className={classNames("fill-base-content", className)}
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 d="M15.7404 0.5C12.9894 0.5 10.7523 2.72375 10.7523 5.45833C10.7523 5.62265 10.7936 5.78341 10.8098 5.94416C7.40832 5.62087 4.40035 3.99191 
                 2.3573 1.50024C2.26207 1.38057 2.11472 1.31627 1.96019 1.32698C1.80746 1.3377 1.67089 1.42522 1.59543 1.5574C1.16597 2.2915 0.919801 3.13634 0.919801 
@@ -24,7 +31,6 @@ export const TwitterIcon = ({ width = "23", height = "20", fill = "none" }) => {
                 8.259C3.58816 8.2715 3.77863 8.14111 3.84332 7.94285C3.908 7.74459 3.82894 7.52668 3.65105 7.41594C2.55855 6.68898 1.8398 5.45118 1.8398 4.0437C1.8398 3.52215 
                 1.97636 3.04346 2.15605 2.58621C4.45605 5.09574 7.67605 6.76221 11.3129 6.9444C11.4567 6.95154 11.5968 6.8926 11.6903 6.78364C11.7837 6.6729 11.8196 6.52644 
                 11.7873 6.38712C11.7172 6.09062 11.6723 5.77626 11.6723 5.45833C11.6723 3.21851 13.4871 1.4145 15.7404 1.4145Z"
-                fill="#322F37"
             />
         </svg>
     );

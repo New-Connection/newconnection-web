@@ -1,6 +1,5 @@
 module.exports = {
     content: ["./src/pages/**/*.{js,ts,jsx,tsx}", "./src/components/**/*.{js,ts,jsx,tsx}"],
-    darkMode: "class",
     theme: {
         screens: {
             sm: "480px",
@@ -10,36 +9,31 @@ module.exports = {
         },
 
         extend: {
-            colors: {
-                // primary colors
-                purple: "#7343DF",
-                gray: "#F2F3F4",
-                white: "#FFFFFF",
-                graySupport: "#666666",
-                // text
-                black: "#1C1823",
-                black2: "#322F37",
-                gray2: "#AAAAAA",
-                gray3: "#CCCCCC",
-                // additional colors
-                yellow: "#F8E155",
-                pink: "#EF5390",
-                lilac: "#E3D9F9",
-                darkBlue: "#1E1E30", //70% transparent
-                gray5: "#AAAAAB", // 50% transparent
-                lightGray: "#CECECE",
-                // button
-                btnHover: "#5E37B5",
-                btnActive: "#885CEB",
-                btnDisabled: "#E0E0E0",
-                // Alert
-                green: "#54A547",
-                red: "#EB4747",
-            },
             fontFamily: {
                 sans: [""],
             },
         },
     },
-    plugins: [require("@tailwindcss/line-clamp")],
+    plugins: [require("@tailwindcss/line-clamp"), require("daisyui")],
+    daisyui: {
+        themes: [ 
+        {
+        light: {
+          primary: "#7343DF",           // PURPLE - Main color
+          "primary-focus": "#5E37B5",   // PURPLE Hover
+          neutral: "#000000",           // BLACK - close button and header 
+          success: "#54A547",           // GREEN
+          warning: "#F8E155",           // YELLOW 
+          error: "#EB4747",             // RED 
+          "neutral-content": "#F2F3F4", // GRAY (BADGE)
+          "base-100": "#FFFFFF",        // WHITE
+          "base-200": "#F2F3F4"  ,       // GRAY (Bg)
+          "base-300": "#AAAAAA",        // DARK GRAY(For badges on GRAY)
+        }, 
+        dark: {
+            ...require("daisyui/src/colors/themes")["[data-theme=dark]"],
+            primary: "#7343DF",          // PURPLE
+            neutral: "#FFFFFF",          // WHITE
+        }},],
+    },
 };

@@ -2,13 +2,14 @@ import { timestampToDate } from "utils";
 import { BlockchainIcon, CopyTextButton } from "components";
 import React from "react";
 import classNames from "classnames";
-import { ICardProposal, IInformationCard, IProposalCard } from "./cardsInterfaces";
+import { ICardProposal, IInformationCard, IProposalCard, IVotingCounter } from "./cardsInterfaces";
+import { ProposalState } from "interactions/contract";
 
 export const ProposalCard = ({
     title,
     shortDescription,
     tokenName,
-    isActive,
+    proposalState,
     chainId,
     forVotes,
     againstVotes,
@@ -17,17 +18,17 @@ export const ProposalCard = ({
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
     return (
-        <div className="h-56 py-5 justify-between">
+        <div className="rounded-2xl bg-base-200 cursor-pointer active:bg-base-200 justify-between py-4 px-6">
             <div className="flex justify-between pb-6">
                 <p className="font-medium text-xl">{title}</p>
                 <div>
                     <div className="flex gap-5">
-                        {isActive && (
+                        {proposalState && (
                             <p className="hidden md:block font-light text-sm pt-1">
                                 Ends {timestampToDate(deadline || 0)}
                             </p>
                         )}
-                        <ProposalActivityBadge isActive={isActive} />
+                        <ProposalActivityBadge isActive={proposalState} />
                     </div>
                 </div>
             </div>
@@ -36,7 +37,7 @@ export const ProposalCard = ({
                     <p className="w-full h-24 font-normal line-clamp-3">{shortDescription}</p>
                     <div className="flex gap-5">
                         <div className="flex gap-5">
-                            <p className="text-gray3">For</p>
+                            <p className="text-base-content/50">For</p>
                             <p className="font-medium">{tokenName}</p>
                         </div>
                         <BlockchainIcon chain={chainId} />
@@ -44,33 +45,23 @@ export const ProposalCard = ({
                 </div>
 
                 <div className="hidden md:flex gap-10 items-left justify-between pt-1">
-                    <div className="text-center">
-                        <div className="relative px-5 py-3 text-black">
-                            <p className="text-2xl font-light">{forV}</p>
-                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
-                        </div>
-                        <p>{"In favor"}</p>
-                    </div>
-                    <div className="text-center">
-                        <div className="relative px-5 py-3 text-black">
-                            <p className="text-2xl font-light">{againstV}</p>
-                            <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
-                        </div>
-                        <p>{"Against"}</p>
-                    </div>
+                    <VotingCounter counter={forV.toString()} option={"For"} />
+                    <VotingCounter counter={againstV.toString()} option={"Against"} />
                 </div>
             </div>
         </div>
     );
 };
 
-export const ProposalActivityBadge = ({ isActive }) => {
+export const ProposalActivityBadge = ({ isActive: proposalState }) => {
     return (
         <div>
-            {isActive ? (
-                <p className="text-green bg-gray px-5 py-0.5 rounded-full">Active</p>
+            {proposalState === ProposalState.Active ? (
+                <p className="text-primary bg-base-300 px-5 py-0.5 rounded-full">Active</p>
+            ) : proposalState === ProposalState.Succeeded ? (
+                <p className="text-success bg-base-300 px-5 py-0.5 rounded-full">Succeeded</p>
             ) : (
-                <p className="text-red bg-gray px-5 py-0.5 rounded-full">Closed</p>
+                <p className="text-error bg-base-300 px-5 py-0.5 rounded-full">Failed</p>
             )}
         </div>
     );
@@ -78,8 +69,8 @@ export const ProposalActivityBadge = ({ isActive }) => {
 
 const DetailProposalCard = ({ title, children, className }: ICardProposal) => {
     return (
-        <div className={classNames("w-full h-64 border-2 border-gray rounded-xl mt-6 p-4", className)}>
-            <p className="text-purple mb-4 text-lg">{title}</p>
+        <div className={classNames("w-full h-64 border-2 border-base-200 rounded-xl mt-6 p-4", className)}>
+            <p className="text-primary mb-4 text-lg">{title}</p>
             <div>{children}</div>
         </div>
     );
@@ -97,7 +88,7 @@ export const InfoProposalCard = ({ proposalData }: IInformationCard) => {
     const InfoRow = ({ name, value }) => {
         return (
             <div className={"flex justify-between"}>
-                <div className={"text-gray2"}>{name}</div>
+                <div className={"text-base-content/50"}>{name}</div>
                 <div>{value}</div>
             </div>
         );
@@ -120,21 +111,26 @@ export const VotingResultsCard = ({ proposalData }: IInformationCard) => {
     return (
         <DetailProposalCard title="Voting Results" className="lg:w-1/3 w-full">
             <div className="flex gap-10 justify-around pt-1">
-                <div className="text-center">
-                    <div className="relative px-5 py-3 text-black">
-                        <p className="text-2xl font-light">{proposalData.forVotes}</p>
-                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
-                    </div>
-                    <p>{"In favor"}</p>
-                </div>
-                <div className="text-center">
-                    <div className="relative px-5 py-3 text-black">
-                        <p className="text-2xl font-light">{proposalData.againstVotes}</p>
-                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
-                    </div>
-                    <p>{"Against"}</p>
-                </div>
+                <VotingCounter counter={proposalData.forVotes} option={"For"} />
+                <VotingCounter counter={proposalData.againstVotes} option={"Against"} />
             </div>
         </DetailProposalCard>
+    );
+};
+
+export const VotingCounter = ({ counter, option }: IVotingCounter) => {
+    return (
+        <div className="text-center">
+            <div className="indicator relative px-5 py-3 text-base-content">
+                <p className="text-2xl font-light">{counter}</p>
+                <span
+                    className={classNames(
+                        "indicator-item badge badge-xs",
+                        option === "Against" ? "badge-error" : "badge-success"
+                    )}
+                ></span>
+            </div>
+            <p>{option}</p>
+        </div>
     );
 };

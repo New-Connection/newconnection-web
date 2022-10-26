@@ -1,5 +1,7 @@
 import { InputAmountProps, InputTextProps } from "./types";
 import Image, { StaticImageData } from "next/image";
+import classNames from "classnames";
+import React from "react";
 
 export const InputAmount = ({
     name,
@@ -7,6 +9,7 @@ export const InputAmount = ({
     labelTitle,
     isRequired,
     className,
+    measure,
     handleChange,
     min,
     max,
@@ -15,14 +18,13 @@ export const InputAmount = ({
     ...props
 }: InputAmountProps) => {
     return (
-        <div className={className}>
-            <label>
-                <div title={labelTitle} className={isDisabled ? "input-label text-gray-400" : "input-label"}>
-                    {label}
-                </div>
+        <div className={classNames(className, "form-control w-full max-w-xl")}>
+            <label className="label">
+                <span className={"input-label"}>{label}</span>
+                {measure && <span className={"text-neutral-content/50"}>{measure}</span>}
             </label>
             <input
-                className={isDisabled ? "input-field cursor-not-allowed" : "input-field"}
+                className={"input-field"}
                 name={name}
                 required={isRequired}
                 autoComplete="off"
@@ -34,7 +36,7 @@ export const InputAmount = ({
                 maxLength={79}
                 spellCheck="false"
                 inputMode="decimal"
-                title="Enter numbers only."
+                title={labelTitle}
                 min={min === 0 ? 0 : min || 1}
                 max={max || 100} //Max number of NFT
                 step={step || 1}
@@ -60,11 +62,9 @@ export const InputText = ({
     ...props
 }: InputTextProps) => {
     return (
-        <div className={className}>
-            <label>
-                <div title={labelTitle} className="input-label">
-                    {label}
-                </div>
+        <div className={classNames(className, "form-control w-full")}>
+            <label className="label">
+                <span className="input-label">{label}</span>
             </label>
             <input
                 className="input-field"
@@ -91,20 +91,19 @@ export const InputTextArea = ({
     labelTitle,
     isRequired,
     className,
+    height,
     handleChange,
     placeholder,
     maxLength,
     ...props
 }: InputTextProps) => {
     return (
-        <div className={className}>
-            <label>
-                <div title={labelTitle} className="input-label mr-2">
-                    {label}
-                </div>
+        <div className={classNames(className, "form-control w-full")}>
+            <label className="label">
+                <span className="input-label">{label}</span>
             </label>
             <textarea
-                className="input-field resize-none h-28"
+                className={classNames("textarea input-field", height ? height : "h-28")}
                 name={name}
                 required={isRequired}
                 autoComplete="off"
@@ -135,15 +134,13 @@ export const InputSupplyOfNFT = ({
     ...props
 }: InputAmountProps) => {
     return (
-        <div className={className}>
-            <label>
-                <div title={labelTitle} className={isDisabled ? "sub-label" : "sub-label text-black"}>
-                    {label}
-                </div>
+        <div className={classNames(className, "form-control w-full max-w-xs")}>
+            <label className="label">
+                <span className="input-label">{label}</span>
             </label>
-            <div className="relative">
+            <div className="relative flex">
                 <input
-                    className={isDisabled ? "input-field cursor-not-allowed" : "input-field"}
+                    className={"input-field w-full mb-0"}
                     name={name}
                     required={isRequired}
                     autoComplete="off"
@@ -163,8 +160,8 @@ export const InputSupplyOfNFT = ({
                     onChange={handleChange}
                     {...props}
                 />
-                <div className="flex absolute inset-y-0 right-0 items-center pr-2  pointer-events-none">
-                    <Image src={image as StaticImageData} height="25" width="25" />
+                <div className="flex absolute w-6 h-6 inset-y-3 right-2  pointer-events-none">
+                    <Image src={image as StaticImageData} />
                 </div>
             </div>
         </div>

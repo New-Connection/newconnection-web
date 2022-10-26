@@ -1,52 +1,32 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
 import { useAccount } from "wagmi";
 import Layout, { BackButton, LockIcon } from "components";
-import { IChatsQuery, IDAOPageForm, INFTVoting } from "types";
+import { INFTVoting, IQuery } from "types";
 import { formatAddress } from "utils";
-import { getNumberOfTokenInOwnerAddress } from "interactions/contract";
+import { useReadLocalStorage } from "usehooks-ts";
+import classnames from "classnames";
 
-const ChatsPage: NextPage = () => {
-    const router = useRouter();
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const ChatsPage: NextPage<IQuery> = ({ url }) => {
     const { address } = useAccount();
 
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
-    const [ownedTokenAddresses, setOwnedTokenAddresses] = useState([]);
 
     const [activeChat, setActiveChat] = useState(null);
     const [isChatOpen, setChatOpen] = useState(false);
 
+    const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
+
     useEffect(() => {
-        const query = router.query as IChatsQuery;
-        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
-        const savedNfts: INFTVoting[] = JSON.parse(localStorage.getItem(query.url + " NFTs"));
-
-        const checkNFTs = async (tokenAddresses: string[], walletAddress: string, chainId: number) => {
-            const newTokenAddresses = [];
-            await Promise.all(
-                tokenAddresses.map(async (token) => {
-                    if (+(await getNumberOfTokenInOwnerAddress(walletAddress, token, chainId)) > 0) {
-                        newTokenAddresses.push(token);
-                    }
-                })
-            );
-            console.log("owned NFTs " + newTokenAddresses);
-            setOwnedTokenAddresses(() => newTokenAddresses);
-        };
-
-        if (DAO && savedNfts) {
-            const chainId = DAO.chainId;
-
-            setNFTs(savedNfts);
-            checkNFTs(
-                savedNfts.map((NFT) => NFT.tokenAddress),
-                address,
-                chainId
-            ).catch(console.error);
-        }
-    }, [router, address]);
+        console.log("fetch");
+        storageNFTs && setNFTs(storageNFTs);
+    }, [address]);
 
     return (
         <div>
@@ -57,20 +37,20 @@ const ChatsPage: NextPage = () => {
                         <div className="flex justify-between items-center">
                             <h1 className="text-highlighter">Membership chats</h1>
                         </div>
-                        <div className="container mx-auto rounded-lg border-t border-[#ccc]">
-                            <div className="flex flex-row justify-between bg-white">
+                        <div className="container mx-auto rounded-lg border-t border-base-200">
+                            <div className="flex flex-row justify-between bg-base-100">
                                 {/* User chat*/}
 
-                                <div
-                                    className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-gray pb-4">
+                                <div className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-base-200 pb-4">
                                     {NFTs &&
                                         NFTs.map((nft, index) => (
                                             <button
-                                                className={
+                                                className={classnames(
+                                                    "flex flex-row py-4 px-2 justify-center items-center",
                                                     activeChat === nft.tokenAddress
-                                                        ? "chat-button border-l-4 border-purple"
-                                                        : "chat-button cursor-pointer disabled:cursor-not-allowed disabled:text-gray2"
-                                                }
+                                                        ? "border-l-4 border-primary"
+                                                        : "cursor-pointer disabled:cursor-not-allowed disabled:text-base-content/50"
+                                                )}
                                                 key={index}
                                                 type={"button"}
                                                 onClick={(e) => {
@@ -78,13 +58,13 @@ const ChatsPage: NextPage = () => {
                                                     setActiveChat(() => nft.tokenAddress);
                                                     setChatOpen(true);
                                                 }}
-                                                disabled={!ownedTokenAddresses.includes(nft.tokenAddress)}
+                                                disabled={nft.tokenMintedByMember <= 0}
                                             >
                                                 <div className="w-full">
                                                     <div className="text-lg font-semibold">{nft.title}</div>
-                                                    {/*<span className="text-gray-500">DAO members</span>*/}
+                                                    {/*<span className="text-base-content/50">DAO members</span>*/}
                                                 </div>
-                                                {!ownedTokenAddresses.includes(nft.tokenAddress) && <LockIcon />}
+                                                {nft.tokenMintedByMember <= 0 && <LockIcon />}
                                             </button>
                                         ))}
                                 </div>

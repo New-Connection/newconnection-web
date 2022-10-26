@@ -4,8 +4,6 @@ import Layout, {
     Button,
     CreateNftDialog,
     DragAndDropImage,
-    handleNext,
-    handleReset,
     InputAmount,
     InputSupplyOfNFT,
     InputText,
@@ -27,13 +25,14 @@ import {
 import { useDialogState } from "ariakit";
 import {
     chainIds,
-    CHAINS,
     checkCorrectNetwork,
     deployNFTContract,
+    getChain,
     getChainNames,
     getLogoURI,
     layerzeroEndpoints,
 } from "interactions/contract";
+import { useCounter } from "usehooks-ts";
 
 const CreateNFT: NextPage = () => {
     const [formData, setFormData] = useState<ICreateNFT>({
@@ -48,18 +47,9 @@ const CreateNFT: NextPage = () => {
     });
     const { data: signerData } = useSigner();
     const confirmDialog = useDialogState();
-    const [activeStep, setActiveStep] = useState(0);
+    const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
 
     const { switchNetwork } = useSwitchNetwork();
-
-    const calculateSupply = () => {
-        return formData[
-            getChainNames().find((chain) => {
-                const supply = formData[chain];
-                return supply !== 0 && supply !== "" && supply !== undefined;
-            })
-        ];
-    };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -68,28 +58,29 @@ const CreateNFT: NextPage = () => {
             return;
         }
 
-        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))) {
+        if (!(await checkCorrectNetwork(signerData, getChain(formData.blockchain).id, switchNetwork))) {
             return;
         }
 
-        handleReset(setActiveStep);
+        resetActiveStep();
+
         // SHOW DIALOG
         confirmDialog.toggle();
 
-        let path;
-        // IPFS UPLOAD
+        const calculateSupply = () => {
+            return formData[
+                getChainNames().find((chain) => {
+                    const supply = formData[chain];
+                    return supply !== 0 && supply !== "" && supply !== undefined;
+                })
+            ];
+        };
+
         try {
-            path = await storeNFT(formData.file as File);
+            const path = await storeNFT(formData.file as File);
             console.log("path " + path);
             handleChangeBasic(path, setFormData, "ipfsAddress");
-        } catch (error) {
-            handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
-            return;
-        }
 
-        // UPLOAD NFT CONTRACT
-        try {
             const chainId = await signerData.getChainId();
             const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
@@ -103,91 +94,96 @@ const CreateNFT: NextPage = () => {
                 startMintId: 0,
                 endMintId: calculateSupply(),
             });
-            handleNext(setActiveStep);
+            incrementActiveStep();
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            handleNext(setActiveStep);
-            handleNext(setActiveStep);
+            incrementActiveStep();
+            incrementActiveStep();
             handleChangeBasic(contract.address, setFormData, "contractAddress");
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
-            return;
+            resetActiveStep();
         }
     }
 
     return (
         <div>
             <Layout className="layout-base">
-                <BackButton />
                 <section className="relative w-full">
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
+                        <BackButton />
                         <h1 className="text-highlighter">Add NFT</h1>
-                        <div className="w-full lg:flex">
-                            <div className="lg:w-2/3 w-full">
+                        <div className={"grid grid-cols-2"}>
+                            <div className={"grid grid-flow-row"}>
                                 <InputText
                                     label="Name"
                                     name="name"
+                                    className={"max-w-2xl"}
                                     placeholder="NFT Name"
                                     handleChange={(event) => handleTextChange(event, setFormData)}
                                 />
                                 <InputTextArea
                                     label="Description"
                                     name="description"
+                                    className={"max-w-2xl"}
                                     placeholder="A short description about NFT collection(Max. 250 words)"
                                     maxLength={2000}
                                     handleChange={(event) => handleTextChange(event, setFormData)}
                                 />
-                                <div className="flex justify-between gap-10">
+                                <div className="grid grid-cols-2 gap-10">
                                     <InputText
                                         label="Symbol"
                                         name="symbol"
                                         placeholder="Short NFT name"
+                                        className={"max-w-sm"}
                                         handleChange={(event) => {
                                             handleTextChange(event, setFormData);
                                         }}
-                                        className="w-1/2"
+                                        // className="w-1/2"
                                     />
                                     <InputAmount
                                         label="Price"
                                         placeholder="Price in ETH"
                                         name="price"
+                                        // measure={"ETH"}
                                         handleChange={(event) => handleTextChange(event, setFormData)}
-                                        className="w-full"
+                                        // className="w-full"
                                         min={0}
                                         step={0.0001}
                                         max={10}
                                     />
                                 </div>
-
-                                <label>
-                                    <div className="input-label"> NFT Supply</div>
-                                </label>
-                                <div className="grid w-full grid-cols-4 gap-4">
-                                    {getChainNames().map((chain) => (
-                                        // chain === "Polygon" ? (
-                                        <InputSupplyOfNFT
-                                            key={chain}
-                                            label={chain}
-                                            name={chain}
-                                            image={getLogoURI(chain)}
-                                            handleChange={(event) => {
-                                                handleNftSupplyChange(event, setFormData, chain, "blockchain");
-                                            }}
-                                            isDisabled={chain !== formData.blockchain && formData.blockchain !== ""}
-                                        />
-                                    ))}
-                                </div>
                             </div>
-                            <div className="lg:w-1/3 lg:ml-10">
+                            <div className={"flex"}>
+                                <div className="divider divider-horizontal" />
                                 <DragAndDropImage
+                                    height={"h-full"}
                                     label="Image"
                                     name="file"
                                     handleChange={(file) => handleImageChange(file, setFormData, "file")}
                                 />
                             </div>
                         </div>
-                        <Button className="mt-5 w-2/3">Create Contract</Button>
+
+                        <label className="label">
+                            <span className="input-label">NFT Supply</span>
+                        </label>
+                        <div className="grid w-full grid-cols-3 gap-4">
+                            {getChainNames().map((chain) => (
+                                // chain === "Polygon" ? (
+                                <InputSupplyOfNFT
+                                    key={chain}
+                                    label={chain}
+                                    name={chain}
+                                    image={getLogoURI(chain)}
+                                    handleChange={(event) => {
+                                        handleNftSupplyChange(event, setFormData, chain, "blockchain");
+                                    }}
+                                    isDisabled={chain !== formData.blockchain && formData.blockchain !== ""}
+                                />
+                            ))}
+                        </div>
+                        <Button className="mt-5 w-2/3 self-center">Create Contract</Button>
                     </form>
                 </section>
 

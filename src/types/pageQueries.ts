@@ -1,5 +1,9 @@
 import { ParsedUrlQuery } from "querystring";
 
+export interface IQuery {
+    url: string;
+}
+
 export interface IDaoQuery extends ParsedUrlQuery {
     url: string;
 }
@@ -9,6 +13,7 @@ export interface DAOPageProps {
 }
 
 export interface IDetailProposalQuery extends ParsedUrlQuery {
+    url: string;
     detailProposal: string;
 }
 

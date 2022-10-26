@@ -5,6 +5,7 @@ import website from "assets/social/globe.png";
 // wallets
 import metamask from "assets/wallets/mm.png";
 import walletConnect from "assets/wallets/wc.png";
+import web3Auth from "assets/wallets/w3a.svg";
 
 // mockups
 import daoCoverMock from "assets/mockups/basic-dao-cover.png";
@@ -37,6 +38,7 @@ const ASSETS = {
     // wallets
     metamask: metamask,
     walletConnect: walletConnect,
+    web3Auth: web3Auth,
     // mockups
     daoCoverMock: daoCoverMock,
     daoLogoMock: daoLogoMock,

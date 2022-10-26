@@ -1,29 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Layout, {
     AddNftDialog,
     BackButton,
     Button,
     DragAndDropImage,
-    handleNext,
-    handleReset,
     InputAmount,
     InputSupplyOfNFT,
     InputText,
     InputTextArea,
-    TypeSelector,
 } from "components";
-import { useRouter } from "next/router";
 import { Signer } from "ethers";
-import { useMoralis, useMoralisQuery } from "react-moralis";
 import { useSigner, useSwitchNetwork } from "wagmi";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { IAddNftQuery, ICreateNFT, IDAOPageForm } from "types";
 import {
     handleChangeBasic,
     handleContractError,
     handleImageChange,
     handleNftSupplyChange,
-    handleSelectorChange,
     handleTextChange,
     storeNFT,
     validateForm,
@@ -32,16 +26,21 @@ import { useDialogState } from "ariakit";
 import {
     addToken,
     chainIds,
-    CHAINS,
     checkCorrectNetwork,
     deployNFTContract,
+    getChain,
     getChainNames,
     getLogoURI,
     layerzeroEndpoints,
 } from "interactions/contract";
-import { fetchDAO } from "interactions/database";
+import { addValueToDaoArray } from "interactions/database";
+import { useCounter, useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 
-const AddNewNFT: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const AddNewNFT: NextPage<IAddNftQuery> = ({ url }) => {
     const [formData, setFormData] = useState<ICreateNFT>({
         name: "",
         description: "",
@@ -53,34 +52,26 @@ const AddNewNFT: NextPage = () => {
         governorAddress: "",
         ipfsAddress: "",
         blockchain: "",
+        governorUrl: "",
     });
 
-    const router = useRouter();
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
-    const { isInitialized } = useMoralis();
     const confirmDialog = useDialogState();
-    const [activeStep, setActiveStep] = useState(0);
+    const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
 
-    const { fetch: DaoQuery } = useMoralisQuery(
-        "DAO",
-        (query) => query.equalTo("governorAddress", formData.governorAddress),
-        [formData.governorAddress],
-        {
-            autoFetch: false,
-        }
-    );
+    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
 
-    useEffect(() => {
+    useEffectOnce(() => {
         fetchQuery();
-    }, [router]);
+    });
 
     const fetchQuery = () => {
-        const query = router.query as IAddNftQuery;
-        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
+        const DAO: IDAOPageForm = storageDao;
 
         if (DAO) {
             handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
+            handleChangeBasic(DAO.url, setFormData, "governorUrl");
             handleChangeBasic(DAO.blockchain[0], setFormData, "blockchain");
         }
     };
@@ -94,15 +85,6 @@ const AddNewNFT: NextPage = () => {
         ];
     };
 
-    const saveNewNFTContractAddress = async (nftTokenAddress: string) => {
-        console.log("nft token address", nftTokenAddress);
-        const { moralisInstance } = await fetchDAO(isInitialized, DaoQuery);
-        if (moralisInstance && nftTokenAddress) {
-            moralisInstance.addUnique("tokenAddress", nftTokenAddress);
-            await moralisInstance.save();
-        }
-    };
-
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -110,30 +92,23 @@ const AddNewNFT: NextPage = () => {
             return;
         }
 
-        if (!(await checkCorrectNetwork(signerData, CHAINS[formData.blockchain].id, switchNetwork))) {
+        const chainId = getChain(formData.blockchain).id;
+        if (!(await checkCorrectNetwork(signerData, chainId, switchNetwork))) {
             return;
         }
 
-        handleReset(setActiveStep);
+        resetActiveStep();
         confirmDialog.toggle();
 
-        let path;
         try {
-            path = await storeNFT(formData.file as File);
+            const path = await storeNFT(formData.file as File);
             console.log(path);
             handleChangeBasic(path, setFormData, "ipfsAddress");
-        } catch (error) {
-            handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
-            return;
-        }
 
-        let contract;
-        try {
             const chainId = await signerData.getChainId();
             const endpoint: string = layerzeroEndpoints[chainIds[chainId]] || layerzeroEndpoints["not-supported"];
 
-            contract = await deployNFTContract(signerData as Signer, {
+            const contract = await deployNFTContract(signerData as Signer, {
                 name: formData.name,
                 symbol: formData.symbol,
                 price: formData.price.toString(),
@@ -143,30 +118,26 @@ const AddNewNFT: NextPage = () => {
                 startMintId: 0,
                 endMintId: calculateSupply(),
             });
-            handleNext(setActiveStep);
+            incrementActiveStep();
 
             await contract.deployed();
             console.log(`Deployment successful! Contract Address: ${contract.address}`);
-            handleNext(setActiveStep);
+            incrementActiveStep();
 
             const addTx = await addToken(formData.governorAddress, signerData, contract.address);
-            handleNext(setActiveStep);
+            incrementActiveStep();
 
             await addTx.wait();
-            handleNext(setActiveStep);
+            incrementActiveStep();
 
             handleChangeBasic(contract.address, setFormData, "contractAddress");
-            await saveNewNFTContractAddress(contract.address);
-            handleNext(setActiveStep);
+
+            await addValueToDaoArray(formData.governorUrl, "tokenAddress", contract.address);
+
+            incrementActiveStep();
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
-            return;
-        }
-        try {
-        } catch (error) {
-            handleContractError(error, { dialog: confirmDialog });
-            handleReset(setActiveStep);
+            resetActiveStep();
             return;
         }
     }
@@ -178,28 +149,24 @@ const AddNewNFT: NextPage = () => {
                     <form className="mx-auto flex max-w-4xl flex-col gap-4" onSubmit={onSubmit}>
                         <BackButton />
                         <h1 className="text-highlighter">Add NFT</h1>
-                        <div className="w-full lg:flex">
-                            <div className="lg:w-2/3 w-full">
+                        <div className="grid grid-cols-2">
+                            <div className={"grid grid-flow-row"}>
                                 <InputText
                                     label="Name"
                                     name="name"
+                                    className={"max-w-2xl"}
                                     placeholder="NFT Name"
                                     handleChange={(event) => handleTextChange(event, setFormData)}
                                 />
                                 <InputTextArea
                                     label="Description"
                                     name="description"
+                                    className={"max-w-2xl"}
                                     placeholder="A short description about NFT collection(Max. 250 words)"
                                     maxLength={2000}
                                     handleChange={(event) => handleTextChange(event, setFormData)}
                                 />
-                                <div className="flex justify-between gap-10">
-                                    <TypeSelector
-                                        label="Membership type"
-                                        name="NFTtype"
-                                        handleChange={(event) => handleSelectorChange(event, setFormData, "NFTtype")}
-                                        className="w-1/2 mt-6"
-                                    />
+                                <div className="grid grid-cols-2 gap-4">
                                     <InputText
                                         label="Symbol"
                                         name="symbol"
@@ -207,51 +174,54 @@ const AddNewNFT: NextPage = () => {
                                         handleChange={(event) => {
                                             handleTextChange(event, setFormData);
                                         }}
-                                        className="w-1/2"
                                     />
                                 </div>
-
-                                <InputAmount
-                                    label="Price"
-                                    placeholder="Price in ETH"
-                                    name="price"
-                                    handleChange={(event) => handleTextChange(event, setFormData)}
-                                    className="w-full"
-                                    min={0}
-                                    step={0.0001}
-                                    max={10}
-                                />
-                                <label>
-                                    <div className="input-label"> NFT Supply</div>
-                                </label>
-                                <div className="grid w-full grid-cols-4 gap-4">
-                                    {getChainNames()
-                                        // TODO: remove when few blockchains
-                                        .filter((chain) => formData.blockchain === chain)
-                                        .map((chain) => (
-                                            <InputSupplyOfNFT
-                                                key={chain}
-                                                label={chain}
-                                                name={chain}
-                                                image={getLogoURI(chain)}
-                                                handleChange={(event) => {
-                                                    handleNftSupplyChange(event, setFormData, chain, "blockchain");
-                                                    fetchQuery();
-                                                }}
-                                                isDisabled={chain !== formData.blockchain}
-                                            />
-                                        ))}
-                                </div>
                             </div>
-                            <div className="lg:w-1/3 lg:ml-10">
+                            <div className="flex">
+                                <div className="divider divider-horizontal" />
                                 <DragAndDropImage
+                                    height={"h-full"}
                                     label="Image"
                                     name="file"
                                     handleChange={(file) => handleImageChange(file, setFormData, "file")}
                                 />
                             </div>
                         </div>
-                        <Button className="mt-5 w-2/3">Create Contract</Button>
+
+                        <div className={"mb-4"}>
+                            <InputAmount
+                                label="Price"
+                                placeholder="Price in ETH"
+                                name="price"
+                                handleChange={(event) => handleTextChange(event, setFormData)}
+                                className="w-full"
+                                min={0}
+                                step={0.0001}
+                                max={10}
+                            />
+                        </div>
+                        <label className={"label"}>
+                            <div className="input-label"> NFT Supply</div>
+                        </label>
+                        <div className="grid w-full grid-cols-4 gap-4">
+                            {getChainNames()
+                                // TODO: remove when few blockchains
+                                .filter((chain) => formData.blockchain === chain)
+                                .map((chain) => (
+                                    <InputSupplyOfNFT
+                                        key={chain}
+                                        label={chain}
+                                        name={chain}
+                                        image={getLogoURI(chain)}
+                                        handleChange={(event) => {
+                                            handleNftSupplyChange(event, setFormData, chain, "blockchain");
+                                            fetchQuery();
+                                        }}
+                                        isDisabled={chain !== formData.blockchain}
+                                    />
+                                ))}
+                        </div>
+                        <Button className="mt-5 w-2/3 self-center">Create Contract</Button>
                     </form>
                 </section>
 

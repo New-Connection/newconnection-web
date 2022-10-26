@@ -1,100 +1,60 @@
 import * as React from "react";
-import { useState } from "react";
-import { formatAddress, handleContractError } from "utils";
-import { AddToWhitelist, checkCorrectNetwork, getLogoURI } from "interactions/contract";
-import { Signer } from "ethers";
-import toast from "react-hot-toast";
-import { MockupTextCard } from "components";
-import { useSwitchNetwork } from "wagmi";
+import { ArrowUpRightIcon, MockupTextCard, WhitelistRecordCard } from "components";
 import { IWhitelistRecord } from "types";
-
-const renderValue = (chain: string) => {
-    const image = getLogoURI(chain);
-    return <img src={image.src} alt="" aria-hidden className="h-6 w-6 rounded-full" />;
-};
+import Link from "next/link";
 
 interface IWhitelistTab {
     whitelist: IWhitelistRecord[];
-    signer: Signer;
-    isOwner: boolean;
-    chainId: number;
-    deleteFunction: Function;
+    isLoaded: boolean;
+    governorUrl: string;
+    handleWhitelistRecord: (record: IWhitelistRecord, isRejected: boolean) => Promise<void>;
 }
 
-export const WhitelistTab = ({ whitelist, signer, isOwner, chainId, deleteFunction }: IWhitelistTab) => {
-    const [click, setClick] = useState(false);
-    const { switchNetwork } = useSwitchNetwork();
+export const WhitelistTab = ({ whitelist, isLoaded, governorUrl, handleWhitelistRecord }: IWhitelistTab) => {
+    const visibleWhitelistLength: number = 5;
 
     return whitelist && whitelist.length !== 0 ? (
-        <div className="w-full justify-between space-y-5 gap-5">
-            <div className="flex text-gray2 pb-4 pt-0">
-                <div className="flex w-2/4">
-                    <div className="w-1/3">Wallet Address</div>
-                    <div className="w-1/3">Blockchain</div>
-                    <div className="w-1/3">NFT</div>
-                </div>
-                <p className="w-1/4">Notes</p>
-                {isOwner && <p className="w-1/4 text-center">Action</p>}
+        <div className="grid grid-flow-row gap-4">
+            <div className="grid grid-cols-7 px-4 py-2 text-base-content/50">
+                <div>Wallet Address</div>
+                <div className={"justify-self-center"}>Blockchain</div>
+                <div className={"justify-self-center"}>NFT</div>
+                <p className={"col-span-2 justify-self-center"}>Notes</p>
+                <p className={"col-span-2 justify-self-end mr-20"}>Action</p>
             </div>
-
-            {whitelist.map((wl, index) => {
-                const walletAddress = wl.walletAddress;
-                const votingTokenName = wl.votingTokenName;
-                const votingTokenAddress = wl.votingTokenAddress;
-                const note = wl.note;
-                const blockchainSelected = wl.blockchainSelected;
-                return (
-                    <div className="flex w-full" key={index}>
-                        <div className="flex w-2/4">
-                            <div className="w-1/3">{formatAddress(walletAddress)}</div>
-                            <div className="w-1/3 pl-7">{renderValue(blockchainSelected[0])}</div>
-                            <div className="w-1/3">{votingTokenName}</div>
-                        </div>
-                        <p className="w-1/4 text-sm line-clamp-3 text-center">{note}</p>
-
-                        {isOwner && (
-                            <button
-                                className="w-1/4 settings-button py-2 px-4 bg-white border-gray2 border-2 btn-state"
-                                onClick={async () => {
-                                    if (!(await checkCorrectNetwork(signer, chainId, switchNetwork))) {
-                                        return;
-                                    }
-
-                                    setClick(true);
-                                    try {
-                                        console.log(votingTokenAddress);
-                                        const status = await AddToWhitelist({
-                                            addressNFT: votingTokenAddress,
-                                            walletAddress: walletAddress,
-                                            signer: signer,
-                                        });
-
-                                        status
-                                            ? toast.success("Wallet added to Whitelist")
-                                            : toast.error("Only owner of DAO can add a new members");
-                                        setClick(false);
-
-                                        deleteFunction(walletAddress);
-                                    } catch (error) {
-                                        handleContractError(error);
-                                    }
-                                    setClick(false);
-                                }}
-                                disabled={click}
-                            >
-                                {click ? <p className="text-gray2">Loading...</p> : <p>Add</p>}
+            {whitelist.slice(0, visibleWhitelistLength).map((wl, index) => (
+                <WhitelistRecordCard
+                    key={index}
+                    record={wl}
+                    isLoaded={isLoaded}
+                    handleWhitelistRecord={handleWhitelistRecord}
+                />
+            ))}
+            {whitelist.length > visibleWhitelistLength && (
+                <div className={"flex flex-col "}>
+                    <div className={"flex justify-center"}>
+                        <Link
+                            href={{
+                                pathname: `${governorUrl}/whitelist/`,
+                            }}
+                        >
+                            <button className="flex gap-2 btn-link mt-8">
+                                View all whitelist records
+                                <div className="mt-[0.125rem]">
+                                    <ArrowUpRightIcon />
+                                </div>
                             </button>
-                        )}
+                        </Link>
                     </div>
-                );
-            })}
+                </div>
+            )}
         </div>
     ) : (
         <div className="text-center">
             <MockupTextCard
-                label={"No members here yet"}
+                label={"No whitelist requests here yet"}
                 text={
-                    "You can join DAO click to become member" +
+                    "You can send a request to join the DAO by clicking the become a member button" +
                     "then click the button “Add new proposals” and initiate a proposals"
                 }
             />

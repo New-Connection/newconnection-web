@@ -5,6 +5,7 @@ import Link from "next/link";
 import Layout, { BackButton, Button } from "components";
 import { isBlockchainSupported } from "interactions/contract";
 import { useNetwork } from "wagmi";
+import classNames from "classnames";
 
 interface ICard {
     title: string;
@@ -14,36 +15,23 @@ interface ICard {
     isDisabled?: boolean;
 }
 
-const CardText = {
-    addNFTtoDAO: {
-        title: "Existing NFT collection (Comming Soon)",
-        subtitle: "Add NFT smart contract if you have an existing collection",
-        buttonTitle: "Add a created NFT",
-        linkToPage: "/create-nft",
-    },
-    createNFT: {
-        title: "New NFT collection",
-        subtitle: "If you don't have any NFT collections created, you can mint them here",
-        buttonTitle: "Mint NFT",
-        linkToPage: "/create-nft",
-    },
-};
-
 const CreateNewDAO: NextPage = () => {
     const { chain } = useNetwork();
 
     const Card = ({ title, subtitle, buttonTitle, linkToPage, isDisabled = false }: ICard) => {
         return (
-            <div className="w-full border-2 border-[#F2F4F4] rounded-lg pb-6 px-4">
-                <p className="input-label checkbox font-medium text-lg">{title}</p>
+            <div className="grid grid-flow-row border-2 border-base-200 rounded-lg py-4 px-4 gap-4">
+                <p className="input-label font-medium text-lg">{title}</p>
                 <p className="pb-6">{subtitle}</p>
-                <Link href={{ pathname: linkToPage }}>
-                    <a>
-                        <Button type={"button"} className="mt-5 mb-5 py-4 border-2 w-full" disabled={isDisabled}>
-                            {buttonTitle}
-                        </Button>
-                    </a>
-                </Link>
+                <Button
+                    type={"button"}
+                    className={classNames("w-full", isDisabled ? "cursor-not-allowed" : "cursor-pointer")}
+                    disabled={isDisabled}
+                >
+                    <Link href={{ pathname: linkToPage }}>
+                        <a>{buttonTitle}</a>
+                    </Link>
+                </Button>
             </div>
         );
     };
@@ -52,8 +40,8 @@ const CreateNewDAO: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <BackButton />
                     <form className="mx-auto flex max-w-4xl flex-col gap-4">
+                        <BackButton />
                         <h1 className="text-highlighter">Create new DAO</h1>
                         <p className="input-label text-lg font-medium">NFT smart contract</p>
                         <p className="pb-4">

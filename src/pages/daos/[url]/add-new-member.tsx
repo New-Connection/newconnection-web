@@ -1,26 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { GetServerSideProps, NextPage } from "next";
 import toast from "react-hot-toast";
 import Layout, { BackButton, Button, InputTextArea, RadioSelectorNFT } from "components";
-import {
-    handleChangeBasic,
-    handleChangeBasicArray,
-    handleContractError,
-    handleTextChangeAddNewMember,
-    validateForm,
-} from "utils";
-import { IAddMemberQuery, IDAOPageForm, INFTVoting, IWhitelistRecord } from "types";
-import {
-    getMoralisInstance,
-    MoralisClassEnum,
-    saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
-} from "interactions/database";
-import { useSigner } from "wagmi";
-import { useMoralisQuery } from "react-moralis";
+import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, validateForm } from "utils";
+import { IDAOPageForm, INFTVoting, IQuery, IWhitelistRecord } from "types";
+import { saveWhitelistRequest, whitelistRequestExists } from "interactions/database";
+import { useAccount, useSigner } from "wagmi";
+import { useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 
-const AddNewMember: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const AddNewMember: NextPage<IQuery> = ({ url }) => {
     const [formData, setFormData] = useState<IWhitelistRecord>({
         governorAddress: "",
         governorUrl: "",
@@ -30,41 +22,32 @@ const AddNewMember: NextPage = () => {
         blockchainSelected: [],
         note: "",
     });
-    const router = useRouter();
-    const { data: signer_data } = useSigner();
+    const { data: signerData } = useSigner();
+    const { address: signerAddress } = useAccount();
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
 
-    const { fetch: whitelistFetch } = useMoralisQuery(
-        "Whitelist",
-        (query) =>
-            query.equalTo("governorAddress", formData.governorAddress) &&
-            query.equalTo("votingTokenAddress", formData.votingTokenAddress),
-        [formData.governorAddress, formData.votingTokenAddress, signer_data],
-        {
-            autoFetch: false,
-        }
-    );
+    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
+    const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
 
-    useEffect(() => {
+    useEffectOnce(() => {
         console.log("fetch query");
-        const query = router.query as IAddMemberQuery;
 
-        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
+        const DAO: IDAOPageForm = storageDao;
         if (DAO) {
             handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
             handleChangeBasic(DAO.url, setFormData, "governorUrl");
             handleChangeBasic(DAO.chainId, setFormData, "chainId");
-            handleChangeBasicArray(DAO.blockchain, setFormData, "blockchainSelected");
+            handleChangeBasic(DAO.blockchain, setFormData, "blockchainSelected");
         }
 
-        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
-    }, [router]);
+        setNFTs(storageNFTs);
+    });
 
     async function sendSignatureRequest(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
 
-        if (!signer_data) {
+        if (!signerData) {
             toast.error("Please connect wallet");
             return;
         }
@@ -73,19 +56,13 @@ const AddNewMember: NextPage = () => {
             return;
         }
 
-        const signerAddress = await signer_data.getAddress();
-
-        if (!(await checkRequestAvailability(signerAddress))) {
+        if (await whitelistRequestExists(formData.governorUrl, signerAddress, formData.votingTokenAddress)) {
             toast.error(`You already send request for token: ${formData.votingTokenName}`);
             return;
         }
 
         try {
-            const moralisInstance = getMoralisInstance(MoralisClassEnum.WHITELIST);
-            setFieldsIntoMoralisInstance(moralisInstance, formData);
-            moralisInstance.set("walletAddress", signerAddress);
-
-            await saveMoralisInstance(moralisInstance);
+            await saveWhitelistRequest({ ...formData, walletAddress: signerAddress });
             toast.success("Your request was saved", {
                 duration: 4000,
                 className: "bg-red",
@@ -98,23 +75,6 @@ const AddNewMember: NextPage = () => {
         }
     }
 
-    const checkRequestAvailability = async (walletAddress: string) => {
-        let available = false;
-        console.log("chedd");
-        await whitelistFetch({
-            onSuccess: (results) => {
-                if (results.filter((result) => result.get("walletAddress") === walletAddress).length === 0) {
-                    console.log("available=true");
-                    available = true;
-                }
-            },
-            onError: (e) => {
-                console.log("error" + e);
-            },
-        });
-        return available;
-    };
-
     return (
         <div>
             <Layout className="layout-base">
@@ -123,9 +83,9 @@ const AddNewMember: NextPage = () => {
                         <BackButton />
                         <div className={"flex flex-col md:flex-row"}>
                             <h1 className="text-highlighter">Become a member of</h1>
-                            <h1 className="text-highlighter text-purple capitalize md:ml-4">{formData.governorUrl}</h1>
+                            <h1 className="text-highlighter text-primary capitalize md:ml-4">{formData.governorUrl}</h1>
                         </div>
-                        <label>
+                        <label className={"label"}>
                             <div className="input-label">Choose voting token</div>
                         </label>
                         {NFTs && (
@@ -147,7 +107,7 @@ const AddNewMember: NextPage = () => {
                             maxLength={2000}
                             handleChange={(event) => handleTextChangeAddNewMember(event, setFormData)}
                         />
-                        <Button className="mt-5 w-full">Send a request</Button>
+                        <Button className="mt-5 w-2/3 self-center">Send a request</Button>
                     </form>
                 </section>
             </Layout>

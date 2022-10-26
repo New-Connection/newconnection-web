@@ -30,7 +30,6 @@ export interface IDAOPageForm extends ICreateDAO {
     totalMembers?: number;
     totalProposals?: number;
     activeProposals?: number;
-    nftImage?: any;
     isActive?: boolean;
     treasuryAddress?: string;
 }
@@ -45,7 +44,8 @@ export interface IBlockchains {
     Optimism?: number;
 }
 
-export interface ICreateNFT extends ICreate, IBlockchains {
+export interface ICreateNFT extends ICreate {
+    governorUrl?: string;
     file: object;
     symbol: string;
     price: number;
@@ -72,7 +72,7 @@ export interface ICreateProposal extends ICreate {
 }
 
 export interface IProposalPageForm extends ICreateProposal {
-    isActive?: boolean;
+    proposalState?: number;
     forVotes?: string;
     againstVotes?: string;
     endDateTimestamp?: number;
@@ -89,6 +89,7 @@ export interface IProposal {
 }
 
 export interface INFTVoting {
+    chainId: number;
     title?: string;
     type?: string;
     image?: string;
@@ -96,6 +97,10 @@ export interface INFTVoting {
     price?: string;
     totalSupply?: string;
     totalMinted?: string;
+
+    tokenRequestedByMember?: boolean;
+    tokenRequestApproved?: boolean;
+    tokenMintedByMember?: number;
 }
 
 export interface IWhitelistRecord {
@@ -107,6 +112,8 @@ export interface IWhitelistRecord {
     votingTokenAddress?: string;
     note?: string;
     blockchainSelected?: string[];
+
+    tokenRequestedByMember?: boolean;
 }
 
 export type TabsType = {
@@ -114,5 +121,14 @@ export type TabsType = {
     index: number;
     Component: React.FC;
 }[];
+
+export interface IMember {
+    governorUrl: string;
+    chainId: number;
+    memberAddress: string;
+    memberTokens: string[];
+    role: string;
+    votingPower?: number;
+}
 
 export type ButtonState = "Mint" | "Loading" | "Success" | "Error";

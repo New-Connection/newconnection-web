@@ -20,12 +20,12 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                     htmlFor="bordered-radio-1"
                     className={classNames(
                         className,
-                        "inline-flex justify-between items-center p-5 w-full text-black bg-white rounded-lg border border-gray2 cursor-pointer peer-checked:border-purple peer-checked:text-purple hover:text-btnHover hover:border-btnHover active:text-btnActive active:border-btnActive"
+                        "inline-flex justify-between items-center p-5 w-full text-base-content bg-base-100 rounded-lg border border-base-200 peer-checked:border-primary hover:border-primary/50"
                     )}
                 >
-                    <div className="relative px-4 py-2 text-black">
+                    <div className="relative px-4 py-2 text-base-content">
                         {labels[0]}
-                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-red rounded-full text-xs text-white"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-error rounded-full text-xs text-base-content"></span>
                     </div>
                 </label>
             </div>
@@ -42,12 +42,12 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                     htmlFor="bordered-radio-2"
                     className={classNames(
                         className,
-                        "inline-flex justify-between items-center p-5 w-full text-black bg-white rounded-lg border border-gray2 cursor-pointer peer-checked:border-purple peer-checked:text-purple hover:text-btnHover hover:border-btnHover active:text-btnActive active:border-btnActive"
+                        "inline-flex justify-between items-center p-5 w-full text-base-content bg-base-100 rounded-lg border border-base-200 peer-checked:border-primary hover:border-primary/50"
                     )}
                 >
-                    <div className="relative px-4 py-2 text-black">
+                    <div className="relative px-4 py-2 text-base-content">
                         {labels[1]}
-                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-green rounded-full text-xs text-white"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-success rounded-full text-xs text-base-content"></span>
                     </div>
                 </label>
             </div>
@@ -69,8 +69,8 @@ export const RadioSelectorNFT = (radioSelector: IRadioSelectorNFT) => {
                                 chain={radioSelector.chainId}
                                 className={
                                     clickedValue === index
-                                        ? "nft-card border-2 border-purple rounded-lg"
-                                        : "nft-card cursor-pointer hover:text-btnHover hover:border-btnHover active:text-btnActive active:border-btnActive"
+                                        ? "nft-card border-2 border-primary rounded-lg"
+                                        : "nft-card cursor-pointer"
                                 }
                             />
                         </label>

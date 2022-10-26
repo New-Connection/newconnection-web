@@ -1,63 +1,47 @@
 import Link from "next/link";
-import { Account, Logo, NetworksMenu, WalletSelector } from "components";
-import { useAccount } from "wagmi";
-import { useDialogState } from "ariakit";
-import { useRouter } from "next/router";
-import Menu from "./Menu";
-import { useIsMounted } from "hooks";
-
-const navigation = [
-    { id: 0, title: "Home", path: "/" },
-    { id: 1, title: "DAOs", path: "/daos" },
-    { id: 2, title: "Proposals", path: "/proposals" },
-];
+import { Logo, MoonIcon, SunIcon } from "components";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useDarkMode } from "usehooks-ts";
 
 const Navbar = () => {
-    const { isConnected } = useAccount();
-
-    const walletDailog = useDialogState(); // For pop-up with wallets
-    const router = useRouter();
-    const isMounted = useIsMounted();
+    const { toggle } = useDarkMode();
 
     return (
         <>
-            <Link href="/" passHref>
-                <div className="cursor-pointer">
-                    <span className="sr-only">Navigate to Home Page</span>
-                    <Logo />
-                </div>
-            </Link>
-
-            {/* <nav className={styles.nav}>
-                {navigation.map(({ id, title, path }) => (
-                    <Link key={id} href={path}>
-                        <div
-                            className={classNames(
-                                styles.navMenuButton,
-                                router.pathname == path ? styles.navButtonActive : null
-                            )}
-                        >
-                            {title}
-                        </div>
+            <div className={"w-1/2 grid grid-flow-col"}>
+                <div>
+                    <Link href="/home" passHref>
+                        <button className="p-1 text-left text-neutral">
+                            <span className="sr-only">Navigate to Home Page</span>
+                            <Logo />
+                        </button>
                     </Link>
-                ))}
-            </nav> */}
+                </div>
 
-            <div className="flex gap-3">
-                {isMounted && isConnected ? (
-                    <>
-                        <NetworksMenu />
-                        <Account showAccountInfo={walletDailog.toggle} />
-                    </>
-                ) : (
-                    <button className="form-submit-button hidden md:block" onClick={walletDailog.toggle}>
-                        Connect Wallet
-                    </button>
-                )}
+                <div className={"grid grid-flow-col "}>
+                    <Link href="/home" passHref>
+                        <button className="btn-ghost p-1 rounded-xl text-center text-neutral">
+                            <span className={"font-bold"}>Home</span>
+                        </button>
+                    </Link>
 
-                <Menu walletDialog={walletDailog} />
+                    <Link href="/daos" passHref>
+                        <button className="btn-ghost p-1 rounded-xl text-center text-neutral">
+                            <span className={"font-bold"}>Rooms</span>
+                        </button>
+                    </Link>
+                </div>
             </div>
-            <WalletSelector dialog={walletDailog} />
+
+            <div className={"flex gap-3"}>
+                <ConnectButton accountStatus="address" label="Sign in" showBalance={false} />
+
+                <label className="swap swap-rotate text-xs text-neutral">
+                    <input type="checkbox" onClick={toggle} />
+                    <SunIcon />
+                    <MoonIcon />
+                </label>
+            </div>
         </>
     );
 };

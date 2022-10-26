@@ -69,7 +69,8 @@ export async function getNumAvailableToMint(userAddress: string, contractAddress
     try {
         let baseProvider = provider({ chainId });
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
-        return await nft.numAvailableToMint(userAddress);
+        const available = await nft.numAvailableToMint(userAddress);
+        return available.toString();
     } catch (e) {
         handleContractError(e);
     }
@@ -80,7 +81,6 @@ export async function getNumberOfTokenInOwnerAddress(userAddress: string, contra
         let baseProvider = provider({ chainId });
         const nft = new ethers.Contract(contractAddress, GOVERNANCE_NFT_ABI, baseProvider);
         const balance = await nft.balanceOf(userAddress);
-        console.log(balance.toString());
         return balance.toString(); // 0 if you don't have tokens
     } catch (e) {
         handleContractError(e);

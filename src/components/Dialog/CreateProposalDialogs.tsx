@@ -15,7 +15,7 @@ export const CreateProposalDialog = ({ dialog, activeStep, formData }: ICreatePr
                 <CopyTextButton copyText={formData.proposalId} />
             </div>
             <button
-                className="form-submit-button"
+                className="dialog-button"
                 onClick={() => {
                     dialog.toggle();
                     router.back();

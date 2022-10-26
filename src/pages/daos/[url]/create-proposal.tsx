@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import type { NextPage } from "next";
-import { ICreateProposal, ICreateProposalQuery, IDAOPageForm, INFTVoting } from "types";
+import { GetServerSideProps } from "next";
+import { ICreateProposal, IDAOPageForm, INFTVoting, IQuery } from "types";
 import { useSigner, useSwitchNetwork } from "wagmi";
 import Layout, {
     BackButton,
     Button,
-    CheckboxGroup,
     CreateProposalDialog,
-    handleNext,
-    handleReset,
     InputText,
     InputTextArea,
     RadioSelectorNFT,
@@ -16,16 +14,15 @@ import Layout, {
 import { handleAddArray, handleChangeBasic, handleContractError, handleTextChange, validateForm } from "utils";
 import { useDialogState } from "ariakit";
 import { checkCorrectNetwork, createProposal } from "interactions/contract";
-import { useRouter } from "next/router";
 import { Signer } from "ethers";
-import {
-    getMoralisInstance,
-    MoralisClassEnum,
-    saveMoralisInstance,
-    setFieldsIntoMoralisInstance,
-} from "interactions/database";
+import { saveNewProposal } from "interactions/database";
+import { useCounter, useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 
-const CreateProposal: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: context.params,
+});
+
+const CreateProposal: NextPage<IQuery> = ({ url }) => {
     const [formData, setFormData] = useState<ICreateProposal>({
         governorAddress: "",
         governorUrl: "",
@@ -38,17 +35,18 @@ const CreateProposal: NextPage = () => {
         blockchain: [],
         // enabledBlockchains: []
     });
-    const router = useRouter();
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
 
     const [NFTs, setNFTs] = useState<INFTVoting[]>();
     const confirmDialog = useDialogState();
-    const [activeStep, setActiveStep] = useState(0);
+    const { count: activeStep, increment: incrementActiveStep, reset: resetActiveStep } = useCounter(0);
 
-    useEffect(() => {
-        const query = router.query as ICreateProposalQuery;
-        const DAO: IDAOPageForm = JSON.parse(localStorage.getItem(query.url));
+    const storageDao = useReadLocalStorage<IDAOPageForm>(url);
+    const storageNFTs = useReadLocalStorage<INFTVoting[]>(`${url} NFTs`);
+
+    useEffectOnce(() => {
+        const DAO: IDAOPageForm = storageDao;
 
         if (DAO) {
             handleChangeBasic(DAO.governorAddress, setFormData, "governorAddress");
@@ -57,9 +55,8 @@ const CreateProposal: NextPage = () => {
             handleChangeBasic(+DAO.chainId, setFormData, "chainId");
         }
 
-        setNFTs(JSON.parse(localStorage.getItem(query.url + " NFTs")));
-        // handleChangeBasicArray(query.blockchains, setFormData, "enabledBlockchains");
-    }, [router]);
+        setNFTs(storageNFTs);
+    });
 
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -72,7 +69,7 @@ const CreateProposal: NextPage = () => {
             return;
         }
 
-        handleReset(setActiveStep);
+        resetActiveStep();
         confirmDialog.toggle();
 
         let proposalId;
@@ -83,10 +80,10 @@ const CreateProposal: NextPage = () => {
                 formData.name,
                 formData.tokenAddress
             );
-            handleNext(setActiveStep);
-            handleNext(setActiveStep);
+            incrementActiveStep();
+            incrementActiveStep();
             handleChangeBasic(proposalId, setFormData, "proposalId");
-            handleNext(setActiveStep);
+            incrementActiveStep();
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
             return;
@@ -94,12 +91,13 @@ const CreateProposal: NextPage = () => {
 
         try {
             const chainId = await signerData.getChainId();
-            handleChangeBasic(chainId.toString(), setFormData, "chainId");
-            const moralisProposal = getMoralisInstance(MoralisClassEnum.PROPOSAL);
-            setFieldsIntoMoralisInstance(moralisProposal, formData);
-            moralisProposal.set("proposalId", proposalId);
-            moralisProposal.set("chainId", chainId);
-            await saveMoralisInstance(moralisProposal);
+            const proposal: ICreateProposal = {
+                ...formData,
+                chainId: chainId,
+                proposalId: proposalId,
+            };
+
+            await saveNewProposal(proposal);
         } catch (error) {
             handleContractError(error, { dialog: confirmDialog });
             return;
@@ -115,7 +113,7 @@ const CreateProposal: NextPage = () => {
                         <div className="text-highlighter items-center flex flex-col md:flex-row">
                             New Proposal for
                             <div
-                                className={"text-highlighter text-purple capitalize md:ml-4"}
+                                className={"text-highlighter text-primary capitalize md:ml-4"}
                             >{`${formData?.governorUrl}`}</div>
                         </div>
                         <InputText
@@ -141,17 +139,7 @@ const CreateProposal: NextPage = () => {
                             handleChange={(event) => handleTextChange(event, setFormData)}
                             isRequired
                         />
-                        <CheckboxGroup
-                            label="Proposal Blockchain"
-                            images={true}
-                            values={formData.blockchain}
-                            // description="You can choose one or more blockchains"
-                            // values={[...getChainNames()]}
-                            // enabledValues={formData.enabledBlockchains}
-                            // handleChange={(event) =>
-                            //     handleCheckboxChange(event, formData, setFormData, "blockchain")
-                            // }
-                        />
+
                         <div className={"input-label"}>Choose voting token</div>
                         {NFTs && (
                             <RadioSelectorNFT

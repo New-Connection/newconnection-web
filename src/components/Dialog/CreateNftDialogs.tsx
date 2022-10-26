@@ -17,7 +17,7 @@ export const AddNftDialog = ({ dialog, activeStep, formData }: ICreateNftDialog)
                 <CopyTextButton copyText={formData.contractAddress} />
             </div>
             <button
-                className="form-submit-button"
+                className="dialog-button"
                 onClick={() => {
                     dialog.toggle();
                     router.back();
@@ -47,7 +47,7 @@ export const CreateNftDialog = ({ dialog, formData, activeStep }: ICreateNftDial
                 }}
             >
                 <button
-                    className="form-submit-button"
+                    className="dialog-button"
                     onClick={() => {
                         dialog.toggle();
                     }}

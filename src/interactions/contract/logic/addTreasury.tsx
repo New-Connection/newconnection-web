@@ -2,56 +2,43 @@ import { IDAOPageForm } from "types";
 import { DisclosureState } from "ariakit";
 import { checkCorrectNetwork, deployTreasuryContract, transferTreasuryOwnership } from "interactions/contract";
 import { Signer } from "ethers";
-import { handleNext, handleReset } from "components";
 import { handleContractError } from "utils";
-import { saveMoralisInstance } from "interactions/database";
 
 export async function addTreasury(
     DAO: IDAOPageForm,
     treasuryDialog: DisclosureState,
     signerData,
-    setCreateTreasuryStep,
+    incrementCreateTreasuryStep,
+    resetCreateTreasuryStep,
     switchNetwork
 ) {
     if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
         return;
     }
 
-    handleReset(setCreateTreasuryStep);
+    resetCreateTreasuryStep();
     treasuryDialog.toggle();
 
     let treasuryContract;
     try {
         treasuryContract = await deployTreasuryContract(signerData as Signer, {});
-        handleNext(setCreateTreasuryStep);
+        incrementCreateTreasuryStep();
         await treasuryContract.deployed();
         // console.log(
         //     `Deployment successful! Treasury Contract Address: ${treasuryContract.address}`
         // );
-        handleNext(setCreateTreasuryStep);
+        incrementCreateTreasuryStep();
         const renounceTx = await transferTreasuryOwnership(treasuryContract.address, DAO.governorAddress, signerData);
-        handleNext(setCreateTreasuryStep);
+        incrementCreateTreasuryStep();
         await renounceTx.wait();
-        handleNext(setCreateTreasuryStep);
-        handleNext(setCreateTreasuryStep);
+        incrementCreateTreasuryStep();
+        incrementCreateTreasuryStep();
 
         // handleChangeBasic(treasuryContract.address, setDAO, "treasuryAddress");
         return treasuryContract.address;
     } catch (error) {
         handleContractError(error, { dialog: treasuryDialog });
-        handleReset(setCreateTreasuryStep);
-        return;
-    }
-}
-
-export async function addTreasureMoralis(DAOMoralisInstance, treasuryAddress: string, treasuryDialog: DisclosureState) {
-    try {
-        if (DAOMoralisInstance) {
-            DAOMoralisInstance.set("treasuryAddress", treasuryAddress);
-            await saveMoralisInstance(DAOMoralisInstance);
-        }
-    } catch (error) {
-        handleContractError(error, { dialog: treasuryDialog });
+        resetCreateTreasuryStep();
         return;
     }
 }

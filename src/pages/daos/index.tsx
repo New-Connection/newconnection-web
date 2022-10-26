@@ -2,21 +2,20 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useMoralis, useMoralisQuery } from "react-moralis";
 import { useNetwork } from "wagmi";
 import Layout, { DAOCard } from "components";
 import { IDAOPageForm } from "types";
 import { getTotalProposals, isBlockchainSupported } from "interactions/contract";
-import { fetchDAOs } from "interactions/database";
+import { getAllDaos } from "interactions/database";
 
 const DAOsPage: NextPage = () => {
     const [DAOs, setDAOs] = useState<IDAOPageForm[]>();
     const { chain } = useNetwork();
-    const { isInitialized } = useMoralis();
+    const [isChainSupported, setIsChainSupported] = useState(false);
 
-    const { fetch: DAOsQuery } = useMoralisQuery("DAO", (query) => query.notEqualTo("objectId", ""), [], {
-        autoFetch: false,
-    });
+    useEffect(() => {
+        setIsChainSupported(() => isBlockchainSupported(chain));
+    }, [chain]);
 
     const loadingLargeData = async (DAOsList: IDAOPageForm[]) => {
         const newDAOs = await Promise.all(
@@ -32,7 +31,7 @@ const DAOsPage: NextPage = () => {
 
     useEffect(() => {
         const loadindDAOs = async () => {
-            const listOfDAOs = await fetchDAOs(isInitialized, DAOsQuery);
+            const listOfDAOs = await getAllDaos();
             if (listOfDAOs) {
                 setDAOs(listOfDAOs);
                 loadingLargeData(listOfDAOs).then();
@@ -42,13 +41,13 @@ const DAOsPage: NextPage = () => {
         loadindDAOs().catch((e) => {
             console.log("Error when loading DAOs", e);
         });
-    }, [isInitialized]);
+    }, []);
 
     const CreateDAOButton = () => {
         return (
             <Link href="./create-new-dao">
-                <button className="secondary-button h-10 disabled:bg-gray" disabled={!isBlockchainSupported(chain)}>
-                    Create DAO
+                <button className="main-button h-10" disabled={!isChainSupported}>
+                    Create Room
                 </button>
             </Link>
         );
@@ -58,14 +57,14 @@ const DAOsPage: NextPage = () => {
         <div>
             <Layout className="layout-base">
                 <section className="relative w-full">
-                    <form className="mx-auto flex max-w-4xl flex-col gap-4">
+                    <form className="mx-auto flex max-w-5xl flex-col gap-4">
                         {/* HIGHLIGHTS AND CREATE DAO BUTTON */}
                         <div className="flex justify-between items-center">
-                            <h1 className="text-highlighter">DAOs</h1>
+                            <h1 className="text-highlighter">Rooms</h1>
                             <CreateDAOButton />
                         </div>
                         {/* LIST OF DAOs */}
-                        <ul>
+                        <ul className={"flex flex-col"}>
                             {DAOs &&
                                 DAOs.map((dao, index) => (
                                     <DAOCard key={index} daoObject={dao} lastElement={!(index !== DAOs.length - 1)} />

@@ -2,13 +2,9 @@ import * as React from "react";
 import { DisclosureState } from "ariakit";
 import { Dialog } from "ariakit/dialog";
 import classNames from "classnames";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepContent from "@mui/material/StepContent";
-import Typography from "@mui/material/Typography";
-import { CheckCircleIcon } from "@heroicons/react/solid";
-import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
-import { styled } from "@mui/material/styles";
+import { CheckCircleIcon } from "@heroicons/react/20/solid";
+import { useDarkMode } from "usehooks-ts";
+import { DARK_THEME, LIGHT_THEME } from "utils";
 
 interface StepperDialogProps {
     dialog: DisclosureState;
@@ -23,7 +19,7 @@ export const SpinnerLoading = () => {
     return (
         <div role="status">
             <svg
-                className="inline mr-2 w-7 h-7 animate-spin text-gray-600 fill-purple"
+                className="inline w-7 h-7 animate-spin text-base-200 fill-primary"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -118,14 +114,6 @@ export const createTreasurySteps = [
     },
 ];
 
-const ColorlibConnector = styled(StepConnector)(({}) => ({
-    [`& .${stepConnectorClasses.line}`]: {
-        height: 3,
-        border: 0,
-        borderRadius: 1,
-    },
-}));
-
 export const StepperDialog = ({
     dialog,
     className,
@@ -137,51 +125,41 @@ export const StepperDialog = ({
     if (!steps) {
         steps = defaultSteps;
     }
+    const { isDarkMode } = useDarkMode();
+
     return (
         <Dialog
+            data-theme={isDarkMode ? DARK_THEME : LIGHT_THEME}
             state={dialog}
             className={classNames("dialog", className)}
             hideOnInteractOutside={isClose}
             hideOnEscape={isClose}
         >
             <div className="h-full m-10">
-                <Stepper activeStep={activeStep} orientation="vertical" connector={<ColorlibConnector />}>
-                    {steps.map((step, index) => (
-                        <Step key={index}>
-                            <div className="flex gap-2">
-                                {index === activeStep ? (
-                                    //step for rn active message
-                                    <>
-                                        <div className={"w-7"}>
+                <ul className="steps steps-vertical gap-6">
+                    {steps.map((step, index) => {
+                        return (
+                            <li key={index}>
+                                <div
+                                    className={classNames(
+                                        "flex gap-4 text-xl text-base-content text-left items-center"
+                                    )}
+                                >
+                                    <div className={"w-7"}>
+                                        {index == activeStep ? (
                                             <SpinnerLoading />
-                                        </div>
-                                        <div className="text-xl text-black">{step.label}</div>
-                                    </>
-                                ) : index > activeStep - 1 ? (
-                                    //steps for next messages
-                                    <>
-                                        <div className={"w-7"}>
-                                            <CheckCircleIcon className="h-7 w-7 fill-gray3" />
-                                        </div>
-                                        <div className="text-xl text-gray3">{step.label}</div>
-                                    </>
-                                ) : (
-                                    //steps for previous messages
-                                    <>
-                                        <div className={"w-7"}>
-                                            <CheckCircleIcon className="h-7 w-7 stroke-1 fill-purple" />
-                                        </div>
-                                        <div className="text-xl text-black2">{step.label}</div>
-                                    </>
-                                )}
-                            </div>
-                            <StepContent>
-                                <Typography>{step.description}</Typography>
-                            </StepContent>
-                        </Step>
-                    ))}
-                </Stepper>
-
+                                        ) : index > activeStep - 1 ? (
+                                            <CheckCircleIcon className="h-7 w-7 fill-base-300" />
+                                        ) : (
+                                            <CheckCircleIcon className="h-7 w-7 stroke-1 fill-primary" />
+                                        )}
+                                    </div>
+                                    {step.label}
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ul>
                 {
                     //final step and children
                     activeStep === steps.length && <div className="p-3">{children}</div>

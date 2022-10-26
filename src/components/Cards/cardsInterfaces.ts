@@ -1,4 +1,4 @@
-import { ButtonState, INFTVoting, IProposalDetail } from "types";
+import { ButtonState, IDAOPageForm, IMember, INFTVoting, IProposalDetail, IWhitelistRecord } from "types";
 import * as React from "react";
 import { DisclosureState } from "ariakit";
 
@@ -16,6 +16,7 @@ export interface INFTCard {
 
 export interface INFTCardWithDialog extends INFTCard {
     nftObject: INFTVoting;
+    isLoaded: boolean;
     setCurrentNFT?: React.Dispatch<React.SetStateAction<INFTVoting>>;
     setButtonState?: React.Dispatch<React.SetStateAction<ButtonState>>;
     detailNFTDialog?: DisclosureState;
@@ -30,7 +31,7 @@ export interface IProposalCard {
     description?: string;
     governorName?: string;
     blockchain?: string[];
-    isActive?: boolean;
+    proposalState?: number;
     forVotes?: string;
     againstVotes?: string;
     deadline?: number;
@@ -44,4 +45,25 @@ export interface ICardProposal {
 
 export interface IInformationCard {
     proposalData: IProposalDetail;
+}
+
+export interface IVotingCounter {
+    counter: string;
+    option: "Against" | "For";
+}
+
+export interface IDAOCard {
+    daoObject: IDAOPageForm;
+    lastElement: any;
+}
+
+export interface IWhitelistRecordCard {
+    record: IWhitelistRecord;
+    isLoaded: boolean;
+    handleWhitelistRecord: (record: IWhitelistRecord, isRejected: boolean) => Promise<void>;
+}
+
+export interface IMemberCard {
+    member: IMember;
+    nfts: INFTVoting[];
 }
