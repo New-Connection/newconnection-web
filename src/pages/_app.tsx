@@ -35,7 +35,6 @@ const myLightTheme = merge(lightTheme(), {
         // error: "...",
         // modalText: "...",
         // modalTextDim: "...",
-        // modalTextSecondary: "...",
         // standby: "...",
     },
 

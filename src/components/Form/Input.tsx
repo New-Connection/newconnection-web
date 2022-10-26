@@ -24,7 +24,7 @@ export const InputAmount = ({
                 {measure && <span className={"text-neutral-content/50"}>{measure}</span>}
             </label>
             <input
-                className={"input w-full bg-base-200 placeholder:text-base-content/50 disabled:cursor-not-allowed"}
+                className={"input-field"}
                 name={name}
                 required={isRequired}
                 autoComplete="off"
@@ -44,7 +44,6 @@ export const InputAmount = ({
                 disabled={isDisabled}
                 {...props}
             />
-
         </div>
     );
 };
@@ -104,10 +103,7 @@ export const InputTextArea = ({
                 <span className="input-label">{label}</span>
             </label>
             <textarea
-                className={classNames(
-                    "textarea bg-base-200 mb-4 resize-none placeholder:text-base-content/50",
-                    height ? height : "h-28"
-                )}
+                className={classNames("textarea input-field", height ? height : "h-28")}
                 name={name}
                 required={isRequired}
                 autoComplete="off"

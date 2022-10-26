@@ -22,7 +22,6 @@ export const WhitelistTab = ({ whitelist, isLoaded, governorUrl, handleWhitelist
                 <p className={"col-span-2 justify-self-center"}>Notes</p>
                 <p className={"col-span-2 justify-self-end mr-20"}>Action</p>
             </div>
-
             {whitelist.slice(0, visibleWhitelistLength).map((wl, index) => (
                 <WhitelistRecordCard
                     key={index}

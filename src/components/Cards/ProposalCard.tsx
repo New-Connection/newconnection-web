@@ -18,7 +18,7 @@ export const ProposalCard = ({
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
     return (
-        <div className="rounded-2xl bg-base-200 cursor-pointer active:bg-base-300 justify-between py-4 px-6">
+        <div className="rounded-2xl bg-base-300 cursor-pointer active:bg-base-300 justify-between py-4 px-6">
             <div className="flex justify-between pb-6">
                 <p className="font-medium text-xl">{title}</p>
                 <div>

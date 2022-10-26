@@ -8,7 +8,7 @@ export const ProposalVoteDialog = ({ dialog, activeStep }: IProposalPageDialog) 
             <p className="ml-7 mb-7">Voted successfully!</p>
 
             <button
-                className="form-submit-button"
+                className="dialog-button"
                 onClick={() => {
                     dialog.toggle();
                 }}

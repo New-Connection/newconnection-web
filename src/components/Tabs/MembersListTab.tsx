@@ -20,7 +20,6 @@ export const MembersListTab = ({ members, nfts, governorUrl }: IMembersListTab) 
                 <div className={"justify-self-center"}>Role</div>
                 <div className={"justify-self-end"}>Voting Power</div>
             </div>
-
             {members.map((member, index) => (
                 <MemberCard key={index} member={member} nfts={nfts} />
             ))}

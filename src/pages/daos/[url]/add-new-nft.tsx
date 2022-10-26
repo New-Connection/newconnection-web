@@ -84,7 +84,7 @@ const AddNewNFT: NextPage<IAddNftQuery> = ({ url }) => {
                 const supply = formData[chain];
                 return supply !== 0 && supply !== "" && supply !== undefined;
             })
-            ];
+        ];
     };
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -169,11 +169,6 @@ const AddNewNFT: NextPage<IAddNftQuery> = ({ url }) => {
                                     handleChange={(event) => handleTextChange(event, setFormData)}
                                 />
                                 <div className="grid grid-cols-2 gap-4">
-                                    <TypeSelector
-                                        label="Membership type"
-                                        name="NFTtype"
-                                        handleChange={(event) => handleSelectorChange(event, setFormData, "NFTtype")}
-                                    />
                                     <InputText
                                         label="Symbol"
                                         name="symbol"

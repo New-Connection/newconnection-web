@@ -62,7 +62,7 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
                                 pathname: `${DAO.url}/proposals/`,
                             }}
                         >
-                            <button className="flex gap-2 btn-link mt-8">
+                            <button className="view-all-button">
                                 View all proposals
                                 <div className="mt-[0.125rem]">
                                     <ArrowUpRightIcon />
