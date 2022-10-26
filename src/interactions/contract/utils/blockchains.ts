@@ -1,7 +1,6 @@
 import ASSETS from "assets";
 import { chain } from "wagmi";
 import { StaticImageData } from "next/image";
-import { INFURA_ID } from "utils";
 import { Chain } from "@rainbow-me/rainbowkit";
 
 enum ChainEnum {
@@ -83,7 +82,7 @@ const CHAINS: Chain[] = [
     // ----------------------------------------------------------------------
     chain.polygonMumbai,
 
-    {
+    /*{
         id: 420,
         name: "Optimism Goerli",
         network: "Optimism",
@@ -99,9 +98,9 @@ const CHAINS: Chain[] = [
             default: { name: "optiscan", url: "https://goerli-optimism.etherscan.io/" },
         },
         testnet: true,
-    },
+    },*/
 
-    {
+    /*{
         id: 1313161555,
         name: "Aurora Testnet",
         network: "Aurora",
@@ -118,17 +117,17 @@ const CHAINS: Chain[] = [
             default: { name: "aurorascan", url: "https://testnet.aurorascan.dev" },
         },
         testnet: true,
-    },
+    },*/
 
     // MAIN CHAINS
     // ----------------------------------------------------------------------
-    chain.mainnet,
+    // chain.mainnet,
 
     chain.polygon,
 
-    chain.optimism,
+    // chain.optimism,
 
-    {
+    /*{
         id: 1313161554,
         name: "Aurora",
         network: "Aurora",
@@ -145,7 +144,7 @@ const CHAINS: Chain[] = [
             default: { name: "aurorascan", url: "https://aurorascan.dev" },
         },
         testnet: false,
-    },
+    },*/
 ];
 
 export const getChains = (): Chain[] => CHAINS;
