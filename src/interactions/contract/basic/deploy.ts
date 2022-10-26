@@ -64,8 +64,7 @@ export async function deployNFTContract(signer: Signer, constructor: IConstructo
 }
 
 // For future constructor arguments
-export interface IConstructorTreasury {
-}
+export interface IConstructorTreasury {}
 
 export async function deployTreasuryContract(signer: Signer, constructor: IConstructorTreasury): Promise<Contract> {
     const factory = CreateTreasuryContract(signer);

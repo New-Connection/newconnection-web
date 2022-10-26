@@ -19,7 +19,7 @@ enum DBCollections {
     DAOS = "daos",
     MEMBERS = "members",
     PROPOSALS = "proposals",
-    WHITELIST = "whitelist"
+    WHITELIST = "whitelist",
 }
 
 export const daosCollection = collection(db, DBCollections.DAOS);

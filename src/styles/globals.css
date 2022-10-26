@@ -57,7 +57,6 @@
     }
 
     /* BADGE */
-
     .badge-active {
         @apply font-normal text-sm bg-success text-white rounded-full mr-4 px-[4.0erm] py-1;
     }
@@ -179,6 +178,7 @@
 #w3a-modal {
     z-index: 100;
 }
+
 /* RainbowKit Wallet */
 [data-rk] ._9pm4ki3 {
     z-index: 50;

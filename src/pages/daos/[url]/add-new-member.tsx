@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import Layout, { BackButton, Button, InputTextArea, RadioSelectorNFT } from "components";
 import { handleChangeBasic, handleContractError, handleTextChangeAddNewMember, validateForm } from "utils";
 import { IDAOPageForm, INFTVoting, IQuery, IWhitelistRecord } from "types";
-import { saveWhitelistRequest, whitelistRequestExists, } from "interactions/database";
+import { saveWhitelistRequest, whitelistRequestExists } from "interactions/database";
 import { useAccount, useSigner } from "wagmi";
 import { useEffectOnce, useReadLocalStorage } from "usehooks-ts";
 

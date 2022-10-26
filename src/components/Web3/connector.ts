@@ -10,18 +10,18 @@ import {
     WALLET_ADAPTERS,
 } from "@web3auth/base";
 import { Web3AuthCore } from "@web3auth/core";
-import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
+import { OpenloginAdapter, OpenloginLoginParams } from "@web3auth/openlogin-adapter";
 import LoginModal, { getAdapterSocialLogins, LOGIN_MODAL_EVENTS, OPENLOGIN_PROVIDERS } from "@web3auth/ui";
 import { ethers, Signer } from "ethers";
 import { getAddress } from "ethers/lib/utils";
 import log from "loglevel";
 
 import type { OpenLoginOptions } from "@toruslabs/openlogin";
-import { OpenloginLoginParams } from "@web3auth/openlogin-adapter";
 
 // TODO: remove later
 
-export type LoginMethodConfig = Record<string,
+export type LoginMethodConfig = Record<
+    string,
     {
         /**
          * Display Name. If not provided, we use the default for openlogin app
@@ -59,7 +59,8 @@ export type LoginMethodConfig = Record<string,
          * Whether to show the login button on mobile
          */
         showOnMobile?: boolean;
-    }>;
+    }
+>;
 
 export interface UIConfig {
     /**
@@ -122,7 +123,6 @@ export interface Options extends OpenLoginOptions {
 
     socialLoginConfig: Pick<OpenloginLoginParams, "dappShare" | "appState" | "mfaLevel" | "sessionTime">;
 }
-
 
 const IS_SERVER = typeof window === "undefined";
 
@@ -203,7 +203,11 @@ export class Web3AuthConnector extends Connector {
             await this.loginModal.initModal();
             this.loginModal.addSocialLogins(
                 WALLET_ADAPTERS.OPENLOGIN,
-                getAdapterSocialLogins(WALLET_ADAPTERS.OPENLOGIN, this.socialLoginAdapter, this.options.uiConfig?.loginMethodConfig),
+                getAdapterSocialLogins(
+                    WALLET_ADAPTERS.OPENLOGIN,
+                    this.socialLoginAdapter,
+                    this.options.uiConfig?.loginMethodConfig
+                ),
                 this.options.uiConfig?.loginMethodsOrder || OPENLOGIN_PROVIDERS
             );
             if (this.web3AuthInstance.status !== ADAPTER_STATUS.READY) {
@@ -329,13 +333,16 @@ export class Web3AuthConnector extends Connector {
     }
 
     private subscribeToLoginModalEvents(): void {
-        this.loginModal.on(LOGIN_MODAL_EVENTS.LOGIN, async (params: { adapter: WALLET_ADAPTER_TYPE; loginParams: unknown }) => {
-            try {
-                await this.web3AuthInstance.connectTo<unknown>(params.adapter, params.loginParams);
-            } catch (error) {
-                log.error(`Error while connecting to adapter: ${params.adapter}`, error);
+        this.loginModal.on(
+            LOGIN_MODAL_EVENTS.LOGIN,
+            async (params: { adapter: WALLET_ADAPTER_TYPE; loginParams: unknown }) => {
+                try {
+                    await this.web3AuthInstance.connectTo<unknown>(params.adapter, params.loginParams);
+                } catch (error) {
+                    log.error(`Error while connecting to adapter: ${params.adapter}`, error);
+                }
             }
-        });
+        );
 
         this.loginModal.on(LOGIN_MODAL_EVENTS.DISCONNECT, async () => {
             try {

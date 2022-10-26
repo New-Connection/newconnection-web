@@ -15,8 +15,11 @@ interface CustomDialogProps {
 export const CustomDialog = ({ dialog, className, children }: CustomDialogProps) => {
     const { isDarkMode } = useDarkMode();
     return (
-        <Dialog data-theme={isDarkMode ? DARK_THEME : LIGHT_THEME} state={dialog}
-                className={classNames("dialog", className)}>
+        <Dialog
+            data-theme={isDarkMode ? DARK_THEME : LIGHT_THEME}
+            state={dialog}
+            className={classNames("dialog", className)}
+        >
             <DialogHeader title="" dialog={dialog}></DialogHeader>
             <div className="h-full w-full my-4">
                 <div className="pt-4 px-6">{children}</div>

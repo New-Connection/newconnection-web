@@ -33,7 +33,6 @@ export function CheckboxGroup({
                                 onChange={handleChange}
                                 disabled={isDisabled}
                             >
-
                                 {value}
                                 {images && (
                                     <Image

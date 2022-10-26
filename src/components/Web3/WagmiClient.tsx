@@ -1,4 +1,4 @@
-import { chain, configureChains, createClient } from "wagmi";
+import { configureChains, createClient } from "wagmi";
 import { infuraProvider } from "wagmi/providers/infura";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";

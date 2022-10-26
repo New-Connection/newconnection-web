@@ -73,7 +73,7 @@ const CreateNFT: NextPage = () => {
                     const supply = formData[chain];
                     return supply !== 0 && supply !== "" && supply !== undefined;
                 })
-                ];
+            ];
         };
 
         try {

@@ -8,7 +8,6 @@ import Layout, {
     InputSupplyOfNFT,
     InputText,
     InputTextArea,
-    TypeSelector,
 } from "components";
 import { Signer } from "ethers";
 import { useSigner, useSwitchNetwork } from "wagmi";
@@ -19,7 +18,6 @@ import {
     handleContractError,
     handleImageChange,
     handleNftSupplyChange,
-    handleSelectorChange,
     handleTextChange,
     storeNFT,
     validateForm,

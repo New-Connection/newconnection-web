@@ -2,7 +2,13 @@ import React from "react";
 
 export const DiscordIcon = ({ width = "21", height = "17" }) => {
     return (
-        <svg width={width} height={height} viewBox="0 0 22 17" className={'fill-base-content'} xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            height={height}
+            viewBox="0 0 22 17"
+            className={"fill-base-content"}
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 d="M8.10865 0.276257C8.10865 0.276257 5.08867 0.486778 3.11364 2.09576C3.10438 2.09952 3.09326 2.10516 3.084 2.1108C2.74124 2.43222 2.48371 2.93033 2.16504 
                 3.6446C1.84636 4.35887 1.50916 5.27802 1.20161 6.30619C0.588349 8.36441 0.0899597 10.8907 0.0899597 13.2684C0.088107 13.353 0.108487 13.4357 0.149248 

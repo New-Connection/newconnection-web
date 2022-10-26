@@ -2,7 +2,13 @@ import React from "react";
 
 export const WebsiteIcon = ({ width = "22", height = "21" }) => {
     return (
-        <svg width={width} height={height} viewBox="0 0 22 21" className={'fill-base-content'} xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            height={height}
+            viewBox="0 0 22 21"
+            className={"fill-base-content"}
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 d="M3.20117 17.0087C1.50214 15.1867 0.561876 12.8312 0.558998 10.3895C0.555958 7.94785 1.49058 5.59043 3.18537 3.76442C3.20483 3.73796 3.22687 
                 3.71325 3.25119 3.69057C4.55838 2.30167 6.24722 1.29209 8.12525 0.776966C10.0034 0.261845 11.995 0.261845 13.8729 0.776966C15.751 1.29209 17.4398 

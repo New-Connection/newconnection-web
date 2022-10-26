@@ -25,8 +25,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-base-content">
                         {labels[0]}
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-error rounded-full text-xs text-base-content"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-error rounded-full text-xs text-base-content"></span>
                     </div>
                 </label>
             </div>
@@ -48,8 +47,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                 >
                     <div className="relative px-4 py-2 text-base-content">
                         {labels[1]}
-                        <span
-                            className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-success rounded-full text-xs text-base-content"></span>
+                        <span className="absolute top-0 right-0 px-1 py-1 translate-x-1/2 -translate-y-1/2 bg-success rounded-full text-xs text-base-content"></span>
                     </div>
                 </label>
             </div>

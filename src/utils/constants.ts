@@ -12,8 +12,8 @@ export const ipfsClient = create({
             "Basic " +
             Buffer.from(
                 process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID +
-                ":" +
-                process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET
+                    ":" +
+                    process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET
             ).toString("base64"),
     },
 });

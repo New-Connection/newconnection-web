@@ -56,8 +56,10 @@ export const DragAndDropImage = ({
                 {...props}
             >
                 <div
-                    className={classNames("flex flex-col max-h-80 text-center border-dashed rounded-md border-2 justify-center border-base-200 hover:border-primary focus:text-base-content",
-                        height)}
+                    className={classNames(
+                        "flex flex-col max-h-80 text-center border-dashed rounded-md border-2 justify-center border-base-200 hover:border-primary focus:text-base-content",
+                        height
+                    )}
                 >
                     {error ? (
                         <p className="text-error mt-1">Error: {errorMessages}</p>
@@ -66,7 +68,8 @@ export const DragAndDropImage = ({
                             {file ? (
                                 <div className={"flex flex-col h-full w-full p-3"}>
                                     <div className={"w-full h-full overflow-hidden relative"}>
-                                        <Image src={preview} layout={"fill"} /></div>
+                                        <Image src={preview} layout={"fill"} />
+                                    </div>
                                     <div>
                                         <p className="text-primary mt-1">File is accepted ✅</p>
                                         <p className={"truncate"}>File name: {file?.name}</p>
@@ -74,9 +77,12 @@ export const DragAndDropImage = ({
                                 </div>
                             ) : (
                                 <div className={"flex flex-col"}>
-                                    <div><Image src={ASSETS.imageIcon} width={"50"} height={"50"} /></div>
-                                    <p className="text-base-content/50 mt-6 text-sm px-4">PNG, JPEG and JPG accept. Max
-                                        1mb.</p>
+                                    <div>
+                                        <Image src={ASSETS.imageIcon} width={"50"} height={"50"} />
+                                    </div>
+                                    <p className="text-base-content/50 mt-6 text-sm px-4">
+                                        PNG, JPEG and JPG accept. Max 1mb.
+                                    </p>
                                 </div>
                             )}
                         </>
