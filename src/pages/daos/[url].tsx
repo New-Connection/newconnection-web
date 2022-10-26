@@ -20,7 +20,6 @@ import Layout, {
 } from "components";
 import Image from "next/image";
 import {
-    AddToWhitelist,
     addTreasury,
     checkCorrectNetwork,
     contributeToTreasury,
@@ -28,6 +27,7 @@ import {
     fetchTreasuryBalance,
     getChainScanner,
     getGovernorOwnerAddress,
+    handleWhitelistRecord,
     mint,
 } from "interactions/contract";
 import {
@@ -44,10 +44,9 @@ import { LinkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useDialogState } from "ariakit";
 import { useAccount, useSigner, useSwitchNetwork } from "wagmi";
-import { handleChangeBasic, handleContractError, isValidHttpUrl } from "utils";
+import { handleChangeBasic, isValidHttpUrl } from "utils";
 import {
     addValueToDao,
-    deleteWhitelistRecord,
     getAllMembersForDao,
     getAllProposals,
     getDao,
@@ -55,7 +54,6 @@ import {
     saveMember,
 } from "interactions/database";
 import classNames from "classnames";
-import toast from "react-hot-toast";
 import { useBoolean, useCounter, useLocalStorage } from "usehooks-ts";
 
 export const getServerSideProps: GetServerSideProps<DAOPageProps, IDaoQuery> = async (context) => {
@@ -244,29 +242,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         }
     };
 
-    const addToWhitelist = async (walletAddress: string, votingTokenAddress: string, isRejected: boolean = false) => {
-        let status;
-        if (!isRejected) {
-            if (!(await checkCorrectNetwork(signerData, DAO.chainId, switchNetwork))) {
-                return;
-            }
-
-            console.log("voting token " + votingTokenAddress);
-            status = await AddToWhitelist({
-                addressNFT: votingTokenAddress,
-                walletAddress: walletAddress,
-                signer: signerData,
-            });
-        }
-        try {
-            if (status || isRejected) {
-                await deleteWhitelistRecord(DAO.url, walletAddress, votingTokenAddress);
-                loadingWhitelist().then();
-                isRejected ? toast.success("Whitelist request refected") : toast.success("Wallet added to Whitelist");
-            }
-        } catch (e) {
-            handleContractError(e);
-        }
+    const addToWhitelist = async (record: IWhitelistRecord, isRejected: boolean = false) => {
+        await handleWhitelistRecord(record, isRejected, signerData, switchNetwork, loadingWhitelist);
     };
 
     const mintButton = async () => {
@@ -444,7 +421,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                     label: "Members",
                                     index: 1,
                                     Component: () => {
-                                        return <MembersListTab members={members} nfts={NFTs} />;
+                                        return <MembersListTab members={members} nfts={NFTs} governorUrl={url} />;
                                     },
                                 },
                                 isOwner && {
@@ -456,9 +433,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                                 governorUrl={url}
                                                 whitelist={whitelist}
                                                 isLoaded={isLoaded}
-                                                signer={signerData}
-                                                chainId={DAO.chainId}
-                                                addToWhitelist={addToWhitelist}
+                                                handleWhitelistRecord={addToWhitelist}
                                             />
                                         );
                                     },

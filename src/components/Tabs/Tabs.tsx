@@ -57,7 +57,7 @@ export const Tabs: FC<TabsProps> = ({ tabs = [], selectedTab = 0, onClick, url, 
                     </Link>
                 </div>
             </div>
-            <div id={`tabpanel-${selectedTab}`} className="w-full py-2 px-2">
+            <div id={`tabpanel-${selectedTab}`} className="w-full py-2 px-2 min-h-[28rem]">
                 {Panel && <Panel.Component index={selectedTab} />}
             </div>
         </div>

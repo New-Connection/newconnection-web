@@ -3,12 +3,13 @@ import { BlockchainIcon, CopyTextButton } from "components";
 import React from "react";
 import classNames from "classnames";
 import { ICardProposal, IInformationCard, IProposalCard, IVotingCounter } from "./cardsInterfaces";
+import { ProposalState } from "interactions/contract";
 
 export const ProposalCard = ({
     title,
     shortDescription,
     tokenName,
-    isActive,
+    proposalState,
     chainId,
     forVotes,
     againstVotes,
@@ -22,12 +23,12 @@ export const ProposalCard = ({
                 <p className="font-medium text-xl">{title}</p>
                 <div>
                     <div className="flex gap-5">
-                        {isActive && (
+                        {proposalState && (
                             <p className="hidden md:block font-light text-sm pt-1">
                                 Ends {timestampToDate(deadline || 0)}
                             </p>
                         )}
-                        <ProposalActivityBadge isActive={isActive} />
+                        <ProposalActivityBadge isActive={proposalState} />
                     </div>
                 </div>
             </div>
@@ -52,13 +53,15 @@ export const ProposalCard = ({
     );
 };
 
-export const ProposalActivityBadge = ({ isActive }) => {
+export const ProposalActivityBadge = ({ isActive: proposalState }) => {
     return (
         <div>
-            {isActive ? (
-                <p className="badge-active mr-0 px-5 py-0.5 rounded-full">Active</p>
+            {proposalState === ProposalState.Active ? (
+                <p className="text-primary bg-base-300 px-5 py-0.5 rounded-full">Active</p>
+            ) : proposalState === ProposalState.Succeeded ? (
+                <p className="text-success bg-base-300 px-5 py-0.5 rounded-full">Succeeded</p>
             ) : (
-                <p className="badge-non-active mr-0 px-5 py-0.5 rounded-full">Closed</p>
+                <p className="text-error bg-base-300 px-5 py-0.5 rounded-full">Failed</p>
             )}
         </div>
     );

@@ -4,6 +4,7 @@ import { ArrowUpRightIcon, MockupLoadingProposals, MockupTextCard, ProposalCard 
 import * as React from "react";
 import { addValueToDao } from "interactions/database";
 import { useTimeout } from "usehooks-ts";
+import { ProposalState } from "interactions/contract";
 
 interface IProposalListTab {
     DAO: IDAOPageForm;
@@ -13,7 +14,7 @@ interface IProposalListTab {
 export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
     const visibleProposalsLength: number = 3;
     let activeProposals: IProposalPageForm[];
-    proposals && (activeProposals = proposals.filter((proposals) => proposals.isActive));
+    proposals && (activeProposals = proposals.filter((proposals) => proposals.proposalState === ProposalState.Active));
 
     useTimeout(() => activeProposals && addValueToDao(DAO.url, "isActive", activeProposals.length !== 0).then(), 1500);
 
@@ -26,7 +27,7 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
                     const description = proposal.description;
                     const tokenName = proposal.tokenName;
                     const shortDescription = proposal.shortDescription;
-                    const isActive = proposal.isActive;
+                    const isActive = proposal.proposalState;
                     const forVotes = proposal.forVotes;
                     const againstVotes = proposal.againstVotes;
                     const deadline = proposal.endDateTimestamp;
@@ -39,7 +40,7 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
                                     shortDescription={shortDescription}
                                     tokenName={tokenName}
                                     chainId={DAO?.chainId}
-                                    isActive={isActive}
+                                    proposalState={isActive}
                                     forVotes={forVotes}
                                     againstVotes={againstVotes}
                                     deadline={deadline}

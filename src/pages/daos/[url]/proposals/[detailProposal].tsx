@@ -106,7 +106,7 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                         <BackButton />
                         <div className="flex justify-between">
                             <h1 className="text-highlighter capitalize w-1/2">{proposalData.name}</h1>
-                            <ProposalActivityBadge isActive={proposalData.isActive} />
+                            <ProposalActivityBadge isActive={proposalData.proposalState} />
                         </div>
                         <p className="pb-4">{proposalData.shortDescription}</p>
                         <div className="flex gap-6 pb-10">
