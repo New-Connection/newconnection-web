@@ -41,21 +41,17 @@ const Home: NextPage = () => {
         const loadingData = async () => {
             const memberRecords = await getAllMemberRecords(address);
             getDaosForMember(memberRecords).then((daos) => {
-                if (daos.length > 0) {
-                    console.log("load daos " + daos);
-                    setMemberDaos(daos);
-                    loadingLargeData(daos).then();
+                console.log("load daos " + daos);
+                setMemberDaos(daos);
+                loadingLargeData(daos).then();
 
-                    setStorageDaos(daos);
-                }
+                setStorageDaos(daos);
             });
             fetchNFTsForMember(memberRecords).then((nfts) => {
-                if (nfts.length > 0) {
-                    console.log("load nfts" + nfts);
-                    setMemberNfts(nfts);
+                console.log("load nfts" + nfts);
+                setMemberNfts(nfts);
 
-                    setStorageNfts(nfts);
-                }
+                setStorageNfts(nfts);
             });
         };
 
