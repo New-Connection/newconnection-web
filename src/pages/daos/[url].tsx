@@ -27,6 +27,7 @@ import {
     fetchTreasuryBalance,
     getChainScanner,
     getGovernorOwnerAddress,
+    getTokenSymbol,
     handleWhitelistRecord,
     mint,
 } from "interactions/contract";
@@ -92,6 +93,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
     // Treasury section
     const { value: isOwner, setTrue: setOwnerTrue, setFalse: setOwnerFalse } = useBoolean(false);
     const [treasuryBalance, setTreasuryBalance] = useState("0");
+    const [treasuryBalanceEth, setTreasuryBalanceEth] = useState("");
     const {
         count: createTreasuryStep,
         increment: incrementCreateTreasuryStep,
@@ -155,7 +157,8 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         const loadingTreasuryBalance = async (dao: IDAOPageForm) => {
             const treasuryBalance = await fetchTreasuryBalance(dao);
             if (treasuryBalance) {
-                setTreasuryBalance(treasuryBalance);
+                setTreasuryBalance(treasuryBalance.currencyBalance);
+                setTreasuryBalanceEth(`${treasuryBalance.ethBalance} ${getTokenSymbol(dao.chainId)}`);
             }
         };
 
@@ -356,7 +359,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                         <LinkIcon className="h-6 w-5" />
                                     </a>
                                 </div>
-                                <p className={"text-2xl font-medium"}>$ {treasuryBalance}</p>
+                                <div className={"flex gap-2 justify-center"}>
+                                    <p className={"text-2xl font-medium"}>$ {treasuryBalance}</p>
+                                    <div className="divider divider-horizontal" />
+                                    <p className={"text-2xl font-medium"}>{treasuryBalanceEth}</p>
+                                </div>
                                 <div className="flex flex-col items-center justify-center pb-3">
                                     <button
                                         className="secondary-button w-1/3"

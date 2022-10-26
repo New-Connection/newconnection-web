@@ -18,5 +18,7 @@ export async function getTreasuryBalance(contractAddress: string, chainId: numbe
 
     const exchangeRate = await getExchangeRate(getTokenSymbol(chainId), Currency.USD);
 
-    return ethBalance * exchangeRate;
+    const currencyBalance = ethBalance * exchangeRate;
+
+    return { currencyBalance, ethBalance };
 }
