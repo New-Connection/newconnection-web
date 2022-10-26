@@ -20,7 +20,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                     htmlFor="bordered-radio-1"
                     className={classNames(
                         className,
-                        "inline-flex justify-between items-center p-5 w-full text-base-content bg-base-100 rounded-lg border border-base-300 peer-checked:border-primary hover:border-primary/50"
+                        "inline-flex justify-between items-center p-5 w-full text-base-content bg-base-100 rounded-lg border border-base-200 peer-checked:border-primary hover:border-primary/50"
                     )}
                 >
                     <div className="relative px-4 py-2 text-base-content">
@@ -43,7 +43,7 @@ export const RadioSelector = ({ name, labels, className, handleChange }: IRadioS
                     htmlFor="bordered-radio-2"
                     className={classNames(
                         className,
-                        "inline-flex justify-between items-center p-5 w-full text-base-content bg-base-100 rounded-lg border border-base-300 peer-checked:border-primary hover:border-primary/50"
+                        "inline-flex justify-between items-center p-5 w-full text-base-content bg-base-100 rounded-lg border border-base-200 peer-checked:border-primary hover:border-primary/50"
                     )}
                 >
                     <div className="relative px-4 py-2 text-base-content">

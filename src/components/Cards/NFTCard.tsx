@@ -49,7 +49,7 @@ export function NFTCardWithDialog({
                         <ClockIcon
                             width={"40px"}
                             height={"40px"}
-                            className={"bg-base-300 opacity-60 rounded-lg mt-2 ml-2"}
+                            className={"bg-base-200 opacity-60 rounded-lg mt-2 ml-2"}
                         />
                     </div>
                 )}

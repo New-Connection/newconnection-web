@@ -19,7 +19,7 @@ export const SpinnerLoading = () => {
     return (
         <div role="status">
             <svg
-                className="inline w-7 h-7 animate-spin text-base-300 fill-primary"
+                className="inline w-7 h-7 animate-spin text-base-200 fill-primary"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +149,7 @@ export const StepperDialog = ({
                                         {index == activeStep ? (
                                             <SpinnerLoading />
                                         ) : index > activeStep - 1 ? (
-                                            <CheckCircleIcon className="h-7 w-7 fill-base-200" />
+                                            <CheckCircleIcon className="h-7 w-7 fill-base-300" />
                                         ) : (
                                             <CheckCircleIcon className="h-7 w-7 stroke-1 fill-primary" />
                                         )}

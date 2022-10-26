@@ -56,7 +56,7 @@ export const DragAndDropImage = ({
                 {...props}
             >
                 <div
-                    className={classNames("flex flex-col max-h-80 text-center border-dashed rounded-md border-2 justify-center border-base-300 hover:border-primary focus:text-base-content",
+                    className={classNames("flex flex-col max-h-80 text-center border-dashed rounded-md border-2 justify-center border-base-200 hover:border-primary focus:text-base-content",
                         height)}
                 >
                     {error ? (

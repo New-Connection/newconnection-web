@@ -18,7 +18,7 @@ export const ProposalCard = ({
     const againstV = +againstVotes! ?? 0;
     const forV = +forVotes! ?? 0;
     return (
-        <div className="rounded-2xl bg-base-300 cursor-pointer active:bg-base-300 justify-between py-4 px-6">
+        <div className="rounded-2xl bg-base-200 cursor-pointer active:bg-base-200 justify-between py-4 px-6">
             <div className="flex justify-between pb-6">
                 <p className="font-medium text-xl">{title}</p>
                 <div>
@@ -57,11 +57,11 @@ export const ProposalActivityBadge = ({ isActive: proposalState }) => {
     return (
         <div>
             {proposalState === ProposalState.Active ? (
-                <p className="text-primary bg-base-300 px-5 py-0.5 rounded-full">Active</p>
+                <p className="text-primary bg-base-200 px-5 py-0.5 rounded-full">Active</p>
             ) : proposalState === ProposalState.Succeeded ? (
-                <p className="text-success bg-base-300 px-5 py-0.5 rounded-full">Succeeded</p>
+                <p className="text-success bg-base-200 px-5 py-0.5 rounded-full">Succeeded</p>
             ) : (
-                <p className="text-error bg-base-300 px-5 py-0.5 rounded-full">Failed</p>
+                <p className="text-error bg-base-200 px-5 py-0.5 rounded-full">Failed</p>
             )}
         </div>
     );
@@ -69,7 +69,7 @@ export const ProposalActivityBadge = ({ isActive: proposalState }) => {
 
 const DetailProposalCard = ({ title, children, className }: ICardProposal) => {
     return (
-        <div className={classNames("w-full h-64 border-2 border-base-300 rounded-xl mt-6 p-4", className)}>
+        <div className={classNames("w-full h-64 border-2 border-base-200 rounded-xl mt-6 p-4", className)}>
             <p className="text-primary mb-4 text-lg">{title}</p>
             <div>{children}</div>
         </div>

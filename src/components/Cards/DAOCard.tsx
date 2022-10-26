@@ -9,7 +9,7 @@ export const DAOCard = ({ daoObject, lastElement }: IDAOCard) => {
         <Link href={`/daos/${daoObject.url}`}>
             <div
                 className={classNames(
-                    "flex justify-between w-full h-50 p-3 cursor-pointer active:bg-base-300 pt-7 pb-7",
+                    "flex justify-between w-full h-50 p-3 cursor-pointer active:bg-base-200 pt-7 pb-7",
                     lastElement ? "border-none" : "border-b"
                 )}
             >
@@ -58,7 +58,7 @@ export const DAOCard = ({ daoObject, lastElement }: IDAOCard) => {
                                     daoObject.totalProposals || "0"
                                 ) : (
                                     //MOCK UP FOR LOADING
-                                    <div className="bg-base-300 text-base-content/50 animate-pulse rounded-md">000</div>
+                                    <div className="bg-base-200 text-base-content/50 animate-pulse rounded-md">000</div>
                                 )}
                             </div>
                         </div>

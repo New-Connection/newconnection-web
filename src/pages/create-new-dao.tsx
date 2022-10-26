@@ -20,7 +20,7 @@ const CreateNewDAO: NextPage = () => {
 
     const Card = ({ title, subtitle, buttonTitle, linkToPage, isDisabled = false }: ICard) => {
         return (
-            <div className="grid grid-flow-row border-2 border-base-300 rounded-lg py-4 px-4 gap-4">
+            <div className="grid grid-flow-row border-2 border-base-200 rounded-lg py-4 px-4 gap-4">
                 <p className="input-label font-medium text-lg">{title}</p>
                 <p className="pb-6">{subtitle}</p>
                 <Button

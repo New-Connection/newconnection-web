@@ -37,11 +37,11 @@ const ChatsPage: NextPage<IQuery> = ({ url }) => {
                         <div className="flex justify-between items-center">
                             <h1 className="text-highlighter">Membership chats</h1>
                         </div>
-                        <div className="container mx-auto rounded-lg border-t border-base-300">
+                        <div className="container mx-auto rounded-lg border-t border-base-200">
                             <div className="flex flex-row justify-between bg-base-100">
                                 {/* User chat*/}
 
-                                <div className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-base-300 pb-4">
+                                <div className="flex flex-col h-[calc(100vh-190px-165px)] w-2/5 overflow-y-auto border-r-2 border-base-200 pb-4">
                                     {NFTs &&
                                         NFTs.map((nft, index) => (
                                             <button

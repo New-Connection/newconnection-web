@@ -86,7 +86,7 @@ const Home: NextPage = () => {
                 </div>
                 <div
                     className={
-                        "flex flex-col justify-between text-center h-52 p-3 bg-base-300 border-base-300 rounded-2xl border-2"
+                        "flex flex-col justify-between text-center h-52 p-3 bg-base-200 border-base-200 rounded-2xl border-2"
                     }
                 >
                     <div className={"flex justify-center text-2xl pt-3"}>
@@ -132,7 +132,7 @@ const Home: NextPage = () => {
             <div className={"app-section mt-20"}>
                 <div
                     className={
-                        "bg-base-300 p-10 grid grid-flow-row gap-16 justify-center border-2 border-base-300 rounded-xl w-1/2"
+                        "bg-base-200 p-10 grid grid-flow-row gap-16 justify-center border-2 border-base-200 rounded-xl w-1/2"
                     }
                 >
                     <div className={"text-2xl"}>

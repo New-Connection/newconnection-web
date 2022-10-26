@@ -14,11 +14,11 @@ const Footer = () => {
             </div>
 
             <div className="grid grid-flow-col gap-4 md:justify-self-end">
-                <button className="grid place-items-center cursor-not-allowed w-[50px] h-[50px] bg-base-300 rounded-full hover:bg-primary/75 ">
+                <button className="grid place-items-center cursor-not-allowed w-[50px] h-[50px] bg-base-200 rounded-full hover:bg-primary/75 ">
                     <DiscordIcon height="25" width="25" />
                 </button>
                 <a href="https://twitter.com/NewConnectionX" target="_blank" rel="noreferrer">
-                    <button className="w-[50px] h-[50px] grid place-items-center bg-base-300 rounded-full hover:bg-primary/75">
+                    <button className="w-[50px] h-[50px] grid place-items-center bg-base-200 rounded-full hover:bg-primary/75">
                         <TwitterIcon height="25" width="25" />
                     </button>
                 </a>

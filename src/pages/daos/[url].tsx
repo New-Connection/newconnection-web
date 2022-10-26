@@ -343,7 +343,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         {DAO.treasuryAddress ? (
                             <div
                                 className={
-                                    "flex flex-col justify-between border-2 text-center border-base-300 rounded-2xl h-52 p-3 md:w-4/5"
+                                    "flex flex-col justify-between border-2 text-center border-base-200 rounded-2xl h-52 p-3 md:w-4/5"
                                 }
                             >
                                 <div className={"flex justify-center text-2xl pt-3"}>
@@ -520,7 +520,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
         </div>
     ) : (
         <div>
-            <div className="cover h-48 w-full relative justify-center bg-base-300 animate-pulse"></div>
+            <div className="cover h-48 w-full relative justify-center bg-base-200 animate-pulse"></div>
             <Layout className="layout-base">
                 <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
                     {notFound ? (

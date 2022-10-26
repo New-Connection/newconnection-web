@@ -27,9 +27,8 @@ module.exports = {
           error: "#EB4747",             // RED 
           "neutral-content": "#F2F3F4", // GRAY (BADGE)
           "base-100": "#FFFFFF",        // WHITE
-          "base-200": "#AAAAAA",        // DARK GRAY(For badges on GRAY)
-          "base-300": "#F2F3F4"         // GRAY (Bg)
-          
+          "base-200": "#F2F3F4"  ,       // GRAY (Bg)
+          "base-300": "#AAAAAA",        // DARK GRAY(For badges on GRAY)
         }, 
         dark: {
             ...require("daisyui/src/colors/themes")["[data-theme=dark]"],

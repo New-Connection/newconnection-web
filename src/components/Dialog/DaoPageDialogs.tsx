@@ -37,7 +37,7 @@ export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButt
                                 {buttonState}
                             </button>
                         ) : currentNFT.tokenRequestedByMember ? (
-                            <button className={"main-button disabled:bg-base-300"} disabled>
+                            <button className={"main-button disabled:bg-base-200"} disabled>
                                 Confirmation awaited
                             </button>
                         ) : (
