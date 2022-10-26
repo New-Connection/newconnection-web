@@ -18,7 +18,7 @@ export const web3AuthWallet = ({ chains }: IWalletOptions): Wallet => ({
             options: {
                 socialLoginConfig: { mfaLevel: "default" },
                 enableLogging: false,
-                clientId: "BONXAIAsHEXSHuEpA5kGei87cF8CXcvZIyRQuVgveMEEatHhJe7MeQTWcsq-kylSTBRuYiJkdu3fZcG4fv-O8OI",
+                clientId: process.env.NEXT_PUBLIC_WEB3_AUTH_CLIENT_ID,
                 network: "mainnet",
                 chainId: "0x89",
                 uiConfig: {
