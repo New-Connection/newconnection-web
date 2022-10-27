@@ -67,7 +67,7 @@
 
     /* BUTTONS */
     .main-button {
-        @apply btn btn-primary flex items-center gap-2 whitespace-nowrap font-medium h-10 rounded-full py-2 px-8 text-sm normal-case text-white disabled:bg-base-300;
+        @apply btn btn-primary flex items-center gap-2 whitespace-nowrap font-medium h-10 rounded-full py-2 px-8 text-sm normal-case disabled:bg-base-300;
     }
 
     .secondary-button {
@@ -88,6 +88,10 @@
 
     .view-all-button {
         @apply flex gap-2 btn-link text-gray-500 mt-8 hover:text-primary;
+    }
+
+    .radio-button {
+        @apply main-button normal-case bg-base-200 border-base-300
     }
 
     /* DIALOGS */

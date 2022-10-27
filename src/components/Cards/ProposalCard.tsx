@@ -76,24 +76,36 @@ const DetailProposalCard = ({ title, children, className }: ICardProposal) => {
     );
 };
 
+const InfoRow = ({ name, value }) => {
+    return (
+        <div className={"flex justify-between"}>
+            <div className={"text-base-content/50"}>{name}</div>
+            <div>{value}</div>
+        </div>
+    );
+};
+
 export const AboutProposalCard = ({ proposalData }: IInformationCard) => {
     return (
         <DetailProposalCard title="About" className="lg:w-1/3 w-full">
-            <div className="text-sm h-44 overflow-y-auto">{proposalData.description}</div>
+            <div className={"flex flex-col gap-4 h-44 overflow-y-auto"}>
+                <InfoRow name={"Voting Type"} value={proposalData.type.toUpperCase()} />
+                {proposalData.type === "executing" && (
+                    <>
+                        <InfoRow name={"Receiver"} value={<CopyTextButton copyText={proposalData.receiverAddress} />} />
+                        <InfoRow name={"Amount"} value={`${proposalData.receiveAmount} ${proposalData.currency}`} />
+                    </>
+                )}
+                <div>
+                    <p className={"text-base-content/50"}>Description</p>
+                    <div className={"text-sm"}>{proposalData.description}</div>
+                </div>
+            </div>
         </DetailProposalCard>
     );
 };
 
 export const InfoProposalCard = ({ proposalData }: IInformationCard) => {
-    const InfoRow = ({ name, value }) => {
-        return (
-            <div className={"flex justify-between"}>
-                <div className={"text-base-content/50"}>{name}</div>
-                <div>{value}</div>
-            </div>
-        );
-    };
-
     return (
         <DetailProposalCard title="Info" className="lg:w-1/3 w-full">
             <div className={"flex flex-col h-44 justify-between"}>

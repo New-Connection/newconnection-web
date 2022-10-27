@@ -69,6 +69,11 @@ export interface ICreateProposal extends ICreate {
     options?: string[];
     blockchain?: string[];
     enabledBlockchains?: string[];
+    type: "voting" | "executing";
+    treasuryAddress?: string;
+    receiverAddress?: string;
+    receiveAmount?: string;
+    currency?: string;
 }
 
 export interface IProposalPageForm extends ICreateProposal {

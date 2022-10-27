@@ -21,7 +21,7 @@ export const InputAmount = ({
         <div className={classNames(className, "form-control w-full max-w-xl")}>
             <label className="label">
                 <span className={"input-label"}>{label}</span>
-                {measure && <span className={"text-neutral-content/50"}>{measure}</span>}
+                {measure && <span className={"text-base-content/50"}>{measure}</span>}
             </label>
             <input
                 className={"input-field"}
