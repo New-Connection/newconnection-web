@@ -4,14 +4,14 @@ import { getSecondsPerBlock } from "interactions/contract";
 import { provider } from "components";
 
 export enum ProposalState {
-    Pending,
-    Active,
-    Canceled,
-    Defeated,
-    Succeeded,
-    Queued,
-    Expired,
-    Executed,
+    Pending = 0 as any,
+    Active = 1 as any,
+    Canceled = 2 as any,
+    Defeated = 3 as any,
+    Succeeded = 4 as any,
+    Queued = 5 as any,
+    Expired = 6 as any,
+    Executed = 7 as any,
 }
 
 export async function getGovernorName(contractAddress: string, chainId: number) {
@@ -50,7 +50,8 @@ export async function proposalDeadline(contractAddress: string, chainId: number,
     const proposalVotingPeriod = (await governor.votingPeriod()).toNumber();
     const proposalStartBlock = (await governor.proposalSnapshot(proposalId)).toNumber();
     return (
-        (await baseProvider.getBlock(proposalStartBlock)).timestamp + getSecondsPerBlock(chainId) * proposalVotingPeriod
+        (await baseProvider.getBlock(proposalStartBlock))?.timestamp +
+        getSecondsPerBlock(chainId) * proposalVotingPeriod
     );
 }
 
@@ -58,7 +59,7 @@ export async function proposalSnapshot(contractAddress: string, chainId: number,
     let baseProvider = provider({ chainId });
     const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, baseProvider);
     const blockNumber = (await governor.proposalSnapshot(proposalId)).toNumber();
-    return (await baseProvider.getBlock(blockNumber)).timestamp;
+    return (await baseProvider.getBlock(blockNumber))?.timestamp;
 }
 
 export async function proposalForVotes(contractAddress: string, chainId: number, proposalId: string): Promise<string> {

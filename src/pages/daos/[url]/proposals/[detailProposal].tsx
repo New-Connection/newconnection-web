@@ -16,7 +16,14 @@ import Layout, {
 } from "components";
 import { handleContractError, handleTextChangeAddNewMember, validateForm } from "utils";
 import { IDetailProposalProps, IDetailProposalQuery, IProposal, IProposalDetail, IProposalPageForm } from "types";
-import { castVote, checkCorrectNetwork, getProposer, proposalSnapshot } from "interactions/contract";
+import {
+    castVote,
+    checkCorrectNetwork,
+    executeGovernorProposal,
+    getProposer,
+    proposalSnapshot,
+    ProposalState,
+} from "interactions/contract";
 import { useRouter } from "next/router";
 import { useCounter, useReadLocalStorage } from "usehooks-ts";
 
@@ -98,6 +105,29 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
         incrementActiveStep();
     }
 
+    async function executeProposal() {
+        if (!(await checkCorrectNetwork(signerData, proposalData.chainId, switchNetwork))) {
+            return;
+        }
+
+        try {
+            await executeGovernorProposal(
+                proposalData.governorAddress,
+                signerData,
+                proposalData.name,
+                proposalData.tokenAddress,
+                proposalData.treasuryAddress,
+                proposalData.receiverAddress,
+                proposalData.receiveAmount
+            );
+        } catch (error) {
+            handleContractError(error, { dialog: confirmDialog });
+            return;
+        } finally {
+            await router.push(`/daos/${proposalData.governorUrl}`);
+        }
+    }
+
     return proposalData ? (
         <div>
             <Layout className="layout-base">
@@ -114,14 +144,23 @@ const DetailProposal: NextPage<IDetailProposalProps> = ({ detailProposal }) => {
                             <InfoProposalCard proposalData={proposalData} />
                             <VotingResultsCard proposalData={proposalData} />
                         </div>
-                        <RadioSelector
-                            name="voteResult"
-                            labels={["Against", "In favor"]}
-                            handleChange={(event) => handleTextChangeAddNewMember(event, setFormData)}
-                        />
-                        <Button className="mt-10">
-                            <p>Vote</p>
-                        </Button>
+                        {proposalData.proposalState === ProposalState.Active && proposalData.type === "executing" && (
+                            <>
+                                <RadioSelector
+                                    name="voteResult"
+                                    labels={["Against", "In favor"]}
+                                    handleChange={(event) => handleTextChangeAddNewMember(event, setFormData)}
+                                />
+                                <Button className="mt-10">
+                                    <p>Vote</p>
+                                </Button>
+                            </>
+                        )}
+                        {proposalData.proposalState === ProposalState.Succeeded && (
+                            <Button type={"button"} className="mt-10" onClick={() => executeProposal()}>
+                                <p>Execute</p>
+                            </Button>
+                        )}
                     </form>
                 </section>
 

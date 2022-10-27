@@ -58,10 +58,10 @@ export const ProposalActivityBadge = ({ isActive: proposalState }) => {
         <div>
             {proposalState === ProposalState.Active ? (
                 <p className="text-primary bg-base-300 px-5 py-0.5 rounded-full">Active</p>
-            ) : proposalState === ProposalState.Succeeded ? (
-                <p className="text-success bg-base-300 px-5 py-0.5 rounded-full">Succeeded</p>
+            ) : proposalState === ProposalState.Succeeded || proposalState === ProposalState.Executed ? (
+                <p className="text-success bg-base-300 px-5 py-0.5 rounded-full">{ProposalState[proposalState]}</p>
             ) : (
-                <p className="text-error bg-base-300 px-5 py-0.5 rounded-full">Failed</p>
+                <p className="text-error bg-base-300 px-5 py-0.5 rounded-full">{ProposalState[proposalState]}</p>
             )}
         </div>
     );

@@ -37,7 +37,6 @@ const CreateProposal: NextPage<IQuery> = ({ url }) => {
         type: "voting",
         // enabledBlockchains: []
     });
-    console.log(formData);
     const { data: signerData } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
 
@@ -57,7 +56,7 @@ const CreateProposal: NextPage<IQuery> = ({ url }) => {
             handleAddArray(DAO.blockchain, setFormData, "blockchain");
             handleChangeBasic(+DAO.chainId, setFormData, "chainId");
             handleChangeBasic(getTokenSymbol(+DAO.chainId), setFormData, "currency");
-            handleChangeBasic(DAO.treasuryAddress, setFormData, "treasuryAddress");
+            handleChangeBasic(DAO.treasuryAddress ? DAO.treasuryAddress : "", setFormData, "treasuryAddress");
         }
 
         setNFTs(storageNFTs);
@@ -66,7 +65,9 @@ const CreateProposal: NextPage<IQuery> = ({ url }) => {
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const ignoreFields = ["options"].concat(formData.type === "voting" && ["receiverAddress", "receiveAmount"]);
+        const ignoreFields = ["options"].concat(
+            formData.type === "voting" && ["receiverAddress", "receiveAmount", "treasuryAddress"]
+        );
 
         if (!validateForm(formData, ignoreFields)) {
             return;
