@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NextPage } from "next";
 import Link from "next/link";
 
@@ -17,21 +17,26 @@ interface ICard {
 
 const CreateNewDAO: NextPage = () => {
     const { chain } = useNetwork();
+    const [isChainSupported, setIsChainSupported] = useState(false);
+
+    useEffect(() => {
+        setIsChainSupported(() => isBlockchainSupported(chain));
+    }, [chain]);
 
     const Card = ({ title, subtitle, buttonTitle, linkToPage, isDisabled = false }: ICard) => {
         return (
             <div className="grid grid-flow-row border-2 border-base-200 rounded-lg py-4 px-4 gap-4">
                 <p className="input-label font-medium text-lg">{title}</p>
                 <p className="pb-6">{subtitle}</p>
-                <Button
-                    type={"button"}
-                    className={classNames("w-full", isDisabled ? "cursor-not-allowed" : "cursor-pointer")}
-                    disabled={isDisabled}
-                >
-                    <Link href={{ pathname: linkToPage }}>
+                <Link href={{ pathname: linkToPage }}>
+                    <Button
+                        type={"button"}
+                        className={classNames("w-full", isDisabled ? "cursor-not-allowed" : "cursor-pointer")}
+                        disabled={isDisabled}
+                    >
                         <a>{buttonTitle}</a>
-                    </Link>
-                </Button>
+                    </Button>
+                </Link>
             </div>
         );
     };
@@ -53,7 +58,7 @@ const CreateNewDAO: NextPage = () => {
                                 title="Existing NFT collection (Comming Soon)"
                                 subtitle="Add NFT smart contract if you have an existing collection"
                                 buttonTitle="Add a created NFT"
-                                linkToPage="/create-nft"
+                                linkToPage="./create-nft"
                                 isDisabled={true}
                             />
 
@@ -61,8 +66,8 @@ const CreateNewDAO: NextPage = () => {
                                 title="New NFT collection"
                                 subtitle="If you don't have any NFT collections created, you can mint them here"
                                 buttonTitle="Mint NFT"
-                                linkToPage="/create-nft"
-                                isDisabled={!isBlockchainSupported(chain)}
+                                linkToPage="./create-nft"
+                                isDisabled={!isChainSupported}
                             />
                         </div>
                     </form>
