@@ -174,15 +174,15 @@
     }
 }
 
-/* Web3AUTH */
+/* Web3AUTH in rainbowkit max z-index: 2147483646 */
 #w3a-modal {
-    z-index: 100;
+    z-index: 2147483647;
 }
 
 /* RainbowKit Wallet */
-[data-rk] .iekbcc0 {
+/* [data-rk] .iekbcc0 {
     z-index: 50;
-}
+} */
 
 @layer utilities {
     input[type="number"]::-webkit-inner-spin-button,
