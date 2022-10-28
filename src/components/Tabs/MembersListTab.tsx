@@ -1,7 +1,6 @@
 import * as React from "react";
 import { IMember, INFTVoting } from "types";
-import { ArrowUpRightIcon, MemberCard, MockupTextCard } from "components";
-import Link from "next/link";
+import { MemberCard, MockupTextCard, ViewAllButton } from "components";
 
 interface IMembersListTab {
     members: IMember[];
@@ -25,22 +24,7 @@ export const MembersListTab = ({ members, nfts, governorUrl }: IMembersListTab) 
             ))}
 
             {members.length > visibleMembersLength && (
-                <div className={"flex flex-col "}>
-                    <div className={"flex justify-center"}>
-                        <Link
-                            href={{
-                                pathname: `${governorUrl}/members/`,
-                            }}
-                        >
-                            <button className="flex gap-2 btn-link mt-8">
-                                View all members
-                                <div className="mt-[0.125rem]">
-                                    <ArrowUpRightIcon />
-                                </div>
-                            </button>
-                        </Link>
-                    </div>
-                </div>
+                <ViewAllButton label={"View all members"} pathname={`${governorUrl}/members/`} />
             )}
         </div>
     ) : (

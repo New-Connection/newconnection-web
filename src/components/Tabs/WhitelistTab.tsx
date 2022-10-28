@@ -1,7 +1,6 @@
 import * as React from "react";
-import { ArrowUpRightIcon, MockupTextCard, WhitelistRecordCard } from "components";
+import { MockupTextCard, ViewAllButton, WhitelistRecordCard } from "components";
 import { IWhitelistRecord } from "types";
-import Link from "next/link";
 
 interface IWhitelistTab {
     whitelist: IWhitelistRecord[];
@@ -31,22 +30,7 @@ export const WhitelistTab = ({ whitelist, isLoaded, governorUrl, handleWhitelist
                 />
             ))}
             {whitelist.length > visibleWhitelistLength && (
-                <div className={"flex flex-col "}>
-                    <div className={"flex justify-center"}>
-                        <Link
-                            href={{
-                                pathname: `${governorUrl}/whitelist/`,
-                            }}
-                        >
-                            <button className="flex gap-2 btn-link mt-8">
-                                View all whitelist records
-                                <div className="mt-[0.125rem]">
-                                    <ArrowUpRightIcon />
-                                </div>
-                            </button>
-                        </Link>
-                    </div>
-                </div>
+                <ViewAllButton label={"View all whitelist records"} pathname={`${governorUrl}/whitelist/`} />
             )}
         </div>
     ) : (

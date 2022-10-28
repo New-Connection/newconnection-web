@@ -1,6 +1,6 @@
 import { IDAOPageForm, IProposalPageForm } from "types";
 import Link from "next/link";
-import { ArrowUpRightIcon, MockupLoadingProposals, MockupTextCard, ProposalCard } from "components";
+import { MockupLoadingProposals, MockupTextCard, ProposalCard, ViewAllButton } from "components";
 import * as React from "react";
 import { addValueToDao } from "interactions/database";
 import { useTimeout } from "usehooks-ts";
@@ -56,20 +56,7 @@ export const ProposalsListTab = ({ proposals, DAO }: IProposalListTab) => {
                         <MockupTextCard label={"No active proposals"} text={"You can view previous proposals"} />
                     )}
 
-                    <div className={"flex justify-center"}>
-                        <Link
-                            href={{
-                                pathname: `${DAO.url}/proposals/`,
-                            }}
-                        >
-                            <button className="view-all-button">
-                                View all proposals
-                                <div className="mt-[0.125rem]">
-                                    <ArrowUpRightIcon />
-                                </div>
-                            </button>
-                        </Link>
-                    </div>
+                    <ViewAllButton label={"View all proposals"} pathname={`${DAO.url}/proposals/`} />
                 </div>
             )}
         </>
