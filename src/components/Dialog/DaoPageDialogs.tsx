@@ -25,7 +25,7 @@ export const DetailNftDialog = ({ dialog, DAO, currentNFT, buttonState, mintButt
                     </a>
 
                     <div className={"flex justify-center h-12"}>
-                        {currentNFT.tokenRequestApproved ? (
+                        {!currentNFT.tokenRequestApproved ? (
                             <button
                                 className={classNames(
                                     "main-button",
