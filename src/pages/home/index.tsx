@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
-import Layout, { CopyTextButton, DAOCard, MockupLoadingNFT, NFTCard } from "components";
+import Layout, { CopyTextButton, DAOCard, MockupLoadingNFT, NFTCard, ViewAllButton } from "components";
 import Image from "next/image";
 import ASSETS from "assets";
 import { LinkIcon } from "@heroicons/react/24/outline";
@@ -12,19 +12,21 @@ import { fetchNFTsForMember, getTotalProposals } from "interactions/contract";
 import { getAllMemberRecords, getDaosForMember } from "interactions/database";
 import { useLocalStorage } from "usehooks-ts";
 
+const VISIBLE_ELEMENTS = 3;
+
 const Home: NextPage = () => {
     const { address, isConnected } = useAccount();
     const [userAddress, setUserAddress] = useState("");
 
-    const [memberDaos, setMemberDaos] = useState<IDAOPageForm[]>();
-    const [memberNfts, setMemberNfts] = useState<INFTVoting[]>();
+    const [homeDaos, setHomeDaos] = useState<IDAOPageForm[]>();
+    const [homeNfts, setHomeNfts] = useState<INFTVoting[]>();
 
-    const [storageDaos, setStorageDaos] = useLocalStorage("homeDaos", null);
-    const [storageNfts, setStorageNfts] = useLocalStorage("homeNfts", null);
+    const [storageHomeDaos, setStorageDaos] = useLocalStorage("homeDaos", null);
+    const [storageHomeNfts, setStorageNfts] = useLocalStorage("homeNfts", null);
 
     useEffect(() => {
-        setMemberDaos(storageDaos);
-        setMemberNfts(storageNfts);
+        setHomeDaos(storageHomeDaos);
+        setHomeNfts(storageHomeNfts);
 
         const loadingLargeData = async (DAOsList: IDAOPageForm[]) => {
             const newDAOs = await Promise.all(
@@ -35,21 +37,21 @@ const Home: NextPage = () => {
                     };
                 })
             );
-            setMemberDaos(() => newDAOs);
+            setHomeDaos(() => newDAOs);
         };
 
         const loadingData = async () => {
             const memberRecords = await getAllMemberRecords(address);
             getDaosForMember(memberRecords).then((daos) => {
                 console.log("load daos " + daos);
-                setMemberDaos(daos);
+                setHomeDaos(daos);
                 loadingLargeData(daos).then();
 
                 setStorageDaos(daos);
             });
             fetchNFTsForMember(memberRecords).then((nfts) => {
                 console.log("load nfts" + nfts);
-                setMemberNfts(nfts);
+                setHomeNfts(nfts);
 
                 setStorageNfts(nfts);
             });
@@ -72,11 +74,9 @@ const Home: NextPage = () => {
                             <Image src={ASSETS.daoNFTMock} height={"175px"} width={"175px"} className="rounded-full" />
                         </div>
                     </div>
-                    <div className={"info flex flex-col w-full gap-8 md:ml-6"}>
-                        <div className={"info-row-1 flex flex-col md:flex-row justify-between items-center"}>
-                            <div className="dao-label hover:text-base-content">
-                                <CopyTextButton copyText={userAddress} />
-                            </div>
+                    <div className={"info ml-6"}>
+                        <div className="dao-label hover:text-base-content">
+                            <CopyTextButton copyText={userAddress} />
                         </div>
                     </div>
                 </div>
@@ -104,22 +104,36 @@ const Home: NextPage = () => {
                 <div className="grid grid-flow-row w-full">
                     <h1 className="text-highlighter mb-8">Member DAOs</h1>
                     <ul className={"flex flex-col gap-6"}>
-                        {memberDaos &&
-                            memberDaos.map((dao, index) => (
-                                <DAOCard key={index} daoObject={dao} lastElement={!(index !== memberDaos.length - 1)} />
-                            ))}
+                        {homeDaos &&
+                            homeDaos
+                                .slice(0, VISIBLE_ELEMENTS)
+                                .map((dao, index) => (
+                                    <DAOCard
+                                        key={index}
+                                        daoObject={dao}
+                                        lastElement={!(index !== homeDaos.length - 1)}
+                                    />
+                                ))}
                     </ul>
+                    {homeDaos.length > VISIBLE_ELEMENTS && (
+                        <ViewAllButton label={"View all DAOs"} pathname={"home/daos/"} />
+                    )}
                 </div>
 
                 <div className="grid grid-flow-row w-full">
                     <h1 className="text-highlighter mb-8">Member NFTs</h1>
                     <div className="nft-cards-grid">
-                        {memberNfts ? (
-                            memberNfts.map((nft, index) => <NFTCard key={index} nftObject={nft} />)
+                        {homeNfts ? (
+                            homeNfts
+                                .slice(0, VISIBLE_ELEMENTS)
+                                .map((nft, index) => <NFTCard key={index} nftObject={nft} />)
                         ) : (
                             <MockupLoadingNFT chain={1} />
                         )}
                     </div>
+                    {homeNfts.length > VISIBLE_ELEMENTS && (
+                        <ViewAllButton label={"View all NFTs"} pathname={"home/nfts/"} />
+                    )}
                 </div>
             </section>
         </Layout>
