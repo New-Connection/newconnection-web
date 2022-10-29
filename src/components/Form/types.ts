@@ -79,7 +79,7 @@ export interface ButtonProps {
     disabled?: boolean;
     type?: "submit" | "button";
     className?: string;
-    onClick?: () => void;
+    onClick?: () => void | Promise<void>;
     children: React.ReactNode;
 }
 

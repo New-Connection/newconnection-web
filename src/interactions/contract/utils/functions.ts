@@ -30,6 +30,13 @@ export const checkCorrectNetwork = async (signerData, chainID: number, switchNet
 };
 
 export async function fetchTreasuryBalance(DAO: IDAOPageForm) {
-    const balance = DAO.treasuryAddress ? await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId) : 0;
-    return balance.toString().slice(0, 7);
+    let currencyBalance = "0";
+    let ethBalance = "0";
+    if (DAO.treasuryAddress) {
+        const balance = await getTreasuryBalance(DAO.treasuryAddress, DAO.chainId);
+
+        currencyBalance = balance?.currencyBalance?.toString().slice(0, 7) || "0";
+        ethBalance = balance?.ethBalance?.toString().slice(0, 7) || "0";
+    }
+    return { currencyBalance, ethBalance };
 }

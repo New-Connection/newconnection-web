@@ -21,7 +21,7 @@ export const InputAmount = ({
         <div className={classNames(className, "form-control w-full max-w-xl")}>
             <label className="label">
                 <span className={"input-label"}>{label}</span>
-                {measure && <span className={"text-neutral-content/50"}>{measure}</span>}
+                {measure && <span className={"text-base-content/50"}>{measure}</span>}
             </label>
             <input
                 className={"input-field"}
@@ -103,7 +103,7 @@ export const InputTextArea = ({
                 <span className="input-label">{label}</span>
             </label>
             <textarea
-                className={classNames("textarea input-field", height ? height : "h-28")}
+                className={classNames("textarea input-field resize-none", height ? height : "h-28")}
                 name={name}
                 required={isRequired}
                 autoComplete="off"

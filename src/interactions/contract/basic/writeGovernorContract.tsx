@@ -1,5 +1,5 @@
 import { ethers, Signer } from "ethers";
-import { GOVERNANCE_NFT_ABI, GOVERNOR_ABI } from "abis";
+import { GOVERNOR_ABI, TREASURY_ABI } from "abis";
 
 export async function createProposal(
     contractAddress: string,
@@ -9,15 +9,70 @@ export async function createProposal(
 ) {
     const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, signer);
     const encodedFunctionCall = governor.interface.encodeFunctionData("incrementExecutedProposals");
-    const nftToken = new ethers.Contract(tokenAddress, GOVERNANCE_NFT_ABI, signer);
     const proposeTx = await governor.propose(
         [contractAddress],
         [0],
         [encodedFunctionCall],
         proposalDescription,
-        nftToken.address
+        tokenAddress
     );
     const proposeReceipt = await proposeTx.wait();
+
+    return proposeReceipt.events![0].args!.proposalId.toString();
+}
+
+export async function createTransferProposal(
+    contractAddress: string,
+    signer: Signer,
+    proposalDescription: string,
+    tokenAddress: string,
+    treasuryAddress: string,
+    receiverAddress: string,
+    receiveAmount: string
+) {
+    const treasury = new ethers.Contract(treasuryAddress, TREASURY_ABI, signer);
+    const encodedFunctionCall = treasury.interface.encodeFunctionData("send", [
+        receiverAddress,
+        ethers.utils.parseEther(receiveAmount),
+    ]);
+    const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, signer);
+
+    const proposeTx = await governor.propose(
+        [treasuryAddress],
+        [0],
+        [encodedFunctionCall],
+        proposalDescription,
+        tokenAddress
+    );
+    const proposeReceipt = await proposeTx.wait();
+
+    return proposeReceipt.events![0].args!.proposalId.toString();
+}
+
+export async function executeGovernorProposal(
+    contractAddress: string,
+    signer: Signer,
+    proposalDescription: string,
+    tokenAddress: string,
+    treasuryAddress: string,
+    receiverAddress: string,
+    receiveAmount: string
+) {
+    const treasury = new ethers.Contract(treasuryAddress, TREASURY_ABI, signer);
+    const encodedFunctionCall = treasury.interface.encodeFunctionData("send", [
+        receiverAddress,
+        ethers.utils.parseEther(receiveAmount),
+    ]);
+    const governor = new ethers.Contract(contractAddress, GOVERNOR_ABI, signer);
+
+    const executeTx = await governor.execute(
+        [treasuryAddress],
+        [0],
+        [encodedFunctionCall],
+        ethers.utils.id(proposalDescription)
+    );
+
+    const proposeReceipt = await executeTx.wait();
 
     return proposeReceipt.events![0].args!.proposalId.toString();
 }

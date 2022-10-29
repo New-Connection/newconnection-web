@@ -13,10 +13,11 @@ import Layout, {
 } from "components";
 import { handleAddArray, handleChangeBasic, handleContractError, handleTextChange, validateForm } from "utils";
 import { useDialogState } from "ariakit";
-import { checkCorrectNetwork, createProposal } from "interactions/contract";
+import { checkCorrectNetwork, createProposal, createTransferProposal, getTokenSymbol } from "interactions/contract";
 import { Signer } from "ethers";
 import { saveNewProposal } from "interactions/database";
 import { useCounter, useEffectOnce, useReadLocalStorage } from "usehooks-ts";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
     props: context.params,
@@ -33,6 +34,7 @@ const CreateProposal: NextPage<IQuery> = ({ url }) => {
         description: "",
         options: [],
         blockchain: [],
+        type: "voting",
         // enabledBlockchains: []
     });
     const { data: signerData } = useSigner();
@@ -53,6 +55,8 @@ const CreateProposal: NextPage<IQuery> = ({ url }) => {
             handleChangeBasic(DAO.url, setFormData, "governorUrl");
             handleAddArray(DAO.blockchain, setFormData, "blockchain");
             handleChangeBasic(+DAO.chainId, setFormData, "chainId");
+            handleChangeBasic(getTokenSymbol(+DAO.chainId), setFormData, "currency");
+            handleChangeBasic(DAO.treasuryAddress ? DAO.treasuryAddress : "", setFormData, "treasuryAddress");
         }
 
         setNFTs(storageNFTs);
@@ -61,7 +65,11 @@ const CreateProposal: NextPage<IQuery> = ({ url }) => {
     async function createProposalContract(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        if (!validateForm(formData, ["options"])) {
+        const ignoreFields = ["options"].concat(
+            formData.type === "voting" && ["receiverAddress", "receiveAmount", "treasuryAddress"]
+        );
+
+        if (!validateForm(formData, ignoreFields)) {
             return;
         }
 
@@ -74,12 +82,23 @@ const CreateProposal: NextPage<IQuery> = ({ url }) => {
 
         let proposalId;
         try {
-            proposalId = await createProposal(
-                formData.governorAddress,
-                signerData as Signer,
-                formData.name,
-                formData.tokenAddress
-            );
+            proposalId =
+                formData.type === "voting"
+                    ? await createProposal(
+                          formData.governorAddress,
+                          signerData as Signer,
+                          formData.name,
+                          formData.tokenAddress
+                      )
+                    : await createTransferProposal(
+                          formData.governorAddress,
+                          signerData,
+                          formData.name,
+                          formData.tokenAddress,
+                          formData.treasuryAddress,
+                          formData.receiverAddress,
+                          formData.receiveAmount
+                      );
             incrementActiveStep();
             incrementActiveStep();
             handleChangeBasic(proposalId, setFormData, "proposalId");
@@ -140,7 +159,79 @@ const CreateProposal: NextPage<IQuery> = ({ url }) => {
                             isRequired
                         />
 
-                        <div className={"input-label"}>Choose voting token</div>
+                        <label className="label">
+                            <div className="flex gap-2 items-center">
+                                <span className="input-label">Proposal Type</span>
+                                <div
+                                    data-tip="Treasury is needed for executing proposal"
+                                    className={"tooltip tooltip-bottom"}
+                                >
+                                    <InformationCircleIcon className={"h-4 w-4 text-base-content"} />
+                                </div>
+                            </div>
+                        </label>
+
+                        <div className="btn-group">
+                            <input
+                                type="radio"
+                                name="type"
+                                data-title="Voting"
+                                className="btn radio-button"
+                                onClick={() => {
+                                    setFormData((prevState) => ({ ...prevState, type: "voting" }));
+                                    handleChangeBasic("", setFormData, "receiveAmount");
+                                    handleChangeBasic("", setFormData, "receiverAddress");
+                                }}
+                                defaultChecked
+                            />
+                            <input
+                                type="radio"
+                                name="type"
+                                data-title="Executing"
+                                disabled={!formData.treasuryAddress}
+                                className="btn radio-button"
+                                onClick={() => {
+                                    setFormData((prevState) => ({ ...prevState, type: "executing" }));
+                                }}
+                            />
+                        </div>
+
+                        {formData.type === "executing" && (
+                            <div className={"executing-block flex justify-between"}>
+                                <InputText
+                                    label="Member's wallet address"
+                                    pattern={"^0x[a-fA-F0-9]{40}$"}
+                                    name="receiverAddress"
+                                    className={"max-w-lg"}
+                                    placeholder="0x..."
+                                    handleChange={(event) => {
+                                        handleTextChange(event, setFormData);
+                                    }}
+                                />
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="input-label">Enter amount</span>
+                                    </label>
+                                    <label className="input-group">
+                                        <span className={"uppercase input-field bg-base-300"}>{formData.currency}</span>
+                                        <input
+                                            name={"receiveAmount"}
+                                            type="number"
+                                            step={0.001}
+                                            min={0.001}
+                                            max={10}
+                                            placeholder="0.01"
+                                            className="input-field w-40"
+                                            onChange={(event) => handleTextChange(event, setFormData)}
+                                        />
+                                    </label>
+                                </div>
+                            </div>
+                        )}
+
+                        <label className="label">
+                            <span className={"input-label"}>Choose voting token</span>
+                        </label>
                         {NFTs && (
                             <RadioSelectorNFT
                                 name={"tokenAddress"}
