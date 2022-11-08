@@ -264,11 +264,11 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
 
     return DAO ? (
         <div>
-            <div className="cover h-48 w-full relative justify-center">
+            {/* <div className="cover h-48 w-full relative justify-center">
                 <Image priority={true} src={DAO.coverImage} layout={"fill"} />
-            </div>
+            </div> */}
             <Layout className="layout-base">
-                <section className="dao app-section flex h-full flex-1 flex-col gap-[50px]">
+                <section className="dao app-section pt-24 flex h-full flex-1 flex-col gap-[50px]">
                     <div className="dao-header flex flex-col md:flex-row items-center -mt-10">
                         <div className="avatar">
                             <div className="w-32 rounded-full">
@@ -343,7 +343,7 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                         {DAO.treasuryAddress ? (
                             <div
                                 className={
-                                    "flex flex-col justify-between border-2 text-center border-base-200 rounded-2xl h-52 p-3 md:w-4/5"
+                                    "flex flex-col justify-between border-2 text-center border-base-200 rounded-2xl h-52 p-3 w-full"
                                 }
                             >
                                 <div className={"flex justify-center text-2xl pt-3"}>
@@ -384,25 +384,6 @@ const DAOPage: NextPage<DAOPageProps> = ({ url }) => {
                                 )}
                             </div>
                         )}
-                        <div>
-                            <Link
-                                href={{
-                                    pathname: `${url}/chats`,
-                                }}
-                            >
-                                <button
-                                    className={classNames(
-                                        isLoaded
-                                            ? "btn-gradient main-button w-full border-none"
-                                            : "main-button h-full w-full",
-                                        DAO.treasuryAddress && "rounded-2xl h-full"
-                                    )}
-                                    disabled={!isLoaded}
-                                >
-                                    DAO Chats
-                                </button>
-                            </Link>
-                        </div>
                     </div>
 
                     <div className="lg:w-full">
